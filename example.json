@@ -1,0 +1,66 @@
+{
+    "selector": ".avatar",
+    "queries": [
+        {
+            "conditions": [
+                "width > 100px",
+                "height > 100px"
+            ],
+            "elements": [
+                {
+                    "selector": ".avatar__image",
+                    "styles": {
+                        "background": "#000"
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                "width > 100px"
+            ],
+            "elements": [
+                {
+                    "selector": ".avatar__username",
+                    "styles": {
+                        "display": "block"
+                    }
+                }
+            ]
+        }
+    ],
+    "values": [
+        {
+            "elements": [
+                {
+                    "selector": ".avatar",
+                    "values": {
+                        "font-size": "2ch"
+                    }
+                },
+                {
+                    "selector": ".avatar__image",
+                    "values": {
+                        "width": "2cw",
+                        "height": "2ch"
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                "width > 100px",
+                "height > 100px"
+            ],
+            "elements": [
+                {
+                    "selector": ".avatar__image",
+                    "values": {
+                        "width": "4cw",
+                        "height": "4ch"
+                    }
+                }
+            ]
+        }
+    ]
+}
