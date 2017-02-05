@@ -35,29 +35,25 @@
                 {
                     "selector": ".container__title",
                     "values": {
-                        "fontSize": [0.2, "ch"],
                         "lineHeight": [1, "ch"]
-                    }
-                },
-                {
-                    "selector": ".container__nonexistent",
-                    "values": {
-                        "fontSize": [0.05, "ch"]
+                    },
+                    "defaultValues": {
+                        "lineHeight": "",
+                        "fontSize": ""
                     }
                 }
             ]
         },
         {
             "conditions": [
-                "width > 100px",
-                "height > 100px"
+                [ "width", "<=", 250 ],
+                [ "height", "<=", 300 ]
             ],
             "elements": [
                 {
-                    "selector": ".avatar__image",
+                    "selector": ".container__title",
                     "values": {
-                        "width": "4cw",
-                        "height": "4ch"
+                        "fontSize": [0.3, "ch"]
                     }
                 }
             ]

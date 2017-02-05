@@ -1,7 +1,80 @@
+function getFunctionFromConditions (conditions) {
+    if (!Array.isArray(conditions)) {
+        return noCondition;
+    }
+
+    let conditionFunctions = conditions.map((condition) => {
+        const rule = condition[0];
+        const operation = condition[1];
+        const value = condition[2];
+
+        if (rule === 'width') {
+            if (operation === '>') {
+                return (containerDimensions) => {
+                    return containerDimensions.width > value;
+                };
+            } else if (operation === '>=') {
+                return (containerDimensions) => {
+                    return containerDimensions.width >= value;
+                };
+            } else if (operation === '<') {
+                return (containerDimensions) => {
+                    return containerDimensions.width < value;
+                };
+            } else if (operation === '<=') {
+                return (containerDimensions) => {
+                    return containerDimensions.width <= value;
+                };
+            }
+        } else if (rule === 'height') {
+            if (operation === '>') {
+                return (containerDimensions) => {
+                    return containerDimensions.height > value;
+                };
+            } else if (operation === '>=') {
+                return (containerDimensions) => {
+                    return containerDimensions.height >= value;
+                };
+            } else if (operation === '<') {
+                return (containerDimensions) => {
+                    return containerDimensions.height < value;
+                };
+            } else if (operation === '<=') {
+                return (containerDimensions) => {
+                    return containerDimensions.height <= value;
+                };
+            }
+        }
+
+        return () => {
+            console.log("This condition was not processed properly, returning false.", condition);
+
+            return false;
+        };
+    });
+
+    return andCondition.bind(this, conditionFunctions);
+}
+
+function andCondition (conditionFunctions, containerDimensions) {
+    let conditionFunctionsLength = conditionFunctions.length;
+    for (let i = 0; i < conditionFunctionsLength; i++) {
+        if (!conditionFunctions[i](containerDimensions)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function noCondition () { return true; }
+
 export default function enhanceConfig ($container, origConfig) {
     let config = Object.assign({}, origConfig);
 
-    
+    config.values.forEach((valueData) => {
+        valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
+    });
 
     return config;
 }

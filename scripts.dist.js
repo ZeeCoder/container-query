@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -107,38 +107,39 @@ module.exports = {
 				{
 					"selector": ".container__title",
 					"values": {
-						"fontSize": [
-							0.2,
-							"ch"
-						],
 						"lineHeight": [
 							1,
 							"ch"
 						]
-					}
-				},
-				{
-					"selector": ".container__nonexistent",
-					"values": {
-						"fontSize": [
-							0.05,
-							"ch"
-						]
+					},
+					"defaultValues": {
+						"lineHeight": "",
+						"fontSize": ""
 					}
 				}
 			]
 		},
 		{
 			"conditions": [
-				"width > 100px",
-				"height > 100px"
+				[
+					"width",
+					"<=",
+					250
+				],
+				[
+					"height",
+					"<=",
+					300
+				]
 			],
 			"elements": [
 				{
-					"selector": ".avatar__image",
+					"selector": ".container__title",
 					"values": {
-						"width": "4cw",
-						"height": "4ch"
+						"fontSize": [
+							0.3,
+							"ch"
+						]
 					}
 				}
 			]
@@ -151,37 +152,10 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enhanceConfig__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adjustContainer__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enhanceConfig__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adjustContainer__ = __webpack_require__(2);
 
 
-
-// function enhance ($container, origConfig) {
-//     let config = Object.assign({}, origConfig);
-//
-//     config.index = index++;
-//
-//     return config;
-//
-//     config.values.forEach((valueData, index, array) => {
-//         if (typeof valueData.conditions !== 'undefined') {
-//             return;
-//         }
-//
-//         valueData.elements.forEach((elementData, index, array) => {
-//             let $element = $container.find(elementData.selector);
-//             if (!$element.length) {
-//                 array.splice(index, 1);
-//
-//                 return;
-//             }
-//
-//             elementData.$element = $element;
-//         });
-//     });
-//
-//     return config;
-// }
 
 /* harmony default export */ __webpack_exports__["a"] = class {
     constructor(container, config) {
@@ -200,40 +174,6 @@ module.exports = {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = enhanceConfig;
-function enhanceConfig($container, origConfig) {
-    let config = Object.assign({}, origConfig);
-
-    return config;
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_Container__ = __webpack_require__(1);
-
-
-const config = __webpack_require__(0);
-
-let containers = [];
-$(config.selector).each(function () {
-    containers.push(new __WEBPACK_IMPORTED_MODULE_0__src_Container__["a" /* default */](this, Object.assign({}, config)));
-});
-
-$(window).on('resize', () => {
-    containers.forEach(container => {
-        container.adjust();
-    });
-});
-
-/***/ }),
-/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -262,23 +202,142 @@ function adjustContainer($container, config) {
         height: $container.height()
     };
 
-    console.log('=== Adjusting');
-    console.log($container[0]);
-    console.log(config);
-    console.log(containerDimensions);
+    let valuesLength = config.values.length;
+    let changeSets = {};
 
-    config.values.forEach(currentValue => {
-        if (typeof currentValue.conditions !== 'undefined') {
-            return;
+    for (var i = 0; i < valuesLength; i++) {
+        if (i !== 0 && typeof config.values[i].conditionFunction === 'function' && !config.values[i].conditionFunction(containerDimensions)) {
+            continue;
         }
 
-        currentValue.elements.forEach(elementData => {
-            let adjustedValues = adjustValuesByContainerDimensions(containerDimensions, elementData.values);
+        config.values[i].elements.forEach(elementData => {
+            if (i === 0) {
+                // @todo This is where missing elements could be addressed
+                changeSets[elementData.selector] = {
+                    $element: $container.find(elementData.selector),
+                    change: Object.assign({}, elementData.defaultValues)
+                };
+            }
 
-            $container.find(elementData.selector).css(adjustedValues);
+            Object.assign(changeSets[elementData.selector].change, adjustValuesByContainerDimensions(containerDimensions, elementData.values));
         });
-    });
+    }
+
+    for (let key in changeSets) {
+        changeSets[key].$element.css(changeSets[key].change);
+    }
 }
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = enhanceConfig;
+function getFunctionFromConditions(conditions) {
+    if (!Array.isArray(conditions)) {
+        return noCondition;
+    }
+
+    let conditionFunctions = conditions.map(condition => {
+        const rule = condition[0];
+        const operation = condition[1];
+        const value = condition[2];
+
+        if (rule === 'width') {
+            if (operation === '>') {
+                return containerDimensions => {
+                    return containerDimensions.width > value;
+                };
+            } else if (operation === '>=') {
+                return containerDimensions => {
+                    return containerDimensions.width >= value;
+                };
+            } else if (operation === '<') {
+                return containerDimensions => {
+                    return containerDimensions.width < value;
+                };
+            } else if (operation === '<=') {
+                return containerDimensions => {
+                    return containerDimensions.width <= value;
+                };
+            }
+        } else if (rule === 'height') {
+            if (operation === '>') {
+                return containerDimensions => {
+                    return containerDimensions.height > value;
+                };
+            } else if (operation === '>=') {
+                return containerDimensions => {
+                    return containerDimensions.height >= value;
+                };
+            } else if (operation === '<') {
+                return containerDimensions => {
+                    return containerDimensions.height < value;
+                };
+            } else if (operation === '<=') {
+                return containerDimensions => {
+                    return containerDimensions.height <= value;
+                };
+            }
+        }
+
+        return () => {
+            console.log("This condition was not processed properly, returning false.", condition);
+
+            return false;
+        };
+    });
+
+    return andCondition.bind(this, conditionFunctions);
+}
+
+function andCondition(conditionFunctions, containerDimensions) {
+    let conditionFunctionsLength = conditionFunctions.length;
+    for (let i = 0; i < conditionFunctionsLength; i++) {
+        if (!conditionFunctions[i](containerDimensions)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function noCondition() {
+    return true;
+}
+
+function enhanceConfig($container, origConfig) {
+    let config = Object.assign({}, origConfig);
+
+    config.values.forEach(valueData => {
+        valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
+    });
+
+    return config;
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_Container__ = __webpack_require__(1);
+
+
+const config = __webpack_require__(0);
+
+let containers = [];
+$(config.selector).each(function () {
+    containers.push(new __WEBPACK_IMPORTED_MODULE_0__src_Container__["a" /* default */](this, Object.assign({}, config)));
+});
+
+$(window).on('resize', () => {
+    containers.forEach(container => {
+        container.adjust();
+    });
+});
 
 /***/ })
 /******/ ]);

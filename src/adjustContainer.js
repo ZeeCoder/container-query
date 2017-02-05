@@ -22,20 +22,35 @@ export default function adjustContainer ($container, config) {
         height: $container.height(),
     };
 
-    console.log('=== Adjusting');
-    console.log($container[0]);
-    console.log(config);
-    console.log(containerDimensions);
+    let valuesLength = config.values.length;
+    let changeSets = {};
 
-    config.values.forEach((currentValue) => {
-        if (typeof currentValue.conditions !== 'undefined') {
-            return;
+    for (var i = 0; i < valuesLength; i++) {
+        if (
+            i !== 0 &&
+            typeof config.values[i].conditionFunction === 'function' &&
+            !config.values[i].conditionFunction(containerDimensions)
+        ) {
+            continue;
         }
 
-        currentValue.elements.forEach((elementData) => {
-            let adjustedValues = adjustValuesByContainerDimensions(containerDimensions, elementData.values);
+        config.values[i].elements.forEach((elementData) => {
+            if (i === 0) {
+                // @todo This is where missing elements could be addressed
+                changeSets[elementData.selector] = {
+                    $element: $container.find(elementData.selector),
+                    change: Object.assign({}, elementData.defaultValues),
+                };
+            }
 
-            $container.find(elementData.selector).css(adjustedValues);
+            Object.assign(
+                changeSets[elementData.selector].change,
+                adjustValuesByContainerDimensions(containerDimensions, elementData.values)
+            );
         });
-    });
+    }
+
+    for (let key in changeSets) {
+        changeSets[key].$element.css(changeSets[key].change);
+    }
 }
