@@ -33,16 +33,16 @@
         {
             "elements": [
                 {
-                    "selector": ".avatar",
+                    "selector": ".container__title",
                     "values": {
-                        "font-size": "2ch"
+                        "fontSize": [0.2, "ch"],
+                        "lineHeight": [1, "ch"]
                     }
                 },
                 {
-                    "selector": ".avatar__image",
+                    "selector": ".container__nonexistent",
                     "values": {
-                        "width": "2cw",
-                        "height": "2ch"
+                        "fontSize": [0.05, "ch"]
                     }
                 }
             ]
