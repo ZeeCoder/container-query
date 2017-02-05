@@ -38,7 +38,11 @@ export default function adjustContainer ($container, config) {
             if (i === 0) {
                 // @todo This is where missing elements could be addressed
                 changeSets[elementData.selector] = {
-                    $element: $container.find(elementData.selector),
+                    $element: (
+                        elementData.selector === config.selector
+                            ? $container
+                            : $container.find(elementData.selector)
+                    ),
                     change: Object.assign({}, elementData.defaultValues),
                 };
             }

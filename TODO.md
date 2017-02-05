@@ -1,10 +1,12 @@
 
 # Runtime JS
 
+- Think of a better unit for container values (instead of ch/cw)
 - query support: width / height / ratio (>, <, >=, <=)
 - postcss plugin
 - support "or" in queries
-- address potential issues with dynamically added / removed elements
+- address potential issues with dynamically added / removed elements (MutationObserver?)
+- think about circular issues
 
 # PostCSS Plugin
 - in "values", the first element must not have a condition function (always applied)

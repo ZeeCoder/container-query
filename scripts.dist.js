@@ -105,6 +105,13 @@ module.exports = {
 		{
 			"elements": [
 				{
+					"selector": ".container",
+					"values": {},
+					"defaultValues": {
+						"borderWidth": ""
+					}
+				},
+				{
 					"selector": ".container__title",
 					"values": {
 						"lineHeight": [
@@ -115,6 +122,26 @@ module.exports = {
 					"defaultValues": {
 						"lineHeight": "",
 						"fontSize": ""
+					}
+				}
+			]
+		},
+		{
+			"conditions": [
+				[
+					"height",
+					">=",
+					150
+				]
+			],
+			"elements": [
+				{
+					"selector": ".container",
+					"values": {
+						"borderWidth": [
+							0.04,
+							"ch"
+						]
 					}
 				}
 			]
@@ -214,7 +241,7 @@ function adjustContainer($container, config) {
             if (i === 0) {
                 // @todo This is where missing elements could be addressed
                 changeSets[elementData.selector] = {
-                    $element: $container.find(elementData.selector),
+                    $element: elementData.selector === config.selector ? $container : $container.find(elementData.selector),
                     change: Object.assign({}, elementData.defaultValues)
                 };
             }

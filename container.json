@@ -33,6 +33,13 @@
         {
             "elements": [
                 {
+                    "selector": ".container",
+                    "values": {},
+                    "defaultValues": {
+                        "borderWidth": ""
+                    }
+                },
+                {
                     "selector": ".container__title",
                     "values": {
                         "lineHeight": [1, "ch"]
@@ -40,6 +47,19 @@
                     "defaultValues": {
                         "lineHeight": "",
                         "fontSize": ""
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "height", ">=", 150 ]
+            ],
+            "elements": [
+                {
+                    "selector": ".container",
+                    "values": {
+                        "borderWidth": [0.04, "ch"]
                     }
                 }
             ]
