@@ -10,3 +10,7 @@ gulp.task('css', function () {
         ]))
         .pipe( gulp.dest('demo/dist') );
 });
+
+gulp.task('watch', function() {
+    gulp.watch('demo/styles.css', ['css']);
+});

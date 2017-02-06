@@ -1,6 +1,8 @@
 const postcss = require('postcss');
 const trim = require('lodash.trim');
 const camelCase = require('lodash.camelCase');
+const CUNIT__HEIGHT = 'ch';
+const CUNIT__WIDTH = 'cw';
 
 module.exports = postcss.plugin('container-query', function myplugin(options) {
 
@@ -11,7 +13,7 @@ module.exports = postcss.plugin('container-query', function myplugin(options) {
         options = options || {};
 
         // Processing code will be added her
-        let lastContainer;
+        let currentContainer;
         root.walkAtRules((rule) => {
             // todo: handle issues here, when for a @container declaration there's no defined-container
             if (rule.name === 'define-container') {
@@ -20,9 +22,11 @@ module.exports = postcss.plugin('container-query', function myplugin(options) {
                     queries: [],
                     values: [],
                 };
-                lastContainer = rule.parent.selector;
+                currentContainer = rule.parent.selector;
             } else if (rule.name === 'container') {
                 let query = { conditions: [], elements: [] };
+                let value = { conditions: [], elements: [] };
+
                 let conditionArr = rule.params.match(/\(([^\)]*)\)/g);
                 query.conditions = conditionArr.map((condition) => {
                     let conditionArr = trim(condition, '()');
@@ -35,20 +39,55 @@ module.exports = postcss.plugin('container-query', function myplugin(options) {
                     return conditionArr;
                 });
 
+                value.conditions = query.conditions;
+
                 rule.nodes.forEach((rule) => {
-                    let element = {
+                    let queryElement = {
                         selector: rule.selector,
                         styles: {},
                     };
+                    let attachQuery = false;
+
+                    let valueElement = {
+                        selector: rule.selector,
+                        values: {},
+                    };
+                    let attachValue = false;
 
                     rule.nodes.forEach((declaration) => {
-                        element.styles[camelCase(declaration.prop)] = declaration.value;
+                        let prop = camelCase(declaration.prop);
+
+                        if (
+                            declaration.value.indexOf(CUNIT__HEIGHT) === -1 &&
+                            declaration.value.indexOf(CUNIT__WIDTH) === -1
+                        ) {
+                            queryElement.styles[prop] = declaration.value;
+                            attachQuery = true;
+                        } else {
+
+                            let valueArr = declaration.value.match(/(\d*)([a-z]*)/i);
+                            valueArr.shift();
+                            valueArr[0] = parseInt(valueArr[0]) / 100;
+
+                            valueElement.values[prop] = valueArr;
+                            attachValue = true;
+                        }
                     });
 
-                    query.elements.push(element);
+                    if (attachQuery) {
+                        query.elements.push(queryElement);
+                    }
+                    if (attachValue) {
+                        value.elements.push(valueElement);
+                    }
                 });
 
-                containers[lastContainer].queries.push(query);
+                if (query.elements.length > 0) {
+                    containers[currentContainer].queries.push(query);
+                }
+                if (value.elements.length > 0) {
+                    containers[currentContainer].values.push(value);
+                }
             }
         });
 

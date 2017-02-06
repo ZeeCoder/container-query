@@ -32,5 +32,12 @@
     .user {
         background: red;
         font-size: 2px;
+        line-height: 100ch;
+    }
+}
+
+@container (width >= 100) {
+    .user {
+        line-height: 50ch;
     }
 }
