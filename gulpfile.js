@@ -1,12 +1,17 @@
-let gulp = require('gulp');
-let containerQuery = require('./src/postcss');
+const gulp = require('gulp');
+const path = require('path');
+const nested = require('postcss-nested');
+const containerQuery = require('./src/postcss');
 
 gulp.task('css', function () {
     var postcss    = require('gulp-postcss');
 
     return gulp.src('demo/styles.css')
         .pipe(postcss([
-            containerQuery()
+            nested(),
+            containerQuery({
+                JSONSavePath: path.join(__dirname, '/demo/containers.json'),
+            }),
         ]))
         .pipe( gulp.dest('demo/dist') );
 });

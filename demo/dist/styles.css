@@ -1,5 +1,47 @@
-.user {
+.cell {
     position: fixed;
+}
+
+.cell--left,
+    .cell--right1,
+    .cell--right2,
+    .cell--right3,
+    .cell--right4 {
+    width: 50%;
+}
+
+.cell--right1,
+    .cell--right2,
+    .cell--right3,
+    .cell--right4 {
+    right: 0;
+    height: 25%;
+}
+
+.cell--left {
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.cell--right1 {
+    top: 0;
+}
+
+.cell--right2 {
+    top: 25%;
+}
+
+.cell--right3 {
+    bottom: 25%;
+}
+
+.cell--right4 {
+    bottom: 0;
+}
+
+.user {
+    position: absolute;
     left: 0;
     top: 0;
     right: 0;
@@ -28,33 +70,26 @@
     display: none;
 }
 
-@container (orientation: landscape) {
-    .user {
-        background: red;
-        font-size: 2px;
-        line-height: 100ch;
-        border-width: 2cw;
-    }
+.user__landscape,
+.user__portrait {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 10px;
+    background: #ddd;
+    font-family: monospace;
+    display: none;
+    font-size: 15px;
+}
 
-    .user__image {
-        font-size: 2px;
-        border-width: 2cw;
+@container (orientation: landscape) {
+    .user__landscape {
+        display: block;
     }
 }
 
 @container (orientation: portrait) {
-    .user {
-        border: none;
-    }
-
-    .user__image {
-        line-height: 2px;
-        width: 2cw;
-    }
-}
-
-@container (width >= 100) {
-    .user {
-        line-height: 50ch;
+    .user__portrait {
+        display: block;
     }
 }

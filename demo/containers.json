@@ -1,0 +1,62 @@
+{
+  ".user": {
+    "selector": ".user",
+    "queries": [
+      {
+        "elements": [
+          {
+            "selector": ".user__landscape",
+            "styles": {
+              "display": ""
+            }
+          },
+          {
+            "selector": ".user__portrait",
+            "styles": {
+              "display": ""
+            }
+          }
+        ]
+      },
+      {
+        "conditions": [
+          [
+            "orientation",
+            ":",
+            "landscape"
+          ]
+        ],
+        "elements": [
+          {
+            "selector": ".user__landscape",
+            "styles": {
+              "display": "block"
+            }
+          }
+        ]
+      },
+      {
+        "conditions": [
+          [
+            "orientation",
+            ":",
+            "portrait"
+          ]
+        ],
+        "elements": [
+          {
+            "selector": ".user__portrait",
+            "styles": {
+              "display": "block"
+            }
+          }
+        ]
+      }
+    ],
+    "values": [
+      {
+        "elements": []
+      }
+    ]
+  }
+}

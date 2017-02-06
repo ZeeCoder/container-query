@@ -15,4 +15,5 @@
 - in "values", the first element must not have a condition function (always applied)
 - this same element must have the defaultValues object
 - values parsing ex: "80ch" => [0.8, "ch"]
-- config object: json save path / handler?
+- support shorthand values, like: `padding: 10cw 10ch`
+- support default container values without @container queries

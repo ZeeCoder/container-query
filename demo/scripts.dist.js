@@ -71,118 +71,66 @@
 /***/ (function(module, exports) {
 
 module.exports = {
-	"selector": ".user",
-	"queries": [
-		{
-			"elements": [
-				{
-					"selector": ".user",
-					"styles": {
-						"background": ""
+	".user": {
+		"selector": ".user",
+		"queries": [
+			{
+				"elements": [
+					{
+						"selector": ".user__landscape",
+						"styles": {
+							"display": ""
+						}
+					},
+					{
+						"selector": ".user__portrait",
+						"styles": {
+							"display": ""
+						}
 					}
-				},
-				{
-					"selector": ".user__name",
-					"styles": {
-						"display": ""
-					}
-				}
-			]
-		},
-		{
-			"conditions": [
-				[
-					"orientation",
-					":",
-					"landscape"
 				]
-			],
-			"elements": [
-				{
-					"selector": ".user",
-					"styles": {
-						"background": "red"
-					}
-				}
-			]
-		},
-		{
-			"conditions": [
-				[
-					"aspect-ratio",
-					">",
-					3
-				]
-			],
-			"elements": [
-				{
-					"selector": ".user",
-					"styles": {
-						"background": "blue"
-					}
-				}
-			]
-		},
-		{
-			"conditions": [
-				[
-					"width",
-					">",
-					200
+			},
+			{
+				"conditions": [
+					[
+						"orientation",
+						":",
+						"landscape"
+					]
 				],
-				[
-					"height",
-					">",
-					200
+				"elements": [
+					{
+						"selector": ".user__landscape",
+						"styles": {
+							"display": "block"
+						}
+					}
 				]
-			],
-			"elements": [
-				{
-					"selector": ".user__name",
-					"styles": {
-						"display": "block"
-					}
-				}
-			]
-		}
-	],
-	"values": [
-		{
-			"elements": [
-				{
-					"selector": ".user__name",
-					"styles": {
-						"fontSize": ""
-					}
-				}
-			]
-		},
-		{
-			"conditions": [
-				[
-					"width",
-					">",
-					200
+			},
+			{
+				"conditions": [
+					[
+						"orientation",
+						":",
+						"portrait"
+					]
 				],
-				[
-					"height",
-					">",
-					200
-				]
-			],
-			"elements": [
-				{
-					"selector": ".user__name",
-					"values": {
-						"fontSize": [
-							0.1,
-							"ch"
-						]
+				"elements": [
+					{
+						"selector": ".user__portrait",
+						"styles": {
+							"display": "block"
+						}
 					}
-				}
-			]
-		}
-	]
+				]
+			}
+		],
+		"values": [
+			{
+				"elements": []
+			}
+		]
+	}
 };
 
 /***/ }),
@@ -428,12 +376,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_Container__ = __webpack_require__(1);
 
 
-const config = __webpack_require__(0);
+const containerConfigs = __webpack_require__(0);
 
 let containers = [];
-$(config.selector).each(function () {
-    containers.push(new __WEBPACK_IMPORTED_MODULE_0__src_Container__["a" /* default */](this, Object.assign({}, config)));
-});
+
+for (let containerSelector in containerConfigs) {
+    $(containerSelector).each(function () {
+        containers.push(new __WEBPACK_IMPORTED_MODULE_0__src_Container__["a" /* default */](this, Object.assign({}, containerConfigs[containerSelector])));
+    });
+}
 
 $(window).on('resize', () => {
     containers.forEach(container => {

@@ -1,4 +1,5 @@
 const postcss = require('postcss');
+const fs = require('fs');
 const trim = require('lodash.trim');
 const camelCase = require('lodash.camelCase');
 const CUNIT__HEIGHT = 'ch';
@@ -36,6 +37,9 @@ function addDefaultsToContainer (container, defaultElementStyles, defaultElement
     container.values.unshift(defaultValue);
 }
 
+/**
+ * @type {{ JSONSavePath: string }}
+ */
 module.exports = postcss.plugin('container-query', function myplugin(options) {
 
     return function (root) {
@@ -148,7 +152,7 @@ module.exports = postcss.plugin('container-query', function myplugin(options) {
 
         addDefaultsToContainer(containers[currentContainer], defaultElementStyles, defaultElementValues);
 
-        console.log(JSON.stringify(containers, null, 2));
+        fs.writeFileSync(options.JSONSavePath, JSON.stringify(containers, null, 2));
     };
 
 });

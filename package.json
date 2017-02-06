@@ -16,6 +16,7 @@
     "gulp-postcss": "^6.3.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.trim": "^4.5.1",
+    "postcss-nested": "^1.0.0",
     "webpack": "^2.2.0"
   },
   "devDependencies": {}
