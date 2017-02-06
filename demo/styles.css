@@ -33,6 +33,23 @@
         background: red;
         font-size: 2px;
         line-height: 100ch;
+        border-width: 2cw;
+    }
+
+    .user__image {
+        font-size: 2px;
+        border-width: 2cw;
+    }
+}
+
+@container (orientation: portrait) {
+    .user {
+        border: none;
+    }
+
+    .user__image {
+        line-height: 2px;
+        width: 2cw;
     }
 }
 
