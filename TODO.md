@@ -7,6 +7,10 @@
 - support "or" in queries
 - address potential issues with dynamically added / removed elements (MutationObserver?)
 - think about circular issues
+- remove "defaultValues"
+- merge adjustQueries and adjustValues
+- support ratios
+- add tests
 
 # PostCSS Plugin
 - in "values", the first element must not have a condition function (always applied)

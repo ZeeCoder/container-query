@@ -76,5 +76,9 @@ export default function enhanceConfig ($container, origConfig) {
         valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
     });
 
+    config.queries.forEach((queryData) => {
+        queryData.conditionFunction = getFunctionFromConditions(queryData.conditions);
+    });
+
     return config;
 }

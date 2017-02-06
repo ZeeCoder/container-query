@@ -2,28 +2,50 @@
     "selector": ".container",
     "queries": [
         {
-            "conditions": [
-                "width > 100px",
-                "height > 100px"
-            ],
             "elements": [
                 {
-                    "selector": ".avatar__image",
+                    "selector": ".container",
                     "styles": {
-                        "background": "#000"
+                        "opacity": ""
+                    }
+                },
+                {
+                    "selector": ".container__title",
+                    "styles": {
+                        "background": ""
                     }
                 }
             ]
         },
         {
             "conditions": [
-                "width > 100px"
+                [ "width", ">=", 200 ],
+                [ "height", ">=", 200 ]
             ],
             "elements": [
                 {
-                    "selector": ".avatar__username",
+                    "selector": ".container",
                     "styles": {
-                        "display": "block"
+                        "opacity": "0.5"
+                    }
+                },
+                {
+                    "selector": ".container__title",
+                    "styles": {
+                        "background": "red"
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "width", ">=", 300 ]
+            ],
+            "elements": [
+                {
+                    "selector": ".container",
+                    "styles": {
+                        "opacity": "1"
                     }
                 }
             ]

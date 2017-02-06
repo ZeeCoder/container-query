@@ -74,28 +74,62 @@ module.exports = {
 	"selector": ".container",
 	"queries": [
 		{
-			"conditions": [
-				"width > 100px",
-				"height > 100px"
-			],
 			"elements": [
 				{
-					"selector": ".avatar__image",
+					"selector": ".container",
 					"styles": {
-						"background": "#000"
+						"opacity": ""
+					}
+				},
+				{
+					"selector": ".container__title",
+					"styles": {
+						"background": ""
 					}
 				}
 			]
 		},
 		{
 			"conditions": [
-				"width > 100px"
+				[
+					"width",
+					">=",
+					200
+				],
+				[
+					"height",
+					">=",
+					200
+				]
 			],
 			"elements": [
 				{
-					"selector": ".avatar__username",
+					"selector": ".container",
 					"styles": {
-						"display": "block"
+						"opacity": "0.5"
+					}
+				},
+				{
+					"selector": ".container__title",
+					"styles": {
+						"background": "red"
+					}
+				}
+			]
+		},
+		{
+			"conditions": [
+				[
+					"width",
+					">=",
+					300
+				]
+			],
+			"elements": [
+				{
+					"selector": ".container",
+					"styles": {
+						"opacity": "1"
 					}
 				}
 			]
@@ -223,12 +257,34 @@ function convertValue(containerDimensions, value) {
     return containerDimensions.width * value[0] + 'px';
 }
 
-function adjustContainer($container, config) {
-    let containerDimensions = {
-        width: $container.width(),
-        height: $container.height()
-    };
+function adjustQueries($container, containerDimensions, config) {
+    let queriesLength = config.queries.length;
+    let changeSets = {};
 
+    for (var i = 0; i < queriesLength; i++) {
+        if (i !== 0 && typeof config.queries[i].conditionFunction === 'function' && !config.queries[i].conditionFunction(containerDimensions)) {
+            continue;
+        }
+
+        config.queries[i].elements.forEach(elementData => {
+            if (i === 0) {
+                // @todo This is where missing elements could be addressed
+                changeSets[elementData.selector] = {
+                    $element: elementData.selector === config.selector ? $container : $container.find(elementData.selector),
+                    change: {}
+                };
+            }
+
+            Object.assign(changeSets[elementData.selector].change, elementData.styles);
+        });
+    }
+
+    for (let key in changeSets) {
+        changeSets[key].$element.css(changeSets[key].change);
+    }
+}
+
+function adjustValues($container, containerDimensions, config) {
     let valuesLength = config.values.length;
     let changeSets = {};
 
@@ -253,6 +309,16 @@ function adjustContainer($container, config) {
     for (let key in changeSets) {
         changeSets[key].$element.css(changeSets[key].change);
     }
+}
+
+function adjustContainer($container, config) {
+    let containerDimensions = {
+        width: $container.width(),
+        height: $container.height()
+    };
+
+    adjustValues($container, containerDimensions, config);
+    adjustQueries($container, containerDimensions, config);
 }
 
 /***/ }),
@@ -339,6 +405,10 @@ function enhanceConfig($container, origConfig) {
 
     config.values.forEach(valueData => {
         valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
+    });
+
+    config.queries.forEach(queryData => {
+        queryData.conditionFunction = getFunctionFromConditions(queryData.conditions);
     });
 
     return config;
