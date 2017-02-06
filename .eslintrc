@@ -1,9 +1,12 @@
 extends: eslint:recommended
 env:
+    jquery: true
     browser: true
     commonjs: true
-globals:
-    $: true
-parser: babel-eslint
+    es6: true
+
+parserOptions:
+    sourceType: module
+
 rules:
     no-console: warn
