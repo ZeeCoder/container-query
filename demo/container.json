@@ -1,0 +1,87 @@
+{
+    "selector": ".user",
+    "queries": [
+        {
+            "elements": [
+                {
+                    "selector": ".user",
+                    "styles": {
+                        "background": ""
+                    }
+                },
+                {
+                    "selector": ".user__name",
+                    "styles": {
+                        "display": ""
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "orientation", ":", "landscape" ]
+            ],
+            "elements": [
+                {
+                    "selector": ".user",
+                    "styles": {
+                        "background": "red"
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "aspect-ratio", ">", 3 ]
+            ],
+            "elements": [
+                {
+                    "selector": ".user",
+                    "styles": {
+                        "background": "blue"
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "width", ">", 200 ],
+                [ "height", ">", 200 ]
+            ],
+            "elements": [
+                {
+                    "selector": ".user__name",
+                    "styles": {
+                        "display": "block"
+                    }
+                }
+            ]
+        }
+    ],
+    "values": [
+        {
+            "elements": [
+                {
+                    "selector": ".user__name",
+                    "styles": {
+                        "fontSize": ""
+                    }
+                }
+            ]
+        },
+        {
+            "conditions": [
+                [ "width", ">", 200 ],
+                [ "height", ">", 200 ]
+            ],
+            "elements": [
+                {
+                    "selector": ".user__name",
+                    "values": {
+                        "fontSize": [ 0.1, "ch" ]
+                    }
+                }
+            ]
+        }
+    ]
+}

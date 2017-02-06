@@ -1,4 +1,4 @@
-import Container from './src/Container';
+import Container from '../src/Container';
 
 const config = require('./container.json');
 

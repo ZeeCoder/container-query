@@ -71,20 +71,20 @@
 /***/ (function(module, exports) {
 
 module.exports = {
-	"selector": ".container",
+	"selector": ".user",
 	"queries": [
 		{
 			"elements": [
 				{
-					"selector": ".container",
+					"selector": ".user",
 					"styles": {
-						"opacity": ""
+						"background": ""
 					}
 				},
 				{
-					"selector": ".container__title",
+					"selector": ".user__name",
 					"styles": {
-						"background": ""
+						"display": ""
 					}
 				}
 			]
@@ -92,25 +92,14 @@ module.exports = {
 		{
 			"conditions": [
 				[
-					"width",
-					">=",
-					200
-				],
-				[
-					"height",
-					">=",
-					200
+					"orientation",
+					":",
+					"landscape"
 				]
 			],
 			"elements": [
 				{
-					"selector": ".container",
-					"styles": {
-						"opacity": "0.5"
-					}
-				},
-				{
-					"selector": ".container__title",
+					"selector": ".user",
 					"styles": {
 						"background": "red"
 					}
@@ -120,16 +109,38 @@ module.exports = {
 		{
 			"conditions": [
 				[
-					"width",
-					">=",
-					300
+					"aspect-ratio",
+					">",
+					3
 				]
 			],
 			"elements": [
 				{
-					"selector": ".container",
+					"selector": ".user",
 					"styles": {
-						"opacity": "1"
+						"background": "blue"
+					}
+				}
+			]
+		},
+		{
+			"conditions": [
+				[
+					"width",
+					">",
+					200
+				],
+				[
+					"height",
+					">",
+					200
+				]
+			],
+			"elements": [
+				{
+					"selector": ".user__name",
+					"styles": {
+						"display": "block"
 					}
 				}
 			]
@@ -139,22 +150,8 @@ module.exports = {
 		{
 			"elements": [
 				{
-					"selector": ".container",
-					"values": {},
-					"defaultValues": {
-						"borderWidth": ""
-					}
-				},
-				{
-					"selector": ".container__title",
-					"values": {
-						"lineHeight": [
-							1,
-							"ch"
-						]
-					},
-					"defaultValues": {
-						"lineHeight": "",
+					"selector": ".user__name",
+					"styles": {
 						"fontSize": ""
 					}
 				}
@@ -163,42 +160,22 @@ module.exports = {
 		{
 			"conditions": [
 				[
-					"height",
-					">=",
-					150
-				]
-			],
-			"elements": [
-				{
-					"selector": ".container",
-					"values": {
-						"borderWidth": [
-							0.04,
-							"ch"
-						]
-					}
-				}
-			]
-		},
-		{
-			"conditions": [
-				[
 					"width",
-					"<=",
-					250
+					">",
+					200
 				],
 				[
 					"height",
-					"<=",
-					300
+					">",
+					200
 				]
 			],
 			"elements": [
 				{
-					"selector": ".container__title",
+					"selector": ".user__name",
 					"values": {
 						"fontSize": [
-							0.3,
+							0.1,
 							"ch"
 						]
 					}
@@ -371,6 +348,34 @@ function getFunctionFromConditions(conditions) {
             } else if (operation === '<=') {
                 return containerDimensions => {
                     return containerDimensions.height <= value;
+                };
+            }
+        } else if (rule === 'aspect-ratio') {
+            if (operation === '>') {
+                return containerDimensions => {
+                    return containerDimensions.width / containerDimensions.height > value;
+                };
+            } else if (operation === '>=') {
+                return containerDimensions => {
+                    return containerDimensions.width / containerDimensions.height >= value;
+                };
+            } else if (operation === '<') {
+                return containerDimensions => {
+                    return containerDimensions.width / containerDimensions.height < value;
+                };
+            } else if (operation === '<=') {
+                return containerDimensions => {
+                    return containerDimensions.width / containerDimensions.height <= value;
+                };
+            }
+        } else if (rule === 'orientation') {
+            if (value === 'portrait') {
+                return containerDimensions => {
+                    return containerDimensions.height >= containerDimensions.width;
+                };
+            } else {
+                return containerDimensions => {
+                    return containerDimensions.height < containerDimensions.width;
                 };
             }
         }

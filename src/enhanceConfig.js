@@ -44,6 +44,34 @@ function getFunctionFromConditions (conditions) {
                     return containerDimensions.height <= value;
                 };
             }
+        } else if (rule === 'aspect-ratio') {
+            if (operation === '>') {
+                return (containerDimensions) => {
+                    return (containerDimensions.width / containerDimensions.height) > value;
+                };
+            } else if (operation === '>=') {
+                return (containerDimensions) => {
+                    return (containerDimensions.width / containerDimensions.height) >= value;
+                };
+            } else if (operation === '<') {
+                return (containerDimensions) => {
+                    return (containerDimensions.width / containerDimensions.height) < value;
+                };
+            } else if (operation === '<=') {
+                return (containerDimensions) => {
+                    return (containerDimensions.width / containerDimensions.height) <= value;
+                };
+            }
+        } else if (rule === 'orientation') {
+            if (value === 'portrait') {
+                return (containerDimensions) => {
+                    return containerDimensions.height >= containerDimensions.width;
+                };
+            } else {
+                return (containerDimensions) => {
+                    return containerDimensions.height < containerDimensions.width;
+                };
+            }
         }
 
         return () => {

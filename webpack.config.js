@@ -1,10 +1,8 @@
-const webpack = require('webpack');
-
 module.exports = {
-    entry: './scripts.js',
+    entry: './demo/scripts.js',
     output: {
         path: '.',
-        filename: 'scripts.dist.js',
+        filename: './demo/scripts.dist.js',
     },
     module: {
         rules: [

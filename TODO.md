@@ -9,7 +9,6 @@
 - think about circular issues
 - remove "defaultValues"
 - merge adjustQueries and adjustValues
-- support ratios
 - add tests
 
 # PostCSS Plugin
