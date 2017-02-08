@@ -4,7 +4,7 @@ const nested = require('postcss-nested');
 const containerQuery = require('./src/postcss');
 
 gulp.task('css', function () {
-    var postcss    = require('gulp-postcss');
+    var postcss = require('gulp-postcss');
 
     return gulp.src('demo/styles.css')
         .pipe(postcss([
