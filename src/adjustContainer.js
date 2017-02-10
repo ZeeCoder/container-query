@@ -1,19 +1,13 @@
+import { convertSingleValueToPixel } from '../lib/utils';
+
 function adjustValuesByContainerDimensions (containerDimensions, valueDefinition) {
     let values = Object.assign({}, valueDefinition);
 
     for (let cssRule in values) {
-        values[cssRule] = convertValue(containerDimensions, values[cssRule]);
+        values[cssRule] = convertSingleValueToPixel(containerDimensions, values[cssRule]);
     }
 
     return values;
-}
-
-function convertValue (containerDimensions, value) {
-    if (value[1] === 'ch') {
-        return (containerDimensions.height * value[0]) + 'px';
-    }
-
-    return (containerDimensions.width * value[0]) + 'px';
 }
 
 function adjustQueries ($container, containerDimensions, config) {
