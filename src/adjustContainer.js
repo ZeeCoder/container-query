@@ -1,10 +1,13 @@
-import { adjustValueObjectByContainerDimensions } from '../lib/utils';
+import {
+    adjustValueObjectByContainerDimensions,
+    getContainerDimensions,
+} from '../lib/utils';
 
 function adjustQueries ($container, containerDimensions, config) {
     let queriesLength = config.queries.length;
     let changeSets = {};
 
-    for (var i = 0; i < queriesLength; i++) {
+    for (let i = 0; i < queriesLength; i++) {
         if (
             i !== 0 &&
             typeof config.queries[i].conditionFunction === 'function' &&
@@ -42,7 +45,7 @@ function adjustValues ($container, containerDimensions, config) {
     let valuesLength = config.values.length;
     let changeSets = {};
 
-    for (var i = 0; i < valuesLength; i++) {
+    for (let i = 0; i < valuesLength; i++) {
         if (
             i !== 0 &&
             typeof config.values[i].conditionFunction === 'function' &&
@@ -77,10 +80,7 @@ function adjustValues ($container, containerDimensions, config) {
 }
 
 export default function adjustContainer ($container, config) {
-    let containerDimensions = {
-        width: $container.width(),
-        height: $container.height(),
-    };
+    const containerDimensions = getContainerDimensions($container);
 
     adjustValues($container, containerDimensions, config);
     adjustQueries($container, containerDimensions, config);
