@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -124,74 +124,191 @@ module.exports = {
 					}
 				]
 			}
-		],
-		"values": [
-			{
-				"elements": []
-			}
 		]
 	}
 };
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enhanceConfig__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adjustContainer__ = __webpack_require__(2);
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-/* harmony default export */ __webpack_exports__["a"] = class {
-    constructor(container, config) {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _enhanceConfig = __webpack_require__(4);
+
+var _enhanceConfig2 = _interopRequireDefault(_enhanceConfig);
+
+var _adjustContainer = __webpack_require__(3);
+
+var _adjustContainer2 = _interopRequireDefault(_adjustContainer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class(container, config) {
+        _classCallCheck(this, _class);
+
         this.$container = $(container);
         this.adjust = this.adjust.bind(this);
 
-        this.config = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__enhanceConfig__["a" /* default */])(this.$container, config);
+        this.config = (0, _enhanceConfig2.default)(this.$container, config);
 
         this.adjust();
     }
 
-    adjust() {
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__adjustContainer__["a" /* default */])(this.$container, this.config);
-    }
-};
+    _createClass(_class, [{
+        key: 'adjust',
+        value: function adjust() {
+            (0, _adjustContainer2.default)(this.$container, this.config);
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = adjustContainer;
-function adjustValuesByContainerDimensions(containerDimensions, valueDefinition) {
-    let values = Object.assign({}, valueDefinition);
 
-    for (let cssRule in values) {
-        values[cssRule] = convertValue(containerDimensions, values[cssRule]);
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.convertSingleValueToPixel = convertSingleValueToPixel;
+exports.convertCompositValuesToPixel = convertCompositValuesToPixel;
+exports.adjustValueObjectByContainerDimensions = adjustValueObjectByContainerDimensions;
+exports.getContainerDimensions = getContainerDimensions;
+var HEIGHT_UNIT = exports.HEIGHT_UNIT = 'ch';
+var WIDTH_UNIT = exports.WIDTH_UNIT = 'cw';
+
+/**
+ * @param {ContainerDimensions} dimensions
+ * @param {string} value Ex: "1<HEIGHT_UNIT>", "20<WIDTH_UNIT>"
+ *
+ * @return {string} Ex: "123px"
+ */
+function convertSingleValueToPixel(dimensions, value) {
+    var isHeightUnit = value.indexOf(HEIGHT_UNIT) !== -1;
+
+    var match = value.match(new RegExp('(\\d+)'));
+
+    if (isHeightUnit) {
+        return dimensions.height * parseInt(match[1]) / 100 + 'px';
+    }
+
+    return dimensions.width * parseInt(match[1]) / 100 + 'px';
+}
+
+/**
+ * @param  {ContainerDimensions} dimensions
+ * @param  {string} compositValue Ex: "10<HEIGHT_UNIT> 5<WIDTH_UNIT>"
+ *
+ * @return {string} Ex: "123px 10px 42px"
+ */
+function convertCompositValuesToPixel(dimensions, compositValue) {
+    var valArr = [];
+    var match = void 0;
+
+    match = compositValue.match(new RegExp('\\d+' + HEIGHT_UNIT, 'g'));
+    if (match !== null) {
+        valArr = valArr.concat(match);
+    }
+
+    match = compositValue.match(new RegExp('\\d+' + WIDTH_UNIT, 'g'));
+    if (match !== null) {
+        valArr = valArr.concat(match);
+    }
+
+    var convertedValues = {};
+    valArr.forEach(function (value) {
+        convertedValues[value] = convertSingleValueToPixel(dimensions, value);
+    });
+
+    var compositPixelValue = compositValue;
+
+    for (var unconvertedValue in convertedValues) {
+        compositPixelValue = compositPixelValue.replace(new RegExp(unconvertedValue, 'g'), convertedValues[unconvertedValue]);
+    }
+
+    return compositPixelValue;
+}
+
+/**
+ * @param {ContainerDimensions} containerDimensions
+ * @param {Object} valueDefinition
+ * Ex:
+ * `{
+ *   fontSize: "1<HEIGHT_UNIT>",
+ *   padding: "10<HEIGHT_UNIT> 10<WIDTH_UNIT>",
+ * }`
+ *
+ * @returns {Object}
+ * Ex:
+ * `{
+ *   fontSize: "10px",
+ *   padding: "10px 20px",
+ * }`
+ */
+function adjustValueObjectByContainerDimensions(containerDimensions, valueDefinition) {
+    var values = Object.assign({}, valueDefinition);
+
+    for (var cssRule in values) {
+        values[cssRule] = convertCompositValuesToPixel(containerDimensions, values[cssRule]);
     }
 
     return values;
 }
 
-function convertValue(containerDimensions, value) {
-    if (value[1] === 'ch') {
-        return containerDimensions.height * value[0] + 'px';
-    }
-
-    return containerDimensions.width * value[0] + 'px';
+/**
+ * @param {jQuery} $container
+ *
+ * @return {ContainerDimensions}
+ */
+function getContainerDimensions($container) {
+    return {
+        width: $container.width(),
+        height: $container.height()
+    };
 }
 
-function adjustQueries($container, containerDimensions, config) {
-    let queriesLength = config.queries.length;
-    let changeSets = {};
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
-    for (var i = 0; i < queriesLength; i++) {
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = adjustContainer;
+
+var _utils = __webpack_require__(2);
+
+function adjustQueries($container, containerDimensions, config) {
+    var queriesLength = config.queries.length;
+    var changeSets = {};
+
+    var _loop = function _loop(i) {
+        // Check if the condition apply, or if it's the first, default query
         if (i !== 0 && typeof config.queries[i].conditionFunction === 'function' && !config.queries[i].conditionFunction(containerDimensions)) {
-            continue;
+            return 'continue';
         }
 
-        config.queries[i].elements.forEach(elementData => {
+        config.queries[i].elements.forEach(function (elementData) {
             if (i === 0) {
                 // @todo This is where missing elements could be addressed
                 changeSets[elementData.selector] = {
@@ -200,135 +317,115 @@ function adjustQueries($container, containerDimensions, config) {
                 };
             }
 
-            Object.assign(changeSets[elementData.selector].change, elementData.styles);
+            Object.assign(changeSets[elementData.selector].change, (0, _utils.adjustValueObjectByContainerDimensions)(containerDimensions, elementData.styles));
         });
+    };
+
+    for (var i = 0; i < queriesLength; i++) {
+        var _ret = _loop(i);
+
+        if (_ret === 'continue') continue;
     }
 
-    for (let key in changeSets) {
-        changeSets[key].$element.css(changeSets[key].change);
-    }
-}
-
-function adjustValues($container, containerDimensions, config) {
-    let valuesLength = config.values.length;
-    let changeSets = {};
-
-    for (var i = 0; i < valuesLength; i++) {
-        if (i !== 0 && typeof config.values[i].conditionFunction === 'function' && !config.values[i].conditionFunction(containerDimensions)) {
-            continue;
-        }
-
-        config.values[i].elements.forEach(elementData => {
-            if (i === 0) {
-                // @todo This is where missing elements could be addressed
-                changeSets[elementData.selector] = {
-                    $element: elementData.selector === config.selector ? $container : $container.find(elementData.selector),
-                    change: Object.assign({}, elementData.defaultValues)
-                };
-            }
-
-            Object.assign(changeSets[elementData.selector].change, adjustValuesByContainerDimensions(containerDimensions, elementData.values));
-        });
-    }
-
-    for (let key in changeSets) {
-        changeSets[key].$element.css(changeSets[key].change);
+    for (var elementSelector in changeSets) {
+        changeSets[elementSelector].$element.css(changeSets[elementSelector].change);
     }
 }
 
 function adjustContainer($container, config) {
-    let containerDimensions = {
-        width: $container.width(),
-        height: $container.height()
-    };
+    var containerDimensions = (0, _utils.getContainerDimensions)($container);
 
-    adjustValues($container, containerDimensions, config);
     adjustQueries($container, containerDimensions, config);
 }
 
 /***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = enhanceConfig;
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = enhanceConfig;
 function getFunctionFromConditions(conditions) {
     if (!Array.isArray(conditions)) {
         return noCondition;
     }
 
-    let conditionFunctions = conditions.map(condition => {
-        const rule = condition[0];
-        const operation = condition[1];
-        const value = condition[2];
+    var conditionFunctions = conditions.map(function (condition) {
+        var rule = condition[0];
+        var operation = condition[1];
+        var value = condition[2];
 
         if (rule === 'width') {
             if (operation === '>') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width > value;
                 };
             } else if (operation === '>=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width >= value;
                 };
             } else if (operation === '<') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width < value;
                 };
             } else if (operation === '<=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width <= value;
                 };
             }
         } else if (rule === 'height') {
             if (operation === '>') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height > value;
                 };
             } else if (operation === '>=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height >= value;
                 };
             } else if (operation === '<') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height < value;
                 };
             } else if (operation === '<=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height <= value;
                 };
             }
         } else if (rule === 'aspect-ratio') {
             if (operation === '>') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width / containerDimensions.height > value;
                 };
             } else if (operation === '>=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width / containerDimensions.height >= value;
                 };
             } else if (operation === '<') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width / containerDimensions.height < value;
                 };
             } else if (operation === '<=') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.width / containerDimensions.height <= value;
                 };
             }
         } else if (rule === 'orientation') {
             if (value === 'portrait') {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height >= containerDimensions.width;
                 };
             } else {
-                return containerDimensions => {
+                return function (containerDimensions) {
                     return containerDimensions.height < containerDimensions.width;
                 };
             }
         }
 
-        return () => {
+        return function () {
             console.log("This condition was not processed properly, returning false.", condition);
 
             return false;
@@ -339,8 +436,8 @@ function getFunctionFromConditions(conditions) {
 }
 
 function andCondition(conditionFunctions, containerDimensions) {
-    let conditionFunctionsLength = conditionFunctions.length;
-    for (let i = 0; i < conditionFunctionsLength; i++) {
+    var conditionFunctionsLength = conditionFunctions.length;
+    for (var i = 0; i < conditionFunctionsLength; i++) {
         if (!conditionFunctions[i](containerDimensions)) {
             return false;
         }
@@ -354,13 +451,9 @@ function noCondition() {
 }
 
 function enhanceConfig($container, origConfig) {
-    let config = Object.assign({}, origConfig);
+    var config = Object.assign({}, origConfig);
 
-    config.values.forEach(valueData => {
-        valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
-    });
-
-    config.queries.forEach(queryData => {
+    config.queries.forEach(function (queryData) {
         queryData.conditionFunction = getFunctionFromConditions(queryData.conditions);
     });
 
@@ -368,26 +461,34 @@ function enhanceConfig($container, origConfig) {
 }
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_Container__ = __webpack_require__(1);
 
 
-const containerConfigs = __webpack_require__(0);
+var _Container = __webpack_require__(1);
 
-let containers = [];
+var _Container2 = _interopRequireDefault(_Container);
 
-for (let containerSelector in containerConfigs) {
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var containerConfigs = __webpack_require__(0);
+
+var containers = [];
+
+var _loop = function _loop(containerSelector) {
     $(containerSelector).each(function () {
-        containers.push(new __WEBPACK_IMPORTED_MODULE_0__src_Container__["a" /* default */](this, Object.assign({}, containerConfigs[containerSelector])));
+        containers.push(new _Container2.default(this, Object.assign({}, containerConfigs[containerSelector])));
     });
+};
+
+for (var containerSelector in containerConfigs) {
+    _loop(containerSelector);
 }
 
-$(window).on('resize', () => {
-    containers.forEach(container => {
+$(window).on('resize', function () {
+    containers.forEach(function (container) {
         container.adjust();
     });
 });

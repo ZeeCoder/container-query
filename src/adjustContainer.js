@@ -8,6 +8,7 @@ function adjustQueries ($container, containerDimensions, config) {
     let changeSets = {};
 
     for (let i = 0; i < queriesLength; i++) {
+        // Check if the condition apply, or if it's the first, default query
         if (
             i !== 0 &&
             typeof config.queries[i].conditionFunction === 'function' &&
@@ -31,57 +32,18 @@ function adjustQueries ($container, containerDimensions, config) {
 
             Object.assign(
                 changeSets[elementData.selector].change,
-                elementData.styles
+                adjustValueObjectByContainerDimensions(containerDimensions, elementData.styles)
             );
         });
     }
 
-    for (let key in changeSets) {
-        changeSets[key].$element.css(changeSets[key].change);
-    }
-}
-
-function adjustValues ($container, containerDimensions, config) {
-    let valuesLength = config.values.length;
-    let changeSets = {};
-
-    for (let i = 0; i < valuesLength; i++) {
-        if (
-            i !== 0 &&
-            typeof config.values[i].conditionFunction === 'function' &&
-            !config.values[i].conditionFunction(containerDimensions)
-        ) {
-            continue;
-        }
-
-        config.values[i].elements.forEach((elementData) => {
-            if (i === 0) {
-                // @todo This is where missing elements could be addressed
-                changeSets[elementData.selector] = {
-                    $element: (
-                        elementData.selector === config.selector
-                            ? $container
-                            : $container.find(elementData.selector)
-                    ),
-                    change: Object.assign({}, elementData.defaultValues),
-                };
-            }
-
-            Object.assign(
-                changeSets[elementData.selector].change,
-                adjustValueObjectByContainerDimensions(containerDimensions, elementData.values)
-            );
-        });
-    }
-
-    for (let key in changeSets) {
-        changeSets[key].$element.css(changeSets[key].change);
+    for (let elementSelector in changeSets) {
+        changeSets[elementSelector].$element.css(changeSets[elementSelector].change);
     }
 }
 
 export default function adjustContainer ($container, config) {
     const containerDimensions = getContainerDimensions($container);
 
-    adjustValues($container, containerDimensions, config);
     adjustQueries($container, containerDimensions, config);
 }

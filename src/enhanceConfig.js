@@ -100,10 +100,6 @@ function noCondition () { return true; }
 export default function enhanceConfig ($container, origConfig) {
     let config = Object.assign({}, origConfig);
 
-    config.values.forEach((valueData) => {
-        valueData.conditionFunction = getFunctionFromConditions(valueData.conditions);
-    });
-
     config.queries.forEach((queryData) => {
         queryData.conditionFunction = getFunctionFromConditions(queryData.conditions);
     });
