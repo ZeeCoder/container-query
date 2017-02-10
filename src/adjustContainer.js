@@ -1,14 +1,4 @@
-import { convertSingleValueToPixel } from '../lib/utils';
-
-function adjustValuesByContainerDimensions (containerDimensions, valueDefinition) {
-    let values = Object.assign({}, valueDefinition);
-
-    for (let cssRule in values) {
-        values[cssRule] = convertSingleValueToPixel(containerDimensions, values[cssRule]);
-    }
-
-    return values;
-}
+import { adjustValueObjectByContainerDimensions } from '../lib/utils';
 
 function adjustQueries ($container, containerDimensions, config) {
     let queriesLength = config.queries.length;
@@ -76,7 +66,7 @@ function adjustValues ($container, containerDimensions, config) {
 
             Object.assign(
                 changeSets[elementData.selector].change,
-                adjustValuesByContainerDimensions(containerDimensions, elementData.values)
+                adjustValueObjectByContainerDimensions(containerDimensions, elementData.values)
             );
         });
     }
