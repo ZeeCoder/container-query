@@ -141,11 +141,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _enhanceConfig = __webpack_require__(4);
+var _processConfig = __webpack_require__(7);
 
-var _enhanceConfig2 = _interopRequireDefault(_enhanceConfig);
+var _processConfig2 = _interopRequireDefault(_processConfig);
 
-var _adjustContainer = __webpack_require__(3);
+var _adjustContainer = __webpack_require__(6);
 
 var _adjustContainer2 = _interopRequireDefault(_adjustContainer);
 
@@ -160,7 +160,7 @@ var _class = function () {
         this.$container = $(container);
         this.adjust = this.adjust.bind(this);
 
-        this.config = (0, _enhanceConfig2.default)(this.$container, config);
+        this.config = (0, _processConfig2.default)(this.$container, config);
 
         this.adjust();
     }
@@ -285,7 +285,42 @@ function getContainerDimensions($container) {
 }
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Container = __webpack_require__(1);
+
+var _Container2 = _interopRequireDefault(_Container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var containerConfigs = __webpack_require__(0);
+
+var containers = [];
+
+var _loop = function _loop(containerSelector) {
+    $(containerSelector).each(function () {
+        containers.push(new _Container2.default(this, Object.assign({}, containerConfigs[containerSelector])));
+    });
+};
+
+for (var containerSelector in containerConfigs) {
+    _loop(containerSelector);
+}
+
+$(window).on('resize', function () {
+    containers.forEach(function (container) {
+        container.adjust();
+    });
+});
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -339,7 +374,7 @@ function adjustContainer($container, config) {
 }
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,7 +383,7 @@ function adjustContainer($container, config) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = enhanceConfig;
+exports.default = processConfig;
 function getFunctionFromConditions(conditions) {
     if (!Array.isArray(conditions)) {
         return noCondition;
@@ -450,7 +485,7 @@ function noCondition() {
     return true;
 }
 
-function enhanceConfig($container, origConfig) {
+function processConfig($container, origConfig) {
     var config = Object.assign({}, origConfig);
 
     config.queries.forEach(function (queryData) {
@@ -459,39 +494,6 @@ function enhanceConfig($container, origConfig) {
 
     return config;
 }
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Container = __webpack_require__(1);
-
-var _Container2 = _interopRequireDefault(_Container);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var containerConfigs = __webpack_require__(0);
-
-var containers = [];
-
-var _loop = function _loop(containerSelector) {
-    $(containerSelector).each(function () {
-        containers.push(new _Container2.default(this, Object.assign({}, containerConfigs[containerSelector])));
-    });
-};
-
-for (var containerSelector in containerConfigs) {
-    _loop(containerSelector);
-}
-
-$(window).on('resize', function () {
-    containers.forEach(function (container) {
-        container.adjust();
-    });
-});
 
 /***/ })
 /******/ ]);
