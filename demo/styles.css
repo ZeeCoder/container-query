@@ -45,7 +45,7 @@
     bottom: 0;
 
     border: 1px solid #ccc;
-    background: rgb(245,245,245);
+    background: red;
     border-radius: 5px;
     padding: 20px;
 
@@ -79,14 +79,28 @@
     font-size: 15px;
 }
 
+@container (width >= 200) {
+    .user {
+        background: green;
+    }
+}
+
+@container (width >= 300) {
+    .user {
+        background: blue;
+    }
+}
+
 @container (orientation: landscape) {
     .user__landscape {
         display: block;
+        background: red;
     }
 }
 
 @container (orientation: portrait) {
     .user__portrait {
         display: block;
+        background: blue;
     }
 }

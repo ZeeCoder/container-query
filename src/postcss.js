@@ -2,8 +2,9 @@ const postcss = require('postcss');
 const fs = require('fs');
 const trim = require('lodash.trim');
 const camelCase = require('lodash.camelCase');
-const CUNIT__HEIGHT = 'ch';
-const CUNIT__WIDTH = 'cw';
+const unit_constants = require('../lib/unit_constants');
+const HEIGHT_UNIT = unit_constants.HEIGHT_UNIT;
+const WIDTH_UNIT = unit_constants.WIDTH_UNIT;
 
 function addDefaultsToContainer (container, defaultElementStyles, defaultElementValues) {
     let defaultQuery = { elements: [] };
@@ -105,8 +106,8 @@ module.exports = postcss.plugin('container-query', function myplugin(options) {
                         let prop = camelCase(declaration.prop);
 
                         if (
-                            declaration.value.indexOf(CUNIT__HEIGHT) === -1 &&
-                            declaration.value.indexOf(CUNIT__WIDTH) === -1
+                            declaration.value.indexOf(HEIGHT_UNIT) === -1 &&
+                            declaration.value.indexOf(WIDTH_UNIT) === -1
                         ) {
                             queryElement.styles[prop] = declaration.value;
                             attachQuery = true;

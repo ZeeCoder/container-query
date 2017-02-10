@@ -77,15 +77,57 @@ module.exports = {
 			{
 				"elements": [
 					{
+						"selector": ".user",
+						"styles": {
+							"background": ""
+						}
+					},
+					{
 						"selector": ".user__landscape",
 						"styles": {
-							"display": ""
+							"display": "",
+							"background": ""
 						}
 					},
 					{
 						"selector": ".user__portrait",
 						"styles": {
-							"display": ""
+							"display": "",
+							"background": ""
+						}
+					}
+				]
+			},
+			{
+				"conditions": [
+					[
+						"width",
+						">=",
+						"200"
+					]
+				],
+				"elements": [
+					{
+						"selector": ".user",
+						"styles": {
+							"background": "green"
+						}
+					}
+				]
+			},
+			{
+				"conditions": [
+					[
+						"width",
+						">=",
+						"300"
+					]
+				],
+				"elements": [
+					{
+						"selector": ".user",
+						"styles": {
+							"background": "blue"
 						}
 					}
 				]
@@ -102,7 +144,8 @@ module.exports = {
 					{
 						"selector": ".user__landscape",
 						"styles": {
-							"display": "block"
+							"display": "block",
+							"background": "red"
 						}
 					}
 				]
@@ -119,10 +162,16 @@ module.exports = {
 					{
 						"selector": ".user__portrait",
 						"styles": {
-							"display": "block"
+							"display": "block",
+							"background": "blue"
 						}
 					}
 				]
+			}
+		],
+		"values": [
+			{
+				"elements": []
 			}
 		]
 	}
@@ -191,8 +240,8 @@ exports.convertSingleValueToPixel = convertSingleValueToPixel;
 exports.convertCompositValuesToPixel = convertCompositValuesToPixel;
 exports.adjustValueObjectByContainerDimensions = adjustValueObjectByContainerDimensions;
 exports.getContainerDimensions = getContainerDimensions;
-var HEIGHT_UNIT = exports.HEIGHT_UNIT = 'ch';
-var WIDTH_UNIT = exports.WIDTH_UNIT = 'cw';
+
+var _unit_constants = __webpack_require__(8);
 
 /**
  * @param {ContainerDimensions} dimensions
@@ -201,7 +250,7 @@ var WIDTH_UNIT = exports.WIDTH_UNIT = 'cw';
  * @return {string} Ex: "123px"
  */
 function convertSingleValueToPixel(dimensions, value) {
-    var isHeightUnit = value.indexOf(HEIGHT_UNIT) !== -1;
+    var isHeightUnit = value.indexOf(_unit_constants.HEIGHT_UNIT) !== -1;
 
     var match = value.match(new RegExp('(\\d+)'));
 
@@ -222,12 +271,12 @@ function convertCompositValuesToPixel(dimensions, compositValue) {
     var valArr = [];
     var match = void 0;
 
-    match = compositValue.match(new RegExp('\\d+' + HEIGHT_UNIT, 'g'));
+    match = compositValue.match(new RegExp('\\d+' + _unit_constants.HEIGHT_UNIT, 'g'));
     if (match !== null) {
         valArr = valArr.concat(match);
     }
 
-    match = compositValue.match(new RegExp('\\d+' + WIDTH_UNIT, 'g'));
+    match = compositValue.match(new RegExp('\\d+' + _unit_constants.WIDTH_UNIT, 'g'));
     if (match !== null) {
         valArr = valArr.concat(match);
     }
@@ -494,6 +543,18 @@ function processConfig($container, origConfig) {
 
     return config;
 }
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+    HEIGHT_UNIT: 'ch',
+    WIDTH_UNIT: 'cw'
+};
 
 /***/ })
 /******/ ]);

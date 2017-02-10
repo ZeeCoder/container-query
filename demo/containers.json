@@ -5,15 +5,57 @@
       {
         "elements": [
           {
+            "selector": ".user",
+            "styles": {
+              "background": ""
+            }
+          },
+          {
             "selector": ".user__landscape",
             "styles": {
-              "display": ""
+              "display": "",
+              "background": ""
             }
           },
           {
             "selector": ".user__portrait",
             "styles": {
-              "display": ""
+              "display": "",
+              "background": ""
+            }
+          }
+        ]
+      },
+      {
+        "conditions": [
+          [
+            "width",
+            ">=",
+            "200"
+          ]
+        ],
+        "elements": [
+          {
+            "selector": ".user",
+            "styles": {
+              "background": "green"
+            }
+          }
+        ]
+      },
+      {
+        "conditions": [
+          [
+            "width",
+            ">=",
+            "300"
+          ]
+        ],
+        "elements": [
+          {
+            "selector": ".user",
+            "styles": {
+              "background": "blue"
             }
           }
         ]
@@ -30,7 +72,8 @@
           {
             "selector": ".user__landscape",
             "styles": {
-              "display": "block"
+              "display": "block",
+              "background": "red"
             }
           }
         ]
@@ -47,10 +90,16 @@
           {
             "selector": ".user__portrait",
             "styles": {
-              "display": "block"
+              "display": "block",
+              "background": "blue"
             }
           }
         ]
+      }
+    ],
+    "values": [
+      {
+        "elements": []
       }
     ]
   }
