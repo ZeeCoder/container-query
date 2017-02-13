@@ -120,7 +120,7 @@ function isEmptyObject (obj) {
 /**
  * @type {{ JSONSavePath: string }}
  */
-module.exports = postcss.plugin('container-query', function ContainerQuery(options) {
+function ContainerQueryPlugin (options) {
     return function (root) {
         options = options || {};
 
@@ -211,4 +211,9 @@ module.exports = postcss.plugin('container-query', function ContainerQuery(optio
         options.getJSON(containers);
     };
 
-});
+}
+
+module.exports = postcss.plugin('container-query', ContainerQueryPlugin);
+
+module.exports.detectContainerDefinition = detectContainerDefinition;
+
