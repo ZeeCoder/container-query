@@ -1,0 +1,40 @@
+.user {
+    @define-container;
+    font-size: 1ch;
+}
+
+.user__image {
+    font-size: 10ch;
+    line-height: 5ch;
+}
+
+@container (width > 100) {
+    .user {
+        font-size: 10ch;
+        border: none;
+    }
+
+    .user__image {
+        font-size: 20ch;
+        background: #ccc;
+        height: 100px;
+    }
+}
+
+.user2 {
+    border: none;
+    font-size: 10ch;
+    @define-container;
+    line-height: 10ch;
+    background: #000;
+}
+
+@container (landscape: portrait) {
+    .user2 {
+        height: 50px;
+    }
+
+    .user2__image {
+        width: 100px;
+    }
+}

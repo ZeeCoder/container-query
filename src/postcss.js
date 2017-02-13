@@ -1,159 +1,214 @@
 const postcss = require('postcss');
-const fs = require('fs');
 const trim = require('lodash.trim');
 const camelCase = require('lodash.camelCase');
+
 const unit_constants = require('../lib/unit_constants');
 const HEIGHT_UNIT = unit_constants.HEIGHT_UNIT;
 const WIDTH_UNIT = unit_constants.WIDTH_UNIT;
 
-function addDefaultsToContainer (container, defaultElementStyles, defaultElementValues) {
-    let defaultQuery = { elements: [] };
-    for (let elementSelector in defaultElementStyles) {
-        let defaultElement = {
-            selector: elementSelector,
-            styles: {},
-        };
+/**
+ * @param ruleNode
+ *
+ * @returns {string|null}
+ */
+function detectContainerDefinition (ruleNode) {
+    let container = null;
 
-        defaultElementStyles[elementSelector].forEach((prop) => {
-            defaultElement.styles[prop] = '';
-        });
-
-        defaultQuery.elements.push(defaultElement);
+    const nodesLength = ruleNode.nodes.length;
+    for (let i = 0; i < nodesLength; i++) {
+        if (
+            ruleNode.nodes[i].type === 'atrule' &&
+            ruleNode.nodes[i].name === 'define-container'
+        ) {
+            container = ruleNode.selector;
+            break;
+        }
     }
-    container.queries.unshift(defaultQuery);
 
-    let defaultValue = { elements: [] };
-    for (let elementSelector in defaultElementValues) {
-        let defaultElement = {
-            selector: elementSelector,
-            values: {},
-        };
+    return container;
+}
 
-        defaultElementValues[elementSelector].forEach((prop) => {
-            defaultElement.values[prop] = '';
-        });
+/**
+ * @param {String} value
+ *
+ * @returns {boolean}
+ */
+function isValueUsingContainerUnits (value) {
+    return (
+        value.indexOf(HEIGHT_UNIT) !== -1 ||
+        value.indexOf(WIDTH_UNIT) !== -1
+    );
+}
 
-        defaultValue.elements.push(defaultElement);
+/**
+ * Creates a styles object that contains only css declarations that use
+ * container units.
+ */
+function extractContainerUnitStylesFromRule (ruleNode, isContainer) {
+    const styles = {};
+
+    ruleNode.nodes.forEach((node) => {
+        if (
+            node.type !== 'decl' ||
+            !isValueUsingContainerUnits(node.value)
+        ) {
+            return;
+        }
+
+        if (
+            isContainer &&
+            [ 'width', 'height' ].indexOf(node.prop) !== -1
+        ) {
+            // @todo more helpful message here
+            throw new Error('A container cannot use container units for its width and/or height properties.');
+        }
+
+        styles[camelCase(node.prop)] = node.value;
+    });
+
+    return styles;
+}
+
+function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false) {
+    for (let prop in styles) {
+        if (typeof defaultElementRef.styles[prop] !== 'undefined') {
+            continue;
+        }
+
+        defaultElementRef.styles[prop] = keepValues ? styles[prop] : '';
     }
-    container.values.unshift(defaultValue);
+}
+
+function getConditionsFromQueryParams (params) {
+    let conditionArr = params.match(/\(([^\)]*)\)/g);
+    return conditionArr.map((condition) => {
+        let conditionArr = trim(condition, '()');
+
+        conditionArr = conditionArr.match(/([a-z]*)([ :><=]*)([a-z0-9]*)/i);
+        conditionArr.shift();
+
+        conditionArr = conditionArr.map(trim);
+
+        return conditionArr;
+    });
+}
+
+function getStylesObjectFromNodes(nodes) {
+    const styles = {};
+
+    nodes.forEach((node) => {
+        if (node.type !== 'decl') {
+            return;
+        }
+
+        styles[camelCase(node.prop)] = node.value;
+    });
+
+    return styles;
+}
+
+function isEmptyObject (obj) {
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
  * @type {{ JSONSavePath: string }}
  */
-module.exports = postcss.plugin('container-query', function myplugin(options) {
-
+module.exports = postcss.plugin('container-query', function ContainerQuery(options) {
     return function (root) {
-
-        let containers = {};
-
         options = options || {};
 
-        // Processing code will be added her
-        let currentContainer = null;
-        let defaultElementStyles = {};
-        let defaultElementValues = {};
-        root.walkAtRules((rule) => {
-            // todo: handle issues here, when for a @container declaration there's no defined-container
+        let containers = {};
+        let currentContainerSelector = null;
+        let currentDefaultQuery = null;
+        let currentDefaultQueryMap = null;
 
-            if (rule.name === 'define-container') {
-                containers[rule.parent.selector] = {
-                    selector: rule.parent.selector,
-                    queries: [],
-                    values: [],
+        function getElementRefBySelector (selector) {
+            if (typeof currentDefaultQueryMap[selector] === 'undefined') {
+                let elementRef = {
+                    selector: selector,
+                    styles: {},
                 };
 
-                if (currentContainer !== null) {
-                    addDefaultsToContainer(containers[currentContainer], defaultElementStyles, defaultElementValues);
+                currentDefaultQuery.elements.push(elementRef);
+                currentDefaultQueryMap[selector] = elementRef;
+            }
+
+            return currentDefaultQueryMap[selector];
+        }
+
+        function flushCurrentContainerData (newContainer = null) {
+            if (currentContainerSelector !== null) {
+                containers[currentContainerSelector].queries.unshift(currentDefaultQuery);
+            }
+            if (newContainer !== null) {
+                containers[newContainer] = {
+                    selector: newContainer,
+                    queries: [],
+                };
+            }
+            currentDefaultQuery = { elements: [] };
+            currentDefaultQueryMap = {};
+
+            currentContainerSelector = newContainer;
+        }
+
+        root.walk((node) => {
+            if (node.type === 'rule') {
+                // Check if there's a @define-container declaration in the rule
+                let newContainer = detectContainerDefinition(node);
+                if (newContainer !== null) {
+                    flushCurrentContainerData(newContainer);
                 }
 
-                currentContainer = rule.parent.selector;
-                defaultElementStyles = {};
-                defaultElementValues = {};
+                // Process potential container unit usages to the default query
+                addStylesToDefaultQuery(
+                    getElementRefBySelector(node.selector),
+                    extractContainerUnitStylesFromRule(node, newContainer !== null),
+                    true
+                );
+            } else if (node.type === 'atrule' && node.name === 'container') {
+                let query = {
+                    condition: getConditionsFromQueryParams(node.params),
+                    elements: [],
+                };
 
-            } else if (rule.name === 'container') {
-                let query = { conditions: [], elements: [] };
-                let value = { conditions: [], elements: [] };
-
-                let conditionArr = rule.params.match(/\(([^\)]*)\)/g);
-                query.conditions = conditionArr.map((condition) => {
-                    let conditionArr = trim(condition, '()');
-
-                    conditionArr = conditionArr.match(/([a-z]*)([ :><=]*)([a-z0-9]*)/i);
-                    conditionArr.shift();
-
-                    conditionArr = conditionArr.map(trim);
-
-                    return conditionArr;
-                });
-
-                value.conditions = query.conditions;
-
-                rule.nodes.forEach((rule) => {
-                    let queryElement = {
-                        selector: rule.selector,
-                        styles: {},
-                    };
-                    let attachQuery = false;
-
-                    let valueElement = {
-                        selector: rule.selector,
-                        values: {},
-                    };
-                    let attachValue = false;
-
-                    rule.nodes.forEach((declaration) => {
-                        let prop = camelCase(declaration.prop);
-
-                        if (
-                            declaration.value.indexOf(HEIGHT_UNIT) === -1 &&
-                            declaration.value.indexOf(WIDTH_UNIT) === -1
-                        ) {
-                            queryElement.styles[prop] = declaration.value;
-                            attachQuery = true;
-
-                            if (typeof defaultElementStyles[rule.selector] === 'undefined') {
-                                defaultElementStyles[rule.selector] = [];
-                            }
-
-                            defaultElementStyles[rule.selector].push(prop);
-                        } else {
-
-                            let valueArr = declaration.value.match(/(\d*)([a-z]*)/i);
-                            valueArr.shift();
-                            valueArr[0] = parseInt(valueArr[0]) / 100;
-
-                            valueElement.values[prop] = valueArr;
-                            attachValue = true;
-
-                            if (typeof defaultElementValues[rule.selector] === 'undefined') {
-                                defaultElementValues[rule.selector] = [];
-                            }
-
-                            defaultElementValues[rule.selector].push(prop);
-                        }
-                    });
-
-                    if (attachQuery) {
-                        query.elements.push(queryElement);
+                node.nodes.forEach((elementRule) => {
+                    if (elementRule.type !== 'rule') {
+                        return;
                     }
-                    if (attachValue) {
-                        value.elements.push(valueElement);
+
+                    // @todo check here if the "element" is the container itself, and then don't allow width / height container units
+                    let element = {
+                        selector: elementRule.selector,
+                        styles: getStylesObjectFromNodes(elementRule.nodes),
+                    };
+
+                    if (!isEmptyObject(element.styles)) {
+                        addStylesToDefaultQuery(
+                            getElementRefBySelector(elementRule.selector),
+                            element.styles
+                        );
+
+                        query.elements.push(element);
                     }
                 });
 
                 if (query.elements.length > 0) {
-                    containers[currentContainer].queries.push(query);
-                }
-                if (value.elements.length > 0) {
-                    containers[currentContainer].values.push(value);
+                    containers[currentContainerSelector].queries.push(query);
                 }
             }
         });
 
-        addDefaultsToContainer(containers[currentContainer], defaultElementStyles, defaultElementValues);
+        flushCurrentContainerData();
 
-        fs.writeFileSync(options.JSONSavePath, JSON.stringify(containers, null, 2));
+        options.getJSON(containers);
     };
 
 });

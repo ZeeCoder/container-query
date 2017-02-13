@@ -6,101 +6,33 @@
     &--right2,
     &--right3,
     &--right4 {
-        width: 50%;
-    }
+         width: 50%;
+     }
 
     &--right1,
     &--right2,
     &--right3,
     &--right4 {
-        right: 0;
-        height: 25%;
-    }
+         right: 0;
+         height: 25%;
+     }
 
     &--left {
-        left: 0;
-        top: 0;
-        height: 100%;
-    }
+         left: 0;
+         top: 0;
+         height: 100%;
+     }
 
     &--right1 {
-        top: 0;
-    }
+         top: 0;
+     }
     &--right2 {
-        top: 25%;
-    }
+         top: 25%;
+     }
     &--right3 {
-        bottom: 25%;
-    }
+         bottom: 25%;
+     }
     &--right4 {
-        bottom: 0;
-    }
-}
-
-.user {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-
-    border: 1px solid #ccc;
-    background: red;
-    border-radius: 5px;
-    padding: 20px;
-
-    @define-container;
-}
-
-.user__image {
-    width: 100%;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 100%;
-}
-
-.user__name {
-    display: none;
-}
-
-.user__list {
-    display: none;
-}
-
-.user__landscape,
-.user__portrait {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 10px;
-    background: #ddd;
-    font-family: monospace;
-    display: none;
-    font-size: 15px;
-}
-
-@container (width >= 200) {
-    .user {
-        background: green;
-    }
-}
-
-@container (width >= 300) {
-    .user {
-        background: blue;
-    }
-}
-
-@container (orientation: landscape) {
-    .user__landscape {
-        display: block;
-        background: red;
-    }
-}
-
-@container (orientation: portrait) {
-    .user__portrait {
-        display: block;
-        background: blue;
-    }
+         bottom: 0;
+     }
 }

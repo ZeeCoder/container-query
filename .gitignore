@@ -1,2 +1,6 @@
 node_modules
 .idea
+demo/scripts.dist.js
+demo/scripts.dist.js.map
+demo/containers.json
+
