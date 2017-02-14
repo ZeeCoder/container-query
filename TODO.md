@@ -6,6 +6,7 @@
 - think about circular issues
 - remove jQuery dependency
 - optimize the condition functions by pre-defining and reusing them
+- detect container resizing
 
 # PostCSS Plugin
 - remove processed nodes
@@ -20,6 +21,9 @@
 - support units that translates to non px. (opacity, rgb, %, em-units, etc)
 
 # ETC
+- break down things to milestones
+- have a solution for sass / less
+- make it work in a nested way
 - move utils_constants back to the utils module
 - reactify? make it possible to adjust a container configuration to a given React
 Component by using refs
