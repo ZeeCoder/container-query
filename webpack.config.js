@@ -1,8 +1,8 @@
 module.exports = {
     entry: './demo/scripts.js',
     output: {
-        path: '.',
-        filename: './demo/scripts.dist.js',
+        path: './demo/dist',
+        filename: 'scripts.dist.js',
     },
     module: {
         rules: [

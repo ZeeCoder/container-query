@@ -167,41 +167,49 @@ function ContainerQueryPlugin (options) {
                     flushCurrentContainerData(newContainer);
                 }
 
-                // Process potential container unit usages to the default query
-                addStylesToDefaultQuery(
-                    getElementRefBySelector(node.selector),
-                    extractContainerUnitStylesFromRule(node, newContainer !== null),
-                    true
-                );
+                if (currentContainerSelector !== null) {
+                    // Process potential container unit usages to the default query
+                    addStylesToDefaultQuery(
+                        getElementRefBySelector(node.selector),
+                        extractContainerUnitStylesFromRule(node, newContainer !== null),
+                        true
+                    );
+                }
             } else if (node.type === 'atrule' && node.name === 'container') {
-                let query = {
-                    condition: getConditionsFromQueryParams(node.params),
-                    elements: [],
-                };
+                if (currentContainerSelector === null) {
+                    // @todo be more specific
+                    // throw new Error('A @container query was found, without preceding @define-container declaration.');
+                } else {
 
-                node.nodes.forEach((elementRule) => {
-                    if (elementRule.type !== 'rule') {
-                        return;
-                    }
-
-                    // @todo check here if the "element" is the container itself, and then don't allow width / height container units
-                    let element = {
-                        selector: elementRule.selector,
-                        styles: getStylesObjectFromNodes(elementRule.nodes),
+                    let query = {
+                        conditions: getConditionsFromQueryParams(node.params),
+                        elements: [],
                     };
 
-                    if (!isEmptyObject(element.styles)) {
-                        addStylesToDefaultQuery(
-                            getElementRefBySelector(elementRule.selector),
-                            element.styles
-                        );
+                    node.nodes.forEach((elementRule) => {
+                        if (elementRule.type !== 'rule') {
+                            return;
+                        }
 
-                        query.elements.push(element);
+                        // @todo check here if the "element" is the container itself, and then don't allow width / height container units
+                        let element = {
+                            selector: elementRule.selector,
+                            styles: getStylesObjectFromNodes(elementRule.nodes),
+                        };
+
+                        if (!isEmptyObject(element.styles)) {
+                            addStylesToDefaultQuery(
+                                getElementRefBySelector(elementRule.selector),
+                                element.styles
+                            );
+
+                            query.elements.push(element);
+                        }
+                    });
+
+                    if (query.elements.length > 0) {
+                        containers[currentContainerSelector].queries.push(query);
                     }
-                });
-
-                if (query.elements.length > 0) {
-                    containers[currentContainerSelector].queries.push(query);
                 }
             }
         });

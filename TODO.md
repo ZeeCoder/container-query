@@ -8,12 +8,16 @@
 - optimize the condition functions by pre-defining and reusing them
 
 # PostCSS Plugin
+- remove processed nodes
+- support float container values
 - extra plugin to lift out @container queries from nested selectors 
 - extract and test the condition => conditionFunction transformation
 - handle if the getJSON option is not a function, and have a default
 - handle issues where a @container declaration has no defined-container
 - in "queries", the first element must not have a condition function
 (this is the "base" which contains all possible changes, and the default values)
+- support operations, like `2ch + 2cw`
+- support units that translates to non px. (opacity, rgb, %, em-units, etc)
 
 # ETC
 - move utils_constants back to the utils module

@@ -1,40 +1,129 @@
 .user {
     @define-container;
-    font-size: 1ch;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+
+    border: calc(1ch + 1cw) solid;
+    text-align: center;
+    transition: background .3s;
+    box-sizing: border-box;
+}
+
+.user__line1 {
+    display: flex;
+    height: 100ch;
+    justify-content: center;
+    align-items: center;
+}
+
+.user__image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 80%;
+    height: 100%;
 }
 
 .user__image {
-    font-size: 10ch;
-    line-height: 5ch;
+    max-width: 100%;
+    max-height: 80%;
+    border-radius: 100%;
+    border: calc(1ch + 1cw / 5) solid #ccc;
+    box-sizing: border-box;
 }
 
-@container (width > 100) {
-    .user {
-        font-size: 10ch;
-        border: none;
+.user__name {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 0 0;
+    text-align: left;
+    font-size: calc(4ch + 4cw);
+    display: none;
+}
+
+@container (width >= 250) and (height >= 250) {
+    .user__image-wrapper {
+        flex: 0 0 40%;
+        height: auto;
     }
 
     .user__image {
-        font-size: 20ch;
+        max-width: 100%;
+        max-height: 100ch;
+    }
+
+    .user__name {
+        display: block;
+    }
+}
+
+@container (orientation: landscape) {
+    .user__name {
+        margin: 0 5cw;
+        line-height: 100ch;
+    }
+}
+
+@container (orientation: portrait) {
+    .user__line1 {
+        flex-direction: column;
+        height: 100ch;
+    }
+
+    .user__image-wrapper {
+        flex: 1 0 0;
+    }
+
+    .user__image {
+        max-height: 75ch;
+    }
+
+    .user__name {
+        flex: 0 0 20ch;
+        line-height: 20ch;
+        text-align: center;
+    }
+}
+
+@container (width > 300) {
+    .user {
         background: #ccc;
-        height: 100px;
     }
 }
 
-.user2 {
-    border: none;
-    font-size: 10ch;
-    @define-container;
-    line-height: 10ch;
-    background: #000;
+@container (width > 400) {
+    .user {
+        background: #bbb;
+    }
 }
 
-@container (landscape: portrait) {
-    .user2 {
-        height: 50px;
+@container (width > 500) {
+    .user {
+        background: #aaa;
     }
+}
 
-    .user2__image {
-        width: 100px;
+@container (width > 600) {
+    .user {
+        background: #999;
+    }
+}
+
+@container (width > 700) {
+    .user {
+        background: #888;
+    }
+}
+
+@container (width > 800) {
+    .user {
+        background: #999;
     }
 }

@@ -7,7 +7,7 @@ const containerQuery = require('./src/postcss');
 gulp.task('css', function () {
     const postcss = require('gulp-postcss');
 
-    return gulp.src('demo/user.css')
+    return gulp.src('demo/*.css')
         .pipe(postcss([
             nested(),
             containerQuery({
@@ -23,5 +23,5 @@ gulp.task('css', function () {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('demo/styles.css', ['css']);
+    gulp.watch('demo/*.css', ['css']);
 });

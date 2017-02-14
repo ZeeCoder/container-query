@@ -21,4 +21,4 @@ $(window).on('resize', () => {
     containers.forEach((container) => {
         container.adjust();
     });
-})
+});
