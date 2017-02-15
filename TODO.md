@@ -6,7 +6,7 @@
 - think about circular issues
 - remove jQuery dependency
 - optimize the condition functions by pre-defining and reusing them
-- detect container resizing
+- optionally detect container resizing (polling solution?)
 
 # PostCSS Plugin
 - remove processed nodes

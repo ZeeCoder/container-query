@@ -2,26 +2,26 @@ const gulp = require('gulp');
 const fs = require('fs');
 const path = require('path');
 const nested = require('postcss-nested');
-const containerQuery = require('./src/postcss');
+const containerQuery = require('../lib/postcss/containerQuery');
 
 gulp.task('css', function () {
     const postcss = require('gulp-postcss');
 
-    return gulp.src('demo/*.css')
+    return gulp.src('*.css')
         .pipe(postcss([
             nested(),
             containerQuery({
                 getJSON: (json) => {
                     fs.writeFileSync(
-                        path.join(__dirname, '/demo/containers.json'),
+                        path.join(__dirname, '/containers.json'),
                         JSON.stringify(json, null, 2)
                     );
                 }
             }),
         ]))
-        .pipe( gulp.dest('demo/dist') );
+        .pipe( gulp.dest('dist') );
 });
 
 gulp.task('watch', function() {
-    gulp.watch('demo/*.css', ['css']);
+    gulp.watch('*.css', ['css']);
 });

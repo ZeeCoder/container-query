@@ -1,4 +1,4 @@
-import Container from '../src/Container';
+import Container from '../lib/runtime/Container';
 
 const containerConfigs = require('./containers.json');
 
@@ -6,6 +6,7 @@ let containers = [];
 
 for (let containerSelector in containerConfigs) {
     $(containerSelector).each(function () {
+        console.log(containerConfigs[containerSelector]);
         containers.push(
             new Container(
                 this,

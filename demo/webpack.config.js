@@ -1,7 +1,7 @@
 module.exports = {
-    entry: './demo/scripts.js',
+    entry: './scripts.js',
     output: {
-        path: './demo/dist',
+        path: './dist',
         filename: 'scripts.dist.js',
     },
     module: {
