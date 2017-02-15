@@ -1,0 +1,7 @@
+engines:
+  csslint:
+    enabled: false
+
+exclude_paths:
+  - demo/**/*
+  - lib/**/*

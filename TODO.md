@@ -1,4 +1,5 @@
 
+
 # Runtime JS
 - Think of a better unit for container values (instead of ch/cw)
 - support "or" in queries
@@ -27,6 +28,7 @@
 - move utils_constants back to the utils module
 - reactify? make it possible to adjust a container configuration to a given React
 Component by using refs
+- provide detailed comments
 
 # readme notes
 - lib/* is not considered to be a part of the public API, and hence breaking
