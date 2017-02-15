@@ -1,5 +1,3 @@
-
-
 # Runtime JS
 - Think of a better unit for container values (instead of ch/cw)
 - support "or" in queries
