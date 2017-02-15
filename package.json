@@ -20,6 +20,7 @@
     "url": "https://github.com/ZeeCoder/container-query/issues"
   },
   "devDependencies": {
+    "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-jest": "^18.0.0",
     "babel-loader": "^6.3.1",
@@ -33,6 +34,8 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "babel src --out-dir lib --ignore spec.js",
+    "watch": "babel --watch src --out-dir lib --ignore spec.js"
   }
 }

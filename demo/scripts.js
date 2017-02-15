@@ -1,4 +1,4 @@
-import Container from '../lib/runtime/Container';
+import Container from '../Container';
 
 const containerConfigs = require('./containers.json');
 
