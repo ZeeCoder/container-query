@@ -35,7 +35,9 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage && npm run lint",
+    "watch:test": "jest --watch --notify",
+    "lint": "eslint src",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "build": "babel src --out-dir lib --ignore spec.js",
     "watch": "babel --watch src --out-dir lib --ignore spec.js"
