@@ -3,7 +3,11 @@ engines:
     enabled: false
   eslint:
     enabled: true
-    channel: "eslint-2"
+    channel: eslint-2
+
+ratings:
+  paths:
+    - src/**/*
 
 exclude_paths:
   - demo/**/*
