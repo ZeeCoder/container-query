@@ -18,6 +18,7 @@
 (this is the "base" which contains all possible changes, and the default values)
 - support operations, like `2ch + 2cw`
 - support units that translates to non px. (opacity, rgb, %, em-units, etc)
+- make the plugin more foolproof. It should warn about potential typos / issues
 
 # ETC
 - break down things to milestones

@@ -1,23 +1,8 @@
 import postcss from 'postcss';
-import trim from 'lodash.trim';
 import camelCase from 'lodash.camelcase';
 import detectContainerDefinition from './detectContainerDefinition';
-import {
-    HEIGHT_UNIT,
-    WIDTH_UNIT,
-} from '../unit_constants';
-
-/**
- * @param {String} value
- *
- * @returns {boolean}
- */
-function isValueUsingContainerUnits (value) {
-    return (
-        value.indexOf(HEIGHT_UNIT) !== -1 ||
-        value.indexOf(WIDTH_UNIT) !== -1
-    );
-}
+import isValueUsingContainerUnits from './isValueUsingContainerUnits';
+import getConditionsFromQueryParams from './getConditionsFromQueryParams';
 
 /**
  * Creates a styles object that contains only css declarations that use
@@ -56,20 +41,6 @@ function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false)
 
         defaultElementRef.styles[prop] = keepValues ? styles[prop] : '';
     }
-}
-
-function getConditionsFromQueryParams (params) {
-    let conditionArr = params.match(/\(([^\)]*)\)/g);
-    return conditionArr.map((condition) => {
-        let conditionArr = trim(condition, '()');
-
-        conditionArr = conditionArr.match(/([a-z]*)([ :><=]*)([a-z0-9]*)/i);
-        conditionArr.shift();
-
-        conditionArr = conditionArr.map(trim);
-
-        return conditionArr;
-    });
 }
 
 function getStylesObjectFromNodes(nodes) {

@@ -1,5 +1,5 @@
 /**
- * @param ruleNode
+ * @param {Node} ruleNode
  *
  * @returns {string|null}
  */
