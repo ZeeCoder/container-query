@@ -1,8 +1,7 @@
 import postcss from 'postcss';
-import camelCase from 'lodash.camelcase';
 import detectContainerDefinition from './detectContainerDefinition';
 import getConditionsFromQueryParams from './getConditionsFromQueryParams';
-import extractContainerUnitStylesFromRule from './extractContainerUnitStylesFromRule';
+import getStylesObjectFromNode from './getStylesObjectFromNode';
 import isEmptyObject from './isEmptyObject';
 import { DEFINE_CONTAINER_NAME } from "../constants";
 
@@ -14,20 +13,6 @@ function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false)
 
         defaultElementRef.styles[prop] = keepValues ? styles[prop] : '';
     }
-}
-
-function getStylesObjectFromNodes(nodes) {
-    const styles = {};
-
-    nodes.forEach((node) => {
-        if (node.type !== 'decl') {
-            return;
-        }
-
-        styles[camelCase(node.prop)] = node.value;
-    });
-
-    return styles;
 }
 
 /**
@@ -84,7 +69,7 @@ function containerQuery (options) {
                     // Process potential container unit usages to the default query
                     addStylesToDefaultQuery(
                         getElementRefBySelector(node.selector),
-                        extractContainerUnitStylesFromRule(node),
+                        getStylesObjectFromNode(node, true),
                         true
                     );
                 }
@@ -107,7 +92,7 @@ function containerQuery (options) {
                         // @todo check here if the "element" is the container itself, and then don't allow width / height container units
                         let element = {
                             selector: elementRule.selector,
-                            styles: getStylesObjectFromNodes(elementRule.nodes),
+                            styles: getStylesObjectFromNode(elementRule),
                         };
 
                         if (!isEmptyObject(element.styles)) {
