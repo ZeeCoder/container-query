@@ -1,6 +1,15 @@
 import getConditionFunction from './getConditionFunction';
 
-export default function processConfig ($container, origConfig) {
+/**
+ * Returns an processed copy of the given configuration object.
+ * Enhancements:
+ * - Condition arrays are converted to functions that accept container dimensions
+ *
+ * @param {Object} origConfig
+ *
+ * @returns {Object}
+ */
+export default function processConfig (origConfig) {
     let config = Object.assign({}, origConfig);
 
     config.queries.forEach((queryData) => {

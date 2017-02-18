@@ -6,7 +6,7 @@ export default class {
         this.$container = $(container);
         this.adjust = this.adjust.bind(this);
 
-        this.config = processConfig(this.$container, config);
+        this.config = processConfig(config);
 
         this.adjust();
     }
