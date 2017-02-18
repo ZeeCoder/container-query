@@ -1,7 +1,7 @@
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
-} from '../unit_constants';
+} from '../constants';
 import adjustValueObjectByContainerDimensions from './adjustValueObjectByContainerDimensions';
 
 test('container value object gets all its values converted to pixels', () => {

@@ -3,6 +3,8 @@
  * @property {string} selector
  * @property {string} name
  * @property {string} type
+ * @property {string} prop
+ * @property {string} value
  * @property {Node[]} nodes
  */
 export default class Node {
@@ -11,6 +13,8 @@ export default class Node {
      *   [selector]: string,
      *   [name]: string,
      *   [type]: string,
+     *   [prop]: string,
+     *   [value]: string,
      * }} props
      */
     constructor (props) {
@@ -18,6 +22,8 @@ export default class Node {
         this.selector = props.selector;
         this.name = props.name;
         this.type = props.type;
+        this.prop = props.prop;
+        this.value = props.value;
     }
 
     /**

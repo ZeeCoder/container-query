@@ -1,7 +1,7 @@
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
-} from '../unit_constants';
+} from '../constants';
 import convertCompositValuesToPixel from './convertCompositValuesToPixel';
 
 test('composit container values are properly converted to pixels', () => {

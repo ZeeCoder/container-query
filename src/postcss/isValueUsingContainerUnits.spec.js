@@ -1,7 +1,7 @@
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
-} from '../unit_constants';
+} from '../constants';
 import isValueUsingContainerUnits from './isValueUsingContainerUnits';
 
 test('should report false for non-strings and string not containing container units', () => {

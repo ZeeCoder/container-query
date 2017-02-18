@@ -1,37 +1,9 @@
 import postcss from 'postcss';
 import camelCase from 'lodash.camelcase';
 import detectContainerDefinition from './detectContainerDefinition';
-import isValueUsingContainerUnits from './isValueUsingContainerUnits';
 import getConditionsFromQueryParams from './getConditionsFromQueryParams';
-
-/**
- * Creates a styles object that contains only css declarations that use
- * container units.
- */
-function extractContainerUnitStylesFromRule (ruleNode, isContainer) {
-    const styles = {};
-
-    ruleNode.nodes.forEach((node) => {
-        if (
-            node.type !== 'decl' ||
-            !isValueUsingContainerUnits(node.value)
-        ) {
-            return;
-        }
-
-        if (
-            isContainer &&
-            [ 'width', 'height' ].indexOf(node.prop) !== -1
-        ) {
-            // @todo more helpful message here
-            throw new Error('A container cannot use container units for its width and/or height properties.');
-        }
-
-        styles[camelCase(node.prop)] = node.value;
-    });
-
-    return styles;
-}
+import extractContainerUnitStylesFromRule from './extractContainerUnitStylesFromRule';
+import { DEFINE_CONTAINER_NAME } from "../constants";
 
 function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false) {
     for (let prop in styles) {
@@ -109,9 +81,9 @@ function containerQuery (options) {
             currentContainerSelector = newContainer;
         }
 
-        root.walk((node) => {
+        root.walk((/** Node */ node) => {
             if (node.type === 'rule') {
-                // Check if there's a @define-container declaration in the rule
+                // Check if there's a new container declared in the rule node
                 let newContainer = detectContainerDefinition(node);
                 if (newContainer !== null) {
                     flushCurrentContainerData(newContainer);
@@ -121,14 +93,14 @@ function containerQuery (options) {
                     // Process potential container unit usages to the default query
                     addStylesToDefaultQuery(
                         getElementRefBySelector(node.selector),
-                        extractContainerUnitStylesFromRule(node, newContainer !== null),
+                        extractContainerUnitStylesFromRule(node),
                         true
                     );
                 }
             } else if (node.type === 'atrule' && node.name === 'container') {
                 if (currentContainerSelector === null) {
                     // @todo be more specific
-                    // throw new Error('A @container query was found, without preceding @define-container declaration.');
+                    throw new Error(`A @container query was found, without preceding @${DEFINE_CONTAINER_NAME} declaration.`);
                 } else {
 
                     let query = {

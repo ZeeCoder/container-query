@@ -1,7 +1,7 @@
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
-} from '../unit_constants';
+} from '../constants';
 
 /**
  * @param {String} value

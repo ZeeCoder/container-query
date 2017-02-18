@@ -1,3 +1,5 @@
+import { DEFINE_CONTAINER_NAME } from "../constants";
+
 /**
  * @param {Node} ruleNode
  *
@@ -10,7 +12,7 @@ export default function detectContainerDefinition (ruleNode) {
     for (let i = 0; i < nodesLength; i++) {
         if (
             ruleNode.nodes[i].type === 'atrule' &&
-            ruleNode.nodes[i].name === 'define-container'
+            ruleNode.nodes[i].name === DEFINE_CONTAINER_NAME
         ) {
             container = ruleNode.selector;
             break;

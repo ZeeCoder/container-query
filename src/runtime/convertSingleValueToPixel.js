@@ -1,6 +1,6 @@
 import {
     HEIGHT_UNIT,
-} from '../unit_constants';
+} from '../constants';
 
 /**
  * @param {ContainerDimensions} dimensions
