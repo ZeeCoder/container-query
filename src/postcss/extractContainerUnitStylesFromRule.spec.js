@@ -51,3 +51,55 @@ test('should throw if container units are used on a container with width or heig
         );
     }).toThrowError(errorMessageRegex);
 });
+
+test('should extract all container unit styles', () => {
+    expect(
+        extractContainerUnitStylesFromRule(
+            new Node({
+                type: 'rule',
+                selector: '.container',
+            })
+        )
+    ).toEqual({});
+
+    expect(
+        extractContainerUnitStylesFromRule(
+            new Node({
+                type: 'rule',
+                selector: '.container',
+            })
+                .addNode(new Node({
+                    type: 'atrule',
+                    name: DEFINE_CONTAINER_NAME,
+                }))
+                .addNode(new Node({
+                    type: 'decl',
+                    prop: 'height',
+                    value: '42px',
+                }))
+                .addNode(new Node({
+                    type: 'decl',
+                    prop: 'width',
+                    value: '42px',
+                }))
+                .addNode(new Node({
+                    type: 'decl',
+                    prop: 'font-size',
+                    value: '5' + HEIGHT_UNIT,
+                }))
+                .addNode(new Node({
+                    type: 'decl',
+                    prop: 'line-height',
+                    value: '42' + WIDTH_UNIT,
+                }))
+                .addNode(new Node({
+                    type: 'decl',
+                    prop: 'border',
+                    value: 'none',
+                }))
+        )
+    ).toEqual({
+        lineHeight: '42' + WIDTH_UNIT,
+        fontSize: '5' + HEIGHT_UNIT,
+    });
+});
