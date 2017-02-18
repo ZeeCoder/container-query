@@ -3,6 +3,7 @@ import camelCase from 'lodash.camelcase';
 import detectContainerDefinition from './detectContainerDefinition';
 import getConditionsFromQueryParams from './getConditionsFromQueryParams';
 import extractContainerUnitStylesFromRule from './extractContainerUnitStylesFromRule';
+import isEmptyObject from './isEmptyObject';
 import { DEFINE_CONTAINER_NAME } from "../constants";
 
 function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false) {
@@ -27,16 +28,6 @@ function getStylesObjectFromNodes(nodes) {
     });
 
     return styles;
-}
-
-function isEmptyObject (obj) {
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 /**

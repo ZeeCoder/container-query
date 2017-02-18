@@ -31,6 +31,7 @@ Component by using refs
 - function to initialise all containers found in the current page
 
 # readme notes
+- short description, also in package.json
 - lib/* is not considered to be a part of the public API, and hence breaking
 change can be introduced in any release. (even patch)
 - a container can have more than one instance of its elements
