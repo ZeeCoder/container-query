@@ -1,7 +1,5 @@
-import {
-    adjustValueObjectByContainerDimensions,
-    getContainerDimensions,
-} from './utils';
+import getContainerDimensions from './getContainerDimensions';
+import adjustValueObjectByContainerDimensions from './adjustValueObjectByContainerDimensions';
 
 function adjustQueries ($container, containerDimensions, config) {
     let queriesLength = config.queries.length;

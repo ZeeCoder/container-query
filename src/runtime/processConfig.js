@@ -75,8 +75,6 @@ function getFunctionFromConditions (conditions) {
         }
 
         return () => {
-            console.log("This condition was not processed properly, returning false.", condition);
-
             return false;
         };
     });

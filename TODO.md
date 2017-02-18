@@ -27,6 +27,7 @@
 - reactify? make it possible to adjust a container configuration to a given React
 Component by using refs
 - provide detailed comments
+- function to initialise all containers found in the current page
 
 # readme notes
 - lib/* is not considered to be a part of the public API, and hence breaking

@@ -3,7 +3,7 @@
  *
  * @returns {string|null}
  */
-export function detectContainerDefinition (ruleNode) {
+export default function detectContainerDefinition (ruleNode) {
     let container = null;
 
     const nodesLength = ruleNode.nodes.length;

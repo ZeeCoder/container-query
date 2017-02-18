@@ -1,7 +1,7 @@
 import postcss from 'postcss';
 import trim from 'lodash.trim';
 import camelCase from 'lodash.camelcase';
-import { detectContainerDefinition } from './utils';
+import detectContainerDefinition from './detectContainerDefinition';
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
