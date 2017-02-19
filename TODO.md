@@ -1,33 +1,22 @@
 # Runtime JS
 - Think of a better unit for container values (instead of ch/cw)
 - support "or" in queries
-- address potential issues with dynamically added / removed elements (MutationObserver?)
 - think about circular issues
-- remove jQuery dependency
-- optimize the condition functions by pre-defining and reusing them
 - optionally detect container resizing (polling solution?)
 
 # PostCSS Plugin
 - remove processed nodes
 - support float container values
-- extra plugin to lift out @container queries from nested selectors 
-- extract and test the condition => conditionFunction transformation
+- allow for nested @container queries, like it's with @media queries in other preprocessors 
 - handle if the getJSON option is not a function, and have a default
-- handle issues where a @container declaration has no defined-container
-- in "queries", the first element must not have a condition function
-(this is the "base" which contains all possible changes, and the default values)
-- support operations, like `2ch + 2cw`
 - support units that translates to non px. (opacity, rgb, %, em-units, etc)
 - make the plugin more foolproof. It should warn about potential typos / issues
 
 # ETC
 - break down things to milestones
 - have a solution for sass / less
-- make it work in a nested way
-- move utils_constants back to the utils module
 - reactify? make it possible to adjust a container configuration to a given React
 Component by using refs
-- provide detailed comments
 - function to initialise all containers found in the current page
 - option to save all container configurations in separate JSON files in a dir
 
@@ -36,9 +25,7 @@ Component by using refs
 - lib/* is not considered to be a part of the public API, and hence breaking
 change can be introduced in any release. (even patch)
 - a container can have more than one instance of its elements
-- container units inside @media queries are ignored by design. The whole point
-of using container queries is to remove all dependency from the viewport, and
-instead use the container's dimensions
+- the container units are relative to the container's "inner" height / width, so without the borders.
 - A container cannot use container units for it's width / height properties.
 This is to avoid circular issues.
 - @define-container declarations will be ignored inside @container declarations
