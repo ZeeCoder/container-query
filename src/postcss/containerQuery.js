@@ -42,6 +42,7 @@ function containerQuery (options) {
         }
 
         function flushCurrentContainerData (newContainer = null) {
+            // Prepend the default query to the previously processed container
             if (currentContainerSelector !== null) {
                 containers[currentContainerSelector].queries.unshift(currentDefaultQuery);
             }
@@ -60,55 +61,63 @@ function containerQuery (options) {
         root.walk((/** Node */ node) => {
             if (node.type === 'rule') {
                 // Check if there's a new container declared in the rule node
-                let newContainer = detectContainerDefinition(node);
+                const newContainer = detectContainerDefinition(node);
                 if (newContainer !== null) {
                     flushCurrentContainerData(newContainer);
                 }
+
+                const isContainer = newContainer !== null || node.selector === currentContainerSelector;
 
                 if (currentContainerSelector !== null) {
                     // Process potential container unit usages to the default query
                     addStylesToDefaultQuery(
                         getElementRefBySelector(node.selector),
-                        getStylesObjectFromNode(node, true),
+                        getStylesObjectFromNode(
+                            node,
+                            isContainer,
+                            true,
+                            true
+                        ),
                         true
                     );
                 }
             } else if (node.type === 'atrule' && node.name === 'container') {
                 if (currentContainerSelector === null) {
-                    // @todo be more specific
-                    throw new Error(`A @container query was found, without preceding @${DEFINE_CONTAINER_NAME} declaration.`);
-                } else {
+                    throw node.error(`A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.`);
+                }
 
-                    let query = {
-                        conditions: getConditionsFromQueryParams(node.params),
-                        elements: [],
+                let query = {
+                    conditions: getConditionsFromQueryParams(node.params),
+                    elements: [],
+                };
+
+                node.nodes.forEach((elementRule) => {
+                    if (elementRule.type !== 'rule') {
+                        return;
+                    }
+
+                    // @todo test when an "element" of a @container query is actually a container
+                    const isContainer = elementRule.selector === currentContainerSelector;
+                    let element = {
+                        selector: elementRule.selector,
+                        styles: getStylesObjectFromNode(elementRule, isContainer),
                     };
 
-                    node.nodes.forEach((elementRule) => {
-                        if (elementRule.type !== 'rule') {
-                            return;
-                        }
+                    if (!isEmptyObject(element.styles)) {
+                        addStylesToDefaultQuery(
+                            getElementRefBySelector(elementRule.selector),
+                            element.styles
+                        );
 
-                        // @todo check here if the "element" is the container itself, and then don't allow width / height container units
-                        let element = {
-                            selector: elementRule.selector,
-                            styles: getStylesObjectFromNode(elementRule),
-                        };
-
-                        if (!isEmptyObject(element.styles)) {
-                            addStylesToDefaultQuery(
-                                getElementRefBySelector(elementRule.selector),
-                                element.styles
-                            );
-
-                            query.elements.push(element);
-                        }
-                    });
-
-                    if (query.elements.length > 0) {
-                        containers[currentContainerSelector].queries.push(query);
+                        query.elements.push(element);
                     }
+                });
+
+                if (query.elements.length > 0) {
+                    containers[currentContainerSelector].queries.push(query);
                 }
+
+                node.remove();
             }
         });
 

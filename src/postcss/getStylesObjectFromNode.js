@@ -1,13 +1,17 @@
 import camelCase from 'lodash.camelcase';
 import isValueUsingContainerUnits from './isValueUsingContainerUnits';
-import detectContainerDefinition from './detectContainerDefinition';
 
 /**
  * Creates a styles object from the css declarations found in the given rule
  * node.
  *
  * @param {Node} ruleNode
- * @param {bool} [onlyContainerUnits]
+ * @param {boolean} [isContainer] If the current node is a container, then using
+ * container units on width or height properties will throw an exception.
+ * @param {boolean} [onlyContainerUnits] If set, then only container units are
+ * returned.
+ * @param {boolean} [stripContainerUnits] If set, then all declaration nodes
+ * using container units will be stripped away.
  *
  * @throws Error if the ruleNode is not actually a rule
  * @throws Error if onlyContainerUnits is true, and ruleNode is a container
@@ -18,38 +22,49 @@ import detectContainerDefinition from './detectContainerDefinition';
  */
 export default function getStylesObjectFromNode(
     ruleNode,
-    onlyContainerUnits = false
+    isContainer = false,
+    onlyContainerUnits = false,
+    stripContainerUnits = false
 ) {
     if (ruleNode.type !== 'rule') {
         throw new Error('`ruleNode` must be of type "rule".');
     }
 
     const styles = {};
-    const isContainer = detectContainerDefinition(ruleNode) !== null;
 
     if (Array.isArray(ruleNode.nodes)) {
-        ruleNode.nodes.forEach((/** Node */ node) => {
+        const nodesLength = ruleNode.nodes.length;
+
+        for (let i = 0; i < nodesLength; i++) {
+            let node = ruleNode.nodes[i];
+            if (typeof node === 'undefined') {
+                continue;
+            }
+
+            const containerUnitsUsed = isValueUsingContainerUnits(node.value);
+
             if (
                 node.type !== 'decl' ||
-                (
-                    onlyContainerUnits &&
-                    !isValueUsingContainerUnits(node.value)
-                )
+                ( onlyContainerUnits && !containerUnitsUsed )
             ) {
-                return;
+                continue;
             }
 
             if (
-                onlyContainerUnits &&
                 isContainer &&
+                containerUnitsUsed &&
                 [ 'width', 'height' ].indexOf(node.prop) !== -1
             ) {
-                // @todo more helpful message here
-                throw new Error('A container cannot use container units for its width and/or height properties.');
+                throw node.error('A container cannot use container units for its width and/or height properties.');
             }
 
             styles[camelCase(node.prop)] = node.value;
-        });
+
+            if (stripContainerUnits && containerUnitsUsed) {
+                ruleNode.nodes.splice(i, 1);
+                i--;
+            }
+        }
     }
 
     return styles;

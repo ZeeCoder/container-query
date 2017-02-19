@@ -36,4 +36,8 @@ export default class Node {
 
         return this;
     }
+
+    error (message) {
+        throw new Error(message);
+    }
 }

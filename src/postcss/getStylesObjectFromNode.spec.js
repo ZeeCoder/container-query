@@ -73,6 +73,8 @@ test('should throw if container units are used on a container with width or heig
                     value: '42' + WIDTH_UNIT,
                 }))
             ,
+            true,
+            true,
             true
         );
     }).toThrowError(errorMessageRegex);
@@ -93,6 +95,8 @@ test('should throw if container units are used on a container with width or heig
                     value: '42' + HEIGHT_UNIT,
                 }))
             ,
+            true,
+            true,
             true
         );
     }).toThrowError(errorMessageRegex);
@@ -144,6 +148,7 @@ test('should extract all container unit styles', () => {
                     prop: 'border',
                     value: 'none',
                 })),
+            true,
             true
         )
     ).toEqual({
