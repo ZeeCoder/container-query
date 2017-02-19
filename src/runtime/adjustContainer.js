@@ -3,8 +3,8 @@ import adjustValueObjectByContainerDimensions from './adjustValueObjectByContain
 import applyStylesToElements from "./applyStylesToElements";
 
 /**
- * Apply conditional styles to the container and its elements if criterion are
- * met.
+ * Apply conditional styles to the container and its elements based on the
+ * provided configuration, if criterion are met.
  *
  * @param {HTMLElement} container
  * @param {Object} config
