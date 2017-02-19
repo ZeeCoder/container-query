@@ -25,6 +25,23 @@ test('missing container declaration', () => {
     }).toThrowError(new RegExp(`^A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.$`));
 });
 
+test('A container should not be able to ', () => {
+    const pluginInstance = containerQuery({ getJson: () => {} });
+
+    expect(() => {
+        pluginInstance(
+            (new Root())
+                .addNode(
+                    new Node({
+                        type: 'atrule',
+                        name: 'container',
+                        params: '(orientation: landscape)',
+                    })
+                )
+        )
+    }).toThrowError(new RegExp(`^A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.$`));
+});
+
 test('proper json and css output', () => {
     let containersJSON = null;
 

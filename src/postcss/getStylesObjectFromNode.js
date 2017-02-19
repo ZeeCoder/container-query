@@ -1,6 +1,16 @@
 import camelCase from 'lodash.camelcase';
 import isValueUsingContainerUnits from './isValueUsingContainerUnits';
 
+const bannedPropsInContainers = [
+    'width',
+    'height',
+    'padding',
+    'padding-left',
+    'padding-right',
+    'padding-top',
+    'padding-bottom',
+];
+
 /**
  * Creates a styles object from the css declarations found in the given rule
  * node.
@@ -53,9 +63,9 @@ export default function getStylesObjectFromNode(
             if (
                 isContainer &&
                 containerUnitsUsed &&
-                [ 'width', 'height' ].indexOf(node.prop) !== -1
+                bannedPropsInContainers.indexOf(node.prop) !== -1
             ) {
-                throw node.error('A container cannot use container units for its width and/or height properties.');
+                throw node.error('A container cannot use container units for the following properties: "' + bannedPropsInContainers.join('", "') + '".');
             }
 
             styles[camelCase(node.prop)] = node.value;

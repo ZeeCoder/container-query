@@ -55,7 +55,7 @@ test('should extract all styles', () => {
 });
 
 test('should throw if container units are used on a container with width or height properties', () => {
-    const errorMessageRegex = /^A container cannot use container units for its width and\/or height properties.$/;
+    const errorMessageRegex = /^A container cannot use container units for the following properties/;
 
     expect(() => {
         getStylesObjectFromNode(
