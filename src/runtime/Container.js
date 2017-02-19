@@ -8,15 +8,12 @@ import adjustContainer from './adjustContainer';
  */
 export default class Container {
     constructor (container, config) {
-        this.container = container;
-        this.config = processConfig(config);
-
-        this.adjust = this.adjust.bind(this);
+        this.adjust = adjustContainer.bind(
+            this,
+            container,
+            processConfig(config)
+        );
 
         this.adjust();
-    }
-
-    adjust () {
-        adjustContainer(this.container, this.config);
     }
 }
