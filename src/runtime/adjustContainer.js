@@ -1,9 +1,18 @@
 import getContainerDimensions from './getContainerDimensions';
 import adjustValueObjectByContainerDimensions from './adjustValueObjectByContainerDimensions';
+import applyStylesToElements from "./applyStylesToElements";
 
-function adjustQueries ($container, containerDimensions, config) {
-    let queriesLength = config.queries.length;
-    let changeSets = {};
+/**
+ * Apply conditional styles to the container and its elements if criterion are
+ * met.
+ *
+ * @param {HTMLElement} container
+ * @param {Object} config
+ */
+export default function adjustContainer (container, config) {
+    const containerDimensions = getContainerDimensions(container);
+    const queriesLength = config.queries.length;
+    const changeSets = {};
 
     for (let i = 0; i < queriesLength; i++) {
         // Check if the condition apply, or if it's the first, default query
@@ -17,12 +26,11 @@ function adjustQueries ($container, containerDimensions, config) {
 
         config.queries[i].elements.forEach((elementData) => {
             if (i === 0) {
-                // @todo This is where missing elements could be addressed
                 changeSets[elementData.selector] = {
-                    $element: (
+                    elements: (
                         elementData.selector === config.selector
-                            ? $container
-                            : $container.find(elementData.selector)
+                            ? [ container ]
+                            : container.querySelectorAll(elementData.selector)
                     ),
                     change: {},
                 };
@@ -36,12 +44,9 @@ function adjustQueries ($container, containerDimensions, config) {
     }
 
     for (let elementSelector in changeSets) {
-        changeSets[elementSelector].$element.css(changeSets[elementSelector].change);
+        applyStylesToElements(
+            changeSets[elementSelector].change,
+            changeSets[elementSelector].elements
+        );
     }
-}
-
-export default function adjustContainer ($container, config) {
-    const containerDimensions = getContainerDimensions($container);
-
-    adjustQueries($container, containerDimensions, config);
 }

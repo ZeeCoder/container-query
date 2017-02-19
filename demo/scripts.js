@@ -5,20 +5,17 @@ const containerConfigs = require('./containers.json');
 let containers = [];
 
 for (let containerSelector in containerConfigs) {
-    $(containerSelector).each(function () {
-        console.log(containerConfigs[containerSelector]);
+    document.querySelectorAll(containerSelector).forEach((element) => {
         containers.push(
             new Container(
-                this,
-                Object.assign({}, containerConfigs[containerSelector])
+                element,
+                containerConfigs[containerSelector]
             )
         );
     });
 }
 
-
-
-$(window).on('resize', () => {
+window.addEventListener('resize', () => {
     containers.forEach((container) => {
         container.adjust();
     });

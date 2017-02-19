@@ -1,17 +1,22 @@
 import processConfig from './processConfig';
 import adjustContainer from './adjustContainer';
 
-export default class {
+/**
+ * @class
+ * @property {HTMLElement} container
+ * @property {Object} config
+ */
+export default class Container {
     constructor (container, config) {
-        this.$container = $(container);
-        this.adjust = this.adjust.bind(this);
-
+        this.container = container;
         this.config = processConfig(config);
+
+        this.adjust = this.adjust.bind(this);
 
         this.adjust();
     }
 
     adjust () {
-        adjustContainer(this.$container, this.config);
+        adjustContainer(this.container, this.config);
     }
 }

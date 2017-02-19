@@ -1,11 +1,11 @@
 /**
- * @param {jQuery} $container
+ * @param {HTMLElement} container
  *
  * @return {ContainerDimensions}
  */
-export default function getContainerDimensions ($container) {
+export default function getContainerDimensions (container) {
     return {
-        width: $container.width(),
-        height: $container.height(),
+        width: container.clientWidth,
+        height: container.clientHeight,
     };
 }

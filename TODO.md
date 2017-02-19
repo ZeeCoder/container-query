@@ -29,6 +29,7 @@
 Component by using refs
 - provide detailed comments
 - function to initialise all containers found in the current page
+- option to save all container configurations in separate JSON files in a dir
 
 # readme notes
 - short description, also in package.json

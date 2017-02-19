@@ -14,7 +14,7 @@ export default function convertCompositValuesToPixel (dimensions, compositValue)
     let valArr = [];
     let match;
 
-    match = compositValue.match(new RegExp('\\d+' + HEIGHT_UNIT, 'g'))
+    match = compositValue.match(new RegExp('\\d+' + HEIGHT_UNIT, 'g'));
     if (match !== null) {
         valArr = valArr.concat(match);
     }
