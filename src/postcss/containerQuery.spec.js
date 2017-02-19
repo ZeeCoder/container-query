@@ -8,6 +8,8 @@ import containerQuery from './containerQuery';
 import Root from "../../__mocks__/Root";
 import Node from "../../__mocks__/Node";
 
+// @todo test when an "element" of a @container {} query is actually a container itself, and certain properties should be prohibited
+
 test('missing container declaration', () => {
     const pluginInstance = containerQuery({ getJson: () => {} });
 

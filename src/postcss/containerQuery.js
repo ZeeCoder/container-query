@@ -96,7 +96,6 @@ function containerQuery (options) {
                         return;
                     }
 
-                    // @todo test when an "element" of a @container query is actually a container
                     const isContainer = elementRule.selector === currentContainerSelector;
                     let element = {
                         selector: elementRule.selector,
