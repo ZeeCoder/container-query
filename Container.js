@@ -1,1 +1,1 @@
-module.exports = require('./lib/runtime/Container');
+module.exports = require('./build/runtime/Container');

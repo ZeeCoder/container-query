@@ -2,10 +2,27 @@
   "name": "@zeecoder/container-query",
   "version": "1.0.0",
   "description": "",
+  "main": "index.js",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=4"
   },
+  "keywords": [
+    "rwd",
+    "responsive-design",
+    "responsive",
+    "postcss",
+    "postcss-plugin",
+    "container-query",
+    "element-query",
+    "css",
+    "media-query",
+    "browser",
+    "query",
+    "javascript",
+    "component",
+    "module"
+  ],
   "license": "MIT",
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
@@ -30,11 +47,13 @@
     "jest": "^18.1.0"
   },
   "scripts": {
-    "test": "jest --coverage && npm run lint",
-    "watch:test": "jest --watch --notify",
+    "pretest": "npm run lint",
+    "test": "jest --coverage",
     "lint": "eslint src",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "build": "babel src --out-dir lib --ignore spec.js",
-    "watch": "babel --watch src --out-dir lib --ignore spec.js"
+    "build": "babel src --out-dir build --ignore spec.js",
+    "watch:test": "jest --watch --notify",
+    "prepublish": "npm run build",
+    "postpublish": "rm -rf build && git push --follow-tags"
   }
 }

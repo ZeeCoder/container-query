@@ -1,6 +1,6 @@
-node_modules
+node_modules/
+build/
+coverage/
+npm-debug.log
 .idea
-demo/dist
-demo/containers.json
-coverage
 .DS_Store

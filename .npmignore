@@ -1,0 +1,13 @@
+__mocks__/
+demo/
+src/
+
+.idea
+.babelrc.yml
+.codeclimate.yml
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.npmignore
+.travis.yml

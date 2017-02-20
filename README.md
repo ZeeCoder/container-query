@@ -30,7 +30,9 @@
 - Support units that translates to non px. (opacity, rgb, %, em-units, etc)
 
 ## 1.5.0
-- Ease usage with React, by hooking into Component refs 
+- Ease usage with React, by hooking into Component refs
+- Webpack loader
+- compatibility with CSS-modules
 
 # README notes
 
