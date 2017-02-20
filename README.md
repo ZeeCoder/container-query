@@ -10,7 +10,6 @@
 ## 1.0.0
 - Support float container values
 - Think of a better unit for container values (instead of ch/cw)
-- Function to initialise all containers found in the current page in dist/
 - Short description, also in package.json
 - Documented solutions for SASS / LESS and just PostCSS
 - Turn all milestone notes in the README to github issues and write a proper README

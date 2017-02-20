@@ -1,22 +1,5 @@
-import Container from '../Container';
+import initialiseAllContainers from '../initialiseAllContainers';
 
-const containerConfigs = require('./containers.css.json');
+const containers = require('./containers.css.json');
 
-let containers = [];
-
-for (let containerSelector in containerConfigs) {
-    document.querySelectorAll(containerSelector).forEach((element) => {
-        containers.push(
-            new Container(
-                element,
-                containerConfigs[containerSelector]
-            )
-        );
-    });
-}
-
-window.addEventListener('resize', () => {
-    containers.forEach((container) => {
-        container.adjust();
-    });
-});
+initialiseAllContainers(containers);
