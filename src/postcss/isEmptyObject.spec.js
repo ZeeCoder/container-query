@@ -2,7 +2,14 @@ import isEmptyObject from './isEmptyObject';
 
 test('should return true if object is empty', () => {
     expect(isEmptyObject({})).toBe(true);
-    expect(isEmptyObject({
+
+    const obj = {
         val: 42,
-    })).toBe(false);
+        val2: 24,
+    };
+
+    obj.hasOwnProperty = jest.fn(() => true);
+
+    expect(isEmptyObject(obj)).toBe(false);
+    expect(obj.hasOwnProperty).toHaveBeenCalledTimes(1);
 });
