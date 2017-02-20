@@ -4,6 +4,7 @@ import getConditionsFromQueryParams from './getConditionsFromQueryParams';
 import getStylesObjectFromNode from './getStylesObjectFromNode';
 import isEmptyObject from './isEmptyObject';
 import { DEFINE_CONTAINER_NAME } from "../constants";
+import saveJSON from './saveJSON';
 
 function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false) {
     for (let prop in styles) {
@@ -16,12 +17,12 @@ function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false)
 }
 
 /**
- * @type {{ JSONSavePath: string }}
+ * @param {{ getJSON: function }} options
  */
-function containerQuery (options) {
-    return function (root) {
-        options = options || {};
+function containerQuery (options = {}) {
+    const getJSON = options.getJSON || saveJSON;
 
+    return function (css) {
         let containers = {};
         let currentContainerSelector = null;
         let currentDefaultQuery = null;
@@ -58,7 +59,7 @@ function containerQuery (options) {
             currentContainerSelector = newContainer;
         }
 
-        root.walk((/** Node */ node) => {
+        css.walk((/** Node */ node) => {
             if (node.type === 'rule') {
                 // Check if there's a new container declared in the rule node
                 const newContainer = detectContainerDefinition(node);
@@ -122,7 +123,7 @@ function containerQuery (options) {
 
         flushCurrentContainerData();
 
-        options.getJSON(containers);
+        getJSON(css.source.input.file, containers);
     };
 
 }

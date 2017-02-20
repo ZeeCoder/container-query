@@ -1,6 +1,6 @@
 import Container from '../Container';
 
-const containerConfigs = require('./containers.json');
+const containerConfigs = require('./containers.css.json');
 
 let containers = [];
 

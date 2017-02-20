@@ -7,8 +7,25 @@ import {
 import containerQuery from './containerQuery';
 import Root from "../../__mocks__/Root";
 import Node from "../../__mocks__/Node";
+jest.mock('./saveJSON');
 
 // @todo test when an "element" of a @container {} query is actually a container itself, and certain properties should be prohibited
+
+test('should use the default json saving function if none was supplied', () => {
+    const saveJSON = require('./saveJSON').default;
+
+    const pluginInstance = containerQuery();
+
+    pluginInstance(
+        (new Root({
+            input: {
+                file: 'file/path.css'
+            }
+        }))
+    );
+
+    expect(saveJSON).toHaveBeenCalledTimes(1);
+});
 
 test('missing container declaration', () => {
     const pluginInstance = containerQuery({ getJson: () => {} });
@@ -48,7 +65,7 @@ test('proper json and css output', () => {
     let containersJSON = null;
 
     return postcss([ containerQuery({
-            getJSON: (json) => containersJSON = json
+            getJSON: (cssPath, json) => containersJSON = json
         }) ])
         .process(`
                 .container {
@@ -58,20 +75,20 @@ test('proper json and css output', () => {
                     /* Ignore this */
                     line-height: 100${HEIGHT_UNIT};
                 }
-                
+
                 @container (height >= 100) and (width >= 100) {
                     .container {
                         font-size: 70${HEIGHT_UNIT};
                     }
                 }
-                
+
                 @container (height >= 100) {
                     .container {
                         background: none;
                     }
                     /* Ignore this */
                 }
-                
+
                 /* Ignore this */
 
                 .container2 {
@@ -79,18 +96,18 @@ test('proper json and css output', () => {
                     font-size: 10px;
                     border: 1px solid;
                 }
-                
+
                 .container2__element {
                     width: 50${WIDTH_UNIT};
                     height: 50${HEIGHT_UNIT};
                     background: green;
                 }
-                    
+
                 @container (orientation: portrait) {
                     .container2 {
                         font-size: 70${HEIGHT_UNIT};
                     }
-                    
+
                     .container2__element {
                         width: 75${WIDTH_UNIT};
                         height: 75${HEIGHT_UNIT};
@@ -104,13 +121,13 @@ test('proper json and css output', () => {
                     border: none;
                     /* Ignore this */
                 }
-                
+
                 /* Ignore this */
 
                 .container2 {
                     border: 1px solid;
                 }
-                
+
                 .container2__element {
                     background: green;
                 }
@@ -213,4 +230,3 @@ test('proper json and css output', () => {
             });
         });
 });
-

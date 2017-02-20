@@ -7,17 +7,10 @@ const containerQuery = require('../containerQuery');
 gulp.task('css', function () {
     const postcss = require('gulp-postcss');
 
-    return gulp.src('*.css')
+    return gulp.src('containers.css')
         .pipe(postcss([
             nested(),
-            containerQuery({
-                getJSON: (json) => {
-                    fs.writeFileSync(
-                        path.join(__dirname, '/containers.json'),
-                        JSON.stringify(json, null, 2)
-                    );
-                }
-            }),
+            containerQuery(),
         ]))
         .pipe( gulp.dest('dist') );
 });

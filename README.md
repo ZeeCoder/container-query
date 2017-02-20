@@ -9,8 +9,6 @@
 
 ## 1.0.0
 - Support float container values
-- Handle if the getJSON option is not a function, and provide a default which saves the file next to the corresponding css
-- Option to save all container configurations in separate JSON files in a dir
 - Think of a better unit for container values (instead of ch/cw)
 - Function to initialise all containers found in the current page in dist/
 - Short description, also in package.json
@@ -36,6 +34,7 @@
 
 # README notes
 
+- Example function to save all container configurations in separate JSON files in a dir
 - lib/* is not considered to be a part of the public API, and hence breaking
 change can be introduced in any release. (even patch)
 - a container can have more than one instance of its elements

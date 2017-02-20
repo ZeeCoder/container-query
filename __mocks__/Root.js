@@ -3,8 +3,12 @@
  * @property {Node[]} nodes
  */
 export default class Root {
-    constructor () {
+    /**
+     * @param {Object} source
+     */
+    constructor (source) {
         this.nodes = [];
+        this.source = source;
     }
 
     /**
