@@ -5,38 +5,37 @@
 [![Code Climate](https://codeclimate.com/github/ZeeCoder/container-query/badges/gpa.svg)](https://codeclimate.com/github/ZeeCoder/container-query)
 [![Coverage Status](https://coveralls.io/repos/github/ZeeCoder/container-query/badge.svg?branch=master)](https://coveralls.io/github/ZeeCoder/container-query?branch=master)
 
-A PostCSS plugin and Javascript runtime combination, which allows you to write @container queries in your CSS the same way you would write @media queries.
+A PostCSS plugin and Javascript runtime combination, which allows you to write
+@container queries in your CSS the same way you would write @media queries.
 
-# Milestones
+## PublicAPI
+- `Container.js` - JS Runtime
+- `containerQuery.js` - PostCSS Plugin
+- `initialiseAllContainers.js` - helper function
 
-## 1.0.0
-- Short description, also in package.json
-- Documented solutions for SASS / LESS and just PostCSS
-- Turn all milestone notes in the README to github issues and write a proper README
+The rest is not considered to be a part of the Public API, which means they can
+change at any time. (Including minor / patch releases.)
 
-## 1.1.0
-- introduce vmin/vmax-like functionality
-- Optionally detect container resizing (polling solution?) instead of adjusting on window resize only
+## Limitations
+- No "or" for @container queries right now, so this is not possible:
+`@container ( ... ) or ( ... ) { ... }`
+- `@container` queries cannot be nested
+- LESS doesn't compile with the current syntax
 
-## 1.2.0
-- Support "or" in queries
-
-## 1.3.0
-- Allow for nested @container queries, like it's with @media queries in other preprocessors
-
-## 1.4.0
-- Ease usage with React, by hooking into Component refs
-- Webpack loader
-- compatibility with CSS-modules
-
-# README notes
-
-- Example function to save all container configurations in separate JSON files in a dir
-- lib/* is not considered to be a part of the public API, and hence breaking
-change can be introduced in any release. (even patch)
-- a container can have more than one instance of its elements
-- the container units are relative to the container's "inner" height / width, so without the borders.
+## Notes
+- BEM-inspiration: Block -> inside of which are elements (unique classnames!)
+- @container queries must always be preceded by a @define-container
+- All @containers following a @defined-container will be related to that
 - @define-container declarations will be ignored inside @container declarations
+- Example function to save all container configurations in separate JSON files in a dir
+- Gulp example
+    - PostCSS example
+    - SASS example
+    - Less -> no-go
+- Containers can have more than one instance of their elements
+- The container units are relative to the container's "inner" height / width.
+(Without the borders.)
 - Note possible circular issues
-    - A container cannot use container units for properties that would affect
-    its width / height.
+    - A container should not use container units for properties that would affect
+    its width / height. These situations are not currently handled, so try to
+    avoid them.

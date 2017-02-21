@@ -4,7 +4,9 @@
   "description": "",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "lodash.camelcase": "^4.3.0"
+  },
   "devDependencies": {
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
@@ -13,5 +15,8 @@
     "postcss": "^5.2.13",
     "postcss-nested": "^1.0.0",
     "webpack": "^2.2.1"
+  },
+  "scripts": {
+    "build": "gulp css && webpack"
   }
 }
