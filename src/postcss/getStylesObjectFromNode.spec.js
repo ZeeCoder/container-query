@@ -32,12 +32,12 @@ test('should extract all styles', () => {
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'font-size',
-                    value: '5' + HEIGHT_UNIT,
+                    value: `5${HEIGHT_UNIT}px`,
                 }))
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'line-height',
-                    value: '42' + WIDTH_UNIT,
+                    value: `42${WIDTH_UNIT}`,
                 }))
                 .addNode(new Node({
                     type: 'decl',
@@ -48,8 +48,8 @@ test('should extract all styles', () => {
     ).toEqual({
         height: '42px',
         width: '42px',
-        fontSize: '5' + HEIGHT_UNIT,
-        lineHeight: '42' + WIDTH_UNIT,
+        fontSize: `5${HEIGHT_UNIT}px`,
+        lineHeight: `42${WIDTH_UNIT}`,
         border: 'none',
     });
 });
@@ -70,7 +70,7 @@ test('should throw if container units are used on a container with width or heig
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'width',
-                    value: '42' + WIDTH_UNIT,
+                    value: `42${WIDTH_UNIT}px`,
                 }))
             ,
             true,
@@ -92,7 +92,7 @@ test('should throw if container units are used on a container with width or heig
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'height',
-                    value: '42' + HEIGHT_UNIT,
+                    value: `42${WIDTH_UNIT}px`,
                 }))
             ,
             true,
@@ -136,12 +136,12 @@ test('should extract all container unit styles', () => {
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'font-size',
-                    value: '5' + HEIGHT_UNIT,
+                    value: `5${HEIGHT_UNIT}px`,
                 }))
                 .addNode(new Node({
                     type: 'decl',
                     prop: 'line-height',
-                    value: '42' + WIDTH_UNIT,
+                    value: `42${WIDTH_UNIT}px`,
                 }))
                 .addNode(new Node({
                     type: 'decl',
@@ -152,7 +152,7 @@ test('should extract all container unit styles', () => {
             true
         )
     ).toEqual({
-        lineHeight: '42' + WIDTH_UNIT,
-        fontSize: '5' + HEIGHT_UNIT,
+        fontSize: `5${HEIGHT_UNIT}px`,
+        lineHeight: `42${WIDTH_UNIT}px`,
     });
 });

@@ -9,11 +9,24 @@ import {
  * @returns {boolean}
  */
 export default function isValueUsingContainerUnits (value) {
+    if (typeof value !== 'string') {
+        return false;
+    }
+
+    const match = value.toLowerCase().match(/(\d+(\.\d+)?)([a-z%]+)/i);
+
+    if (match === null) {
+        return false;
+    }
+
+    const unit = match[3];
+
     return (
-        typeof value === 'string' &&
+        unit !== HEIGHT_UNIT &&
+        unit !== WIDTH_UNIT &&
         (
-            value.indexOf(HEIGHT_UNIT) !== -1 ||
-            value.indexOf(WIDTH_UNIT) !== -1
+            unit.indexOf(HEIGHT_UNIT) === 0 ||
+            unit.indexOf(WIDTH_UNIT) === 0
         )
     );
 }

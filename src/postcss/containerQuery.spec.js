@@ -71,14 +71,14 @@ test('proper json and css output', () => {
                 .container {
                     @${DEFINE_CONTAINER_NAME};
                     border: none;
-                    font-size: 50${HEIGHT_UNIT};
+                    font-size: 50${HEIGHT_UNIT}px;
                     /* Ignore this */
-                    line-height: 100${HEIGHT_UNIT};
+                    line-height: 100${HEIGHT_UNIT}px;
                 }
 
                 @container (height >= 100) and (width >= 100) {
                     .container {
-                        font-size: 70${HEIGHT_UNIT};
+                        font-size: 70${HEIGHT_UNIT}px;
                     }
                 }
 
@@ -98,19 +98,19 @@ test('proper json and css output', () => {
                 }
 
                 .container2__element {
-                    width: 50${WIDTH_UNIT};
-                    height: 50${HEIGHT_UNIT};
+                    width: 50${WIDTH_UNIT}px;
+                    height: 50${HEIGHT_UNIT}px;
                     background: green;
                 }
 
                 @container (orientation: portrait) {
                     .container2 {
-                        font-size: 70${HEIGHT_UNIT};
+                        font-size: 70${HEIGHT_UNIT}px;
                     }
 
                     .container2__element {
-                        width: 75${WIDTH_UNIT};
-                        height: 75${HEIGHT_UNIT};
+                        width: 75${WIDTH_UNIT}px;
+                        height: 75${HEIGHT_UNIT}px;
                         background: red;
                     }
                 }
@@ -142,8 +142,8 @@ test('proper json and css output', () => {
                             {
                                 "selector": ".container",
                                 "styles": {
-                                    "fontSize": "50" + HEIGHT_UNIT,
-                                    "lineHeight": "100" + HEIGHT_UNIT,
+                                    "fontSize": `50${HEIGHT_UNIT}px`,
+                                    "lineHeight": `100${HEIGHT_UNIT}px`,
                                     "background": "",
                                 }
                             }
@@ -158,7 +158,7 @@ test('proper json and css output', () => {
                             {
                                 "selector": ".container",
                                 "styles": {
-                                    "fontSize": "70" + HEIGHT_UNIT
+                                    "fontSize": `70${HEIGHT_UNIT}px`
                                 }
                             }
                         ]
@@ -194,8 +194,8 @@ test('proper json and css output', () => {
                             {
                                 "selector": ".container2__element",
                                 "styles": {
-                                    "width": "50" + WIDTH_UNIT,
-                                    "height": "50" + HEIGHT_UNIT,
+                                    "width": `50${WIDTH_UNIT}px`,
+                                    "height": `50${HEIGHT_UNIT}px`,
                                     "background": ""
                                 }
                             }
@@ -213,14 +213,14 @@ test('proper json and css output', () => {
                             {
                                 "selector": ".container2",
                                 "styles": {
-                                    "fontSize": "70" + HEIGHT_UNIT
+                                    "fontSize": `70${HEIGHT_UNIT}px`
                                 }
                             },
                             {
                                 "selector": ".container2__element",
                                 "styles": {
-                                    "width": "75" + WIDTH_UNIT,
-                                    "height": "75" + HEIGHT_UNIT,
+                                    "width": `75${WIDTH_UNIT}px`,
+                                    "height": `75${HEIGHT_UNIT}px`,
                                     "background": "red"
                                 }
                             }
