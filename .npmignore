@@ -1,9 +1,10 @@
 __mocks__/
 demo/
 src/
+coverage/
 
 .idea
-.babelrc.yml
+.babelrc
 .codeclimate.yml
 .editorconfig
 .eslintignore
