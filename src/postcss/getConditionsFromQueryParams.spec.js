@@ -2,16 +2,16 @@ import getConditionsFromQueryParams from './getConditionsFromQueryParams';
 
 test('single condition should work with the "<", ">", "<=", ">=" and ":" operators', () => {
     expect(getConditionsFromQueryParams('(width >= 42px)')).toEqual([
-        [ 'width', '>=', '42px' ],
+        [ 'width', '>=', 42 ],
     ]);
     expect(getConditionsFromQueryParams('(width > 42px)')).toEqual([
-        [ 'width', '>', '42px' ],
+        [ 'width', '>', 42 ],
     ]);
     expect(getConditionsFromQueryParams('(width <= 42px)')).toEqual([
-        [ 'width', '<=', '42px' ],
+        [ 'width', '<=', 42 ],
     ]);
     expect(getConditionsFromQueryParams('(width < 42px)')).toEqual([
-        [ 'width', '<', '42px' ],
+        [ 'width', '<', 42 ],
     ]);
     expect(getConditionsFromQueryParams('(orientation: portrait)')).toEqual([
         [ 'orientation', ':', 'portrait' ],
@@ -24,10 +24,10 @@ test('single condition should work with the "<", ">", "<=", ">=" and ":" operato
 test('should handle multiple "and" conditions', () => {
     expect(getConditionsFromQueryParams('(orientation: landscape) and (width > 42px)')).toEqual([
         [ 'orientation', ':', 'landscape' ],
-        [ 'width', '>', '42px' ],
+        [ 'width', '>', 42 ],
     ]);
     expect(getConditionsFromQueryParams('(width < 42px) and (height >= 42px)')).toEqual([
-        [ 'width', '<', '42px' ],
-        [ 'height', '>=', '42px' ],
+        [ 'width', '<', 42 ],
+        [ 'height', '>=', 42 ],
     ]);
 });

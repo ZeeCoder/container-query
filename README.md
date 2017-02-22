@@ -32,8 +32,8 @@ change at any time. (Including minor / patch releases.)
 - Example function to save all container configurations in separate JSON files in a dir
 - Gulp example
     - PostCSS example
-    - SASS example
-    - Less -> no-go
+    - SASS example: works out of the box
+    - Less -> separate pipeline
 - Containers can have more than one instance of their elements
 - The container units are relative to the container's "inner" height / width.
 (Without the borders.)
@@ -41,3 +41,7 @@ change at any time. (Including minor / patch releases.)
     - A container should not use container units for properties that would affect
     its width / height. These situations are not currently handled, so try to
     avoid them.
+    
+## 
+- To avoid circular deps, use overflow: hidden and avoid using container units on defined containers
+- Use native CSS techniques to achieve your goal whenever possible (css grid, flexbox)

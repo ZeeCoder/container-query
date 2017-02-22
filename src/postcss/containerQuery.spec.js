@@ -76,13 +76,13 @@ test('proper json and css output', () => {
                     line-height: 100${HEIGHT_UNIT}px;
                 }
 
-                @container (height >= 100) and (width >= 100) {
+                @container (height >= 100px) and (width >= 100px) {
                     .container {
                         font-size: 70${HEIGHT_UNIT}px;
                     }
                 }
 
-                @container (height >= 100) {
+                @container (height >= 100px) {
                     .container {
                         background: none;
                     }
@@ -151,8 +151,8 @@ test('proper json and css output', () => {
                     },
                     {
                         "conditions": [
-                            [ "height", ">=", "100" ],
-                            [ "width", ">=", "100" ],
+                            [ "height", ">=", 100 ],
+                            [ "width", ">=", 100 ],
                         ],
                         "elements": [
                             {
@@ -165,7 +165,7 @@ test('proper json and css output', () => {
                     },
                     {
                         "conditions": [
-                            [ "height", ">=", "100" ],
+                            [ "height", ">=", 100 ],
                         ],
                         "elements": [
                             {
