@@ -23,6 +23,8 @@ change at any time. (Including minor / patch releases.)
 - LESS doesn't compile with the current syntax
 
 ## Notes
+- Lead with ## WHAT (image) followed by ## WHY
+- list supported browsers
 - BEM-inspiration: Block -> inside of which are elements (unique classnames!)
 - @container queries must always be preceded by a @define-container
 - All @containers following a @defined-container will be related to that
