@@ -1,6 +1,6 @@
-import Container from '../Container';
+import Container from '../../../Container';
 
-const userJSON = require('./containers/user.json');
+const userJSON = require('../css/components/user/user.json');
 
 const userContainer = new Container(
     document.getElementById('user'),
