@@ -1,4 +1,4 @@
-import convertCompositValuesToPixel from './convertCompositValue';
+import convertCompositValue from './convertCompositValue';
 
 /**
  * @param {ContainerDimensions} containerDimensions
@@ -20,7 +20,7 @@ export default function adjustValueObjectByContainerDimensions (containerDimensi
     let values = Object.assign({}, valueDefinition);
 
     for (let cssRule in values) {
-        values[cssRule] = convertCompositValuesToPixel(containerDimensions, values[cssRule]);
+        values[cssRule] = convertCompositValue(containerDimensions, values[cssRule]);
     }
 
     return values;

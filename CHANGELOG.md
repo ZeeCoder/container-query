@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0 (2017-02-27)
+
+- cmin / cmax unit support
+
 ## 1.0.4 (2017-02-27)
 
 - Fixed the aspect-ratio query

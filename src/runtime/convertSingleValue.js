@@ -1,11 +1,14 @@
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
+    MIN_UNIT,
+    MAX_UNIT,
 } from '../constants';
 
 /**
- * Normalise unit by removing height or width container unit from the
- * beginning of the string.
+ * Normalise unit by removing the container unit from the beginning of the
+ * string.
+ * Ex: "chpx" => "px", "cwem" => "em", etc.
  *
  * @param {string} unit
  */
@@ -16,6 +19,14 @@ function normaliseUnit (unit) {
 
     if (unit.indexOf(WIDTH_UNIT) === 0) {
         return unit.substr(WIDTH_UNIT.length);
+    }
+
+    if (unit.indexOf(MIN_UNIT) === 0) {
+        return unit.substr(MIN_UNIT.length);
+    }
+
+    if (unit.indexOf(MAX_UNIT) === 0) {
+        return unit.substr(MAX_UNIT.length);
     }
 
     return unit;
@@ -39,20 +50,43 @@ export default function convertSingleValue (dimensions, value) {
     const num = match[1];
     const unit = match[3];
 
-    if (unit === HEIGHT_UNIT || unit === WIDTH_UNIT) {
+    if (
+        unit === HEIGHT_UNIT ||
+        unit === WIDTH_UNIT ||
+        unit === MIN_UNIT ||
+        unit === MAX_UNIT
+    ) {
         return value;
     }
 
-    const relativeToHeight = unit.indexOf(HEIGHT_UNIT) === 0;
     const normalisedUnit = normaliseUnit(unit);
+
+    const relativeToHeight = (
+        unit.indexOf(HEIGHT_UNIT) === 0 ||
+        (
+            unit.indexOf(MIN_UNIT) === 0 &&
+            dimensions.height < dimensions.width
+        ) ||
+        (
+            unit.indexOf(MAX_UNIT) === 0 &&
+            dimensions.height > dimensions.width
+        )
+    );
+    const relativeToWidth = (
+        unit.indexOf(WIDTH_UNIT) === 0 ||
+        (
+            unit.indexOf(MIN_UNIT) === 0 &&
+            dimensions.height >= dimensions.width
+        ) ||
+        (
+            unit.indexOf(MAX_UNIT) === 0 &&
+            dimensions.height <= dimensions.width
+        )
+    );
 
     if (relativeToHeight) {
         return (dimensions.height * parseFloat(num) / 100) + normalisedUnit;
-    }
-
-    const relativeToWidth = unit.indexOf(WIDTH_UNIT) === 0;
-
-    if (relativeToWidth) {
+    } else if (relativeToWidth) {
         return (dimensions.width * parseFloat(num) / 100) + normalisedUnit;
     }
 

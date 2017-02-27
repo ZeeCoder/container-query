@@ -119,4 +119,49 @@ test('single container value should be properly converted to px', () => {
         { width: 1000 },
         `55.5px`
     )).toBe('55.5px');
+
+    expect(convertSingleValue(
+        { width: 1200, height: 100 },
+        `1cminpx`
+    )).toBe('1px');
+
+    expect(convertSingleValue(
+        { width: 1200, height: 120 },
+        `1cminpx`
+    )).toBe('1.2px');
+
+    expect(convertSingleValue(
+        { width: 1200, height: 1200 },
+        `1cminpx`
+    )).toBe('12px');
+
+    expect(convertSingleValue(
+        { width: 900, height: 1200 },
+        `1cminpx`
+    )).toBe('9px');
+
+    expect(convertSingleValue(
+        { width: 900, height: 1200 },
+        `5cminem`
+    )).toBe('45em');
+
+    expect(convertSingleValue(
+        { width: 900, height: 1200 },
+        `1cmaxpx`
+    )).toBe('12px');
+
+    expect(convertSingleValue(
+        { width: 900, height: 1200 },
+        `2cmaxpx`
+    )).toBe('24px');
+
+    expect(convertSingleValue(
+        { width: 100, height: 99 },
+        `1cmaxem`
+    )).toBe('1em');
+
+    expect(convertSingleValue(
+        { width: 120, height: 99 },
+        `5cmaxem`
+    )).toBe('6em');
 });
