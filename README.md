@@ -42,6 +42,5 @@ change at any time. (Including minor / patch releases.)
     its width / height. These situations are not currently handled, so try to
     avoid them.
     
-## 
 - To avoid circular deps, use overflow: hidden and avoid using container units on defined containers
 - Use native CSS techniques to achieve your goal whenever possible (css grid, flexbox)
