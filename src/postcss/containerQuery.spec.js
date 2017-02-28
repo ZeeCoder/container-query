@@ -88,6 +88,12 @@ test('proper json and css output', () => {
                     }
                     /* Ignore this */
                 }
+                
+                @container (height >= 100px) and (width >= 100px), (aspect-ratio > 3.5) {
+                    .container {
+                        background: #000;
+                    }
+                }
 
                 /* Ignore this */
 
@@ -150,10 +156,10 @@ test('proper json and css output', () => {
                         ]
                     },
                     {
-                        "conditions": [
+                        "conditions": [[
                             [ "height", ">=", 100 ],
                             [ "width", ">=", 100 ],
-                        ],
+                        ]],
                         "elements": [
                             {
                                 "selector": ".container",
@@ -164,14 +170,33 @@ test('proper json and css output', () => {
                         ]
                     },
                     {
-                        "conditions": [
+                        "conditions": [[
                             [ "height", ">=", 100 ],
-                        ],
+                        ]],
                         "elements": [
                             {
                                 "selector": ".container",
                                 "styles": {
                                     "background": "none"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "conditions": [
+                            [
+                                [ "height", ">=", 100 ],
+                                [ "width", ">=", 100 ],
+                            ],
+                            [
+                                [ "aspect-ratio", ">", 3.5 ]
+                            ]
+                        ],
+                        "elements": [
+                            {
+                                "selector": ".container",
+                                "styles": {
+                                    "background": "#000"
                                 }
                             }
                         ]
@@ -202,13 +227,9 @@ test('proper json and css output', () => {
                         ]
                     },
                     {
-                        "conditions": [
-                            [
-                                "orientation",
-                                ":",
-                                "portrait"
-                            ]
-                        ],
+                        "conditions": [[
+                            [ "orientation", ":", "portrait" ]
+                        ]],
                         "elements": [
                             {
                                 "selector": ".container2",

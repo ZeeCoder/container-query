@@ -1,5 +1,36 @@
 import getConditionFunction from './getConditionFunction';
 
+test('queries separated by a comma should act as an "or"', () => {
+    // When either width or height is greater than 100
+    const condFn = getConditionFunction([
+        [
+            [ 'width', '>=', 100 ],
+        ],
+        [
+            [ 'height', '>=', 100 ],
+        ],
+    ]);
+    const condFn2 = getConditionFunction([
+        [
+            [ 'width', '>=', 100 ],
+            [ 'height', '>=', 100 ],
+        ],
+        [
+            [ 'orientation', ':', 'landscape' ],
+        ],
+    ]);
+
+    expect(condFn({ width: 99, height: 99 })).toBe(false);
+    expect(condFn({ width: 100, height: 99 })).toBe(true);
+    expect(condFn({ width: 100, height: 100 })).toBe(true);
+    expect(condFn({ width: 99, height: 100 })).toBe(true);
+
+    expect(condFn2({ width: 100, height: 100 })).toBe(true);
+    expect(condFn2({ width: 99, height: 99 })).toBe(false);
+    expect(condFn2({ width: 99, height: 100 })).toBe(false);
+    expect(condFn2({ width: 100, height: 20 })).toBe(true);
+});
+
 test('non array conditions should return function always returning true', () => {
     const condFn = getConditionFunction();
     const condFn2 = getConditionFunction([]);
@@ -14,8 +45,8 @@ test('non array conditions should return function always returning true', () => 
 });
 
 test('orientation conditions', () => {
-    const portraitCondFn = getConditionFunction([ [ 'orientation', ':', 'portrait' ] ]);
-    const landscapeCondFn = getConditionFunction([ [ 'orientation', ':', 'landscape' ] ]);
+    const portraitCondFn = getConditionFunction([ [ [ 'orientation', ':', 'portrait' ] ] ]);
+    const landscapeCondFn = getConditionFunction([ [ [ 'orientation', ':', 'landscape' ] ] ]);
 
     expect(typeof portraitCondFn).toBe('function');
     // square counts as portrait according to the @media query spec, so we follow the same rule
@@ -32,10 +63,10 @@ test('orientation conditions', () => {
 });
 
 test('width conditions', () => {
-    const ltCondFn = getConditionFunction([ [ 'width', '<', 100 ] ]);
-    const lteCondFn = getConditionFunction([ [ 'width', '<=', 100 ] ]);
-    const gtCondFn = getConditionFunction([ [ 'width', '>', 100 ] ]);
-    const gteCondFn = getConditionFunction([ [ 'width', '>=', 100 ] ]);
+    const ltCondFn = getConditionFunction([ [ [ 'width', '<', 100 ] ] ]);
+    const lteCondFn = getConditionFunction([ [ [ 'width', '<=', 100 ] ] ]);
+    const gtCondFn = getConditionFunction([ [ [ 'width', '>', 100 ] ] ]);
+    const gteCondFn = getConditionFunction([ [ [ 'width', '>=', 100 ] ] ]);
 
     expect(typeof ltCondFn).toBe('function');
     expect(ltCondFn({ width: 10 })).toBe(true);
@@ -67,10 +98,10 @@ test('width conditions', () => {
 });
 
 test('height conditions', () => {
-    const ltCondFn = getConditionFunction([ [ 'height', '<', 100 ] ]);
-    const lteCondFn = getConditionFunction([ [ 'height', '<=', 100 ] ]);
-    const gtCondFn = getConditionFunction([ [ 'height', '>', 100 ] ]);
-    const gteCondFn = getConditionFunction([ [ 'height', '>=', 100 ] ]);
+    const ltCondFn = getConditionFunction([ [ [ 'height', '<', 100 ] ] ]);
+    const lteCondFn = getConditionFunction([ [ [ 'height', '<=', 100 ] ] ]);
+    const gtCondFn = getConditionFunction([ [ [ 'height', '>', 100 ] ] ]);
+    const gteCondFn = getConditionFunction([ [ [ 'height', '>=', 100 ] ] ]);
 
     expect(typeof ltCondFn).toBe('function');
     expect(ltCondFn({ height: 10 })).toBe(true);
@@ -102,10 +133,10 @@ test('height conditions', () => {
 });
 
 test('aspect-ratio conditions', () => {
-    const ltCondFn = getConditionFunction([ [ 'aspect-ratio', '<', 1 ] ]);
-    const lteCondFn = getConditionFunction([ [ 'aspect-ratio', '<=', 1 ] ]);
-    const gtCondFn = getConditionFunction([ [ 'aspect-ratio', '>', 1 ] ]);
-    const gteCondFn = getConditionFunction([ [ 'aspect-ratio', '>=', 1 ] ]);
+    const ltCondFn = getConditionFunction([ [ [ 'aspect-ratio', '<', 1 ] ] ]);
+    const lteCondFn = getConditionFunction([ [ [ 'aspect-ratio', '<=', 1 ] ] ]);
+    const gtCondFn = getConditionFunction([ [ [ 'aspect-ratio', '>', 1 ] ] ]);
+    const gteCondFn = getConditionFunction([ [ [ 'aspect-ratio', '>=', 1 ] ] ]);
 
     expect(typeof ltCondFn).toBe('function');
     expect(ltCondFn({ width: 10, height: 9 })).toBe(false);
@@ -133,11 +164,11 @@ test('aspect-ratio conditions', () => {
 });
 
 test('multiple conditions should work', () => {
-    const multiCondFn = getConditionFunction([
+    const multiCondFn = getConditionFunction([[
         [ 'orientation', ':', 'landscape' ],
         [ 'width', '>', 100 ],
         [ 'height', '<=', 20 ],
-    ]);
+    ]]);
 
     expect(typeof multiCondFn).toBe('function');
     expect(multiCondFn({ width: 100, height: 200 })).toBe(false);
@@ -147,7 +178,7 @@ test('multiple conditions should work', () => {
 });
 
 test('unsupported condition always returns true', () => {
-    const condFn = getConditionFunction([ [ 'something', "that's", 'unrecognisable' ] ]);
+    const condFn = getConditionFunction([ [ [ 'something', "that's", 'unrecognisable' ] ] ]);
 
     expect(typeof condFn).toBe('function');
     expect(condFn()).toBe(true);

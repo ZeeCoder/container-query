@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.2.0 (2017-02-28)
+
+- Made "or" queries work as they do for @media queries
+
+## 1.1.1 (2017-02-27)
+
+- Attempt to make the readme appear on npm
+
 ## 1.1.0 (2017-02-27)
 
 - cmin / cmax unit support
