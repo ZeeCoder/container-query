@@ -10,19 +10,31 @@
 A PostCSS plugin and Javascript runtime combination, which allows you to write
 @container queries in your CSS the same way you would write @media queries.
 
+## screenshot
+
+## How to use
+
+### Install
+
+`npm install --save-dev @zeecoder/container-query`
+
 ## PublicAPI
 - `Container.js` - JS Runtime
 - `containerQuery.js` - PostCSS Plugin
 - `initialiseAllContainers.js` - helper function
 
-The rest is not considered to be a part of the Public API, which means they can
-change at any time. (Including minor / patch releases.)
+The rest in build/ is not considered to be a part of the Public API, which means
+anything in it can change at any time. (Including minor / patch releases.)
 
 ## Limitations
 - No "or" for @container queries right now, so this is not possible:
 `@container ( ... ) or ( ... ) { ... }`
 - `@container` queries cannot be nested
 - LESS doesn't compile with the current syntax
+
+## Supported Browsers
+
+- Works with all modern browsers
 
 ## Notes
 - Lead with ## WHAT (image) followed by ## WHY
@@ -46,3 +58,20 @@ change at any time. (Including minor / patch releases.)
     
 - To avoid circular deps, use overflow: hidden and avoid using container units on defined containers
 - Use native CSS techniques to achieve your goal whenever possible (css grid, flexbox)
+
+
+## Thoughts on design
+
+Here is a list of goals I started with, in case you're wondering about the
+tool's design:
+
+- Should be thoroughly unit tested
+- Use containers (as opposed to "element query"),
+- Resemble @media queries so that it's familiar and easy to use,
+- Uses PostCSS for preprocessing instead of a JS runtime parser,
+- Modular, so it plays nicely with js bundlers and "Component-based" UI
+libraries (Webpack / Browserify / React etc.)
+- Doesn't need to be valid CSS syntax (since it's based on PostCSS)
+- Be easy enough to use, but a transpiling step in the frontend build
+process would be assumed
+- Should work especially well with css component naming methodologies, like BEM or SUIT 

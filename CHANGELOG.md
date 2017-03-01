@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1 (2017-03-01)
+
+- README update
+
 ## 1.2.0 (2017-02-28)
 
 - Made "or" queries work as they do for @media queries
