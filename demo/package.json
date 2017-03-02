@@ -17,7 +17,8 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "build": "gulp css && webpack"
+    "build": "gulp css && webpack",
+    "watch": "gulp watch & webpack --watch &"
   },
   "dependencies": {
     "autoprefixer": "^6.7.6"

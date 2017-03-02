@@ -2,11 +2,6 @@
     @define-container;
 
     overflow: hidden;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 50%;
-    height: 50%;
     background: #ccc;
     border: calc(0.2chpx + 0.2cwpx) solid #999;
     border-radius: calc(0.3chpx + 0.3cwpx);
@@ -16,7 +11,17 @@
     text-decoration: none;
     color: #333;
     font-size: 85cminpx;
-    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transition: background-color .3s, color .3s;
+
+    &:hover {
+        background-color: #333;
+        color: #eee;
+    }
 
     &__icon {
     }
@@ -25,30 +30,11 @@
         display: none;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 0.5em;
     }
 }
 
-/*@container (width > 100px) {*/
-    /*.social-link {*/
-        /*font-size: calc(30chpx + 30cwpx);*/
-    /*}*/
-
-    /*.social-link__name {*/
-        /*display: block;*/
-    /*}*/
-/*}*/
-
-/*@container (height > 100px) {*/
-    /*.social-link {*/
-        /*font-size: calc(30chpx + 30cwpx);*/
-    /*}*/
-
-    /*.social-link__name {*/
-        /*display: block;*/
-    /*}*/
-/*}*/
-
-@container (aspect-ratio > 2) {
+@container (aspect-ratio > 3) {
     .social-link {
         font-size: 60chpx;
     }
