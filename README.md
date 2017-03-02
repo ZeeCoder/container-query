@@ -26,13 +26,9 @@ The rest in build/ is not considered to be a part of the Public API, which means
 anything in it can change at any time. (Including minor / patch releases.)
 
 ## Limitations
-- No "or" for @container queries right now, so this is not possible:
-`@container ( ... ) or ( ... ) { ... }`
 - `@container` queries cannot be nested
-- LESS doesn't compile with the current syntax
 
 ## Supported Browsers
-
 - Works with all modern browsers and IE9+
 
 ## Notes
@@ -54,10 +50,8 @@ anything in it can change at any time. (Including minor / patch releases.)
     - A container should not use container units for properties that would affect
     its width / height. These situations are not currently handled, so try to
     avoid them.
-    
 - To avoid circular deps, use overflow: hidden and avoid using container units on defined containers
 - Use native CSS techniques to achieve your goal whenever possible (css grid, flexbox)
-
 
 ## Thoughts on design
 
