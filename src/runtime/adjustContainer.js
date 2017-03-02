@@ -1,3 +1,4 @@
+import objectAssign from 'object-assign';
 import getContainerDimensions from './getContainerDimensions';
 import adjustValueObjectByContainerDimensions from './adjustValueObjectByContainerDimensions';
 import applyStylesToElements from "./applyStylesToElements";
@@ -36,7 +37,7 @@ export default function adjustContainer (container, config) {
                 };
             }
 
-            Object.assign(
+            objectAssign(
                 changeSets[elementData.selector].change,
                 adjustValueObjectByContainerDimensions(containerDimensions, elementData.styles)
             );

@@ -6,15 +6,17 @@ const path = require('path');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const nested = require('postcss-nested');
+const autoprefixer = require('autoprefixer');
 const postcssImport = require('postcss-import');
-const containerQuery = require('../containerQuery');
+const containerQuery = require('@zeecoder/container-query/containerQuery');
 const writeFileSync = require('fs').writeFileSync;
 
 gulp.task('css', function () {
     return gulp.src('src/css/main.pcss')
         .pipe(postcss([
-            nested(),
             postcssImport(),
+            nested(),
+            autoprefixer(),
             containerQuery({
                 getJSON: (cssPath, containers) => {
                     for (let containerSelector in containers) {
@@ -32,5 +34,5 @@ gulp.task('css', function () {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('*.css', ['css']);
+    gulp.watch('src/**/*.pcss', ['css']);
 });

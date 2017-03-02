@@ -1,13 +1,20 @@
-import Container from '../../../Container';
+import Container from '@zeecoder/container-query/Container';
 
-const userJSON = require('../css/components/user/user.json');
+function initialiseContainer (jsonData) {
+    /**
+     * @type NodeList
+     */
+    const htmlElements = document.querySelectorAll(jsonData.selector);
+    const htmlElementsLength = htmlElements.length;
 
-const userContainer = new Container(
-    document.getElementById('user'),
-    userJSON
-);
+    for (let i = 0; i < htmlElementsLength; i++) {
+        const containerInstance = new Container(htmlElements[i], jsonData);
+        window.addEventListener('resize', containerInstance.adjust);
+    }
+}
 
-window.addEventListener('resize', userContainer.adjust);
+initialiseContainer(require('../css/components/user/user.json'));
+initialiseContainer(require('../css/components/social-link/social-link.json'));
 
 
 // import initialiseAllContainers from '../initialiseAllContainers';

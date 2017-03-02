@@ -5,16 +5,21 @@
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@zeecoder/container-query": "^1.0.3",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
     "gulp": "^3.9.1",
     "gulp-postcss": "^6.3.0",
+    "gulp-rename": "^1.2.2",
     "postcss": "^5.2.13",
+    "postcss-import": "^9.1.0",
     "postcss-nested": "^1.0.0",
-    "webpack": "^2.2.1",
-    "postcss-import": "^9.1.0"
+    "webpack": "^2.2.1"
   },
   "scripts": {
     "build": "gulp css && webpack"
+  },
+  "dependencies": {
+    "autoprefixer": "^6.7.6"
   }
 }

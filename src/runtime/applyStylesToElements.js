@@ -1,11 +1,13 @@
 /**
  * @param {Object} styles
- * @param {HTMLElement[]} elements
+ * @param {NodeList<HTMLElement>} elements
  */
 export default function applyStylesToElements (styles, elements) {
-    elements.forEach((element) => {
+    const elementsLength = elements.length;
+
+    for (let i = 0; i < elementsLength; i++) {
         for (let prop in styles) {
-            element.style[prop] = styles[prop];
+            elements[i].style[prop] = styles[prop];
         }
-    });
+    }
 }

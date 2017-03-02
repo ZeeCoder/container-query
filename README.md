@@ -34,7 +34,7 @@ anything in it can change at any time. (Including minor / patch releases.)
 
 ## Supported Browsers
 
-- Works with all modern browsers
+- Works with all modern browsers and IE9+
 
 ## Notes
 - Lead with ## WHAT (image) followed by ## WHY

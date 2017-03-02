@@ -1,3 +1,4 @@
+import objectAssign from 'object-assign';
 import getConditionFunction from './getConditionFunction';
 
 /**
@@ -10,7 +11,7 @@ import getConditionFunction from './getConditionFunction';
  * @returns {Object}
  */
 export default function processConfig (origConfig) {
-    let config = Object.assign({}, origConfig);
+    let config = objectAssign({}, origConfig);
 
     config.queries.forEach((queryData) => {
         queryData.conditionFunction = getConditionFunction(queryData.conditions);

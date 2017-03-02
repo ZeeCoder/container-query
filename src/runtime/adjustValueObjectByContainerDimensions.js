@@ -1,3 +1,4 @@
+import objectAssign from 'object-assign';
 import convertCompositValue from './convertCompositValue';
 
 /**
@@ -17,7 +18,7 @@ import convertCompositValue from './convertCompositValue';
  * }`
  */
 export default function adjustValueObjectByContainerDimensions (containerDimensions, valueDefinition) {
-    let values = Object.assign({}, valueDefinition);
+    let values = objectAssign({}, valueDefinition);
 
     for (let cssRule in values) {
         values[cssRule] = convertCompositValue(containerDimensions, values[cssRule]);
