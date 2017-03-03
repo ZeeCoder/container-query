@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.3 (2017-03-03)
+
+- Made the runtime work with an invalid config
+
 ## 1.2.2 (2017-03-02)
 
 - Improved browser support:

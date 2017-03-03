@@ -4,10 +4,10 @@ import {
     WIDTH_UNIT,
 } from "../constants";
 
+jest.mock('./getContainerDimensions');
+
 const container = {
     style: {},
-    clientWidth: 99,
-    clientHeight: 100,
     querySelectorAll: () => [ containerElement ],
 };
 
@@ -76,9 +76,18 @@ const config = {
     ],
 };
 
+beforeEach(() => {
+    require('./getContainerDimensions').default.mockClear();
+});
+
 test('The container and its elements should be properly adjusted with the defaults', () => {
+    const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => {
+        return { width: 99, height: 100 };
+    });
+
     adjustContainer(container, config);
 
+    expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
     expect(container.style).toEqual({
         borderWidth: 'calc(10px + 9.9px)',
     });
@@ -92,10 +101,13 @@ test('The container and its elements should be properly adjusted with the defaul
 
 describe('query styles should be applied, then removed when conditions no longer apply', () => {
     test('Apply query styles with width >= 100', () => {
-        container.clientWidth = 100;
+        const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => {
+            return { width: 100, height: 100 };
+        });
 
         adjustContainer(container, config);
 
+        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
         expect(container.style).toEqual({
             borderWidth: 'calc(20px + 20px)',
         });
@@ -108,10 +120,13 @@ describe('query styles should be applied, then removed when conditions no longer
     });
 
     test('Apply query styles with height >= 200', () => {
-        container.clientHeight = 200;
+        const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => {
+            return { width: 100, height: 200 };
+        });
 
         adjustContainer(container, config);
 
+        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
         expect(container.style).toEqual({
             borderWidth: 'calc(40px + 20px)',
         });
@@ -124,11 +139,13 @@ describe('query styles should be applied, then removed when conditions no longer
     });
 
     test('Remove all query styles, resetting back to the defaults', () => {
-        container.clientWidth = 99;
-        container.clientHeight = 99;
+        const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => {
+            return { width: 99, height: 99 };
+        });
 
         adjustContainer(container, config);
 
+        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
         expect(container.style).toEqual({
             borderWidth: 'calc(9.9px + 9.9px)',
         });
@@ -139,4 +156,12 @@ describe('query styles should be applied, then removed when conditions no longer
             lineHeight: '99px',
         });
     });
+});
+
+test("shouldn't adjust if the configuration is null (invalid)", () => {
+    const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => { console.log('called') });
+
+    adjustContainer(container);
+
+    expect(getContainerDimensionsMock).toHaveBeenCalledTimes(0);
 });

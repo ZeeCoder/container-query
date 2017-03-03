@@ -10,11 +10,12 @@ test('should turn conditions to functions', () => {
         .mockImplementationOnce(() => () => 3);
 
     const origConfig = {
+        selector: '.some-container',
         queries: [
             { conditions: [ [ 'orientation', ':', 'landscape' ] ] },
             { conditions: [ [ 'orientation', ':', 'portrait' ] ] },
             { conditions: [ [ 'width', '>', 100 ] ] },
-        ]
+        ],
     };
 
     const processedConfig = processConfig(origConfig);
@@ -30,4 +31,13 @@ test('should turn conditions to functions', () => {
     expect(processedConfig.queries[1].conditionFunction()).toBe(2);
     expect(typeof processedConfig.queries[2].conditionFunction).toBe('function');
     expect(processedConfig.queries[2].conditionFunction()).toBe(3);
+});
+
+test('should return null for invalid configurations', () => {
+    expect(processConfig()).toEqual(null);
+    expect(processConfig({})).toEqual(null);
+    expect(processConfig([])).toEqual(null);
+    expect(processConfig('')).toEqual(null);
+    expect(processConfig(false)).toEqual(null);
+    expect(processConfig(42)).toEqual(null);
 });

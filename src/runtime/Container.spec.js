@@ -14,9 +14,11 @@ test('appropriate instantiation', () => {
 
     const containerInstance = new Container(containerElement, config);
     containerInstance.adjust();
+    containerInstance.adjust();
+    containerInstance.adjust();
 
     expect(processConfig).toHaveBeenCalledTimes(1);
-    expect(adjustContainer).toHaveBeenCalledTimes(2);
+    expect(adjustContainer).toHaveBeenCalledTimes(4);
     expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
     expect(adjustContainer.mock.calls[0][1]).toBe(processedConfig);
     expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);

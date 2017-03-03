@@ -8,9 +8,14 @@ import applyStylesToElements from "./applyStylesToElements";
  * provided configuration, if criterion are met.
  *
  * @param {HTMLElement} container
- * @param {Object} config
+ * @param {Object} [config] Expects a configuration object that was processed
+ * (and validated) by `processConfig`
  */
-export default function adjustContainer (container, config) {
+export default function adjustContainer (container, config = null) {
+    if (config === null) {
+        return;
+    }
+
     const containerDimensions = getContainerDimensions(container);
     const queriesLength = config.queries.length;
     const changeSets = {};
