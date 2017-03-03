@@ -11,6 +11,10 @@ const postcssImport = require('postcss-import');
 const containerQuery = require('@zeecoder/container-query/containerQuery');
 const writeFileSync = require('fs').writeFileSync;
 
+function containerSelectorToFilename (selector) {
+    return selector.substr(1);
+}
+
 gulp.task('css', function () {
     return gulp.src('src/css/main.pcss')
         .pipe(postcss([
@@ -19,13 +23,20 @@ gulp.task('css', function () {
             autoprefixer(),
             containerQuery({
                 getJSON: (cssPath, containers) => {
+                    // Saving the container query stats individually
                     for (let containerSelector in containers) {
-                        let component = containerSelector.substr(1);
+                        let component = containerSelectorToFilename(containerSelector);
                         writeFileSync(
                             `${__dirname}/src/css/components/${component}/${component}.json`,
                             JSON.stringify(containers[containerSelector])
                         );
                     }
+
+                    // Then saving the container names
+                    writeFileSync(
+                        `${__dirname}/src/js/containers.json`,
+                        JSON.stringify(Object.keys(containers).map(containerSelectorToFilename))
+                    );
                 }
             }),
         ]))

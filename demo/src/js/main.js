@@ -1,5 +1,7 @@
 import Container from '@zeecoder/container-query/Container';
 
+const containers = require('./containers.json');
+
 function initialiseContainer (jsonData) {
     /**
      * @type NodeList
@@ -16,9 +18,9 @@ function initialiseContainer (jsonData) {
     }
 }
 
-initialiseContainer(require('../css/components/user/user.json'));
-initialiseContainer(require('../css/components/social-link/social-link.json'));
-initialiseContainer(require('../css/components/social-container/social-container.json'));
+containers.forEach((containerFileName) => {
+    initialiseContainer(require(`../css/components/${containerFileName}/${containerFileName}.json`));
+});
 
 
 // import initialiseAllContainers from '../initialiseAllContainers';
