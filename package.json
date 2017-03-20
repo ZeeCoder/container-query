@@ -48,13 +48,13 @@
     "jest": "^19.0.2"
   },
   "scripts": {
-    "pretest": "npm run lint",
+    "pretest": "yarn run lint",
     "test": "jest --coverage",
     "lint": "eslint src",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "build": "babel src --out-dir build --ignore spec.js",
     "watch:test": "jest --watch --notify",
-    "prepublish": "npm run build",
+    "prepublish": "yarn run build",
     "postpublish": "rm -rf build && git push --follow-tags"
   }
 }
