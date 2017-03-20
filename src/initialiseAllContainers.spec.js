@@ -32,11 +32,19 @@ test('should initialise all containers and adjust them on window resize', () => 
         }
     });
 
-    let windowOnResizeFn = null;
-    window.addEventListener = jest.fn((type, onResizeFn) => { windowOnResizeFn = onResizeFn; });
+    let triggerWindowResize = null;
+    let triggerDOMContentLoaded = null;
+    document.addEventListener = jest.fn((type, fn) => {
+        triggerDOMContentLoaded = fn;
+    });
+    window.addEventListener = jest.fn((type, fn) => {
+        triggerWindowResize = fn;
+    });
 
     initialiseAllContainers(containers);
-    windowOnResizeFn();
+
+    triggerDOMContentLoaded();
+    triggerWindowResize();
 
     expect(document.querySelectorAll).toHaveBeenCalledTimes(2);
     expect(document.querySelectorAll).toHaveBeenCalledWith(container1Config.selector);
@@ -48,14 +56,14 @@ test('should initialise all containers and adjust them on window resize', () => 
     expect(Container.mock.calls[2]).toEqual([ container2Element1, container2Config ]);
 
     expect(window.addEventListener).toHaveBeenCalledTimes(1);
-    expect(Container.prototype.adjust).toHaveBeenCalledTimes(3);
+    expect(Container.prototype.adjust).toHaveBeenCalledTimes(6);
 });
 
 test('should not add window resize call if not required', () => {
-    let windowOnResizeFn = null;
-    window.addEventListener = jest.fn((type, onResizeFn) => { windowOnResizeFn = onResizeFn; });
+    let triggerWindowResize = null;
+    window.addEventListener = jest.fn((type, onResizeFn) => { triggerWindowResize = onResizeFn; });
 
     initialiseAllContainers({}, false);
 
-    expect(windowOnResizeFn).toBe(null);
+    expect(triggerWindowResize).toBe(null);
 });

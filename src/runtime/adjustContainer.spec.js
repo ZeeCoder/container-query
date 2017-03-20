@@ -159,7 +159,7 @@ describe('query styles should be applied, then removed when conditions no longer
 });
 
 test("shouldn't adjust if the configuration is null (invalid)", () => {
-    const getContainerDimensionsMock = require('./getContainerDimensions').default.mockImplementation(() => { console.log('called') });
+    const getContainerDimensionsMock = require('./getContainerDimensions').default;
 
     adjustContainer(container);
 

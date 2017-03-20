@@ -10,6 +10,10 @@ export default function initialiseAllContainers (
 ) {
     const containerInstances = [];
 
+    function adjustAll () {
+        containerInstances.forEach((instance) => instance.adjust());
+    }
+
     for (let containerSelector in containers) {
         document.querySelectorAll(containerSelector).forEach((htmlElement) => {
             containerInstances.push(
@@ -22,10 +26,9 @@ export default function initialiseAllContainers (
     }
 
     if (adjustOnWindowResize) {
-        window.addEventListener('resize', () => {
-            containerInstances.forEach((instance) => {
-                instance.adjust();
-            });
-        });
+        window.addEventListener('resize', adjustAll);
     }
+
+    // Trigger first adjustment
+    document.addEventListener('DOMContentLoaded', adjustAll);
 }
