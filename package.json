@@ -54,7 +54,6 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "build": "babel src --out-dir build --ignore spec.js",
     "watch:test": "jest --watch --notify",
-    "prepublish": "yarn run build",
-    "postpublish": "rm -rf build && git push --follow-tags"
+    "prepublish": "yarn run build"
   }
 }
