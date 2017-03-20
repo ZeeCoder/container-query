@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.4 (2017-03-20)
+
+- Fixed a bug where initialiseAllContainers didn't trigger adjust calls on dom
+load
+
 ## 1.2.3 (2017-03-03)
 
 - Made the runtime work with an invalid config
