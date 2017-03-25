@@ -3,9 +3,9 @@
  *
  * @return {ContainerDimensions}
  */
-export default function getContainerDimensions (container) {
+export default function getContainerDimensions(container) {
     return {
         width: container.clientWidth,
-        height: container.clientHeight,
+        height: container.clientHeight
     };
 }

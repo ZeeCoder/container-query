@@ -1,4 +1,4 @@
-extends: eslint:recommended
+extends: prettier
 env:
     jquery: true
     browser: true
@@ -11,4 +11,7 @@ parserOptions:
     sourceType: module
 
 rules:
-    no-console: warn
+    prettier/prettier: [error, {tabWidth: 4}]
+
+plugins:
+    - prettier

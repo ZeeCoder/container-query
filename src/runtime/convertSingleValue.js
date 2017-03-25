@@ -1,9 +1,4 @@
-import {
-    HEIGHT_UNIT,
-    WIDTH_UNIT,
-    MIN_UNIT,
-    MAX_UNIT,
-} from '../constants';
+import { HEIGHT_UNIT, WIDTH_UNIT, MIN_UNIT, MAX_UNIT } from "../constants";
 
 /**
  * Normalise unit by removing the container unit from the beginning of the
@@ -12,7 +7,7 @@ import {
  *
  * @param {string} unit
  */
-function normaliseUnit (unit) {
+function normaliseUnit(unit) {
     if (unit.indexOf(HEIGHT_UNIT) === 0) {
         return unit.substr(HEIGHT_UNIT.length);
     }
@@ -40,7 +35,7 @@ function normaliseUnit (unit) {
  *
  * @return {string} Ex: "123px"
  */
-export default function convertSingleValue (dimensions, value) {
+export default function convertSingleValue(dimensions, value) {
     const match = value.toLowerCase().match(/(\d+(\.\d+)?)([a-z%]+)/i);
 
     if (match === null) {
@@ -61,33 +56,19 @@ export default function convertSingleValue (dimensions, value) {
 
     const normalisedUnit = normaliseUnit(unit);
 
-    const relativeToHeight = (
-        unit.indexOf(HEIGHT_UNIT) === 0 ||
-        (
-            unit.indexOf(MIN_UNIT) === 0 &&
-            dimensions.height < dimensions.width
-        ) ||
-        (
-            unit.indexOf(MAX_UNIT) === 0 &&
-            dimensions.height > dimensions.width
-        )
-    );
-    const relativeToWidth = (
-        unit.indexOf(WIDTH_UNIT) === 0 ||
-        (
-            unit.indexOf(MIN_UNIT) === 0 &&
-            dimensions.height >= dimensions.width
-        ) ||
-        (
-            unit.indexOf(MAX_UNIT) === 0 &&
-            dimensions.height <= dimensions.width
-        )
-    );
+    const relativeToHeight = unit.indexOf(HEIGHT_UNIT) === 0 ||
+        (unit.indexOf(MIN_UNIT) === 0 &&
+            dimensions.height < dimensions.width) ||
+        (unit.indexOf(MAX_UNIT) === 0 && dimensions.height > dimensions.width);
+    const relativeToWidth = unit.indexOf(WIDTH_UNIT) === 0 ||
+        (unit.indexOf(MIN_UNIT) === 0 &&
+            dimensions.height >= dimensions.width) ||
+        (unit.indexOf(MAX_UNIT) === 0 && dimensions.height <= dimensions.width);
 
     if (relativeToHeight) {
-        return (dimensions.height * parseFloat(num) / 100) + normalisedUnit;
+        return dimensions.height * parseFloat(num) / 100 + normalisedUnit;
     } else if (relativeToWidth) {
-        return (dimensions.width * parseFloat(num) / 100) + normalisedUnit;
+        return dimensions.width * parseFloat(num) / 100 + normalisedUnit;
     }
 
     return value;

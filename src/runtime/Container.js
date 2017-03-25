@@ -1,5 +1,5 @@
-import processConfig from './processConfig';
-import adjustContainer from './adjustContainer';
+import processConfig from "./processConfig";
+import adjustContainer from "./adjustContainer";
 
 /**
  * @class
@@ -7,7 +7,7 @@ import adjustContainer from './adjustContainer';
  * @property {Object} config
  */
 export default class Container {
-    constructor (container, config) {
+    constructor(container, config) {
         this.adjust = adjustContainer.bind(
             this,
             container,

@@ -1,14 +1,14 @@
-import camelCase from 'lodash.camelcase';
-import isValueUsingContainerUnits from './isValueUsingContainerUnits';
+import camelCase from "lodash.camelcase";
+import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 
 const bannedPropsInContainers = [
-    'width',
-    'height',
-    'padding',
-    'padding-left',
-    'padding-right',
-    'padding-top',
-    'padding-bottom',
+    "width",
+    "height",
+    "padding",
+    "padding-left",
+    "padding-right",
+    "padding-top",
+    "padding-bottom"
 ];
 
 /**
@@ -36,7 +36,7 @@ export default function getStylesObjectFromNode(
     onlyContainerUnits = false,
     stripContainerUnits = false
 ) {
-    if (ruleNode.type !== 'rule') {
+    if (ruleNode.type !== "rule") {
         throw new Error('`ruleNode` must be of type "rule".');
     }
 
@@ -47,15 +47,15 @@ export default function getStylesObjectFromNode(
 
         for (let i = 0; i < nodesLength; i++) {
             let node = ruleNode.nodes[i];
-            if (typeof node === 'undefined') {
+            if (typeof node === "undefined") {
                 continue;
             }
 
             const containerUnitsUsed = isValueUsingContainerUnits(node.value);
 
             if (
-                node.type !== 'decl' ||
-                ( onlyContainerUnits && !containerUnitsUsed )
+                node.type !== "decl" ||
+                (onlyContainerUnits && !containerUnitsUsed)
             ) {
                 continue;
             }
@@ -65,7 +65,11 @@ export default function getStylesObjectFromNode(
                 containerUnitsUsed &&
                 bannedPropsInContainers.indexOf(node.prop) !== -1
             ) {
-                throw node.error('A container cannot use container units for the following properties: "' + bannedPropsInContainers.join('", "') + '".');
+                throw node.error(
+                    'A container cannot use container units for the following properties: "' +
+                        bannedPropsInContainers.join('", "') +
+                        '".'
+                );
             }
 
             styles[camelCase(node.prop)] = node.value;

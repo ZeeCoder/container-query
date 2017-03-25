@@ -1,4 +1,4 @@
-import convertSingleValue from './convertSingleValue';
+import convertSingleValue from "./convertSingleValue";
 
 /**
  * Converts a value possibly using one or more container units into a proper
@@ -9,7 +9,7 @@ import convertSingleValue from './convertSingleValue';
  *
  * @return {string} Ex: "123px 10px 42px"
  */
-export default function convertCompositValue (dimensions, compositValue) {
+export default function convertCompositValue(dimensions, compositValue) {
     const valArr = compositValue.match(/\d+(\.\d+)?[a-z%]+/gi);
 
     if (valArr === null) {
@@ -17,7 +17,7 @@ export default function convertCompositValue (dimensions, compositValue) {
     }
 
     let convertedValues = {};
-    valArr.forEach((value) => {
+    valArr.forEach(value => {
         convertedValues[value] = convertSingleValue(dimensions, value);
     });
 
@@ -25,11 +25,10 @@ export default function convertCompositValue (dimensions, compositValue) {
 
     for (let unconvertedValue in convertedValues) {
         compositPixelValue = compositPixelValue.replace(
-            new RegExp(unconvertedValue, 'g'),
+            new RegExp(unconvertedValue, "g"),
             convertedValues[unconvertedValue]
         );
     }
-
 
     return compositPixelValue;
 }

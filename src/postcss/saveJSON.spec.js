@@ -1,12 +1,12 @@
-import saveJSON from './saveJSON';
+import saveJSON from "./saveJSON";
 
-jest.mock('fs');
+jest.mock("fs");
 
-test('data should be forwarded to writeFileSync', () => {
-    const fs = require('fs');
+test("data should be forwarded to writeFileSync", () => {
+    const fs = require("fs");
 
-    const cssFilePath = 'path/to/css/file.css';
-    const json = { some: 'JSON' };
+    const cssFilePath = "path/to/css/file.css";
+    const json = { some: "JSON" };
 
     saveJSON(cssFilePath, json);
 

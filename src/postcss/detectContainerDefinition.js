@@ -6,14 +6,17 @@ import { DEFINE_CONTAINER_NAME } from "../constants";
  *
  * @returns {string|null}
  */
-export default function detectContainerDefinition (ruleNode, removeDefiniton = true) {
+export default function detectContainerDefinition(
+    ruleNode,
+    removeDefiniton = true
+) {
     let container = null;
 
     const nodesLength = ruleNode.nodes.length;
     let i = 0;
     for (i; i < nodesLength; i++) {
         if (
-            ruleNode.nodes[i].type === 'atrule' &&
+            ruleNode.nodes[i].type === "atrule" &&
             ruleNode.nodes[i].name === DEFINE_CONTAINER_NAME
         ) {
             container = ruleNode.selector;

@@ -1,11 +1,11 @@
-import Container from './Container';
+import Container from "./Container";
 
-jest.mock('./processConfig');
-jest.mock('./adjustContainer');
+jest.mock("./processConfig");
+jest.mock("./adjustContainer");
 
-test('appropriate instantiation', () => {
-    const processConfig = require('./processConfig').default;
-    const adjustContainer = require('./adjustContainer').default;
+test("appropriate instantiation", () => {
+    const processConfig = require("./processConfig").default;
+    const adjustContainer = require("./adjustContainer").default;
 
     const containerElement = {};
     const config = {};

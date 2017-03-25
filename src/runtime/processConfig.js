@@ -1,5 +1,5 @@
-import objectAssign from 'object-assign';
-import getConditionFunction from './getConditionFunction';
+import objectAssign from "object-assign";
+import getConditionFunction from "./getConditionFunction";
 
 /**
  * Returns an processed copy of the given configuration object.
@@ -10,11 +10,11 @@ import getConditionFunction from './getConditionFunction';
  *
  * @returns {Object|null} Return null for invalid configurations
  */
-export default function processConfig (origConfig) {
+export default function processConfig(origConfig) {
     // Validate configuration before processing
     if (
-        typeof origConfig !== 'object' ||
-        typeof origConfig.selector !== 'string' ||
+        typeof origConfig !== "object" ||
+        typeof origConfig.selector !== "string" ||
         !Array.isArray(origConfig.queries)
     ) {
         return null;
@@ -23,8 +23,10 @@ export default function processConfig (origConfig) {
     // Configuration seems valid, process it
     let config = objectAssign({}, origConfig);
 
-    config.queries.forEach((queryData) => {
-        queryData.conditionFunction = getConditionFunction(queryData.conditions);
+    config.queries.forEach(queryData => {
+        queryData.conditionFunction = getConditionFunction(
+            queryData.conditions
+        );
     });
 
     return config;
