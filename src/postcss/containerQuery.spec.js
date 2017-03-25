@@ -16,19 +16,13 @@ test('should use the default json saving function if none was supplied', () => {
 
     const pluginInstance = containerQuery();
 
-    pluginInstance(
-        (new Root({
-            input: {
-                file: 'file/path.css'
-            }
-        }))
-    );
+    pluginInstance(new Root());
 
     expect(saveJSON).toHaveBeenCalledTimes(1);
 });
 
 test('missing container declaration', () => {
-    const pluginInstance = containerQuery({ getJson: () => {} });
+    const pluginInstance = containerQuery();
 
     expect(() => {
         pluginInstance(
@@ -44,21 +38,112 @@ test('missing container declaration', () => {
     }).toThrowError(new RegExp(`^A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.$`));
 });
 
-test('A container should not be able to ', () => {
-    const pluginInstance = containerQuery({ getJson: () => {} });
+test('should ignore unrecognised at-rules, like @keyframes', (done) => {
+    const pluginInstance = containerQuery({
+        getJSON: (path, json) => {
+            expect(json).toEqual({
+                '.container': {
+                    selector: '.container',
+                    queries: [
+                        {
+                            elements: [
+                                {
+                                    selector: '.container',
+                                    styles: { fontSize: '', lineHeight: `100${HEIGHT_UNIT}px` },
+                                },
+                            ],
+                        },
+                        {
+                            conditions: [ [ [ 'orientation', ':', 'landscape' ] ] ],
+                            elements: [
+                                {
+                                    selector: '.container',
+                                    styles: { fontSize: '24px' },
+                                }
+                            ],
+                        },
+                    ],
+                },
+            });
+            done();
+        },
+    });
 
-    expect(() => {
-        pluginInstance(
-            (new Root())
-                .addNode(
-                    new Node({
+    pluginInstance(
+        (new Root())
+            .addNode(
+                new Node({
+                    type: 'rule',
+                    selector: '.container',
+                })
+                    .addNode(new Node({
+                        type: 'decl',
+                        prop: 'line-height',
+                        value: `100${HEIGHT_UNIT}px`,
+                    }))
+                    .addNode(new Node({
+                        type: 'decl',
+                        prop: 'font-size',
+                        value: '42px',
+                    }))
+                    .addNode(new Node({
                         type: 'atrule',
-                        name: 'container',
-                        params: '(orientation: landscape)',
-                    })
-                )
-        )
-    }).toThrowError(new RegExp(`^A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.$`));
+                        name: DEFINE_CONTAINER_NAME,
+                    }))
+                    .addNode(new Node({
+                        type: 'decl',
+                        prop: 'border',
+                        value: 'none',
+                    }))
+            )
+            .addNode(
+                new Node({
+                    type: 'atrule',
+                    name: 'keyframes',
+                    params: 'Expand',
+                })
+                    .addNode(
+                        new Node({
+                            type: 'rule',
+                            selector: '0%',
+                        })
+                            .addNode(new Node({
+                                type: 'decl',
+                                prop: 'opacity',
+                                value: '0%',
+                            }))
+                    )
+                    .addNode(
+                        new Node({
+                            type: 'rule',
+                            selector: '100%',
+                        })
+                            .addNode(new Node({
+                                type: 'decl',
+                                prop: 'opacity',
+                                value: '100%',
+                            }))
+                    )
+            )
+            .addNode(
+                new Node({
+                    type: 'atrule',
+                    name: 'container',
+                    params: '(orientation: landscape)',
+                })
+                    .addNode(
+                        new Node({
+                            type: 'rule',
+                            selector: '.container',
+                        })
+                            .addNode({
+                                type: 'decl',
+                                prop: 'font-size',
+                                value: '24px',
+                            })
+                    )
+            )
+    );
 });
 
 test('proper json and css output', () => {

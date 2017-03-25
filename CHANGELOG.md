@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.5 (2017-03-25)
+
+- Fixed a bug where the postcss plugin processed nodes it shouldn't have
+
 ## 1.2.4 (2017-03-20)
 
 - Fixed a bug where initialiseAllContainers didn't trigger adjust calls on dom

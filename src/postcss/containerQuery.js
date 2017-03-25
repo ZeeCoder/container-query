@@ -17,12 +17,27 @@ function addStylesToDefaultQuery (defaultElementRef, styles, keepValues = false)
 }
 
 /**
+ * Process only rules having "root", @media or @container as the parent.
+ *
+ * @param {Node} node
+ */
+function shouldProcessNode (node) {
+    return (
+        node.parent.type === 'root' ||
+        (
+            node.parent.type === 'atrule' &&
+            [ 'container', 'media' ].indexOf(node.parent.name) !== -1
+        )
+    );
+}
+
+/**
  * @param {{ getJSON: function }} options
  */
 function containerQuery (options = {}) {
     const getJSON = options.getJSON || saveJSON;
 
-    return function (css) {
+    return function (root) {
         let containers = {};
         let currentContainerSelector = null;
         let currentDefaultQuery = null;
@@ -59,7 +74,11 @@ function containerQuery (options = {}) {
             currentContainerSelector = newContainer;
         }
 
-        css.walk((/** Node */ node) => {
+        root.walk((/** Node */ node) => {
+            if (!shouldProcessNode(node)) {
+                return;
+            }
+
             if (node.type === 'rule') {
                 // Check if there's a new container declared in the rule node
                 const newContainer = detectContainerDefinition(node);
@@ -123,7 +142,7 @@ function containerQuery (options = {}) {
 
         flushCurrentContainerData();
 
-        getJSON(css.source.input.file, containers);
+        getJSON(root.source.input.file, containers);
     };
 
 }
