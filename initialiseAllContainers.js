@@ -1,1 +1,1 @@
-module.exports = require('./build/initialiseAllContainers');
+module.exports = require("./build/initialiseAllContainers").default;

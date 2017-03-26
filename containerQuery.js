@@ -1,1 +1,1 @@
-module.exports = require('./build/postcss/containerQuery').default;
+module.exports = require("./build/postcss/containerQuery").default;

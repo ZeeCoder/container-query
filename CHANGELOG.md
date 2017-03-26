@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.6 (2017-03-26)
+
+- Fixed exports for non es-6 environments
+
 ## 1.2.5 (2017-03-25)
 
 - Fixed a bug where the postcss plugin processed nodes it shouldn't have

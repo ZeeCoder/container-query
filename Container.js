@@ -1,1 +1,1 @@
-module.exports = require('./build/runtime/Container');
+module.exports = require("./build/runtime/Container").default;
