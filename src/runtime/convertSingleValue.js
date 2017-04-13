@@ -56,11 +56,13 @@ export default function convertSingleValue(dimensions, value) {
 
     const normalisedUnit = normaliseUnit(unit);
 
-    const relativeToHeight = unit.indexOf(HEIGHT_UNIT) === 0 ||
+    const relativeToHeight =
+        unit.indexOf(HEIGHT_UNIT) === 0 ||
         (unit.indexOf(MIN_UNIT) === 0 &&
             dimensions.height < dimensions.width) ||
         (unit.indexOf(MAX_UNIT) === 0 && dimensions.height > dimensions.width);
-    const relativeToWidth = unit.indexOf(WIDTH_UNIT) === 0 ||
+    const relativeToWidth =
+        unit.indexOf(WIDTH_UNIT) === 0 ||
         (unit.indexOf(MIN_UNIT) === 0 &&
             dimensions.height >= dimensions.width) ||
         (unit.indexOf(MAX_UNIT) === 0 && dimensions.height <= dimensions.width);

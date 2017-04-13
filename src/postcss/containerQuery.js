@@ -26,9 +26,11 @@ function addStylesToDefaultQuery(
  * @param {Node} node
  */
 function shouldProcessNode(node) {
-    return node.parent.type === "root" ||
+    return (
+        node.parent.type === "root" ||
         (node.parent.type === "atrule" &&
-            ["container", "media"].indexOf(node.parent.name) !== -1);
+            ["container", "media"].indexOf(node.parent.name) !== -1)
+    );
 }
 
 /**
@@ -88,7 +90,8 @@ function containerQuery(options = {}) {
                     flushCurrentContainerData(newContainer);
                 }
 
-                const isContainer = newContainer !== null ||
+                const isContainer =
+                    newContainer !== null ||
                     node.selector === currentContainerSelector;
 
                 if (currentContainerSelector !== null) {
@@ -116,8 +119,8 @@ function containerQuery(options = {}) {
                         return;
                     }
 
-                    const isContainer = elementRule.selector ===
-                        currentContainerSelector;
+                    const isContainer =
+                        elementRule.selector === currentContainerSelector;
                     let element = {
                         selector: elementRule.selector,
                         styles: getStylesObjectFromNode(
