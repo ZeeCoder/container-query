@@ -161,7 +161,7 @@ test("proper json and css output", () => {
 
     return postcss([
         containerQuery({
-            getJSON: (cssPath, json) => containersJSON = json
+            getJSON: (cssPath, json) => (containersJSON = json)
         })
     ])
         .process(

@@ -92,23 +92,31 @@ function convertConditionArrayToFunction(condition) {
     } else if (feature === "aspect-ratio") {
         if (operation === ">") {
             return containerDimensions => {
-                return containerDimensions.width / containerDimensions.height >
-                    value;
+                return (
+                    containerDimensions.width / containerDimensions.height >
+                    value
+                );
             };
         } else if (operation === ">=") {
             return containerDimensions => {
-                return containerDimensions.width / containerDimensions.height >=
-                    value;
+                return (
+                    containerDimensions.width / containerDimensions.height >=
+                    value
+                );
             };
         } else if (operation === "<") {
             return containerDimensions => {
-                return containerDimensions.width / containerDimensions.height <
-                    value;
+                return (
+                    containerDimensions.width / containerDimensions.height <
+                    value
+                );
             };
         } else if (operation === "<=") {
             return containerDimensions => {
-                return containerDimensions.width / containerDimensions.height <=
-                    value;
+                return (
+                    containerDimensions.width / containerDimensions.height <=
+                    value
+                );
             };
         }
     } else if (feature === "orientation") {

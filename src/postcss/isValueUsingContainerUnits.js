@@ -19,12 +19,14 @@ export default function isValueUsingContainerUnits(value) {
 
     const unit = match[3];
 
-    return unit !== HEIGHT_UNIT &&
+    return (
+        unit !== HEIGHT_UNIT &&
         unit !== WIDTH_UNIT &&
         unit !== MIN_UNIT &&
         unit !== MAX_UNIT &&
         (unit.indexOf(HEIGHT_UNIT) === 0 ||
             unit.indexOf(WIDTH_UNIT) === 0 ||
             unit.indexOf(MIN_UNIT) === 0 ||
-            unit.indexOf(MAX_UNIT) === 0);
+            unit.indexOf(MAX_UNIT) === 0)
+    );
 }

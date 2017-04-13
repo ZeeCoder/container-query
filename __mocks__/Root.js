@@ -6,13 +6,13 @@ export default class Root {
     /**
      * @param {Object} [source]
      */
-    constructor (source) {
-        this.type = 'root';
+    constructor(source) {
+        this.type = "root";
         this.nodes = [];
         this.source = {
             input: {
-                file: 'non/existent/file/path.css',
-            },
+                file: "non/existent/file/path.css"
+            }
         };
     }
 
@@ -21,7 +21,7 @@ export default class Root {
      *
      * @returns {Node}
      */
-    addNode (node) {
+    addNode(node) {
         node.parent = this;
 
         this.nodes.push(node);
@@ -29,7 +29,7 @@ export default class Root {
         return this;
     }
 
-    walk (cb) {
+    walk(cb) {
         this.nodes.forEach(cb);
     }
 }

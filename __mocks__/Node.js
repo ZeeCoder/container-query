@@ -21,7 +21,7 @@ export default class Node {
      *   [parent]: { type: string },
      * }} props
      */
-    constructor (props) {
+    constructor(props) {
         this.nodes = [];
         this.selector = props.selector;
         this.params = props.params;
@@ -37,7 +37,7 @@ export default class Node {
      *
      * @returns {Node}
      */
-    addNode (node) {
+    addNode(node) {
         node.parent = this;
 
         this.nodes.push(node);
@@ -45,11 +45,11 @@ export default class Node {
         return this;
     }
 
-    error (message) {
+    error(message) {
         throw new Error(message);
     }
 
-    remove () {
+    remove() {
         // ...
     }
 }
