@@ -1114,9 +1114,9 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-prettier@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-1.7.0.tgz#cda3ce22df1e852daa9370f1f3446e8b8a02ce44"
+eslint-config-prettier@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-2.1.0.tgz#cf78bc7864f98b0f87bcadf702459e933dfa659c"
   dependencies:
     get-stdin "^5.0.1"
 
