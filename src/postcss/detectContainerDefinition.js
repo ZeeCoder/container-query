@@ -2,13 +2,13 @@ import { DEFINE_CONTAINER_NAME } from "../constants";
 
 /**
  * @param {Node} ruleNode
- * @param {boolean} [removeDefiniton]
+ * @param {boolean} [removeDefinition]
  *
  * @returns {string|null}
  */
 export default function detectContainerDefinition(
     ruleNode,
-    removeDefiniton = true
+    removeDefinition = true
 ) {
     let container = null;
 
@@ -24,7 +24,7 @@ export default function detectContainerDefinition(
         }
     }
 
-    if (removeDefiniton) {
+    if (removeDefinition) {
         ruleNode.nodes.splice(i, 1);
     }
 
