@@ -6,6 +6,13 @@ test("should only accept rule nodes", () => {
     expect(() => {
         getStylesObjectFromNode({});
     }).toThrowError(/^`ruleNode` must be of type "rule".$/);
+
+    expect(
+        getStylesObjectFromNode({
+            type: "rule",
+            nodes: null
+        })
+    ).toEqual({});
 });
 
 test("should extract all styles", () => {

@@ -1,6 +1,6 @@
 import getConditionFunction from "./getConditionFunction";
 
-test('queries separated by a comma should act as an "or"', () => {
+test('should treat multiple conditions as an "or"', () => {
     // When either width or height is greater than 100
     const condFn = getConditionFunction([
         [["width", ">=", 100]],
@@ -22,7 +22,7 @@ test('queries separated by a comma should act as an "or"', () => {
     expect(condFn2({ width: 100, height: 20 })).toBe(true);
 });
 
-test("non array conditions should return function always returning true", () => {
+test("should return a function always returning true for non-array conditions", () => {
     const condFn = getConditionFunction();
     const condFn2 = getConditionFunction([]);
 
@@ -35,7 +35,7 @@ test("non array conditions should return function always returning true", () => 
     expect(condFn2({ width: 99999, height: 99999 })).toBe(true);
 });
 
-test("orientation conditions", () => {
+test("should work with orientation conditions", () => {
     const portraitCondFn = getConditionFunction([
         [["orientation", ":", "portrait"]]
     ]);
@@ -57,7 +57,7 @@ test("orientation conditions", () => {
     expect(landscapeCondFn({ width: 10, height: 100 })).toBe(false);
 });
 
-test("width conditions", () => {
+test("should work with width conditions", () => {
     const ltCondFn = getConditionFunction([[["width", "<", 100]]]);
     const lteCondFn = getConditionFunction([[["width", "<=", 100]]]);
     const gtCondFn = getConditionFunction([[["width", ">", 100]]]);
@@ -92,7 +92,7 @@ test("width conditions", () => {
     expect(gteCondFn({ width: 0 })).toBe(false);
 });
 
-test("height conditions", () => {
+test("should work with height conditions", () => {
     const ltCondFn = getConditionFunction([[["height", "<", 100]]]);
     const lteCondFn = getConditionFunction([[["height", "<=", 100]]]);
     const gtCondFn = getConditionFunction([[["height", ">", 100]]]);
@@ -127,7 +127,7 @@ test("height conditions", () => {
     expect(gteCondFn({ height: 0 })).toBe(false);
 });
 
-test("aspect-ratio conditions", () => {
+test("should work with aspect-ratio conditions", () => {
     const ltCondFn = getConditionFunction([[["aspect-ratio", "<", 1]]]);
     const lteCondFn = getConditionFunction([[["aspect-ratio", "<=", 1]]]);
     const gtCondFn = getConditionFunction([[["aspect-ratio", ">", 1]]]);
@@ -158,7 +158,7 @@ test("aspect-ratio conditions", () => {
     expect(gteCondFn({ width: 10, height: 100 })).toBe(false);
 });
 
-test("multiple conditions should work", () => {
+test("should work for multiple conditions", () => {
     const multiCondFn = getConditionFunction([
         [
             ["orientation", ":", "landscape"],
@@ -174,16 +174,25 @@ test("multiple conditions should work", () => {
     expect(multiCondFn({ width: 101, height: 20 })).toBe(true);
 });
 
-test("unsupported condition always returns true", () => {
-    const condFn = getConditionFunction([
+test("should return a function always returning true for invalid conditions", () => {
+    const noCondFn1 = getConditionFunction([
         [["something", "that's", "unrecognisable"]]
     ]);
 
-    expect(typeof condFn).toBe("function");
-    expect(condFn()).toBe(true);
-    expect(condFn({})).toBe(true);
-    expect(condFn({ width: 100, height: 100 })).toBe(true);
-    expect(condFn({ width: 200, height: 100 })).toBe(true);
-    expect(condFn({ width: 100, height: 200 })).toBe(true);
-    expect(condFn({ width: 0, height: 0 })).toBe(true);
+    const noCondFn2 = getConditionFunction([[["width", "?", 1]]]);
+    expect(typeof noCondFn2).toBe("function");
+
+    const noCondFn3 = getConditionFunction([[["height", "?", 1]]]);
+    expect(typeof noCondFn3).toBe("function");
+
+    const noCondFn4 = getConditionFunction([[["aspect-ratio", "?", 1]]]);
+    expect(typeof noCondFn4).toBe("function");
+
+    expect(typeof noCondFn1).toBe("function");
+    expect(noCondFn1()).toBe(true);
+    expect(noCondFn1({})).toBe(true);
+    expect(noCondFn1({ width: 100, height: 100 })).toBe(true);
+    expect(noCondFn1({ width: 200, height: 100 })).toBe(true);
+    expect(noCondFn1({ width: 100, height: 200 })).toBe(true);
+    expect(noCondFn1({ width: 0, height: 0 })).toBe(true);
 });
