@@ -1,8 +1,8 @@
-import Container from '@zeecoder/container-query/Container';
+import Container from "@zeecoder/container-query/Container";
 
-const containers = require('./containers.json');
+const containers = require("./containers.json");
 
-function initialiseContainer (jsonData) {
+function initialiseContainer(jsonData) {
     /**
      * @type NodeList
      */
@@ -10,18 +10,45 @@ function initialiseContainer (jsonData) {
     const htmlElementsLength = htmlElements.length;
 
     for (let i = 0; i < htmlElementsLength; i++) {
-        const containerInstance = new Container(htmlElements[i], jsonData);
-        window.addEventListener('resize', containerInstance.adjust);
-        requestAnimationFrame(() => {
-            containerInstance.adjust();
+        // console.log(htmlElements[i]);
+        const containerInstance = new Container(htmlElements[i], jsonData, {
+            adjustOnResize: true
         });
+
+        // const containerInstance = new Container(htmlElements[i], jsonData);
+        // window.addEventListener('resize', containerInstance.adjust);
+        // requestAnimationFrame(() => {
+        //     containerInstance.adjust();
+        // });
     }
 }
 
-containers.forEach((containerFileName) => {
-    initialiseContainer(require(`../css/components/${containerFileName}/${containerFileName}.json`));
+containers.forEach(containerFileName => {
+    initialiseContainer(
+        require(`../css/components/${containerFileName}/${containerFileName}.json`)
+    );
 });
 
+function startAnimating() {
+    let isWide = false;
+    const element = document.getElementById("to-animate");
+
+    function doAnimate() {
+        if (isWide) {
+            element.style.width = "100px";
+        } else {
+            element.style.width = "700px";
+        }
+
+        isWide = !isWide;
+
+        setTimeout(doAnimate, 1000);
+    }
+
+    doAnimate();
+}
+
+setTimeout(startAnimating, 3000);
 
 // import initialiseAllContainers from '../initialiseAllContainers';
 

@@ -1,9 +1,11 @@
 import Container from "./Container";
+import raf from "raf";
 
 jest.mock("./processConfig");
 jest.mock("./adjustContainer");
+jest.mock("raf", () => jest.fn(cb => cb()));
 
-test("appropriate instantiation", () => {
+test("should instantiate properly", () => {
     const processConfig = require("./processConfig").default;
     const adjustContainer = require("./adjustContainer").default;
 
@@ -17,6 +19,7 @@ test("appropriate instantiation", () => {
     containerInstance.adjust();
     containerInstance.adjust();
 
+    expect(raf).toHaveBeenCalledTimes(1);
     expect(processConfig).toHaveBeenCalledTimes(1);
     expect(adjustContainer).toHaveBeenCalledTimes(4);
     expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
