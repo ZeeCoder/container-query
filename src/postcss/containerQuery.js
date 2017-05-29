@@ -34,6 +34,7 @@ function shouldProcessNode(node) {
 }
 
 /**
+ * @todo refactor a bit to make testing easier
  * @param {{ getJSON: function }} options
  */
 function containerQuery(options = {}) {

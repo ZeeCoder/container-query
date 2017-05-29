@@ -77,6 +77,20 @@ beforeEach(() => {
     require("./getContainerDimensions").default.mockClear();
 });
 
+test("should accept container dimensions", () => {
+    const getContainerDimensions = require("./getContainerDimensions").default;
+    let config = {
+        queries: []
+    };
+
+    const container = {};
+    const containerDimensions = { width: 1, height: 2 };
+
+    adjustContainer(container, config, containerDimensions);
+
+    expect(getContainerDimensions).toHaveBeenCalledTimes(0);
+});
+
 test("The container and its elements should be properly adjusted with the defaults", () => {
     const getContainerDimensionsMock = require(
         "./getContainerDimensions"
