@@ -1,6 +1,6 @@
 {
   "name": "@zeecoder/container-query",
-  "version": "1.2.6",
+  "version": "1.3.0",
   "description": "A PostCSS plugin and Javascript runtime combination, which allows you to write @container queries in your CSS the same way you would write @media queries.",
   "main": "index.js",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
