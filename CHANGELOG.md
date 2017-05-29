@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.3.0 (2017-xx-xx)
+
+- Resize Observer can be enabled (will be the default behaviour in 2.0.0)
+- Resize observation can be switched on / off.
+- First adjustment on Container instantiation can be switched off
+- Dependency upgrades
+
 ## 1.2.6 (2017-03-26)
 
 - Fixed exports for non es-6 environments

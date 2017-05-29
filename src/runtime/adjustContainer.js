@@ -11,13 +11,21 @@ import applyStylesToElements from "./applyStylesToElements";
  * @param {HTMLElement} container
  * @param {Object} [config] Expects a configuration object that was processed
  * (and validated) by `processConfig`
+ * @param {ContainerDimensions} [containerDimensions]
  */
-export default function adjustContainer(container, config = null) {
+export default function adjustContainer(
+    container,
+    config = null,
+    containerDimensions = null
+) {
     if (config === null) {
         return;
     }
 
-    const containerDimensions = getContainerDimensions(container);
+    if (!containerDimensions) {
+        containerDimensions = getContainerDimensions(container);
+    }
+
     const queriesLength = config.queries.length;
     const changeSets = {};
 
