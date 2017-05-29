@@ -9,10 +9,18 @@ import {
 import raf from "raf";
 
 const observer = new ResizeObserver(entries => {
+    if (!Array.isArray(entries)) {
+        return;
+    }
+
     entries.forEach(entry => {
         const container = getContainerByElement(entry.target);
 
-        if (container === null) {
+        if (
+            container === null ||
+            typeof container !== "object" ||
+            typeof container.adjust !== "function"
+        ) {
             console.warn(
                 "Could not find Container instance for element:",
                 entry.target
