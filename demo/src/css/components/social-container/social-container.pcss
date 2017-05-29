@@ -1,16 +1,12 @@
 .social-container {
     @define-container;
-
     display: flex;
-    flex-direction: column;
     overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-}
-.social-container {
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -18,22 +14,25 @@
 .social-container__cell {
     width: 100%;
     position: relative;
-}
 
-@container (width > 250px) {
-    .social-container__cell:nth-child(1) {
-        width: 50%;
-    }
-    .social-container__cell:nth-child(2) {
-        width: 50%;
-    }
-    .social-container__cell:nth-child(3) {
-        width: 33%;
-    }
-    .social-container__cell:nth-child(4) {
-        width: 34%;
-    }
-    .social-container__cell:nth-child(5) {
-        width: 33%;
+    @container (width > 250px) {
+        &:nth-child(1) {
+            width: 50%;
+        }
+        &:nth-child(2) {
+            width: 50%;
+        }
+        &:nth-child(3) {
+            width: 33%;
+        }
+        &:nth-child(4) {
+            width: 34%;
+        }
+        &:nth-child(5) {
+            width: 33%;
+        }
+        &:nth-child(6) {
+            width: 40%;
+        }
     }
 }
