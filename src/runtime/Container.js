@@ -2,22 +2,22 @@ import processConfig from "./processConfig";
 import adjustContainer from "./adjustContainer";
 import objectAssign from "object-assign";
 import ResizeObserver from "resize-observer-polyfill";
-import {
-    getContainerByElement,
-    addContainerToRegistry
-} from "./ContainerRegistry";
+import MutationObserver from "mutation-observer";
+import WeakMap from "es6-weak-map";
 import raf from "raf";
 
-const observer = new ResizeObserver(entries => {
+const containerRegistry = new WeakMap();
+
+const resizeObserver = new ResizeObserver(entries => {
     if (!Array.isArray(entries)) {
         return;
     }
 
     entries.forEach(entry => {
-        const container = getContainerByElement(entry.target);
+        const container = containerRegistry.get(entry.target);
 
         if (
-            container === null ||
+            typeof container === "undefined" ||
             typeof container !== "object" ||
             typeof container.adjust !== "function"
         ) {
@@ -31,6 +31,20 @@ const observer = new ResizeObserver(entries => {
         container.adjust({
             width: entry.contentRect.width,
             height: entry.contentRect.height
+        });
+    });
+});
+
+const mutationObserver = new MutationObserver(mutationsRecords => {
+    mutationsRecords.forEach(mutationsRecord => {
+        // Remove container element from registry and unobserve resize changes
+        mutationsRecord.removedNodes.forEach(node => {
+            if (containerRegistry.has(node) === false) {
+                return;
+            }
+
+            resizeObserver.unobserve(node);
+            containerRegistry.delete(node);
         });
     });
 });
@@ -58,7 +72,10 @@ export default class Container {
         this.unobserveResize = this.unobserveResize.bind(this);
         this.adjust = this.adjust.bind(this);
 
-        addContainerToRegistry(containerElement, this);
+        containerRegistry.set(containerElement, this);
+        mutationObserver.observe(this.containerElement.parentNode, {
+            childList: true
+        });
 
         if (this.opts.adjustOnResize) {
             this.observeResize();
@@ -73,14 +90,14 @@ export default class Container {
      * Starts observing resize changes.
      */
     observeResize() {
-        observer.observe(this.containerElement);
+        resizeObserver.observe(this.containerElement);
     }
 
     /**
      * Stops observing resize changes.
      */
     unobserveResize() {
-        observer.unobserve(this.containerElement);
+        resizeObserver.unobserve(this.containerElement);
     }
 
     /**

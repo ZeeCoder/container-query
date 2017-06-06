@@ -1065,7 +1065,7 @@ es6-symbol@3.1.1, es6-symbol@^3.1, es6-symbol@^3.1.1, es6-symbol@~3.1, es6-symbo
     d "1"
     es5-ext "~0.10.14"
 
-es6-weak-map@^2.0.1:
+es6-weak-map@^2.0.1, es6-weak-map@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/es6-weak-map/-/es6-weak-map-2.0.2.tgz#5e3ab32251ffd1538a1f8e5ffa1357772f92d96f"
   dependencies:
@@ -2406,6 +2406,10 @@ minimist@1.2.0, minimist@^1.1.1, minimist@^1.2.0:
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
+
+mutation-observer@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/mutation-observer/-/mutation-observer-1.0.2.tgz#5059b3836180cced1d8f74efd7b3aaf7fa678841"
 
 mute-stream@0.0.5:
   version "0.0.5"
