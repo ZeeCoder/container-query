@@ -67,8 +67,7 @@
     "prepublish": "yarn run build",
     "precommit": "lint-staged",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
-    "prettify": "prettier --write --tab-width 4 '{src,__mocks__}/**/*.js'",
-    "release": "yarn run build && git tag $npm_package_version && git push --follow-tags && yarn publish"
+    "prettify": "prettier --write --tab-width 4 '{src,__mocks__}/**/*.js'"
   },
   "lint-staged": {
     "*.js": [
