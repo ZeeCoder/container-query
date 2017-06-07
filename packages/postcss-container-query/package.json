@@ -1,0 +1,18 @@
+{
+  "name": "@zeecoder/postcss-container-query",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/bundle.cjs.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch:build": "rollup -c -w"
+  },
+  "devDependencies": {
+    "rollup": "^0.42.0"
+  },
+  "dependencies": {
+    "lodash.camelcase": "^4.3.0",
+    "lodash.trim": "^4.5.1",
+    "postcss": "^6.0.1"
+  }
+}

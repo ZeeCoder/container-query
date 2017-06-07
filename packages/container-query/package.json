@@ -1,0 +1,24 @@
+{
+  "name": "@zeecoder/container-query",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.es.js",
+  "browser": "dist/bundle.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch:build": "rollup -c -w"
+  },
+  "devDependencies": {
+    "rollup": "^0.42.0",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "dependencies": {
+    "es6-weak-map": "^2.0.2",
+    "mutation-observer": "^1.0.2",
+    "object-assign": "^4.1.1",
+    "raf": "^3.3.2",
+    "resize-observer-polyfill": "^1.4.2"
+  }
+}

@@ -1,4 +1,4 @@
-__mocks__/
+packages/common/__mocks__/
 demo/
 src/
 coverage/
