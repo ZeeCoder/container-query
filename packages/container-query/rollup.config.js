@@ -1,5 +1,6 @@
 import commonjs from "rollup-plugin-commonjs";
 import nodeResolve from "rollup-plugin-node-resolve";
+import flow from "rollup-plugin-flow";
 
 export default {
     entry: "src/Container.js",
@@ -13,5 +14,5 @@ export default {
             moduleName: "ContainerQuery"
         }
     ],
-    plugins: [commonjs(), nodeResolve()]
+    plugins: [flow(), commonjs(), nodeResolve()]
 };

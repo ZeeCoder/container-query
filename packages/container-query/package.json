@@ -6,12 +6,15 @@
   "module": "dist/bundle.es.js",
   "browser": "dist/bundle.umd.js",
   "scripts": {
+    "prebuild": "flow check",
     "build": "rollup -c",
     "watch:build": "rollup -c -w"
   },
   "devDependencies": {
+    "flow-bin": "^0.47.0",
     "rollup": "^0.42.0",
     "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {

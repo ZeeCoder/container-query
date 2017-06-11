@@ -35,12 +35,10 @@
   "devDependencies": {
     "babel-core": "^6.23.1",
     "babel-jest": "^20.0.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "coveralls": "^2.11.16",
-    "eslint": "^3.19.0",
-    "eslint-config-prettier": "^2.1.0",
-    "eslint-plugin-prettier": "^2.0.1",
     "husky": "^0.13.3",
     "jest": "^20.0.4",
     "lerna": "^2.0.0-rc.5",
@@ -48,15 +46,12 @@
     "prettier": "^1.4.4"
   },
   "scripts": {
-    "pretest": "yarn run lint",
     "test": "jest --coverage",
-    "lint": "eslint packages/*/src/**",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "build": "lerna run build",
     "watch:test": "jest --watch --notify",
     "prepublish": "lerna run build",
     "precommit": "lint-staged",
-    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "prettify": "prettier --write --tab-width 4 'packages/**/*.js'"
   },
   "lint-staged": {

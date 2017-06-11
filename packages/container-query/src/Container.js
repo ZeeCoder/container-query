@@ -1,3 +1,4 @@
+/* @flow */
 import processConfig from "./processConfig";
 import adjustContainer from "./adjustContainer";
 import objectAssign from "object-assign";
@@ -6,9 +7,9 @@ import MutationObserver from "mutation-observer";
 import WeakMap from "es6-weak-map";
 import raf from "raf";
 
-const containerRegistry = new WeakMap();
+const containerRegistry: WeakMap = new WeakMap();
 
-const resizeObserver = new ResizeObserver(entries => {
+const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
     if (!Array.isArray(entries)) {
         return;
     }
@@ -49,14 +50,17 @@ const mutationObserver = new MutationObserver(mutationsRecords => {
     });
 });
 
-/**
- * @class
- * @property {Element} containerElement
- * @property {Object} jsonStats
- * @property {Object} opts
- */
+export type ContainerSize = {
+    width: number,
+    height: number
+};
+
 export default class Container {
-    constructor(containerElement, jsonStats, opts = {}) {
+    containerElement: HTMLElement;
+    processedJsonStats: {};
+    opts: {};
+
+    constructor(containerElement: HTMLElement, jsonStats: {}, opts: {} = {}) {
         this.containerElement = containerElement;
         this.processedJsonStats = processConfig(jsonStats);
 
@@ -68,10 +72,6 @@ export default class Container {
             opts
         );
 
-        this.observeResize = this.observeResize.bind(this);
-        this.unobserveResize = this.unobserveResize.bind(this);
-        this.adjust = this.adjust.bind(this);
-
         containerRegistry.set(containerElement, this);
         mutationObserver.observe(this.containerElement.parentNode, {
             childList: true
@@ -82,7 +82,7 @@ export default class Container {
         }
 
         if (this.opts.adjustOnInstantiation) {
-            raf(this.adjust);
+            raf(() => this.adjust());
         }
     }
 
@@ -102,10 +102,8 @@ export default class Container {
 
     /**
      * Adjusts the container to it's current dimensions, or to the ones given.
-     *
-     * @param {ContainerDimensions} containerDimensions
      */
-    adjust(containerDimensions = null) {
+    adjust(containerDimensions: ?ContainerSize = null) {
         adjustContainer(
             this.containerElement,
             this.processedJsonStats,
