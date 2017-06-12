@@ -3,6 +3,8 @@ import Node from "../../common/__mocks__/Node";
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
+    MIN_UNIT,
+    MAX_UNIT,
     DEFINE_CONTAINER_NAME
 } from "../../common/src/constants";
 
@@ -71,60 +73,6 @@ test("should extract all styles", () => {
     });
 });
 
-test("should throw if container units are used on a container with width or height properties", () => {
-    const errorMessageRegex = /^A container cannot use container units for the following properties/;
-
-    expect(() => {
-        getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: `42${WIDTH_UNIT}px`
-                    })
-                ),
-            true,
-            true,
-            true
-        );
-    }).toThrowError(errorMessageRegex);
-
-    expect(() => {
-        getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: `42${WIDTH_UNIT}px`
-                    })
-                ),
-            true,
-            true,
-            true
-        );
-    }).toThrowError(errorMessageRegex);
-});
-
 test("should extract all container unit styles", () => {
     expect(
         getStylesObjectFromNode(
@@ -190,4 +138,158 @@ test("should extract all container unit styles", () => {
         fontSize: `5${HEIGHT_UNIT}px`,
         lineHeight: `42${WIDTH_UNIT}px`
     });
+});
+
+test("should throw if with / height are using the wrong container units", () => {
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "width",
+                        value: `42${MIN_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(
+        `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+    );
+
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "height",
+                        value: `42${MIN_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(
+        `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+    );
+
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "width",
+                        value: `42${MAX_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(
+        `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+    );
+
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "height",
+                        value: `42${MAX_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(
+        `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+    );
+
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "height",
+                        value: `42${HEIGHT_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(`Containers cannot use ${HEIGHT_UNIT} for the height property.`);
+
+    expect(() => {
+        getStylesObjectFromNode(
+            new Node({
+                type: "rule",
+                selector: ".container"
+            })
+                .addNode(
+                    new Node({
+                        type: "atrule",
+                        name: DEFINE_CONTAINER_NAME
+                    })
+                )
+                .addNode(
+                    new Node({
+                        type: "decl",
+                        prop: "width",
+                        value: `42${WIDTH_UNIT}px`
+                    })
+                ),
+            true,
+            true
+        );
+    }).toThrow(`Containers cannot use ${WIDTH_UNIT} for the width property.`);
 });
