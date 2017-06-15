@@ -1,4 +1,9 @@
-import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
+import {
+    HEIGHT_UNIT,
+    WIDTH_UNIT,
+    MIN_UNIT,
+    MAX_UNIT
+} from "../../common/src/constants";
 import convertSingleValue from "./convertSingleValue";
 
 test("single container value should be properly converted to px", () => {
@@ -6,28 +11,26 @@ test("single container value should be properly converted to px", () => {
         "lorem ipsum"
     );
 
-    expect(convertSingleValue({ height: 100 }, `100${HEIGHT_UNIT}px`)).toBe(
+    expect(convertSingleValue({ height: 100 }, `100${HEIGHT_UNIT}`)).toBe(
         "100px"
     );
 
-    expect(convertSingleValue({ width: 100 }, `100${WIDTH_UNIT}px`)).toBe(
+    expect(convertSingleValue({ width: 100 }, `100${WIDTH_UNIT}`)).toBe(
         "100px"
     );
 
-    expect(convertSingleValue({ height: 20 }, ` 50${HEIGHT_UNIT}px`)).toBe(
+    expect(convertSingleValue({ height: 20 }, ` 50${HEIGHT_UNIT}`)).toBe(
         "10px"
     );
 
-    expect(convertSingleValue({ width: 15 }, ` 50${WIDTH_UNIT}px`)).toBe(
-        "7.5px"
-    );
+    expect(convertSingleValue({ width: 15 }, ` 50${WIDTH_UNIT}`)).toBe("7.5px");
 
-    expect(convertSingleValue({ width: 100 }, `55.5${WIDTH_UNIT}px`)).toBe(
+    expect(convertSingleValue({ width: 100 }, `55.5${WIDTH_UNIT}`)).toBe(
         "55.5px"
     );
 
     expect(convertSingleValue({ width: 100 }, `55.5${WIDTH_UNIT}PX`)).toBe(
-        "55.5px"
+        `55.5${WIDTH_UNIT}PX`
     );
 
     expect(convertSingleValue({ width: 100 }, `55.5${WIDTH_UNIT}em`)).toBe(
@@ -88,41 +91,41 @@ test("single container value should be properly converted to px", () => {
 
     expect(convertSingleValue({ width: 1000 }, `55.5ch`)).toBe("55.5ch");
 
-    expect(convertSingleValue({ width: 1000 }, `55.5px`)).toBe("55.5px");
+    expect(convertSingleValue({ width: 1000 }, `55.5`)).toBe("55.5px");
 
-    expect(convertSingleValue({ width: 1200, height: 100 }, `1cminpx`)).toBe(
-        "1px"
-    );
+    expect(
+        convertSingleValue({ width: 1200, height: 100 }, `1${MIN_UNIT}`)
+    ).toBe("1px");
 
-    expect(convertSingleValue({ width: 1200, height: 120 }, `1cminpx`)).toBe(
-        "1.2px"
-    );
+    expect(
+        convertSingleValue({ width: 1200, height: 120 }, `1${MIN_UNIT}`)
+    ).toBe("1.2px");
 
-    expect(convertSingleValue({ width: 1200, height: 1200 }, `1cminpx`)).toBe(
-        "12px"
-    );
+    expect(
+        convertSingleValue({ width: 1200, height: 1200 }, `1${MIN_UNIT}`)
+    ).toBe("12px");
 
-    expect(convertSingleValue({ width: 900, height: 1200 }, `1cminpx`)).toBe(
-        "9px"
-    );
+    expect(
+        convertSingleValue({ width: 900, height: 1200 }, `1${MIN_UNIT}`)
+    ).toBe("9px");
 
-    expect(convertSingleValue({ width: 900, height: 1200 }, `5cminem`)).toBe(
-        "45em"
-    );
+    expect(
+        convertSingleValue({ width: 900, height: 1200 }, `5${MIN_UNIT}em`)
+    ).toBe(`5${MIN_UNIT}em`);
 
-    expect(convertSingleValue({ width: 900, height: 1200 }, `1cmaxpx`)).toBe(
-        "12px"
-    );
+    expect(
+        convertSingleValue({ width: 900, height: 1200 }, `1${MAX_UNIT}`)
+    ).toBe("12px");
 
-    expect(convertSingleValue({ width: 900, height: 1200 }, `2cmaxpx`)).toBe(
-        "24px"
-    );
+    expect(
+        convertSingleValue({ width: 900, height: 1200 }, `2${MAX_UNIT}`)
+    ).toBe("24px");
 
-    expect(convertSingleValue({ width: 100, height: 99 }, `1cmaxem`)).toBe(
-        "1em"
-    );
+    expect(
+        convertSingleValue({ width: 100, height: 99 }, `1${MAX_UNIT}em`)
+    ).toBe("1em");
 
-    expect(convertSingleValue({ width: 120, height: 99 }, `5cmaxem`)).toBe(
-        "6em"
-    );
+    expect(
+        convertSingleValue({ width: 120, height: 99 }, `5${MAX_UNIT}em`)
+    ).toBe("6em");
 });

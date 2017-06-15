@@ -33,7 +33,7 @@ function normaliseUnit(unit) {
 }
 
 /**
- * Converts a value possibly using a container unit into a proper value.
+ * Converts a value possibly using a container unit into a pixel value.
  *
  * @param {ContainerDimensions} dimensions
  * @param {string} value Ex: "1<HEIGHT_UNIT>", "20<WIDTH_UNIT>"
@@ -41,7 +41,7 @@ function normaliseUnit(unit) {
  * @return {string} Ex: "123px"
  */
 export default function convertSingleValue(dimensions, value) {
-    const match = value.toLowerCase().match(/(\d+(\.\d+)?)([a-z%]+)/i);
+    const match = value.toLowerCase().match(/(\d+(\.\d+)?)([a-z]+)/i);
 
     if (match === null) {
         return value;
@@ -51,32 +51,25 @@ export default function convertSingleValue(dimensions, value) {
     const unit = match[3];
 
     if (
-        unit === HEIGHT_UNIT ||
-        unit === WIDTH_UNIT ||
-        unit === MIN_UNIT ||
-        unit === MAX_UNIT
+        !(
+            unit === HEIGHT_UNIT ||
+            unit === WIDTH_UNIT ||
+            unit === MIN_UNIT ||
+            unit === MAX_UNIT
+        )
     ) {
         return value;
     }
 
-    const normalisedUnit = normaliseUnit(unit);
-
     const relativeToHeight =
-        unit.indexOf(HEIGHT_UNIT) === 0 ||
-        (unit.indexOf(MIN_UNIT) === 0 &&
-            dimensions.height < dimensions.width) ||
-        (unit.indexOf(MAX_UNIT) === 0 && dimensions.height > dimensions.width);
-    const relativeToWidth =
-        unit.indexOf(WIDTH_UNIT) === 0 ||
-        (unit.indexOf(MIN_UNIT) === 0 &&
-            dimensions.height >= dimensions.width) ||
-        (unit.indexOf(MAX_UNIT) === 0 && dimensions.height <= dimensions.width);
+        unit === HEIGHT_UNIT ||
+        (unit === MIN_UNIT && dimensions.height < dimensions.width) ||
+        (unit === MAX_UNIT && dimensions.height > dimensions.width);
 
     if (relativeToHeight) {
-        return dimensions.height * parseFloat(num) / 100 + normalisedUnit;
-    } else if (relativeToWidth) {
-        return dimensions.width * parseFloat(num) / 100 + normalisedUnit;
+        return dimensions.height * parseFloat(num) / 100 + "px";
     }
 
-    return value;
+    // relative to width
+    return dimensions.width * parseFloat(num) / 100 + "px";
 }
