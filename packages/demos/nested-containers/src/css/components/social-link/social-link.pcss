@@ -2,14 +2,14 @@
     @define-container;
     overflow: hidden;
     background: #ccc;
-    border: calc(0.2chpx + 0.2cwpx) solid #999;
-    border-radius: calc(0.3chpx + 0.3cwpx);
+    border: calc(0.2rh + 0.2rw) solid #999;
+    border-radius: calc(0.3rh + 0.3rw);
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     color: #333;
-    font-size: 85cminpx;
+    font-size: 85rmin;
     position: absolute;
     left: 0;
     top: 0;
@@ -18,7 +18,7 @@
     transition: background-color .3s, color .3s;
 
     @container (aspect-ratio > 3) {
-        font-size: 60chpx;
+        font-size: 60rh;
     }
 
     &:hover {
@@ -28,7 +28,7 @@
 
     &__icon {
         @container (aspect-ratio > 3) {
-            margin-left: 20chpx;
+            margin-left: 20rh;
         }
     }
 
@@ -40,8 +40,8 @@
 
         @container (aspect-ratio > 3) {
             display: block;
-            margin-left: 5cwpx;
-            margin-right: 20chpx;
+            margin-left: 5rw;
+            margin-right: 20rh;
         }
     }
 }

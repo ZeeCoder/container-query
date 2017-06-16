@@ -5,8 +5,8 @@
     flex-direction: column;
     background: #ccc;
     overflow: hidden;
-    border: 0.5cmaxpx solid;
-    border-radius: 3cminpx;
+    border: 0.5rmax solid;
+    border-radius: 3rmin;
     min-height: 200px;
     max-height: 300px;
     position: fixed;
@@ -18,7 +18,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1cmaxpx;
+        padding: 1rmax;
 
         @container (width > 300px) {
             flex-direction: row;
@@ -26,14 +26,14 @@
     }
 
     &__image {
-        height: 30cwpx;
+        height: 30rw;
         max-height: 100px;
         border-radius: 100%;
     }
 
     &__name {
         flex: 1 0 0;
-        padding-left: 5cwpx;
+        padding-left: 5rw;
         display: none;
 
         @container (width > 200px) {
