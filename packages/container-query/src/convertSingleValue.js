@@ -6,33 +6,6 @@ import {
 } from "../../common/src/constants";
 
 /**
- * Normalise unit by removing the container unit from the beginning of the
- * string.
- * Ex: "chpx" => "px", "cwem" => "em", etc.
- *
- * @param {string} unit
- */
-function normaliseUnit(unit) {
-    if (unit.indexOf(HEIGHT_UNIT) === 0) {
-        return unit.substr(HEIGHT_UNIT.length);
-    }
-
-    if (unit.indexOf(WIDTH_UNIT) === 0) {
-        return unit.substr(WIDTH_UNIT.length);
-    }
-
-    if (unit.indexOf(MIN_UNIT) === 0) {
-        return unit.substr(MIN_UNIT.length);
-    }
-
-    if (unit.indexOf(MAX_UNIT) === 0) {
-        return unit.substr(MAX_UNIT.length);
-    }
-
-    return unit;
-}
-
-/**
  * Converts a value possibly using a container unit into a pixel value.
  *
  * @param {ContainerDimensions} dimensions
@@ -41,7 +14,9 @@ function normaliseUnit(unit) {
  * @return {string} Ex: "123px"
  */
 export default function convertSingleValue(dimensions, value) {
-    const match = value.toLowerCase().match(/(\d+(\.\d+)?)([a-z]+)/i);
+    const match = value
+        .toLowerCase()
+        .match(/^ *(\d+(\.\d+)?)([rwhminax]+) *$/i);
 
     if (match === null) {
         return value;

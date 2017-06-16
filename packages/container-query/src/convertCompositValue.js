@@ -10,7 +10,7 @@ import convertSingleValue from "./convertSingleValue";
  * @return {string} Ex: "123px 10px 42px"
  */
 export default function convertCompositValue(dimensions, compositValue) {
-    const valArr = compositValue.match(/\d+(\.\d+)?[a-z%]+/gi);
+    const valArr = compositValue.match(/\d+(\.\d+)?[rwhminax]+/gi);
 
     if (valArr === null) {
         return compositValue;

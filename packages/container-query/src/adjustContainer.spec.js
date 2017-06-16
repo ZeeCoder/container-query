@@ -20,7 +20,7 @@ const config = {
                 {
                     selector: ".container",
                     styles: {
-                        borderWidth: `calc(10${HEIGHT_UNIT}px + 10${WIDTH_UNIT}px)`
+                        borderWidth: `calc(10${HEIGHT_UNIT} + 10${WIDTH_UNIT})`
                     }
                 },
                 {
@@ -28,8 +28,8 @@ const config = {
                     styles: {
                         width: "",
                         height: `5${HEIGHT_UNIT}%`,
-                        fontSize: `10${HEIGHT_UNIT}px`,
-                        lineHeight: `100${HEIGHT_UNIT}px`
+                        fontSize: `10${HEIGHT_UNIT}`,
+                        lineHeight: `100${HEIGHT_UNIT}`
                     }
                 }
             ]
@@ -41,16 +41,16 @@ const config = {
                 {
                     selector: ".container",
                     styles: {
-                        borderWidth: `calc(20${HEIGHT_UNIT}px + 20${WIDTH_UNIT}px)`
+                        borderWidth: `calc(20${HEIGHT_UNIT} + 20${WIDTH_UNIT})`
                     }
                 },
                 {
                     selector: ".container__element",
                     styles: {
-                        width: `50${HEIGHT_UNIT}px`,
+                        width: `50${HEIGHT_UNIT}`,
                         height: `15${HEIGHT_UNIT}%`,
-                        fontSize: `50${HEIGHT_UNIT}px`,
-                        lineHeight: `100${HEIGHT_UNIT}px`
+                        fontSize: `50${HEIGHT_UNIT}`,
+                        lineHeight: `100${HEIGHT_UNIT}`
                     }
                 }
             ]
@@ -63,9 +63,9 @@ const config = {
                 {
                     selector: ".container__element",
                     styles: {
-                        width: `75${WIDTH_UNIT}px`,
-                        fontSize: `75${HEIGHT_UNIT}px`,
-                        lineHeight: `90${HEIGHT_UNIT}px`
+                        width: `75${WIDTH_UNIT}`,
+                        fontSize: `75${HEIGHT_UNIT}`,
+                        lineHeight: `90${HEIGHT_UNIT}`
                     }
                 }
             ]
@@ -106,7 +106,7 @@ test("The container and its elements should be properly adjusted with the defaul
     });
     expect(containerElement.style).toEqual({
         width: "",
-        height: "5%",
+        height: `5px%`,
         fontSize: "10px",
         lineHeight: "100px"
     });
@@ -128,7 +128,7 @@ describe("query styles should be applied, then removed when conditions no longer
         });
         expect(containerElement.style).toEqual({
             width: "50px",
-            height: "15%",
+            height: `15px%`,
             fontSize: "50px",
             lineHeight: "100px"
         });
@@ -149,7 +149,7 @@ describe("query styles should be applied, then removed when conditions no longer
         });
         expect(containerElement.style).toEqual({
             width: "75px",
-            height: "30%",
+            height: `30px%`,
             fontSize: "150px",
             lineHeight: "180px"
         });
@@ -170,7 +170,7 @@ describe("query styles should be applied, then removed when conditions no longer
         });
         expect(containerElement.style).toEqual({
             width: "",
-            height: "4.95%",
+            height: `4.95px%`,
             fontSize: "9.9px",
             lineHeight: "99px"
         });

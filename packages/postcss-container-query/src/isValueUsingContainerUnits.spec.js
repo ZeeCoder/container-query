@@ -16,16 +16,16 @@ test("should report false for non-strings and string not containing container un
 });
 
 test("should report true for values using either or both container units", () => {
-    expect(isValueUsingContainerUnits(`42${HEIGHT_UNIT}px`)).toBe(true);
-    expect(isValueUsingContainerUnits(`42${WIDTH_UNIT}px`)).toBe(true);
+    expect(isValueUsingContainerUnits(`42${HEIGHT_UNIT}`)).toBe(true);
+    expect(isValueUsingContainerUnits(`42${WIDTH_UNIT}`)).toBe(true);
     expect(
         isValueUsingContainerUnits(
-            `42${WIDTH_UNIT}px 42${HEIGHT_UNIT}px 42${WIDTH_UNIT}px`
+            `42${WIDTH_UNIT} 42${HEIGHT_UNIT} 42${WIDTH_UNIT}`
         )
     ).toBe(true);
 });
 
-test("should report cmin cmax units too", () => {
+test("should report min and max units too", () => {
     expect(isValueUsingContainerUnits(`42${MIN_UNIT}px`)).toBe(true);
     expect(isValueUsingContainerUnits(`42${MAX_UNIT}px`)).toBe(true);
     expect(
@@ -33,4 +33,12 @@ test("should report cmin cmax units too", () => {
             `42${MIN_UNIT}px 42${MAX_UNIT}px 42${MIN_UNIT}px`
         )
     ).toBe(true);
+});
+
+test("should allow for spaces around the value", () => {
+    expect(isValueUsingContainerUnits(` 42${MIN_UNIT} `)).toBe(true);
+});
+
+test("should work with floating numbers", () => {
+    expect(isValueUsingContainerUnits(`42.42${MIN_UNIT}`)).toBe(true);
 });
