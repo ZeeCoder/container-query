@@ -36,61 +36,62 @@ export default function getStylesObjectFromNode(
         throw new Error('`ruleNode` must be of type "rule".');
     }
 
+    if (Array.isArray(ruleNode.nodes) === false) {
+        return {};
+    }
+
     const styles = {};
+    const nodesLength = ruleNode.nodes.length;
 
-    if (Array.isArray(ruleNode.nodes)) {
-        const nodesLength = ruleNode.nodes.length;
+    for (let i = 0; i < nodesLength; i++) {
+        let node = ruleNode.nodes[i];
+        if (typeof node === "undefined") {
+            continue;
+        }
 
-        for (let i = 0; i < nodesLength; i++) {
-            let node = ruleNode.nodes[i];
-            if (typeof node === "undefined") {
-                continue;
+        const containerUnitsUsed = isValueUsingContainerUnits(node.value);
+
+        if (
+            node.type !== "decl" ||
+            (onlyContainerUnits && !containerUnitsUsed)
+        ) {
+            continue;
+        }
+
+        if (isContainer && containerUnitsUsed) {
+            if (
+                node.value.indexOf(MIN_UNIT) !== -1 ||
+                node.value.indexOf(MAX_UNIT) !== -1
+            ) {
+                throw node.error(
+                    `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+                );
             }
-
-            const containerUnitsUsed = isValueUsingContainerUnits(node.value);
 
             if (
-                node.type !== "decl" ||
-                (onlyContainerUnits && !containerUnitsUsed)
+                node.prop === "width" &&
+                node.value.indexOf(WIDTH_UNIT) !== -1
             ) {
-                continue;
+                throw node.error(
+                    `Containers cannot use ${WIDTH_UNIT} for the width property.`
+                );
             }
 
-            if (isContainer && containerUnitsUsed) {
-                if (
-                    node.value.indexOf(MIN_UNIT) !== -1 ||
-                    node.value.indexOf(MAX_UNIT) !== -1
-                ) {
-                    throw node.error(
-                        `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
-                    );
-                }
-
-                if (
-                    node.prop === "width" &&
-                    node.value.indexOf(WIDTH_UNIT) !== -1
-                ) {
-                    throw node.error(
-                        `Containers cannot use ${WIDTH_UNIT} for the width property.`
-                    );
-                }
-
-                if (
-                    node.prop === "height" &&
-                    node.value.indexOf(HEIGHT_UNIT) !== -1
-                ) {
-                    throw node.error(
-                        `Containers cannot use ${HEIGHT_UNIT} for the height property.`
-                    );
-                }
+            if (
+                node.prop === "height" &&
+                node.value.indexOf(HEIGHT_UNIT) !== -1
+            ) {
+                throw node.error(
+                    `Containers cannot use ${HEIGHT_UNIT} for the height property.`
+                );
             }
+        }
 
-            styles[camelCase(node.prop)] = node.value;
+        styles[camelCase(node.prop)] = node.value;
 
-            if (stripContainerUnits && containerUnitsUsed) {
-                ruleNode.nodes.splice(i, 1);
-                i--;
-            }
+        if (stripContainerUnits && containerUnitsUsed) {
+            ruleNode.nodes.splice(i, 1);
+            i--;
         }
     }
 

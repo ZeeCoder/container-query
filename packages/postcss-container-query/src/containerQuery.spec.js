@@ -7,6 +7,7 @@ import {
 import containerQuery from "./containerQuery";
 import Root from "../../common/__mocks__/Root";
 import Node from "../../common/__mocks__/Node";
+import RuleNode from "../../common/__mocks__/RuleNode";
 jest.mock("./saveJSON");
 
 // @todo test when an "element" of a @container {} query is actually a container itself, and certain properties should be prohibited
@@ -26,13 +27,7 @@ test("missing container declaration", () => {
 
     expect(() => {
         pluginInstance(
-            new Root().addNode(
-                new Node({
-                    type: "atrule",
-                    name: "container",
-                    params: "(orientation: landscape)"
-                })
-            )
+            new Root().addContainerQuery("(orientation: landscape)")
         );
     }).toThrowError(
         new RegExp(
@@ -78,37 +73,11 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
     pluginInstance(
         new Root()
             .addNode(
-                new Node({
-                    type: "rule",
-                    selector: ".container"
-                })
-                    .addNode(
-                        new Node({
-                            type: "decl",
-                            prop: "line-height",
-                            value: `100${HEIGHT_UNIT}px`
-                        })
-                    )
-                    .addNode(
-                        new Node({
-                            type: "decl",
-                            prop: "font-size",
-                            value: "42px"
-                        })
-                    )
-                    .addNode(
-                        new Node({
-                            type: "atrule",
-                            name: DEFINE_CONTAINER_NAME
-                        })
-                    )
-                    .addNode(
-                        new Node({
-                            type: "decl",
-                            prop: "border",
-                            value: "none"
-                        })
-                    )
+                new RuleNode(".container")
+                    .addDeclaration("line-height", `100${HEIGHT_UNIT}px`)
+                    .addDeclaration("font-size", "42px")
+                    .addContainerDefinition()
+                    .addDeclaration("border", "none")
             )
             .addNode(
                 new Node({
@@ -116,29 +85,9 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                     name: "keyframes",
                     params: "Expand"
                 })
+                    .addNode(new RuleNode("0%").addDeclaration("opacity", "0%"))
                     .addNode(
-                        new Node({
-                            type: "rule",
-                            selector: "0%"
-                        }).addNode(
-                            new Node({
-                                type: "decl",
-                                prop: "opacity",
-                                value: "0%"
-                            })
-                        )
-                    )
-                    .addNode(
-                        new Node({
-                            type: "rule",
-                            selector: "100%"
-                        }).addNode(
-                            new Node({
-                                type: "decl",
-                                prop: "opacity",
-                                value: "100%"
-                            })
-                        )
+                        new RuleNode("100%").addDeclaration("opacity", "1000%")
                     )
             )
             .addNode(
@@ -147,14 +96,10 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                     name: "container",
                     params: "(orientation: landscape)"
                 }).addNode(
-                    new Node({
-                        type: "rule",
-                        selector: ".container"
-                    }).addNode({
-                        type: "decl",
-                        prop: "font-size",
-                        value: "24px"
-                    })
+                    new RuleNode(".container").addDeclaration(
+                        "font-size",
+                        "24px"
+                    )
                 )
             )
     );
@@ -190,7 +135,7 @@ test("proper json and css output", () => {
                     }
                     /* Ignore this */
                 }
-                
+
                 @container (height >= 100px) and (width >= 100px), (aspect-ratio > 3.5) {
                     .container {
                         background: #000;

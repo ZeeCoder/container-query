@@ -1,5 +1,6 @@
 import getStylesObjectFromNode from "./getStylesObjectFromNode";
 import Node from "../../common/__mocks__/Node";
+import RuleNode from "../../common/__mocks__/RuleNode";
 import {
     HEIGHT_UNIT,
     WIDTH_UNIT,
@@ -24,113 +25,36 @@ test("should only accept rule nodes", () => {
 test("should extract all styles", () => {
     expect(
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: "42px"
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: "42px"
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "font-size",
-                        value: `5${HEIGHT_UNIT}px`
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "line-height",
-                        value: `42${WIDTH_UNIT}`
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "border",
-                        value: "none"
-                    })
-                )
+            new RuleNode(".container")
+                .addDeclaration("height", "42px")
+                .addDeclaration("width", "42px")
+                .addDeclaration("font-size", `50${HEIGHT_UNIT}`)
+                .addDeclaration("line-height", `100${WIDTH_UNIT}`)
+                .addDeclaration("border", "none")
         )
     ).toEqual({
         height: "42px",
         width: "42px",
-        fontSize: `5${HEIGHT_UNIT}px`,
-        lineHeight: `42${WIDTH_UNIT}`,
+        fontSize: `50${HEIGHT_UNIT}`,
+        lineHeight: `100${WIDTH_UNIT}`,
         border: "none"
     });
 });
 
 test("should extract all container unit styles", () => {
-    expect(
-        getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            }),
-            true
-        )
-    ).toEqual({});
+    expect(getStylesObjectFromNode(new RuleNode(".container"), true)).toEqual(
+        {}
+    );
 
     expect(
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: "42px"
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: "42px"
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "font-size",
-                        value: `5${HEIGHT_UNIT}px`
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "line-height",
-                        value: `42${WIDTH_UNIT}px`
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "border",
-                        value: "none"
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("height", "42px")
+                .addDeclaration("width", "42px")
+                .addDeclaration("font-size", `5${HEIGHT_UNIT}px`)
+                .addDeclaration("line-height", `42${WIDTH_UNIT}px`)
+                .addDeclaration("border", "none"),
             true,
             true
         )
@@ -143,23 +67,9 @@ test("should extract all container unit styles", () => {
 test("should throw if with / height are using the wrong container units", () => {
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: `42${MIN_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("width", `42${MIN_UNIT}px`),
             true,
             true
         );
@@ -169,23 +79,9 @@ test("should throw if with / height are using the wrong container units", () => 
 
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: `42${MIN_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("height", `42${MIN_UNIT}px`),
             true,
             true
         );
@@ -195,23 +91,9 @@ test("should throw if with / height are using the wrong container units", () => 
 
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: `42${MAX_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("width", `42${MAX_UNIT}px`),
             true,
             true
         );
@@ -221,23 +103,9 @@ test("should throw if with / height are using the wrong container units", () => 
 
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: `42${MAX_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("height", `42${MAX_UNIT}px`),
             true,
             true
         );
@@ -247,23 +115,9 @@ test("should throw if with / height are using the wrong container units", () => 
 
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "height",
-                        value: `42${HEIGHT_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("height", `42${HEIGHT_UNIT}px`),
             true,
             true
         );
@@ -271,23 +125,9 @@ test("should throw if with / height are using the wrong container units", () => 
 
     expect(() => {
         getStylesObjectFromNode(
-            new Node({
-                type: "rule",
-                selector: ".container"
-            })
-                .addNode(
-                    new Node({
-                        type: "atrule",
-                        name: DEFINE_CONTAINER_NAME
-                    })
-                )
-                .addNode(
-                    new Node({
-                        type: "decl",
-                        prop: "width",
-                        value: `42${WIDTH_UNIT}px`
-                    })
-                ),
+            new RuleNode(".container")
+                .addContainerDefinition()
+                .addDeclaration("width", `42${WIDTH_UNIT}px`),
             true,
             true
         );

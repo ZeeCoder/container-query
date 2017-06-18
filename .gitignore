@@ -4,5 +4,6 @@ build
 coverage
 npm-debug.log
 lerna-debug.log
+yarn-error.log
 .idea
 .DS_Store
