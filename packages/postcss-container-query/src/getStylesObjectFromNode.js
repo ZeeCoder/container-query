@@ -60,8 +60,9 @@ export default function getStylesObjectFromNode(
 
         if (isContainer && containerUnitsUsed) {
             if (
-                node.value.indexOf(MIN_UNIT) !== -1 ||
-                node.value.indexOf(MAX_UNIT) !== -1
+                (node.prop === "width" || node.prop === "height") &&
+                (node.value.indexOf(MIN_UNIT) !== -1 ||
+                    node.value.indexOf(MAX_UNIT) !== -1)
             ) {
                 throw node.error(
                     `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`

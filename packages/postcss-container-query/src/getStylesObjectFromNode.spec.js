@@ -50,17 +50,18 @@ test("should extract all container unit styles", () => {
         getStylesObjectFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
-                .addDeclaration("height", "42px")
                 .addDeclaration("width", "42px")
-                .addDeclaration("font-size", `5${HEIGHT_UNIT}px`)
-                .addDeclaration("line-height", `42${WIDTH_UNIT}px`)
+                .addDeclaration("height", `150${WIDTH_UNIT}`)
+                .addDeclaration("font-size", `5${MIN_UNIT}`)
+                .addDeclaration("line-height", `42${MAX_UNIT}`)
                 .addDeclaration("border", "none"),
             true,
             true
         )
     ).toEqual({
-        fontSize: `5${HEIGHT_UNIT}px`,
-        lineHeight: `42${WIDTH_UNIT}px`
+        height: `150${WIDTH_UNIT}`,
+        fontSize: `5${MIN_UNIT}`,
+        lineHeight: `42${MAX_UNIT}`
     });
 });
 
