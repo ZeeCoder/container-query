@@ -46,6 +46,7 @@
     "prettier": "^1.4.4"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "test": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "build": "lerna run build",
