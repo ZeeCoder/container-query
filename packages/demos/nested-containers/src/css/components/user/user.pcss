@@ -26,18 +26,38 @@
     }
 
     &__image {
+        min-height: 60px;
+        min-width: 60px;
         height: 30rw;
+        width: 30rw;
         max-height: 100px;
+        max-width: 100px;
         border-radius: 100%;
+        border: 1px solid #666;
+        border-width: 1.25rmin;
+        background: #eee;
     }
 
     &__name {
-        flex: 1 0 0;
-        padding-left: 5rw;
         display: none;
+        font-family: sans-serif;
+        margin: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 90%;
+        margin: 10px 0;
+        text-align: center;
 
-        @container (width > 200px) {
+        @container (width > 100px) {
             display: block;
+        }
+
+        @container (width > 300px) {
+            text-align: left;
+            width: auto;
+            padding-left: 5rw;
+            margin: 0;
         }
     }
 
