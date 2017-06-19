@@ -42,12 +42,9 @@
     "prettier": "^1.4.4"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "test": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "build": "lerna run build",
     "watch:test": "jest --watch --notify",
-    "prepublish": "lerna run build",
     "precommit": "lint-staged",
     "prettify": "prettier --write --tab-width 4 'packages/**/*.js'"
   },
