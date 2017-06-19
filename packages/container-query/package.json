@@ -1,7 +1,12 @@
 {
   "name": "@zeecoder/container-query",
-  "version": "1.0.0",
+  "description": "",
   "license": "MIT",
+  "version": "1.0.0",
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
+  "engines": {
+    "node": ">=4"
+  },
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
   "browser": "dist/bundle.umd.js",

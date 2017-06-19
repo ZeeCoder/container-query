@@ -1,9 +1,10 @@
 language: node_js
 sudo: false
 node_js: [ 4, 5, 6, 7 ]
-after_success: 'npm run coveralls'
+after_success:
+    - coveralls
 cache:
     yarn: true
 script:
     - lerna bootstrap --ignore={demos}
-    - lerna run test --ignore={demos}
+    - yarn test
