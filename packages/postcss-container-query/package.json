@@ -1,6 +1,6 @@
 {
   "name": "@zeecoder/postcss-container-query",
-  "description": "",
+  "description": "PostCSS processing for container queries, using a media query like syntax.",
   "license": "MIT",
   "version": "1.0.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -19,5 +19,24 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.trim": "^4.5.1",
     "postcss": "^6.0.1"
-  }
+  },
+  "keywords": [
+    "rwd",
+    "responsive-design",
+    "responsive",
+    "postcss",
+    "postcss-plugin",
+    "container-query",
+    "container-queries",
+    "element-query",
+    "element-queries",
+    "media-query",
+    "media-queries",
+    "css",
+    "browser",
+    "query",
+    "javascript",
+    "component",
+    "module"
+  ]
 }

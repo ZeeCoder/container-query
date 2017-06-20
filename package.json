@@ -1,25 +1,8 @@
 {
   "name": "container-query-monorepo",
-  "description": "A PostCSS plugin and Javascript runtime combination, which allows you to write @container queries in your CSS the same way you would write @media queries.",
   "license": "MIT",
   "main": "index.js",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
-  "keywords": [
-    "rwd",
-    "responsive-design",
-    "responsive",
-    "postcss",
-    "postcss-plugin",
-    "container-query",
-    "element-query",
-    "css",
-    "media-query",
-    "browser",
-    "query",
-    "javascript",
-    "component",
-    "module"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ZeeCoder/container-query"
