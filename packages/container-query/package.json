@@ -11,6 +11,7 @@
   "module": "dist/bundle.es.js",
   "browser": "dist/bundle.umd.js",
   "scripts": {
+    "flow-check": "flow check",
     "prebuild": "flow check",
     "build": "rollup -c",
     "watch:build": "rollup -c -w"

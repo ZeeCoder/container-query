@@ -1,13 +1,11 @@
-/* @flow */
+// @flow
 import processConfig from "./processConfig";
 import adjustContainer from "./adjustContainer";
 import objectAssign from "object-assign";
 import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
-import WeakMap from "es6-weak-map";
 import raf from "raf";
-
-const containerRegistry: WeakMap = new WeakMap();
+import containerRegistry from "./containerRegistry";
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
     if (!Array.isArray(entries)) {
