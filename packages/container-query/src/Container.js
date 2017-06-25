@@ -1,6 +1,7 @@
 // @flow
 import processConfig from "./processConfig";
 import adjustContainer from "./adjustContainer";
+import getInitialQueryState from "./getInitialQueryState";
 import objectAssign from "object-assign";
 import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
@@ -13,7 +14,7 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
     }
 
     entries.forEach(entry => {
-        const container = containerRegistry.get(entry.target);
+        const container = containerRegistry.get(entry.target).instance;
 
         if (
             typeof container === "undefined" ||
@@ -70,7 +71,12 @@ export default class Container {
             opts
         );
 
-        containerRegistry.set(containerElement, this);
+        containerRegistry.set(containerElement, {
+            instance: this,
+            jsonStats: jsonStats,
+            queryState: getInitialQueryState(jsonStats)
+        });
+
         mutationObserver.observe(this.containerElement.parentNode, {
             childList: true
         });
