@@ -149,10 +149,8 @@ test("should generate empty change set if conditions allow", () => {
                                 selector: ".Container",
                                 styles: {
                                     fontSize: "14px",
-                                    background: "#bbb"
-                                },
-                                values: {
-                                    lineHeight: "2rh"
+                                    background: "#bbb",
+                                    lineHeight: "16px"
                                 }
                             },
                             {
@@ -160,9 +158,6 @@ test("should generate empty change set if conditions allow", () => {
                                 styles: {
                                     fontSize: "8px",
                                     background: "#eee"
-                                },
-                                values: {
-                                    lineHeight: "5rh"
                                 }
                             }
                         ]
@@ -174,10 +169,8 @@ test("should generate empty change set if conditions allow", () => {
                                 selector: ".Container",
                                 styles: {
                                     fontSize: "16px",
-                                    background: "#ccc"
-                                },
-                                values: {
-                                    lineHeight: "3rh"
+                                    background: "#ccc",
+                                    lineHeight: "18px"
                                 }
                             },
                             {
@@ -185,9 +178,6 @@ test("should generate empty change set if conditions allow", () => {
                                 styles: {
                                     fontSize: "9px",
                                     background: "#fff"
-                                },
-                                values: {
-                                    lineHeight: "6rh"
                                 }
                             }
                         ]
@@ -208,5 +198,9 @@ test("should generate empty change set if conditions allow", () => {
             addStyle: {},
             removeProps: []
         }
+    });
+
+    test("should always recalculate values", () => {
+        // @todo
     });
 });

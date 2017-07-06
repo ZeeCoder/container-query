@@ -60,38 +60,53 @@ export default function(element: HTMLElement, size: ContainerSize) {
                 const applicableValueObject = {};
                 let applicableValuePropCount = 0;
                 for (let prop in elementData.values) {
-                    if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
+                    if (
+                        elementPreviouslyAppliedProps.indexOf(prop) === -1 ||
+                        elementStyleChangeSet.removeProps.indexOf(prop) !== -1
+                    ) {
+                        // Add value to addStyle if the prop wasn't affected by
+                        // previous queries, or even if it was, it was about to
+                        // be removed
+                        // if (typeof elementStyleChangeSet.addStyle[prop] === 'undefined') {
                         applicableValuePropCount++;
                         applicableValueObject[prop] = elementData.values[prop];
-                    }
-                }
 
-                if (applicableValuePropCount > 0) {
-                    const currentAddStyle = adjustValueObjectByContainerDimensions(
-                        size,
-                        applicableValueObject
-                    );
-                    // @todo: generate values and add them to the styleChangeSet
-                    // @todo: Also remove these props from removeProps
-                    Object.assign(
-                        styleChangeSet[elementData.selector].addStyle,
-                        currentAddStyle
-                    );
-
-                    // Removeing props now about to be applied from previous removeProps array
-                    for (let prop in currentAddStyle) {
-                        let index = styleChangeSet[
-                            elementData.selector
-                        ].removeProps.indexOf(prop);
+                        let index = elementStyleChangeSet.removeProps.indexOf(
+                            prop
+                        );
                         if (index !== -1) {
-                            styleChangeSet[
-                                elementData.selector
-                            ].removeProps.splice(index, 1);
+                            elementStyleChangeSet.removeProps.splice(index, 1);
                         }
                     }
                 }
 
-                // @todo add affected styles
+                const currentAddStyle = {};
+
+                // See if there's a property which needs to be readded and
+                // removed from "removeProps", since this query adds it
+                for (let prop in elementData.styles) {
+                    let index = elementStyleChangeSet.removeProps.indexOf(prop);
+                    if (index !== -1) {
+                        elementStyleChangeSet.removeProps.splice(index, 1);
+                        currentAddStyle[prop] = elementData.styles[prop];
+                    }
+                }
+
+                // Merge in value object
+                if (applicableValuePropCount > 0) {
+                    Object.assign(
+                        currentAddStyle,
+                        adjustValueObjectByContainerDimensions(
+                            size,
+                            applicableValueObject
+                        )
+                    );
+                }
+
+                Object.assign(
+                    styleChangeSet[elementData.selector].addStyle,
+                    currentAddStyle
+                );
             } else if (!doesCurrentlyApply && didPreviouslyApply) {
                 // Create removeProps object from all affected styles, overshadowed by previously affected props
                 let applicableRemoveProps = _difference(
@@ -123,7 +138,7 @@ export default function(element: HTMLElement, size: ContainerSize) {
                     currentAddStyle
                 );
 
-                // Removeing props now about to be applied from previous removeProps array
+                // Removing props now about to be applied from previous removeProps array
                 for (let prop in applicableCurrentAddStyle) {
                     let index = styleChangeSet[
                         elementData.selector
@@ -146,6 +161,15 @@ export default function(element: HTMLElement, size: ContainerSize) {
                 previouslyAppliedProps[elementData.selector],
                 elementAffectedProps
             );
+
+            // console.log(
+            //     "\n",
+            //     'addStyle',
+            //     JSON.stringify(styleChangeSet[elementData.selector].addStyle) + "\n",
+            //     'removeProps',
+            //     styleChangeSet[elementData.selector].removeProps.join(', ') + "\n",
+            //     `previouslyAppliedProps: ${previouslyAppliedProps[elementData.selector].join(', ')}`
+            // );
 
             // 1) If the query was previously applied, and it's applied again,
             // then get the values, remove any that is overshadowed by a
