@@ -26,12 +26,10 @@ test("should report true for values using either or both container units", () =>
 });
 
 test("should report min and max units too", () => {
-    expect(isValueUsingContainerUnits(`42${MIN_UNIT}px`)).toBe(true);
-    expect(isValueUsingContainerUnits(`42${MAX_UNIT}px`)).toBe(true);
+    expect(isValueUsingContainerUnits(`42${MIN_UNIT}`)).toBe(true);
+    expect(isValueUsingContainerUnits(`42${MAX_UNIT}`)).toBe(true);
     expect(
-        isValueUsingContainerUnits(
-            `42${MIN_UNIT}px 42${MAX_UNIT}px 42${MIN_UNIT}px`
-        )
+        isValueUsingContainerUnits(`42${MIN_UNIT} 42${MAX_UNIT} 42${MIN_UNIT}`)
     ).toBe(true);
 });
 

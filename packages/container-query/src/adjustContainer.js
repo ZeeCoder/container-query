@@ -11,6 +11,7 @@ import applyStylesToElements from "./applyStylesToElements";
  * @param {Object} [config] Expects a configuration object that was processed
  * (and validated) by `processConfig`
  * @param {ContainerDimensions} [containerDimensions]
+ * @todo remove?
  */
 export default function adjustContainer(
     container,

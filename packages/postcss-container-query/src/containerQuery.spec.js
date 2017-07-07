@@ -48,8 +48,10 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                                 {
                                     selector: ".container",
                                     styles: {
-                                        fontSize: "",
-                                        lineHeight: `100${HEIGHT_UNIT}px`
+                                        fontSize: ""
+                                    },
+                                    values: {
+                                        lineHeight: `100${HEIGHT_UNIT}`
                                     }
                                 }
                             ]
@@ -74,7 +76,7 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
         new Root()
             .addNode(
                 new RuleNode(".container")
-                    .addDeclaration("line-height", `100${HEIGHT_UNIT}px`)
+                    .addDeclaration("line-height", `100${HEIGHT_UNIT}`)
                     .addDeclaration("font-size", "42px")
                     .addContainerDefinition()
                     .addDeclaration("border", "none")
@@ -118,14 +120,14 @@ test("proper json and css output", () => {
                 .container {
                     @${DEFINE_CONTAINER_NAME};
                     border: none;
-                    font-size: 50${HEIGHT_UNIT}px;
+                    font-size: 50${HEIGHT_UNIT};
                     /* Ignore this */
-                    line-height: 100${HEIGHT_UNIT}px;
+                    line-height: 100${HEIGHT_UNIT};
                 }
 
                 @container (height >= 100px) and (width >= 100px) {
                     .container {
-                        font-size: 70${HEIGHT_UNIT}px;
+                        font-size: 70${HEIGHT_UNIT};
                     }
                 }
 
@@ -151,19 +153,19 @@ test("proper json and css output", () => {
                 }
 
                 .container2__element {
-                    width: 50${WIDTH_UNIT}px;
-                    height: 50${HEIGHT_UNIT}px;
+                    width: 50${WIDTH_UNIT};
+                    height: 50${HEIGHT_UNIT};
                     background: green;
                 }
 
                 @container (orientation: portrait) {
                     .container2 {
-                        font-size: 70${HEIGHT_UNIT}px;
+                        font-size: 70${HEIGHT_UNIT};
                     }
 
                     .container2__element {
-                        width: 75${WIDTH_UNIT}px;
-                        height: 75${HEIGHT_UNIT}px;
+                        width: 75${WIDTH_UNIT};
+                        height: 75${HEIGHT_UNIT};
                         background: red;
                     }
                 }
@@ -198,10 +200,9 @@ test("proper json and css output", () => {
                         elements: [
                             {
                                 selector: ".container",
-                                styles: {
-                                    fontSize: `50${HEIGHT_UNIT}px`,
-                                    lineHeight: `100${HEIGHT_UNIT}px`,
-                                    background: ""
+                                values: {
+                                    fontSize: `50${HEIGHT_UNIT}`,
+                                    lineHeight: `100${HEIGHT_UNIT}`
                                 }
                             }
                         ]
@@ -213,8 +214,8 @@ test("proper json and css output", () => {
                         elements: [
                             {
                                 selector: ".container",
-                                styles: {
-                                    fontSize: `70${HEIGHT_UNIT}px`
+                                values: {
+                                    fontSize: `70${HEIGHT_UNIT}`
                                 }
                             }
                         ]
@@ -254,17 +255,10 @@ test("proper json and css output", () => {
                     {
                         elements: [
                             {
-                                selector: ".container2",
-                                styles: {
-                                    fontSize: ""
-                                }
-                            },
-                            {
                                 selector: ".container2__element",
-                                styles: {
-                                    width: `50${WIDTH_UNIT}px`,
-                                    height: `50${HEIGHT_UNIT}px`,
-                                    background: ""
+                                values: {
+                                    width: `50${WIDTH_UNIT}`,
+                                    height: `50${HEIGHT_UNIT}`
                                 }
                             }
                         ]
@@ -274,16 +268,18 @@ test("proper json and css output", () => {
                         elements: [
                             {
                                 selector: ".container2",
-                                styles: {
-                                    fontSize: `70${HEIGHT_UNIT}px`
+                                values: {
+                                    fontSize: `70${HEIGHT_UNIT}`
                                 }
                             },
                             {
                                 selector: ".container2__element",
                                 styles: {
-                                    width: `75${WIDTH_UNIT}px`,
-                                    height: `75${HEIGHT_UNIT}px`,
                                     background: "red"
+                                },
+                                values: {
+                                    width: `75${WIDTH_UNIT}`,
+                                    height: `75${HEIGHT_UNIT}`
                                 }
                             }
                         ]

@@ -34,7 +34,11 @@ export default function(element: HTMLElement, size: ContainerSize) {
     const queriesLength = jsonStats.queries.length - 1;
     for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
         let queryData: QueryData = jsonStats.queries[queryIndex];
-        let doesCurrentlyApply = queryData.conditionFunction();
+        // Default queries have no `conditionFunction`
+        let doesCurrentlyApply = typeof queryData.conditionFunction ===
+            "function"
+            ? queryData.conditionFunction()
+            : true;
         let didPreviouslyApply = queryState[queryIndex];
 
         queryData.elements.forEach((elementData: ElementData) => {

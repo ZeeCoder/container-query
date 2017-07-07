@@ -5,6 +5,73 @@ jest.mock("./containerRegistry", () => ({
     get: jest.fn()
 }));
 
+test("should apply default queries without a condition function", () => {
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => {
+        return {
+            queryState: [false, false],
+            jsonStats: {
+                queries: [
+                    {
+                        // conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    fontSize: "2rh",
+                                    lineHeight: "1rh"
+                                }
+                            },
+                            {
+                                selector: ".Container__element",
+                                values: {
+                                    lineHeight: "3rh"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    fontSize: "4rh",
+                                    lineHeight: "2rh"
+                                }
+                            },
+                            {
+                                selector: ".Container__element",
+                                styles: {
+                                    lineHeight: "10px"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+    });
+
+    const element: HTMLElement = document.createElement("div");
+    const size: ContainerSize = { width: 100, height: 100 };
+    expect(getChangedStyles(element, size)).toEqual({
+        ".Container": {
+            addStyle: {
+                fontSize: "4px",
+                lineHeight: "2px"
+            },
+            removeProps: []
+        },
+        ".Container__element": {
+            addStyle: {
+                lineHeight: "10px"
+            },
+            removeProps: []
+        }
+    });
+});
+
 test("should return change sets on first run", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
