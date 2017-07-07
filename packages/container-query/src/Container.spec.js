@@ -116,7 +116,7 @@ test("should call adjust() on resize changes", () => {
     WeakMap.prototype.get.mockImplementationOnce(element => {
         expect(element).toBe(containerElement);
 
-        return containerInstance;
+        return registeredContainer;
     });
     const ResizeObserver = require("resize-observer-polyfill");
     const parentElement = document.createElement("div");
@@ -127,10 +127,15 @@ test("should call adjust() on resize changes", () => {
         adjustOnInstantiation: false,
         adjustOnResize: true
     });
+    const registeredContainer = {
+        instance: containerInstance,
+        jsonStats: {},
+        queryState: []
+    };
     expect(WeakMap.prototype.set).toHaveBeenCalledTimes(1);
     expect(WeakMap.prototype.set).toHaveBeenCalledWith(
         containerElement,
-        containerInstance
+        registeredContainer
     );
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
@@ -181,10 +186,15 @@ test("should clean up after container element is detached from the DOM", () => {
         adjustOnInstantiation: false,
         adjustOnResize: false
     });
+    const registeredContainer = {
+        instance: containerInstance,
+        jsonStats: {},
+        queryState: []
+    };
     expect(WeakMap.prototype.set).toHaveBeenCalledTimes(1);
     expect(WeakMap.prototype.set).toHaveBeenCalledWith(
         containerElement,
-        containerInstance
+        registeredContainer
     );
 
     let mutationRecords = [

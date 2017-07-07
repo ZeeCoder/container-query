@@ -1,7 +1,6 @@
 // @flow
 import processConfig from "./processConfig";
 import adjustContainer from "./adjustContainer";
-import getInitialQueryState from "./getInitialQueryState";
 import objectAssign from "object-assign";
 import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
@@ -14,12 +13,13 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
     }
 
     entries.forEach(entry => {
-        const container = containerRegistry.get(entry.target).instance;
+        const container = containerRegistry.get(entry.target);
 
         if (
             typeof container === "undefined" ||
             typeof container !== "object" ||
-            typeof container.adjust !== "function"
+            typeof container.instance !== "object" ||
+            typeof container.instance.adjust !== "function"
         ) {
             console.warn(
                 "Could not find Container instance for element:",
@@ -28,7 +28,7 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
             return;
         }
 
-        container.adjust({
+        container.instance.adjust({
             width: entry.contentRect.width,
             height: entry.contentRect.height
         });
@@ -71,10 +71,18 @@ export default class Container {
             opts
         );
 
+        const getInitialQueryState = () => {
+            if (!Array.isArray(jsonStats.queries)) {
+                return [];
+            }
+
+            return jsonStats.queries.map(() => false);
+        };
+
         containerRegistry.set(containerElement, {
             instance: this,
             jsonStats: jsonStats,
-            queryState: getInitialQueryState(jsonStats)
+            queryState: getInitialQueryState()
         });
 
         mutationObserver.observe(this.containerElement.parentNode, {
