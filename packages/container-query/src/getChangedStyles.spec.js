@@ -5,7 +5,6 @@ jest.mock("./containerRegistry", () => ({
     get: jest.fn()
 }));
 
-// @todo JSONStats type + builder
 test("should return change sets on first run", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
@@ -70,7 +69,6 @@ test("should return change sets on first run", () => {
     });
 });
 
-// @todo test with multiple elements
 test("should generate remove change set", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
@@ -87,6 +85,12 @@ test("should generate remove change set", () => {
                                     background: "#aaa"
                                 },
                                 values: {}
+                            },
+                            {
+                                selector: ".Container__element",
+                                styles: {
+                                    background: "#bbb"
+                                }
                             }
                         ]
                     },
@@ -114,6 +118,16 @@ test("should generate remove change set", () => {
                                 values: {
                                     lineHeight: "2rh"
                                 }
+                            },
+                            {
+                                selector: ".Container__element",
+                                styles: {
+                                    background: "#ccc",
+                                    border: "none"
+                                },
+                                values: {
+                                    fontSize: "1rh"
+                                }
                             }
                         ]
                     }
@@ -131,6 +145,12 @@ test("should generate remove change set", () => {
                 lineHeight: "10px"
             },
             removeProps: ["fontSize"]
+        },
+        ".Container__element": {
+            addStyle: {
+                background: "#bbb"
+            },
+            removeProps: ["border", "fontSize"]
         }
     });
 });
@@ -199,8 +219,81 @@ test("should generate empty change set if conditions allow", () => {
             removeProps: []
         }
     });
+});
 
-    test("should always recalculate values", () => {
-        // @todo
+test("should always recalculate values", () => {
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => {
+        return {
+            queryState: [true, false, true],
+            jsonStats: {
+                queries: [
+                    {
+                        conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    fontSize: "2rh"
+                                }
+                            },
+                            {
+                                selector: ".Container__element",
+                                values: {
+                                    fontSize: "4rh"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    fontSize: "3rh"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    lineHeight: "4rh"
+                                }
+                            },
+                            {
+                                selector: ".Container__element",
+                                values: {
+                                    lineHeight: "3rh"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+    });
+
+    const element: HTMLElement = document.createElement("div");
+    const size: ContainerSize = { width: 200, height: 200 };
+    expect(getChangedStyles(element, size)).toEqual({
+        ".Container": {
+            addStyle: {
+                lineHeight: "8px",
+                fontSize: "6px"
+            },
+            removeProps: []
+        },
+        ".Container__element": {
+            addStyle: {
+                lineHeight: "6px",
+                fontSize: "8px"
+            },
+            removeProps: []
+        }
     });
 });
