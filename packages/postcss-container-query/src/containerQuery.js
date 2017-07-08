@@ -1,7 +1,7 @@
 import postcss from "postcss";
 import detectContainerDefinition from "./detectContainerDefinition";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
-import getStylesObjectFromNode from "./getStylesObjectFromNode";
+import extractPropsFromNode from "./extractPropsFromNode";
 import isEmptyObject from "./isEmptyObject";
 import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
 import saveJSON from "./saveJSON";
@@ -99,7 +99,11 @@ function containerQuery(options = {}) {
                     // Process potential container unit usages to the default query
                     addStylesToDefaultQuery(
                         getElementRefBySelector(node.selector),
-                        getStylesObjectFromNode(node, isContainer, true, true),
+                        extractPropsFromNode(node, {
+                            isContainer: isContainer,
+                            onlyContainerUnits: true,
+                            stripContainerUnits: true
+                        }),
                         true
                     );
                 }
@@ -123,12 +127,12 @@ function containerQuery(options = {}) {
                     const isContainer =
                         elementRule.selector === currentContainerSelector;
                     let element = {
-                        selector: elementRule.selector,
-                        styles: getStylesObjectFromNode(
-                            elementRule,
-                            isContainer
-                        )
+                        selector: elementRule.selector
                     };
+                    Object.assign(
+                        element,
+                        extractPropsFromNode(elementRule, { isContainer })
+                    );
 
                     if (!isEmptyObject(element.styles)) {
                         addStylesToDefaultQuery(

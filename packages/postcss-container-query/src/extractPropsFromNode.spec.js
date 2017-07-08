@@ -1,4 +1,4 @@
-import getStylesObjectFromNode from "./getStylesObjectFromNode";
+import extractPropsFromNode from "./extractPropsFromNode";
 import Node from "../../common/__mocks__/Node";
 import RuleNode from "../../common/__mocks__/RuleNode";
 import {
@@ -11,11 +11,11 @@ import {
 
 test("should only accept rule nodes", () => {
     expect(() => {
-        getStylesObjectFromNode({});
+        extractPropsFromNode({});
     }).toThrowError(/^`ruleNode` must be of type "rule".$/);
 
     expect(
-        getStylesObjectFromNode({
+        extractPropsFromNode({
             type: "rule",
             nodes: null
         })
@@ -24,7 +24,7 @@ test("should only accept rule nodes", () => {
 
 test("should extract all styles", () => {
     expect(
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addDeclaration("height", "42px")
                 .addDeclaration("width", "42px")
@@ -33,21 +33,23 @@ test("should extract all styles", () => {
                 .addDeclaration("border", "none")
         )
     ).toEqual({
-        height: "42px",
-        width: "42px",
-        fontSize: `50${HEIGHT_UNIT}`,
-        lineHeight: `100${WIDTH_UNIT}`,
-        border: "none"
+        styles: {
+            height: "42px",
+            width: "42px",
+            border: "none"
+        },
+        values: {
+            fontSize: `50${HEIGHT_UNIT}`,
+            lineHeight: `100${WIDTH_UNIT}`
+        }
     });
 });
 
 test("should extract all container unit styles", () => {
-    expect(getStylesObjectFromNode(new RuleNode(".container"), true)).toEqual(
-        {}
-    );
+    expect(extractPropsFromNode(new RuleNode(".container"), true)).toEqual({});
 
     expect(
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("width", "42px")
@@ -55,82 +57,102 @@ test("should extract all container unit styles", () => {
                 .addDeclaration("font-size", `5${MIN_UNIT}`)
                 .addDeclaration("line-height", `42${MAX_UNIT}`)
                 .addDeclaration("border", "none"),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         )
     ).toEqual({
-        height: `150${WIDTH_UNIT}`,
-        fontSize: `5${MIN_UNIT}`,
-        lineHeight: `42${MAX_UNIT}`
+        values: {
+            height: `150${WIDTH_UNIT}`,
+            fontSize: `5${MIN_UNIT}`,
+            lineHeight: `42${MAX_UNIT}`
+        }
     });
 });
 
 test("should throw if with / height are using the wrong container units", () => {
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("width", `42${MIN_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(
         `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
     );
 
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("height", `42${MIN_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(
         `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
     );
 
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("width", `42${MAX_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(
         `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
     );
 
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("height", `42${MAX_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(
         `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
     );
 
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("height", `42${HEIGHT_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(`Containers cannot use ${HEIGHT_UNIT} for the height property.`);
 
     expect(() => {
-        getStylesObjectFromNode(
+        extractPropsFromNode(
             new RuleNode(".container")
                 .addContainerDefinition()
                 .addDeclaration("width", `42${WIDTH_UNIT}px`),
-            true,
-            true
+            {
+                isContainer: true,
+                onlyContainerUnits: true
+            }
         );
     }).toThrow(`Containers cannot use ${WIDTH_UNIT} for the width property.`);
+});
+
+test("should strip container units", () => {
+    // @todo
 });

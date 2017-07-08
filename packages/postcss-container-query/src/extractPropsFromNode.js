@@ -6,14 +6,22 @@ import {
     MIN_UNIT,
     MAX_UNIT
 } from "../../common/src/constants";
+import isEmptyObject from "./isEmptyObject";
 
 /**
  * Creates a styles object from the css declarations found in the given rule
  * node.
  *
  * @param {Node} ruleNode
- * @param {boolean} [isContainer] If the current node is a container, then using
- * container units on width or height properties will throw an exception.
+ * @param {{
+ *  isContainer: boolean,
+ *  onlyContainerUnits: boolean,
+ *  stripContainerUnits: boolean,
+ * }} opts
+ * @todo clean up docs
+ * @param {boolean} [isContainer] If the current node is a container, then the
+ * usage of container units with the with and height props will be limited, and
+ * may throw
  * @param {boolean} [onlyContainerUnits] If set, then only container units are
  * returned.
  * @param {boolean} [stripContainerUnits] If set, then all declaration nodes
@@ -26,11 +34,13 @@ import {
  *
  * @returns {Object}
  */
-export default function getStylesObjectFromNode(
+export default function extractPropsFromNode(
     ruleNode,
-    isContainer = false,
-    onlyContainerUnits = false,
-    stripContainerUnits = false
+    opts = {
+        isContainer: false,
+        onlyContainerUnits: false,
+        stripContainerUnits: false
+    }
 ) {
     if (ruleNode.type !== "rule") {
         throw new Error('`ruleNode` must be of type "rule".');
@@ -40,7 +50,10 @@ export default function getStylesObjectFromNode(
         return {};
     }
 
-    const styles = {};
+    const response = {
+        styles: {},
+        values: {}
+    };
     const nodesLength = ruleNode.nodes.length;
 
     for (let i = 0; i < nodesLength; i++) {
@@ -53,12 +66,12 @@ export default function getStylesObjectFromNode(
 
         if (
             node.type !== "decl" ||
-            (onlyContainerUnits && !containerUnitsUsed)
+            (opts.onlyContainerUnits && !containerUnitsUsed)
         ) {
             continue;
         }
 
-        if (isContainer && containerUnitsUsed) {
+        if (opts.isContainer && containerUnitsUsed) {
             if (
                 (node.prop === "width" || node.prop === "height") &&
                 (node.value.indexOf(MIN_UNIT) !== -1 ||
@@ -88,13 +101,25 @@ export default function getStylesObjectFromNode(
             }
         }
 
-        styles[camelCase(node.prop)] = node.value;
+        if (containerUnitsUsed) {
+            response.values[camelCase(node.prop)] = node.value;
+        } else {
+            response.styles[camelCase(node.prop)] = node.value;
+        }
 
-        if (stripContainerUnits && containerUnitsUsed) {
+        if (opts.stripContainerUnits && containerUnitsUsed) {
             ruleNode.nodes.splice(i, 1);
             i--;
         }
     }
 
-    return styles;
+    if (isEmptyObject(response.styles)) {
+        delete response.styles;
+    }
+
+    if (isEmptyObject(response.values)) {
+        delete response.values;
+    }
+
+    return response;
 }

@@ -40,18 +40,16 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
     const pluginInstance = containerQuery({
         getJSON: (path, json) => {
             expect(json).toEqual({
-                ".container": {
-                    selector: ".container",
+                ".Container": {
+                    selector: ".Container",
                     queries: [
                         {
                             elements: [
                                 {
-                                    selector: ".container",
-                                    styles: {
-                                        fontSize: ""
-                                    },
+                                    selector: ".Container",
                                     values: {
-                                        lineHeight: `100${HEIGHT_UNIT}`
+                                        lineHeight: `2${HEIGHT_UNIT}`,
+                                        fontSize: `1${HEIGHT_UNIT}`
                                     }
                                 }
                             ]
@@ -60,7 +58,7 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                             conditions: [[["orientation", ":", "landscape"]]],
                             elements: [
                                 {
-                                    selector: ".container",
+                                    selector: ".Container",
                                     styles: { fontSize: "24px" }
                                 }
                             ]
@@ -75,11 +73,17 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
     pluginInstance(
         new Root()
             .addNode(
-                new RuleNode(".container")
-                    .addDeclaration("line-height", `100${HEIGHT_UNIT}`)
-                    .addDeclaration("font-size", "42px")
+                new RuleNode(".Container")
+                    .addDeclaration("line-height", `2${HEIGHT_UNIT}`)
                     .addContainerDefinition()
                     .addDeclaration("border", "none")
+            )
+            .addNode(
+                // This should be noticed, and processed as expected
+                new RuleNode(".Container").addDeclaration(
+                    "font-size",
+                    `1${HEIGHT_UNIT}`
+                )
             )
             .addNode(
                 new Node({
@@ -98,11 +102,19 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                     name: "container",
                     params: "(orientation: landscape)"
                 }).addNode(
-                    new RuleNode(".container").addDeclaration(
+                    new RuleNode(".Container").addDeclaration(
                         "font-size",
                         "24px"
                     )
                 )
+            )
+            // Should ignore empty container query
+            .addNode(
+                new Node({
+                    type: "atrule",
+                    name: "container",
+                    params: "(orientation: portrait)"
+                }).addNode(new RuleNode(".Container"))
             )
     );
 });
@@ -192,14 +204,14 @@ test("proper json and css output", () => {
             `
             );
 
-            expect(typeof containersJSON[".container"]).toBe("object");
-            expect(containersJSON[".container"]).toEqual({
-                selector: ".container",
+            expect(typeof containersJSON[".Container"]).toBe("object");
+            expect(containersJSON[".Container"]).toEqual({
+                selector: ".Container",
                 queries: [
                     {
                         elements: [
                             {
-                                selector: ".container",
+                                selector: ".Container",
                                 values: {
                                     fontSize: `50${HEIGHT_UNIT}`,
                                     lineHeight: `100${HEIGHT_UNIT}`
@@ -213,7 +225,7 @@ test("proper json and css output", () => {
                         ],
                         elements: [
                             {
-                                selector: ".container",
+                                selector: ".Container",
                                 values: {
                                     fontSize: `70${HEIGHT_UNIT}`
                                 }
@@ -224,7 +236,7 @@ test("proper json and css output", () => {
                         conditions: [[["height", ">=", 100]]],
                         elements: [
                             {
-                                selector: ".container",
+                                selector: ".Container",
                                 styles: {
                                     background: "none"
                                 }
@@ -238,7 +250,7 @@ test("proper json and css output", () => {
                         ],
                         elements: [
                             {
-                                selector: ".container",
+                                selector: ".Container",
                                 styles: {
                                     background: "#000"
                                 }
@@ -288,3 +300,7 @@ test("proper json and css output", () => {
             });
         });
 });
+
+test("should process containers without queries", () => [
+    // notice and process values after a container was defined
+]);
