@@ -4,7 +4,7 @@ import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
  * @param {Node} ruleNode
  * @param {boolean} [removeDefinition]
  *
- * @returns {string|null}
+ * @returns {string|null} The container's selector
  */
 export default function detectContainerDefinition(
     ruleNode,

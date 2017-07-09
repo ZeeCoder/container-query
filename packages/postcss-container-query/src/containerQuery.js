@@ -6,35 +6,36 @@ import isEmptyObject from "./isEmptyObject";
 import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
 import saveJSON from "./saveJSON";
 
-function addStylesToDefaultQuery(
-    defaultElementRef,
-    styles,
-    keepValues = false
-) {
-    for (let prop in styles) {
-        if (typeof defaultElementRef.styles[prop] !== "undefined") {
-            continue;
-        }
-
-        defaultElementRef.styles[prop] = keepValues ? styles[prop] : "";
-    }
-}
-
 /**
- * Process only rules having "root", @media or @container as the parent.
- *
+ * @todo comments
  * @param {Node} node
  */
 function shouldProcessNode(node) {
     return (
-        node.parent.type === "root" ||
-        (node.parent.type === "atrule" &&
-            ["container", "media"].indexOf(node.parent.name) !== -1)
+        (node.type === "rule" && node.parent.type === "root") ||
+        (node.type === "atrule" && node.name === "container")
     );
 }
 
 /**
- * @todo refactor a bit to make testing easier
+ * Extracts container units with their props from an object.
+ *
+ * @param  {Node}  node
+ * @param  {boolean} isContainer
+ * @return {Object}
+ */
+function extractContainerUnits(node, isContainer = false) {
+    return (
+        extractPropsFromNode(node, {
+            isContainer: isContainer,
+            onlyContainerUnits: true,
+            stripContainerUnits: true
+        }).values || null
+    );
+}
+
+/**
+ * @todo refactor this to use a builder, which'll make testing easier too
  * @param {{ getJSON: function }} options
  */
 function containerQuery(options = {}) {
@@ -46,38 +47,107 @@ function containerQuery(options = {}) {
         let currentDefaultQuery = null;
         let currentDefaultQueryMap = null;
 
-        function getElementRefBySelector(selector) {
-            if (typeof currentDefaultQueryMap[selector] === "undefined") {
-                let elementRef = {
-                    selector: selector,
-                    styles: {}
-                };
-
-                currentDefaultQuery.elements.push(elementRef);
-                currentDefaultQueryMap[selector] = elementRef;
-            }
-
-            return currentDefaultQueryMap[selector];
-        }
-
-        function flushCurrentContainerData(newContainer = null) {
-            // Prepend the default query to the previously processed container
-            if (currentContainerSelector !== null) {
-                containers[currentContainerSelector].queries.unshift(
-                    currentDefaultQuery
+        const checkForPrecedingContainerDeclaration = node => {
+            if (currentContainerSelector === null) {
+                throw node.error(
+                    `A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.`
                 );
             }
-            if (newContainer !== null) {
-                containers[newContainer] = {
-                    selector: newContainer,
-                    queries: []
-                };
-            }
-            currentDefaultQuery = { elements: [] };
-            currentDefaultQueryMap = {};
+        };
 
-            currentContainerSelector = newContainer;
-        }
+        /**
+         * Any node under "root" could potentially have container units in them.
+         * Add such nodes to the default query. (One without conditions which
+         * means it'll always apply)
+         *
+         * @return {Node}
+         */
+        const processRuleNodeForDefaultQuery = node => {
+            const isContainer = isContainerCheck(node);
+
+            // First check if container unites are used or not
+            const containerUnits = extractContainerUnits(node, isContainer);
+            if (containerUnits === null) {
+                return;
+            }
+
+            // Check if we have a default query
+            if (
+                !containers[currentContainerSelector].queries[0] ||
+                containers[currentContainerSelector].queries[0].conditions
+            ) {
+                // Create the default query
+                containers[currentContainerSelector].queries.unshift({
+                    elements: []
+                });
+            }
+
+            // The query at the 0 index is the default query, without conditions
+            // Fetch a previously added element data based on the selector, or
+            // create a new one
+            let elementData = null;
+            let elementslength =
+                containers[currentContainerSelector].queries[0].elements.length;
+            for (let i = 0; i < elementslength; i++) {
+                if (
+                    containers[currentContainerSelector].queries[0].elements[i]
+                        .selector === node.selector
+                ) {
+                    elementData =
+                        containers[currentContainerSelector].queries[0]
+                            .elements[i];
+                    break;
+                }
+            }
+
+            if (elementData === null) {
+                elementData = {
+                    selector: node.selector,
+                    values: {}
+                };
+
+                containers[currentContainerSelector].queries[0].elements.push(
+                    elementData
+                );
+            }
+
+            // Add the extracted container units
+            Object.assign(elementData.values, containerUnits);
+        };
+
+        /**
+         * Processing a rule node under a container query.
+         * @param  {Node} node
+         * @returns {null|Object}
+         */
+        const processRuleNode = node => {
+            const isContainer = isContainerCheck(node);
+            // @todo instead of creating a new elementData, check if the same selector was already processed under this container query
+            const elementData = {
+                selector: node.selector
+            };
+
+            const props = extractPropsFromNode(node, { isContainer });
+
+            if (!props.styles && !props.values) {
+                return null;
+            }
+
+            Object.assign(elementData, props);
+
+            return elementData;
+        };
+
+        /**
+         * Returns true if the node's selector is the same as the currently
+         * processed container's.
+         *
+         * @param  {Node}  node
+         * @return {boolean}
+         */
+        const isContainerCheck = node => {
+            return currentContainerSelector === node.selector;
+        };
 
         root.walk((/** Node */ node) => {
             if (!shouldProcessNode(node)) {
@@ -86,61 +156,37 @@ function containerQuery(options = {}) {
 
             if (node.type === "rule") {
                 // Check if there's a new container declared in the rule node
-                const newContainer = detectContainerDefinition(node);
-                if (newContainer !== null) {
-                    flushCurrentContainerData(newContainer);
+                const newContainerSelector = detectContainerDefinition(node);
+                if (newContainerSelector !== null) {
+                    // @todo initialise new container method
+                    currentContainerSelector = newContainerSelector;
+                    containers[currentContainerSelector] = {
+                        selector: currentContainerSelector,
+                        queries: []
+                    };
                 }
 
-                const isContainer =
-                    newContainer !== null ||
-                    node.selector === currentContainerSelector;
+                checkForPrecedingContainerDeclaration(node);
 
-                if (currentContainerSelector !== null) {
-                    // Process potential container unit usages to the default query
-                    addStylesToDefaultQuery(
-                        getElementRefBySelector(node.selector),
-                        extractPropsFromNode(node, {
-                            isContainer: isContainer,
-                            onlyContainerUnits: true,
-                            stripContainerUnits: true
-                        }),
-                        true
-                    );
-                }
-            } else if (node.type === "atrule" && node.name === "container") {
-                if (currentContainerSelector === null) {
-                    throw node.error(
-                        `A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.`
-                    );
-                }
+                // Process potential container unit usages to the default query
+                processRuleNodeForDefaultQuery(node);
+            } else {
+                // Process container query
+                checkForPrecedingContainerDeclaration(node);
 
                 let query = {
                     conditions: getConditionsFromQueryParams(node.params),
                     elements: []
                 };
 
-                node.nodes.forEach(elementRule => {
-                    if (elementRule.type !== "rule") {
+                node.nodes.forEach(ruleNode => {
+                    if (ruleNode.type !== "rule") {
                         return;
                     }
 
-                    const isContainer =
-                        elementRule.selector === currentContainerSelector;
-                    let element = {
-                        selector: elementRule.selector
-                    };
-                    Object.assign(
-                        element,
-                        extractPropsFromNode(elementRule, { isContainer })
-                    );
-
-                    if (!isEmptyObject(element.styles)) {
-                        addStylesToDefaultQuery(
-                            getElementRefBySelector(elementRule.selector),
-                            element.styles
-                        );
-
-                        query.elements.push(element);
+                    const elementData = processRuleNode(ruleNode);
+                    if (elementData !== null) {
+                        query.elements.push(elementData);
                     }
                 });
 
@@ -151,8 +197,6 @@ function containerQuery(options = {}) {
                 node.remove();
             }
         });
-
-        flushCurrentContainerData();
 
         getJSON(root.source.input.file, containers);
     };

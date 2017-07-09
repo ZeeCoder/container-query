@@ -10,8 +10,6 @@ import Node from "../../common/__mocks__/Node";
 import RuleNode from "../../common/__mocks__/RuleNode";
 jest.mock("./saveJSON");
 
-// @todo test when an "element" of a @container {} query is actually a container itself, and certain properties should be prohibited
-
 test("should use the default json saving function if none was supplied", () => {
     const saveJSON = require("./saveJSON").default;
 
@@ -48,8 +46,16 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                                 {
                                     selector: ".Container",
                                     values: {
-                                        lineHeight: `2${HEIGHT_UNIT}`,
-                                        fontSize: `1${HEIGHT_UNIT}`
+                                        lineHeight: `3${HEIGHT_UNIT}`,
+                                        fontSize: `1${HEIGHT_UNIT}`,
+                                        marginLeft: `2${WIDTH_UNIT}`
+                                    }
+                                },
+                                {
+                                    selector: ".Container__element",
+                                    values: {
+                                        fontSize: `1${WIDTH_UNIT}`,
+                                        lineHeight: `2${WIDTH_UNIT}`
                                     }
                                 }
                             ]
@@ -116,6 +122,32 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                     params: "(orientation: portrait)"
                 }).addNode(new RuleNode(".Container"))
             )
+            // should process container values even after container queries
+            .addNode(
+                new RuleNode(".Container")
+                    .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
+                    .addDeclaration("margin-left", `2${WIDTH_UNIT}`)
+            )
+            // should process default elements using values
+            .addNode(
+                new RuleNode(".Container__element").addDeclaration(
+                    "font-size",
+                    `1${WIDTH_UNIT}`
+                )
+            )
+            // This should be overriden by the following node
+            .addNode(
+                new RuleNode(".Container__element").addDeclaration(
+                    "line-height",
+                    `1${WIDTH_UNIT}`
+                )
+            )
+            .addNode(
+                new RuleNode(".Container__element").addDeclaration(
+                    "line-height",
+                    `2${WIDTH_UNIT}`
+                )
+            )
     );
 });
 
@@ -129,7 +161,7 @@ test("proper json and css output", () => {
     ])
         .process(
             `
-                .container {
+                .Container {
                     @${DEFINE_CONTAINER_NAME};
                     border: none;
                     font-size: 50${HEIGHT_UNIT};
@@ -138,44 +170,44 @@ test("proper json and css output", () => {
                 }
 
                 @container (height >= 100px) and (width >= 100px) {
-                    .container {
+                    .Container {
                         font-size: 70${HEIGHT_UNIT};
                     }
                 }
 
                 @container (height >= 100px) {
-                    .container {
+                    .Container {
                         background: none;
                     }
                     /* Ignore this */
                 }
 
                 @container (height >= 100px) and (width >= 100px), (aspect-ratio > 3.5) {
-                    .container {
+                    .Container {
                         background: #000;
                     }
                 }
 
                 /* Ignore this */
 
-                .container2 {
+                .Container2 {
                     @${DEFINE_CONTAINER_NAME}
                     font-size: 10px;
                     border: 1px solid;
                 }
 
-                .container2__element {
+                .Container2__element {
                     width: 50${WIDTH_UNIT};
                     height: 50${HEIGHT_UNIT};
                     background: green;
                 }
 
                 @container (orientation: portrait) {
-                    .container2 {
+                    .Container2 {
                         font-size: 70${HEIGHT_UNIT};
                     }
 
-                    .container2__element {
+                    .Container2__element {
                         width: 75${WIDTH_UNIT};
                         height: 75${HEIGHT_UNIT};
                         background: red;
@@ -187,18 +219,18 @@ test("proper json and css output", () => {
         .then(result => {
             expect(result.css).toEqual(
                 `
-                .container {
+                .Container {
                     border: none;
                     /* Ignore this */
                 }
 
                 /* Ignore this */
 
-                .container2 {
+                .Container2 {
                     border: 1px solid;
                 }
 
-                .container2__element {
+                .Container2__element {
                     background: green;
                 }
             `
@@ -260,14 +292,14 @@ test("proper json and css output", () => {
                 ]
             });
 
-            expect(typeof containersJSON[".container2"]).toBe("object");
-            expect(containersJSON[".container2"]).toEqual({
-                selector: ".container2",
+            expect(typeof containersJSON[".Container2"]).toBe("object");
+            expect(containersJSON[".Container2"]).toEqual({
+                selector: ".Container2",
                 queries: [
                     {
                         elements: [
                             {
-                                selector: ".container2__element",
+                                selector: ".Container2__element",
                                 values: {
                                     width: `50${WIDTH_UNIT}`,
                                     height: `50${HEIGHT_UNIT}`
@@ -279,13 +311,13 @@ test("proper json and css output", () => {
                         conditions: [[["orientation", ":", "portrait"]]],
                         elements: [
                             {
-                                selector: ".container2",
+                                selector: ".Container2",
                                 values: {
                                     fontSize: `70${HEIGHT_UNIT}`
                                 }
                             },
                             {
-                                selector: ".container2__element",
+                                selector: ".Container2__element",
                                 styles: {
                                     background: "red"
                                 },
@@ -301,6 +333,14 @@ test("proper json and css output", () => {
         });
 });
 
-test("should process containers without queries", () => [
-    // notice and process values after a container was defined
-]);
+test("should process containers without queries", () => {
+    // @todo notice and process values after a container was defined
+});
+
+test("should throw if container units were used without a preceding container declaration", () => {
+    // @todo
+});
+
+test("should throw if container rule in container query uses container units with prohibited props", () => {
+    // @todo
+});
