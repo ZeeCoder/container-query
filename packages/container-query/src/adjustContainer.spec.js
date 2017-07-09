@@ -3,6 +3,8 @@ import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
 
 jest.mock("./getContainerDimensions");
 
+// @todo update tests
+
 const container = {
     style: {},
     querySelectorAll: () => [containerElement]

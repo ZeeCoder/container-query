@@ -2,6 +2,8 @@ import objectAssign from "object-assign";
 import getContainerDimensions from "./getContainerDimensions";
 import adjustValueObjectByContainerDimensions from "./adjustValueObjectByContainerDimensions";
 import applyStylesToElements from "./applyStylesToElements";
+import containerRegistry from "./containerRegistry";
+import isEmptyObject from "./isEmptyObject";
 
 /**
  * Apply conditional styles to the container and its elements based on the
@@ -10,59 +12,42 @@ import applyStylesToElements from "./applyStylesToElements";
  * @param {HTMLElement} container
  * @param {Object} [config] Expects a configuration object that was processed
  * (and validated) by `processConfig`
- * @param {ContainerDimensions} [containerDimensions]
- * @todo remove?
+ * @param {ContainerDimensions} [containerSize]
  */
-export default function adjustContainer(
-    container,
-    config = null,
-    containerDimensions = null
-) {
-    if (config === null) {
+export default function adjustContainer(container, containerSize = null) {
+    const registryData = containerRegistry.get(container);
+
+    if (!containerSize) {
+        // Get container size ourselves, if not given
+        containerSize = getContainerDimensions(container);
+    }
+
+    // Fetching changed styles since the last time we checked.
+    // This contains addStyles and removeProps
+    const changedStyles = getChangedStyles(container, containerSize);
+
+    // Skip if no changes were detected
+    // @todo this could be smarter?
+    if (
+        isEmptyObject(changedStyles.addStyles) &&
+        changedStyles.removeProps.length === 0
+    ) {
         return;
     }
 
-    if (!containerDimensions) {
-        containerDimensions = getContainerDimensions(container);
-    }
-
-    const queriesLength = config.queries.length;
-    const changeSets = {};
-
-    for (let i = 0; i < queriesLength; i++) {
-        // Check if the condition apply, or if it's the first, default query
-        if (
-            i !== 0 &&
-            typeof config.queries[i].conditionFunction === "function" &&
-            !config.queries[i].conditionFunction(containerDimensions)
-        ) {
-            continue;
-        }
-
-        config.queries[i].elements.forEach(elementData => {
-            if (i === 0) {
-                changeSets[elementData.selector] = {
-                    elements: elementData.selector === config.selector
-                        ? [container]
-                        : container.querySelectorAll(elementData.selector),
-                    change: {}
-                };
-            }
-
-            objectAssign(
-                changeSets[elementData.selector].change,
-                adjustValueObjectByContainerDimensions(
-                    containerDimensions,
-                    elementData.styles
-                )
-            );
+    for (let elementSelector in changedStyles) {
+        // Normalise to a single changeSet that can be applied by applyStylesToElements
+        const changeSet = changedStyles[elementSelector].styles;
+        changedStyles[elementSelector].values.forEach(prop => {
+            changeSet[prop] = "";
         });
-    }
 
-    for (let elementSelector in changeSets) {
-        applyStylesToElements(
-            changeSets[elementSelector].change,
-            changeSets[elementSelector].elements
-        );
+        // What element(s) do we need to add these styles to?
+        const elements = elementSelector === registryData.jsonStats.selector
+            ? [container]
+            : container.querySelectorAll(elementSelector);
+
+        // Finally, apply the change set to the elements
+        applyStylesToElements(changeSet, elements);
     }
 }

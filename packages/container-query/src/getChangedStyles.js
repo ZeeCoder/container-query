@@ -24,7 +24,10 @@ function getAffectedPropsByElementData(elementData: ElementData): string[] {
     return Object.keys(affectedStyles);
 }
 
-export default function(element: HTMLElement, size: ContainerSize) {
+export default function getChangedStyles(
+    element: HTMLElement,
+    size: ContainerSize
+) {
     const { queryState, jsonStats } = registry.get(element);
     const styleChangeSet: StyleChangeSet = {};
     const previouslyAppliedProps: {
