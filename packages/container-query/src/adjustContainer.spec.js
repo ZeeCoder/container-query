@@ -1,5 +1,4 @@
 import adjustContainer from "./adjustContainer";
-import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
 
 jest.mock("./applyStylesToElements");
 jest.mock("./getChangedStyles");
@@ -8,79 +7,10 @@ jest.mock("./containerRegistry", () => ({
     get: jest.fn()
 }));
 
-const container = {
-    style: {},
-    querySelectorAll: () => [containerElement]
-};
-
-const containerElement = {
-    style: {}
-};
-
-// const config = {
-//     selector: '.container',
-//     queries: [
-//         {
-//             elements: [
-//                 {
-//                     selector: '.container',
-//                     styles: {
-//                         borderWidth: `calc(10${HEIGHT_UNIT} + 10${WIDTH_UNIT})`,
-//                     },
-//                 },
-//                 {
-//                     selector: '.container__element',
-//                     styles: {
-//                         width: '',
-//                         height: `5${HEIGHT_UNIT}%`,
-//                         fontSize: `10${HEIGHT_UNIT}`,
-//                         lineHeight: `100${HEIGHT_UNIT}`,
-//                     },
-//                 },
-//             ],
-//         },
-//         {
-//             conditionFunction: containerDimensions =>
-//                 containerDimensions.width >= 100,
-//             elements: [
-//                 {
-//                     selector: '.container',
-//                     styles: {
-//                         borderWidth: `calc(20${HEIGHT_UNIT} + 20${WIDTH_UNIT})`,
-//                     },
-//                 },
-//                 {
-//                     selector: '.container__element',
-//                     styles: {
-//                         width: `50${HEIGHT_UNIT}`,
-//                         height: `15${HEIGHT_UNIT}%`,
-//                         fontSize: `50${HEIGHT_UNIT}`,
-//                         lineHeight: `100${HEIGHT_UNIT}`,
-//                     },
-//                 },
-//             ],
-//         },
-//         {
-//             conditionFunction: containerDimensions =>
-//                 containerDimensions.width >= 100 &&
-//                 containerDimensions.height >= 200,
-//             elements: [
-//                 {
-//                     selector: '.container__element',
-//                     styles: {
-//                         width: `75${WIDTH_UNIT}`,
-//                         fontSize: `75${HEIGHT_UNIT}`,
-//                         lineHeight: `90${HEIGHT_UNIT}`,
-//                     },
-//                 },
-//             ],
-//         },
-//     ],
-// };
-
 beforeEach(() => {
-    require("./getContainerDimensions").default.mockClear();
     require("./applyStylesToElements").default.mockClear();
+    require("./getChangedStyles").default.mockClear();
+    require("./getContainerDimensions").default.mockClear();
     require("./containerRegistry").get.mockClear();
 });
 
@@ -101,8 +31,10 @@ test("should be able to get the container size itself, and ignore empty change s
         };
     });
     getChangedStyles.mockImplementationOnce(() => ({
-        addStyles: {},
-        removeProps: []
+        ".Container": {
+            addStyles: {},
+            removeProps: []
+        }
     }));
 
     adjustContainer(containerElement);
@@ -127,21 +59,43 @@ test("should apply changed styles", () => {
     const getChangedStyles = require("./getChangedStyles").default;
     const getContainerDimensions = require("./getContainerDimensions").default;
     const containerElement = document.createElement("div");
+    const containerChildElement1 = document.createElement("div");
+    const containerChildElement2 = document.createElement("div");
+    const containerChildren = [containerChildElement1, containerChildElement2];
+    containerElement.querySelectorAll = jest.fn(selector => {
+        expect(selector).toBe(".Container__element");
+
+        return containerChildren;
+    });
+
     const containerSize = { width: 1, height: 2 };
     containerRegistry.get.mockImplementationOnce(() => {
         return {
             queryState: [],
             jsonStats: {
+                selector: ".Container",
                 queries: []
             }
         };
     });
     getChangedStyles.mockImplementationOnce(() => ({
-        addStyles: {
-            lineHeight: "10px",
-            background: "none"
+        ".Container": {
+            addStyles: {
+                lineHeight: "10px",
+                background: "none"
+            },
+            removeProps: ["fontSize", "border"]
         },
-        removeProps: ["font-size", "border"]
+        ".Container__unchangedElement": {
+            addStyles: {},
+            removeProps: []
+        },
+        ".Container__element": {
+            addStyles: {
+                border: "none"
+            },
+            removeProps: []
+        }
     }));
 
     adjustContainer(containerElement, containerSize);
@@ -156,5 +110,20 @@ test("should apply changed styles", () => {
     );
 
     // This proves that empty change sets are ignored
-    expect(applyStylesToElements).toHaveBeenCalledTimes(0);
+    expect(applyStylesToElements).toHaveBeenCalledTimes(2);
+    expect(applyStylesToElements).toHaveBeenCalledWith(
+        {
+            lineHeight: "10px",
+            background: "none",
+            fontSize: "",
+            border: ""
+        },
+        [containerElement]
+    );
+    expect(applyStylesToElements).toHaveBeenCalledWith(
+        {
+            border: "none"
+        },
+        containerChildren
+    );
 });

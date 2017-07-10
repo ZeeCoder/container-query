@@ -8,42 +8,45 @@ import getChangedStyles from "./getChangedStyles";
  * Calculates and applies styles based on which queries applied to the element
  * previously.
  *
- * @param {HTMLElement} container
+ * @param {HTMLElement} containerElement
  * @param {ContainerDimensions} [containerSize]
  */
-export default function adjustContainer(container, containerSize = null) {
-    const registryData = containerRegistry.get(container);
+export default function adjustContainer(
+    containerElement,
+    containerSize = null
+) {
+    const registryData = containerRegistry.get(containerElement);
 
     if (!containerSize) {
         // Get container size ourselves, if not given
-        containerSize = getContainerDimensions(container);
+        containerSize = getContainerDimensions(containerElement);
     }
 
     // Fetching changed styles since the last time we checked.
     // This contains addStyles and removeProps
-    const changedStyles = getChangedStyles(container, containerSize);
-
-    // Skip if no changes were detected
-    // @todo this could be smarter?
-    if (
-        isEmptyObject(changedStyles.addStyles) &&
-        changedStyles.removeProps.length === 0
-    ) {
-        return;
-    }
+    const changedStyles = getChangedStyles(containerElement, containerSize);
 
     for (let elementSelector in changedStyles) {
+        // Skip if no changes were detected
+        // @todo this could be smarter?
+        if (
+            isEmptyObject(changedStyles[elementSelector].addStyles) &&
+            changedStyles[elementSelector].removeProps.length === 0
+        ) {
+            continue;
+        }
+
         // Normalise to a single changeSet that can be applied by applyStylesToElements
-        const changeSet = changedStyles[elementSelector].styles;
-        changedStyles[elementSelector].values.forEach(prop => {
+        const changeSet = changedStyles[elementSelector].addStyles;
+        changedStyles[elementSelector].removeProps.forEach(prop => {
             changeSet[prop] = "";
         });
 
         // What element(s) do we need to add these styles to?
         const elements =
             elementSelector === registryData.jsonStats.selector
-                ? [container]
-                : container.querySelectorAll(elementSelector);
+                ? [containerElement]
+                : containerElement.querySelectorAll(elementSelector);
 
         // Finally, apply the change set to the elements
         applyStylesToElements(changeSet, elements);

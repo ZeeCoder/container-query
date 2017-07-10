@@ -67,9 +67,7 @@ test("should instantiate properly", () => {
     expect(processConfig.mock.calls[0][0]).toBe(config);
     expect(adjustContainer).toHaveBeenCalledTimes(4);
     expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
-    expect(adjustContainer.mock.calls[0][1]).toEqual(processedConfig);
     expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);
-    expect(adjustContainer.mock.calls[1][1]).toEqual(processedConfig);
 });
 
 test("should be able to observe resize events and switch off initial adjust call", () => {
