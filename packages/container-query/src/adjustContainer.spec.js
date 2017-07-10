@@ -1,6 +1,7 @@
 import adjustContainer from "./adjustContainer";
 import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
 
+jest.mock("./applyStylesToElements");
 jest.mock("./getChangedStyles");
 jest.mock("./getContainerDimensions");
 jest.mock("./containerRegistry", () => ({
@@ -16,191 +17,144 @@ const containerElement = {
     style: {}
 };
 
-const config = {
-    selector: ".container",
-    queries: [
-        {
-            elements: [
-                {
-                    selector: ".container",
-                    styles: {
-                        borderWidth: `calc(10${HEIGHT_UNIT} + 10${WIDTH_UNIT})`
-                    }
-                },
-                {
-                    selector: ".container__element",
-                    styles: {
-                        width: "",
-                        height: `5${HEIGHT_UNIT}%`,
-                        fontSize: `10${HEIGHT_UNIT}`,
-                        lineHeight: `100${HEIGHT_UNIT}`
-                    }
-                }
-            ]
-        },
-        {
-            conditionFunction: containerDimensions =>
-                containerDimensions.width >= 100,
-            elements: [
-                {
-                    selector: ".container",
-                    styles: {
-                        borderWidth: `calc(20${HEIGHT_UNIT} + 20${WIDTH_UNIT})`
-                    }
-                },
-                {
-                    selector: ".container__element",
-                    styles: {
-                        width: `50${HEIGHT_UNIT}`,
-                        height: `15${HEIGHT_UNIT}%`,
-                        fontSize: `50${HEIGHT_UNIT}`,
-                        lineHeight: `100${HEIGHT_UNIT}`
-                    }
-                }
-            ]
-        },
-        {
-            conditionFunction: containerDimensions =>
-                containerDimensions.width >= 100 &&
-                containerDimensions.height >= 200,
-            elements: [
-                {
-                    selector: ".container__element",
-                    styles: {
-                        width: `75${WIDTH_UNIT}`,
-                        fontSize: `75${HEIGHT_UNIT}`,
-                        lineHeight: `90${HEIGHT_UNIT}`
-                    }
-                }
-            ]
-        }
-    ]
-};
+// const config = {
+//     selector: '.container',
+//     queries: [
+//         {
+//             elements: [
+//                 {
+//                     selector: '.container',
+//                     styles: {
+//                         borderWidth: `calc(10${HEIGHT_UNIT} + 10${WIDTH_UNIT})`,
+//                     },
+//                 },
+//                 {
+//                     selector: '.container__element',
+//                     styles: {
+//                         width: '',
+//                         height: `5${HEIGHT_UNIT}%`,
+//                         fontSize: `10${HEIGHT_UNIT}`,
+//                         lineHeight: `100${HEIGHT_UNIT}`,
+//                     },
+//                 },
+//             ],
+//         },
+//         {
+//             conditionFunction: containerDimensions =>
+//                 containerDimensions.width >= 100,
+//             elements: [
+//                 {
+//                     selector: '.container',
+//                     styles: {
+//                         borderWidth: `calc(20${HEIGHT_UNIT} + 20${WIDTH_UNIT})`,
+//                     },
+//                 },
+//                 {
+//                     selector: '.container__element',
+//                     styles: {
+//                         width: `50${HEIGHT_UNIT}`,
+//                         height: `15${HEIGHT_UNIT}%`,
+//                         fontSize: `50${HEIGHT_UNIT}`,
+//                         lineHeight: `100${HEIGHT_UNIT}`,
+//                     },
+//                 },
+//             ],
+//         },
+//         {
+//             conditionFunction: containerDimensions =>
+//                 containerDimensions.width >= 100 &&
+//                 containerDimensions.height >= 200,
+//             elements: [
+//                 {
+//                     selector: '.container__element',
+//                     styles: {
+//                         width: `75${WIDTH_UNIT}`,
+//                         fontSize: `75${HEIGHT_UNIT}`,
+//                         lineHeight: `90${HEIGHT_UNIT}`,
+//                     },
+//                 },
+//             ],
+//         },
+//     ],
+// };
 
 beforeEach(() => {
     require("./getContainerDimensions").default.mockClear();
+    require("./applyStylesToElements").default.mockClear();
+    require("./containerRegistry").get.mockClear();
 });
 
-test("should accept container dimensions", () => {
+test("should be able to get the container size itself, and ignore empty change sets", () => {
     const containerRegistry = require("./containerRegistry");
+    const applyStylesToElements = require("./applyStylesToElements").default;
     const getChangedStyles = require("./getChangedStyles").default;
     const getContainerDimensions = require("./getContainerDimensions").default;
-    let jsonStats = {
-        queries: []
-    };
-
-    const container = document.createElement("div");
+    const containerElement = document.createElement("div");
     const containerSize = { width: 1, height: 2 };
-    containerRegistry.get.mockImplementationOnce(element => {
-        expect(element).toBe(container);
-
+    getContainerDimensions.mockImplementationOnce(() => containerSize);
+    containerRegistry.get.mockImplementationOnce(() => {
         return {
             queryState: [],
-            jsonStats: jsonStats
+            jsonStats: {
+                queries: []
+            }
         };
     });
-    getChangedStyles.mockImplementationOnce(() => {
-        return { addStyles: {}, removeProps: [] };
-    });
+    getChangedStyles.mockImplementationOnce(() => ({
+        addStyles: {},
+        removeProps: []
+    }));
 
-    adjustContainer(container, containerSize);
+    adjustContainer(containerElement);
 
-    expect(getContainerDimensions).toHaveBeenCalledTimes(0);
+    expect(containerRegistry.get).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.get).toHaveBeenCalledWith(containerElement);
+    expect(getContainerDimensions).toHaveBeenCalledTimes(1);
+    expect(getContainerDimensions).toHaveBeenCalledWith(containerElement);
     expect(getChangedStyles).toHaveBeenCalledTimes(1);
-    expect(getChangedStyles).toHaveBeenCalledWith(container, containerSize);
-});
-
-test("The container and its elements should be properly adjusted with the defaults", () => {
-    const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
-        () => {
-            return { width: 99, height: 100 };
-        }
+    expect(getChangedStyles).toHaveBeenCalledWith(
+        containerElement,
+        containerSize
     );
 
-    adjustContainer(container, config);
-
-    expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
-    expect(container.style).toEqual({
-        borderWidth: "calc(10px + 9.9px)"
-    });
-    expect(containerElement.style).toEqual({
-        width: "",
-        height: `5px%`,
-        fontSize: "10px",
-        lineHeight: "100px"
-    });
+    // This proves that empty change sets are ignored
+    expect(applyStylesToElements).toHaveBeenCalledTimes(0);
 });
 
-describe("query styles should be applied, then removed when conditions no longer apply", () => {
-    test("Apply query styles with width >= 100", () => {
-        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
-            () => {
-                return { width: 100, height: 100 };
+test("should apply changed styles", () => {
+    const containerRegistry = require("./containerRegistry");
+    const applyStylesToElements = require("./applyStylesToElements").default;
+    const getChangedStyles = require("./getChangedStyles").default;
+    const getContainerDimensions = require("./getContainerDimensions").default;
+    const containerElement = document.createElement("div");
+    const containerSize = { width: 1, height: 2 };
+    containerRegistry.get.mockImplementationOnce(() => {
+        return {
+            queryState: [],
+            jsonStats: {
+                queries: []
             }
-        );
-
-        adjustContainer(container, config);
-
-        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
-        expect(container.style).toEqual({
-            borderWidth: "calc(20px + 20px)"
-        });
-        expect(containerElement.style).toEqual({
-            width: "50px",
-            height: `15px%`,
-            fontSize: "50px",
-            lineHeight: "100px"
-        });
+        };
     });
+    getChangedStyles.mockImplementationOnce(() => ({
+        addStyles: {
+            lineHeight: "10px",
+            background: "none"
+        },
+        removeProps: ["font-size", "border"]
+    }));
 
-    test("Apply query styles with height >= 200", () => {
-        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
-            () => {
-                return { width: 100, height: 200 };
-            }
-        );
+    adjustContainer(containerElement, containerSize);
 
-        adjustContainer(container, config);
+    expect(containerRegistry.get).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.get).toHaveBeenCalledWith(containerElement);
+    expect(getContainerDimensions).toHaveBeenCalledTimes(0);
+    expect(getChangedStyles).toHaveBeenCalledTimes(1);
+    expect(getChangedStyles).toHaveBeenCalledWith(
+        containerElement,
+        containerSize
+    );
 
-        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
-        expect(container.style).toEqual({
-            borderWidth: "calc(40px + 20px)"
-        });
-        expect(containerElement.style).toEqual({
-            width: "75px",
-            height: `30px%`,
-            fontSize: "150px",
-            lineHeight: "180px"
-        });
-    });
-
-    test("Remove all query styles, resetting back to the defaults", () => {
-        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
-            () => {
-                return { width: 99, height: 99 };
-            }
-        );
-
-        adjustContainer(container, config);
-
-        expect(getContainerDimensionsMock).toHaveBeenCalledTimes(1);
-        expect(container.style).toEqual({
-            borderWidth: "calc(9.9px + 9.9px)"
-        });
-        expect(containerElement.style).toEqual({
-            width: "",
-            height: `4.95px%`,
-            fontSize: "9.9px",
-            lineHeight: "99px"
-        });
-    });
-});
-
-test("shouldn't adjust if the configuration is null (invalid)", () => {
-    const getContainerDimensionsMock = require("./getContainerDimensions")
-        .default;
-
-    adjustContainer(container);
-
-    expect(getContainerDimensionsMock).toHaveBeenCalledTimes(0);
+    // This proves that empty change sets are ignored
+    expect(applyStylesToElements).toHaveBeenCalledTimes(0);
 });

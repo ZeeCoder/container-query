@@ -8,7 +8,6 @@ import getChangedStyles from "./getChangedStyles";
  * Calculates and applies styles based on which queries applied to the element
  * previously.
  *
- * @todo make style applying easily overridable
  * @param {HTMLElement} container
  * @param {ContainerDimensions} [containerSize]
  */
