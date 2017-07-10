@@ -1,9 +1,11 @@
 import adjustContainer from "./adjustContainer";
 import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
 
+jest.mock("./getChangedStyles");
 jest.mock("./getContainerDimensions");
-
-// @todo update tests
+jest.mock("./containerRegistry", () => ({
+    get: jest.fn()
+}));
 
 const container = {
     style: {},
@@ -80,25 +82,40 @@ beforeEach(() => {
 });
 
 test("should accept container dimensions", () => {
+    const containerRegistry = require("./containerRegistry");
+    const getChangedStyles = require("./getChangedStyles").default;
     const getContainerDimensions = require("./getContainerDimensions").default;
-    let config = {
+    let jsonStats = {
         queries: []
     };
 
-    const container = {};
-    const containerDimensions = { width: 1, height: 2 };
+    const container = document.createElement("div");
+    const containerSize = { width: 1, height: 2 };
+    containerRegistry.get.mockImplementationOnce(element => {
+        expect(element).toBe(container);
 
-    adjustContainer(container, config, containerDimensions);
+        return {
+            queryState: [],
+            jsonStats: jsonStats
+        };
+    });
+    getChangedStyles.mockImplementationOnce(() => {
+        return { addStyles: {}, removeProps: [] };
+    });
+
+    adjustContainer(container, containerSize);
 
     expect(getContainerDimensions).toHaveBeenCalledTimes(0);
+    expect(getChangedStyles).toHaveBeenCalledTimes(1);
+    expect(getChangedStyles).toHaveBeenCalledWith(container, containerSize);
 });
 
 test("The container and its elements should be properly adjusted with the defaults", () => {
-    const getContainerDimensionsMock = require(
-        "./getContainerDimensions"
-    ).default.mockImplementation(() => {
-        return { width: 99, height: 100 };
-    });
+    const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
+        () => {
+            return { width: 99, height: 100 };
+        }
+    );
 
     adjustContainer(container, config);
 
@@ -116,11 +133,11 @@ test("The container and its elements should be properly adjusted with the defaul
 
 describe("query styles should be applied, then removed when conditions no longer apply", () => {
     test("Apply query styles with width >= 100", () => {
-        const getContainerDimensionsMock = require(
-            "./getContainerDimensions"
-        ).default.mockImplementation(() => {
-            return { width: 100, height: 100 };
-        });
+        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
+            () => {
+                return { width: 100, height: 100 };
+            }
+        );
 
         adjustContainer(container, config);
 
@@ -137,11 +154,11 @@ describe("query styles should be applied, then removed when conditions no longer
     });
 
     test("Apply query styles with height >= 200", () => {
-        const getContainerDimensionsMock = require(
-            "./getContainerDimensions"
-        ).default.mockImplementation(() => {
-            return { width: 100, height: 200 };
-        });
+        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
+            () => {
+                return { width: 100, height: 200 };
+            }
+        );
 
         adjustContainer(container, config);
 
@@ -158,11 +175,11 @@ describe("query styles should be applied, then removed when conditions no longer
     });
 
     test("Remove all query styles, resetting back to the defaults", () => {
-        const getContainerDimensionsMock = require(
-            "./getContainerDimensions"
-        ).default.mockImplementation(() => {
-            return { width: 99, height: 99 };
-        });
+        const getContainerDimensionsMock = require("./getContainerDimensions").default.mockImplementation(
+            () => {
+                return { width: 99, height: 99 };
+            }
+        );
 
         adjustContainer(container, config);
 

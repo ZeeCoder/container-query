@@ -1,17 +1,15 @@
-import objectAssign from "object-assign";
 import getContainerDimensions from "./getContainerDimensions";
-import adjustValueObjectByContainerDimensions from "./adjustValueObjectByContainerDimensions";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
 import isEmptyObject from "./isEmptyObject";
+import getChangedStyles from "./getChangedStyles";
 
 /**
- * Apply conditional styles to the container and its elements based on the
- * provided configuration, if criterion are met.
+ * Calculates and applies styles based on which queries applied to the element
+ * previously.
  *
+ * @todo make style applying easily overridable
  * @param {HTMLElement} container
- * @param {Object} [config] Expects a configuration object that was processed
- * (and validated) by `processConfig`
  * @param {ContainerDimensions} [containerSize]
  */
 export default function adjustContainer(container, containerSize = null) {
@@ -43,9 +41,10 @@ export default function adjustContainer(container, containerSize = null) {
         });
 
         // What element(s) do we need to add these styles to?
-        const elements = elementSelector === registryData.jsonStats.selector
-            ? [container]
-            : container.querySelectorAll(elementSelector);
+        const elements =
+            elementSelector === registryData.jsonStats.selector
+                ? [container]
+                : container.querySelectorAll(elementSelector);
 
         // Finally, apply the change set to the elements
         applyStylesToElements(changeSet, elements);
