@@ -30,14 +30,14 @@ export default function adjustContainer(
         // Skip if no changes were detected
         // @todo this could be smarter?
         if (
-            isEmptyObject(changedStyles[elementSelector].addStyles) &&
+            isEmptyObject(changedStyles[elementSelector].addStyle) &&
             changedStyles[elementSelector].removeProps.length === 0
         ) {
             continue;
         }
 
         // Normalise to a single changeSet that can be applied by applyStylesToElements
-        const changeSet = changedStyles[elementSelector].addStyles;
+        const changeSet = changedStyles[elementSelector].addStyle;
         changedStyles[elementSelector].removeProps.forEach(prop => {
             changeSet[prop] = "";
         });

@@ -46,6 +46,9 @@ export default function getChangedStyles(
                 : true;
         let didPreviouslyApply = queryState[queryIndex];
 
+        // @todo test this
+        queryState[queryIndex] = doesCurrentlyApply;
+
         queryData.elements.forEach((elementData: ElementData) => {
             if (!styleChangeSet[elementData.selector]) {
                 styleChangeSet[elementData.selector] = {

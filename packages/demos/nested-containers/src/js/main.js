@@ -10,14 +10,12 @@ function initialiseContainer(jsonData) {
     const htmlElementsLength = htmlElements.length;
 
     for (let i = 0; i < htmlElementsLength; i++) {
-        // console.log(htmlElements[i]);
         const containerInstance = new Container(htmlElements[i], jsonData);
 
-        // const containerInstance = new Container(htmlElements[i], jsonData);
-        // window.addEventListener('resize', containerInstance.adjust);
-        // requestAnimationFrame(() => {
-        //     containerInstance.adjust();
+        // const containerInstance = new Container(htmlElements[i], jsonData, {
+        //     adjustOnResize: false,
         // });
+        // window.addEventListener('resize', () => containerInstance.adjust());
     }
 }
 
