@@ -11,9 +11,7 @@ function initialiseContainer(jsonData) {
 
     for (let i = 0; i < htmlElementsLength; i++) {
         // console.log(htmlElements[i]);
-        const containerInstance = new Container(htmlElements[i], jsonData, {
-            adjustOnResize: true
-        });
+        const containerInstance = new Container(htmlElements[i], jsonData);
 
         // const containerInstance = new Container(htmlElements[i], jsonData);
         // window.addEventListener('resize', containerInstance.adjust);
