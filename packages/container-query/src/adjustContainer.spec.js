@@ -32,7 +32,7 @@ test("should be able to get the container size itself, and ignore empty change s
     });
     getChangedStyles.mockImplementationOnce(() => ({
         ".Container": {
-            addStyles: {},
+            addStyle: {},
             removeProps: []
         }
     }));
@@ -80,18 +80,18 @@ test("should apply changed styles", () => {
     });
     getChangedStyles.mockImplementationOnce(() => ({
         ".Container": {
-            addStyles: {
+            addStyle: {
                 lineHeight: "10px",
                 background: "none"
             },
             removeProps: ["fontSize", "border"]
         },
         ".Container__unchangedElement": {
-            addStyles: {},
+            addStyle: {},
             removeProps: []
         },
         ".Container__element": {
-            addStyles: {
+            addStyle: {
                 border: "none"
             },
             removeProps: []

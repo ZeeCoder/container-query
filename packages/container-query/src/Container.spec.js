@@ -39,7 +39,11 @@ jest.mock("mutation-observer", () => {
 
 beforeEach(() => {
     require("raf").mockClear();
+    require("./processConfig").mockClear();
     require("./adjustContainer").mockClear();
+    const ResizeObserver = require("resize-observer-polyfill");
+    ResizeObserver.prototype.observe.mockClear();
+    ResizeObserver.prototype.unobserve.mockClear();
 });
 
 test("should instantiate properly", () => {
@@ -53,7 +57,6 @@ test("should instantiate properly", () => {
     };
 
     const config = {};
-    const processedConfig = {};
 
     const containerInstance = new Container(containerElement, config);
     containerInstance.adjust();
@@ -61,13 +64,38 @@ test("should instantiate properly", () => {
     containerInstance.adjust();
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
-    expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(0);
+    expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(1);
     expect(raf).toHaveBeenCalledTimes(1);
     expect(processConfig).toHaveBeenCalledTimes(1);
     expect(processConfig.mock.calls[0][0]).toBe(config);
     expect(adjustContainer).toHaveBeenCalledTimes(4);
     expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
     expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);
+});
+
+test("should not call adjust if disabled by the options", () => {
+    const ResizeObserver = require("resize-observer-polyfill");
+    const processConfig = require("./processConfig");
+    const adjustContainer = require("./adjustContainer");
+    const raf = require("raf");
+
+    const containerElement = {
+        parentNode: document.createElement("div")
+    };
+
+    const config = {};
+
+    const containerInstance = new Container(containerElement, config, {
+        adjustOnResize: false,
+        adjustOnInstantiation: false
+    });
+
+    expect(ResizeObserver).toHaveBeenCalledTimes(1);
+    expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(0);
+    expect(raf).toHaveBeenCalledTimes(0);
+    expect(processConfig).toHaveBeenCalledTimes(1);
+    expect(processConfig.mock.calls[0][0]).toBe(config);
+    expect(adjustContainer).toHaveBeenCalledTimes(0);
 });
 
 test("should be able to observe resize events and switch off initial adjust call", () => {
