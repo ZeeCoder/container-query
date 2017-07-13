@@ -10,12 +10,12 @@ function initialiseContainer(jsonData) {
     const htmlElementsLength = htmlElements.length;
 
     for (let i = 0; i < htmlElementsLength; i++) {
-        const containerInstance = new Container(htmlElements[i], jsonData);
+        // const containerInstance = new Container(htmlElements[i], jsonData);
 
-        // const containerInstance = new Container(htmlElements[i], jsonData, {
-        //     adjustOnResize: false,
-        // });
-        // window.addEventListener('resize', () => containerInstance.adjust());
+        const containerInstance = new Container(htmlElements[i], jsonData, {
+            adjustOnResize: false
+        });
+        window.addEventListener("resize", () => containerInstance.adjust());
     }
 }
 
@@ -44,10 +44,9 @@ function startAnimating() {
     doAnimate();
 }
 
-setTimeout(startAnimating, 3000);
+// setTimeout(startAnimating, 3000);
 
+// @todo make this a demo in itself
 // import initialiseAllContainers from '../initialiseAllContainers';
-
 // const containers = require('./containers.css.json');
-
 // initialiseAllContainers(containers);

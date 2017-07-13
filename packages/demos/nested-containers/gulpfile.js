@@ -26,6 +26,7 @@ gulp.task("css", function() {
                 }),
                 autoprefixer(),
                 postcssContainerQuery({
+                    singleContainer: false,
                     getJSON: (cssPath, containers) => {
                         // Saving the container query stats individually
                         for (let containerSelector in containers) {
