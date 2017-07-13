@@ -10,10 +10,11 @@ import {
  *
  * @param {ContainerDimensions} dimensions
  * @param {string} value Ex: "1<HEIGHT_UNIT>", "20<WIDTH_UNIT>"
+ * @param {number} precision
  *
  * @return {string} Ex: "123px"
  */
-export default function convertSingleValue(dimensions, value) {
+export default function convertSingleValue(dimensions, value, precision = 2) {
     const match = value
         .toLowerCase()
         .match(/^ *(\d+(\.\d+)?)([rwhminax]+) *$/i);
@@ -42,9 +43,12 @@ export default function convertSingleValue(dimensions, value) {
         (unit === MAX_UNIT && dimensions.height > dimensions.width);
 
     if (relativeToHeight) {
-        return dimensions.height * parseFloat(num) / 100 + "px";
+        // relative to height
+        value = dimensions.height * parseFloat(num) / 100;
+    } else {
+        // relative to width
+        value = dimensions.width * parseFloat(num) / 100;
     }
 
-    // relative to width
-    return dimensions.width * parseFloat(num) / 100 + "px";
+    return `${value.toFixed(precision)}px`;
 }

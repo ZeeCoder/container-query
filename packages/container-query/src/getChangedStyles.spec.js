@@ -364,3 +364,40 @@ test("should always recalculate values", () => {
         }
     });
 });
+
+test("should be able to limit the precision of generated css values", () => {
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => {
+        return {
+            queryState: [false],
+            jsonStats: {
+                queries: [
+                    {
+                        conditionFunction: () => true,
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    fontSize: "22.5rh",
+                                    lineHeight: "22.4rh"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+    });
+
+    const element: HTMLElement = document.createElement("div");
+    const size: ContainerSize = { width: 123, height: 123 };
+    expect(getChangedStyles(element, size)).toEqual({
+        ".Container": {
+            addStyle: {
+                fontSize: "27.68px",
+                lineHeight: "27.55px"
+            },
+            removeProps: []
+        }
+    });
+});
