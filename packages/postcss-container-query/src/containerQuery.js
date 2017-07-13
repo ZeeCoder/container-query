@@ -36,10 +36,14 @@ function extractContainerUnits(node, isContainer = false) {
 
 /**
  * @todo refactor this to use a builder, which'll make testing easier too
- * @param {{ getJSON: function }} options
+ * @param {{
+ *   getJSON: function,
+ *   singleContainer: boolean,
+ * }} options
  */
 function containerQuery(options = {}) {
     const getJSON = options.getJSON || saveJSON;
+    const singleContainer = options.singleContainer !== false;
 
     return function(root) {
         let containers = {};
@@ -50,7 +54,7 @@ function containerQuery(options = {}) {
         const checkForPrecedingContainerDeclaration = node => {
             if (currentContainerSelector === null) {
                 throw node.error(
-                    `A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.`
+                    `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
                 );
             }
         };
@@ -70,6 +74,8 @@ function containerQuery(options = {}) {
             if (containerUnits === null) {
                 return;
             }
+
+            checkForPrecedingContainerDeclaration(node);
 
             // Check if we have a default query
             if (
@@ -155,18 +161,36 @@ function containerQuery(options = {}) {
             }
 
             if (node.type === "rule") {
-                // Check if there's a new container declared in the rule node
-                const newContainerSelector = detectContainerDefinition(node);
-                if (newContainerSelector !== null) {
+                // See if we have to auto-detect the container
+                if (!currentContainerSelector && singleContainer) {
                     // @todo initialise new container method
-                    currentContainerSelector = newContainerSelector;
+                    currentContainerSelector = node.selector;
                     containers[currentContainerSelector] = {
                         selector: currentContainerSelector,
                         queries: []
                     };
                 }
 
-                checkForPrecedingContainerDeclaration(node);
+                // Check if there's a new container declared in the rule node
+                const newContainerSelector = detectContainerDefinition(node);
+                if (newContainerSelector !== null) {
+                    // Throw if in singleContainer mode this container is
+                    // defined with a different selector
+                    if (singleContainer) {
+                        if (currentContainerSelector !== newContainerSelector) {
+                            throw node.error(
+                                `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${newContainerSelector}".`
+                            );
+                        }
+                    } else {
+                        // @todo initialise new container method
+                        currentContainerSelector = newContainerSelector;
+                        containers[currentContainerSelector] = {
+                            selector: currentContainerSelector,
+                            queries: []
+                        };
+                    }
+                }
 
                 // Process potential container unit usages to the default query
                 processRuleNodeForDefaultQuery(node);
@@ -198,7 +222,16 @@ function containerQuery(options = {}) {
             }
         });
 
-        getJSON(root.source.input.file, containers);
+        let response = containers;
+        if (singleContainer) {
+            if (currentContainerSelector) {
+                response = containers[currentContainerSelector];
+            } else {
+                response = {};
+            }
+        }
+
+        getJSON(root.source.input.file, response);
     };
 }
 

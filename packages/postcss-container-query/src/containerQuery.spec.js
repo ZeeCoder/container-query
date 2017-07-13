@@ -28,14 +28,13 @@ test("missing container declaration", () => {
             new Root().addContainerQuery("(orientation: landscape)")
         );
     }).toThrowError(
-        new RegExp(
-            `^A @container query was found, without a preceding @${DEFINE_CONTAINER_NAME} declaration.$`
-        )
+        `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
     );
 });
 
 test("should ignore unrecognised at-rules, like @keyframes", done => {
     const pluginInstance = containerQuery({
+        singleContainer: false,
         getJSON: (path, json) => {
             expect(json).toEqual({
                 ".Container": {
@@ -78,6 +77,12 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
 
     pluginInstance(
         new Root()
+            .addNode(
+                new RuleNode(".unrelated-class").addDeclaration(
+                    "color",
+                    "black"
+                )
+            )
             .addNode(
                 new RuleNode(".Container")
                     .addDeclaration("line-height", `2${HEIGHT_UNIT}`)
@@ -156,6 +161,7 @@ test("proper json and css output", () => {
 
     return postcss([
         containerQuery({
+            singleContainer: false,
             getJSON: (cssPath, json) => (containersJSON = json)
         })
     ])
@@ -331,6 +337,66 @@ test("proper json and css output", () => {
                 ]
             });
         });
+});
+
+test("should auto-detect the container by default", done => {
+    const pluginInstance = containerQuery({
+        getJSON: (path, json) => {
+            expect(json).toEqual({
+                selector: ".Container",
+                queries: [
+                    {
+                        elements: [
+                            {
+                                selector: ".Container",
+                                values: {
+                                    lineHeight: `3${HEIGHT_UNIT}`,
+                                    fontSize: `2${HEIGHT_UNIT}`
+                                }
+                            }
+                        ]
+                    }
+                ]
+            });
+            done();
+        }
+    });
+
+    pluginInstance(
+        new Root()
+            .addNode(
+                new RuleNode(".Container")
+                    .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
+                    .addDeclaration("border", "none")
+            )
+            .addNode(
+                new RuleNode(".Container")
+                    .addContainerDefinition()
+                    .addDeclaration("font-size", `2${HEIGHT_UNIT}`)
+            )
+    );
+});
+
+test("should throw in non singleContainer mode for defining a different container", () => {
+    const pluginInstance = containerQuery();
+
+    expect(() => {
+        pluginInstance(
+            new Root()
+                .addNode(
+                    new RuleNode(".Container")
+                        .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
+                        .addDeclaration("border", "none")
+                )
+                .addNode(
+                    new RuleNode(".AnotherContainer")
+                        .addContainerDefinition()
+                        .addDeclaration("font-size", `2${HEIGHT_UNIT}`)
+                )
+        );
+    }).toThrow(
+        `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override ".Container" with ".AnotherContainer".`
+    );
 });
 
 test("should process containers without queries", () => {
