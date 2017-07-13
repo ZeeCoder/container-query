@@ -13,9 +13,9 @@ test("container value object gets all its values converted to pixels", () => {
             }
         )
     ).toEqual({
-        fontSize: "50px",
-        lineHeight: "100px",
-        borderWidth: "75px",
-        padding: "10px 15px 10px"
+        fontSize: "50.00px",
+        lineHeight: "100.00px",
+        borderWidth: "75.00px",
+        padding: "10.00px 15.00px 10.00px"
     });
 });

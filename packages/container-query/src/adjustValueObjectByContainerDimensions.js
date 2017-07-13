@@ -18,14 +18,16 @@ import type { Styles } from "../types";
  */
 export default function adjustValueObjectByContainerDimensions(
     containerDimensions: ContainerSize,
-    valueDefinition: Styles
+    valueDefinition: Styles,
+    precision: number = 2
 ): Styles {
     let values = objectAssign({}, valueDefinition);
 
     for (let cssRule in values) {
         values[cssRule] = convertCompositValue(
             containerDimensions,
-            values[cssRule]
+            values[cssRule],
+            precision
         );
     }
 

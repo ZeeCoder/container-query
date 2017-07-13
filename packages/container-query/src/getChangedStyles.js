@@ -27,10 +27,9 @@ function getAffectedPropsByElementData(elementData: ElementData): string[] {
 
 export default function getChangedStyles(
     element: HTMLElement,
-    size: ContainerSize,
-    precision: number = 2
+    size: ContainerSize
 ) {
-    const { queryState, jsonStats } = registry.get(element);
+    const { queryState, jsonStats, instance } = registry.get(element);
     const styleChangeSet: StyleChangeSet = {};
     const previouslyAppliedProps: {
         [selector: string]: string[]
@@ -111,7 +110,8 @@ export default function getChangedStyles(
                         currentAddStyle,
                         adjustValueObjectByContainerDimensions(
                             size,
-                            applicableValueObject
+                            applicableValueObject,
+                            instance.opts.valuePrecision
                         )
                     );
                 }
@@ -148,7 +148,8 @@ export default function getChangedStyles(
 
                 const applicableCurrentAddStyle = adjustValueObjectByContainerDimensions(
                     size,
-                    currentAddStyle
+                    currentAddStyle,
+                    instance.opts.valuePrecision
                 );
 
                 // Removing props now about to be applied from previous removeProps array

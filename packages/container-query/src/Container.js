@@ -66,7 +66,8 @@ export default class Container {
         this.opts = objectAssign(
             {
                 adjustOnResize: true,
-                adjustOnInstantiation: true
+                adjustOnInstantiation: true,
+                valuePrecision: 2
             },
             opts
         );

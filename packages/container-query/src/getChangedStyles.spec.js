@@ -9,11 +9,11 @@ test("should apply default queries without a condition function", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 3 } },
             queryState: [false, false],
             jsonStats: {
                 queries: [
                     {
-                        // conditionFunction: () => true,
                         elements: [
                             {
                                 selector: ".Container",
@@ -58,8 +58,8 @@ test("should apply default queries without a condition function", () => {
     expect(getChangedStyles(element, size)).toEqual({
         ".Container": {
             addStyle: {
-                fontSize: "4px",
-                lineHeight: "2px"
+                fontSize: "4.000px",
+                lineHeight: "2.000px"
             },
             removeProps: []
         },
@@ -76,6 +76,7 @@ test("should return change sets on first run", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 2 } },
             queryState: [false, false],
             jsonStats: {
                 queries: [
@@ -128,7 +129,7 @@ test("should return change sets on first run", () => {
         ".Container__element": {
             addStyle: {
                 fontSize: "14px",
-                lineHeight: "1px",
+                lineHeight: "1.00px",
                 background: "#ccc"
             },
             removeProps: []
@@ -140,6 +141,7 @@ test("should generate remove change set", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 2 } },
             queryState: [true, true, true],
             jsonStats: {
                 queries: [
@@ -209,7 +211,7 @@ test("should generate remove change set", () => {
         ".Container": {
             addStyle: {
                 background: "#aaa",
-                lineHeight: "10px"
+                lineHeight: "10.00px"
             },
             removeProps: ["fontSize"]
         },
@@ -226,6 +228,7 @@ test("should generate empty change set if conditions allow", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 2 } },
             queryState: [true, true],
             jsonStats: {
                 queries: [
@@ -292,6 +295,7 @@ test("should always recalculate values", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 2 } },
             queryState: [true, false, true],
             jsonStats: {
                 queries: [
@@ -350,15 +354,15 @@ test("should always recalculate values", () => {
     expect(getChangedStyles(element, size)).toEqual({
         ".Container": {
             addStyle: {
-                lineHeight: "8px",
-                fontSize: "6px"
+                lineHeight: "8.00px",
+                fontSize: "6.00px"
             },
             removeProps: []
         },
         ".Container__element": {
             addStyle: {
-                lineHeight: "6px",
-                fontSize: "8px"
+                lineHeight: "6.00px",
+                fontSize: "8.00px"
             },
             removeProps: []
         }
@@ -369,6 +373,7 @@ test("should be able to limit the precision of generated css values", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
         return {
+            instance: { opts: { valuePrecision: 2 } },
             queryState: [false],
             jsonStats: {
                 queries: [

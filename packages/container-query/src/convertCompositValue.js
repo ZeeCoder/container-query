@@ -6,10 +6,15 @@ import convertSingleValue from "./convertSingleValue";
  *
  * @param  {ContainerDimensions} dimensions
  * @param  {string} compositValue Ex: "10<HEIGHT_UNIT> 5<WIDTH_UNIT>"
+ * @param {number} precision
  *
  * @return {string} Ex: "123px 10px 42px"
  */
-export default function convertCompositValue(dimensions, compositValue) {
+export default function convertCompositValue(
+    dimensions,
+    compositValue,
+    precision = 2
+) {
     const valArr = compositValue.match(/\d+(\.\d+)?[rwhminax]+/gi);
 
     if (valArr === null) {
@@ -18,7 +23,11 @@ export default function convertCompositValue(dimensions, compositValue) {
 
     let convertedValues = {};
     valArr.forEach(value => {
-        convertedValues[value] = convertSingleValue(dimensions, value);
+        convertedValues[value] = convertSingleValue(
+            dimensions,
+            value,
+            precision
+        );
     });
 
     let compositPixelValue = compositValue;
