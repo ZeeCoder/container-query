@@ -6,6 +6,8 @@ jest.mock("./containerRegistry", () => ({
     get: jest.fn()
 }));
 
+// @todo replace rh / rw with constants
+
 test("should apply default queries without a condition function", () => {
     const containerRegistry = require("./containerRegistry");
     containerRegistry.get.mockImplementation(() => {
@@ -487,5 +489,5 @@ test("should handle multiple prop removal over multiple queries", () => {
             removeProps: []
         }
     });
-    expect(registryData.queryState).toEqual([true, false, false]);
+    expect(registryData.queryState).toEqual([true, true, false]);
 });
