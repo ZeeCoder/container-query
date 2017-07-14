@@ -39,14 +39,12 @@ export default function getChangedStyles(
     for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
         let queryData: QueryData = jsonStats.queries[queryIndex];
         // Default queries have no `conditionFunction`
-        // @todo test if size was passed in the conditionFunction
         let doesCurrentlyApply =
             typeof queryData.conditionFunction === "function"
                 ? queryData.conditionFunction(size)
                 : true;
         let didPreviouslyApply = queryState[queryIndex];
 
-        // @todo test this
         queryState[queryIndex] = doesCurrentlyApply;
 
         queryData.elements.forEach((elementData: ElementData) => {

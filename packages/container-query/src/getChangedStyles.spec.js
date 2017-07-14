@@ -73,49 +73,49 @@ test("should apply default queries without a condition function", () => {
 });
 
 test("should return change sets on first run", () => {
-    const containerRegistry = require("./containerRegistry");
-    containerRegistry.get.mockImplementation(() => {
-        return {
-            instance: { opts: { valuePrecision: 2 } },
-            queryState: [false, false],
-            jsonStats: {
-                queries: [
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    fontSize: "12px",
-                                    background: "#ccc"
-                                },
-                                values: {
-                                    lineHeight: "1rh"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {
-                                    background: "#000"
-                                }
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [false, false],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: jest.fn(() => true),
+                    elements: [
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                fontSize: "12px",
+                                background: "#ccc"
                             },
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    fontSize: "14px"
-                                }
+                            values: {
+                                lineHeight: "1rh"
                             }
-                        ]
-                    }
-                ]
-            }
-        };
-    });
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: jest.fn(() => true),
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                background: "#000"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                fontSize: "14px"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => registryData);
 
     const element: HTMLElement = document.createElement("div");
     const size: ContainerSize = { width: 100, height: 100 };
@@ -135,75 +135,88 @@ test("should return change sets on first run", () => {
             removeProps: []
         }
     });
+    expect(
+        registryData.jsonStats.queries[0].conditionFunction
+    ).toHaveBeenCalledTimes(1);
+    expect(
+        registryData.jsonStats.queries[0].conditionFunction
+    ).toHaveBeenCalledWith(size);
+    expect(
+        registryData.jsonStats.queries[1].conditionFunction
+    ).toHaveBeenCalledTimes(1);
+    expect(
+        registryData.jsonStats.queries[1].conditionFunction
+    ).toHaveBeenCalledWith(size);
+    expect(registryData.queryState).toEqual([true, true]);
 });
 
 test("should generate remove change set", () => {
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [true, true, true],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                background: "#aaa"
+                            },
+                            values: {}
+                        },
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                background: "#bbb"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {},
+                            values: {
+                                lineHeight: "10rh"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => false,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                fontSize: "14px",
+                                background: "#bbb"
+                            },
+                            values: {
+                                lineHeight: "2rh"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                background: "#ccc",
+                                border: "none"
+                            },
+                            values: {
+                                fontSize: "1rh"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
     const containerRegistry = require("./containerRegistry");
-    containerRegistry.get.mockImplementation(() => {
-        return {
-            instance: { opts: { valuePrecision: 2 } },
-            queryState: [true, true, true],
-            jsonStats: {
-                queries: [
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {
-                                    background: "#aaa"
-                                },
-                                values: {}
-                            },
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    background: "#bbb"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {},
-                                values: {
-                                    lineHeight: "10rh"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => false,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {
-                                    fontSize: "14px",
-                                    background: "#bbb"
-                                },
-                                values: {
-                                    lineHeight: "2rh"
-                                }
-                            },
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    background: "#ccc",
-                                    border: "none"
-                                },
-                                values: {
-                                    fontSize: "1rh"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        };
-    });
+    containerRegistry.get.mockImplementation(() => registryData);
 
     const element: HTMLElement = document.createElement("div");
     const size: ContainerSize = { width: 100, height: 100 };
@@ -222,60 +235,61 @@ test("should generate remove change set", () => {
             removeProps: ["border", "fontSize"]
         }
     });
+    expect(registryData.queryState).toEqual([true, true, false]);
 });
 
 test("should generate empty change set if conditions allow", () => {
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [true, true],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: () => false,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                fontSize: "14px",
+                                background: "#bbb",
+                                lineHeight: "16px"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                fontSize: "8px",
+                                background: "#eee"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                fontSize: "16px",
+                                background: "#ccc",
+                                lineHeight: "18px"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            styles: {
+                                fontSize: "9px",
+                                background: "#fff"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
     const containerRegistry = require("./containerRegistry");
-    containerRegistry.get.mockImplementation(() => {
-        return {
-            instance: { opts: { valuePrecision: 2 } },
-            queryState: [true, true],
-            jsonStats: {
-                queries: [
-                    {
-                        conditionFunction: () => false,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {
-                                    fontSize: "14px",
-                                    background: "#bbb",
-                                    lineHeight: "16px"
-                                }
-                            },
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    fontSize: "8px",
-                                    background: "#eee"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                styles: {
-                                    fontSize: "16px",
-                                    background: "#ccc",
-                                    lineHeight: "18px"
-                                }
-                            },
-                            {
-                                selector: ".Container__element",
-                                styles: {
-                                    fontSize: "9px",
-                                    background: "#fff"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        };
-    });
+    containerRegistry.get.mockImplementation(() => registryData);
 
     const element: HTMLElement = document.createElement("div");
     const size: ContainerSize = { width: 100, height: 100 };
@@ -289,65 +303,65 @@ test("should generate empty change set if conditions allow", () => {
             removeProps: []
         }
     });
+    expect(registryData.queryState).toEqual([false, true]);
 });
 
 test("should always recalculate values", () => {
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [true, false, true],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            values: {
+                                fontSize: "2rh"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            values: {
+                                fontSize: "4rh"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            values: {
+                                fontSize: "3rh"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            values: {
+                                lineHeight: "4rh"
+                            }
+                        },
+                        {
+                            selector: ".Container__element",
+                            values: {
+                                lineHeight: "3rh"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
     const containerRegistry = require("./containerRegistry");
-    containerRegistry.get.mockImplementation(() => {
-        return {
-            instance: { opts: { valuePrecision: 2 } },
-            queryState: [true, false, true],
-            jsonStats: {
-                queries: [
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                values: {
-                                    fontSize: "2rh"
-                                }
-                            },
-                            {
-                                selector: ".Container__element",
-                                values: {
-                                    fontSize: "4rh"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                values: {
-                                    fontSize: "3rh"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                values: {
-                                    lineHeight: "4rh"
-                                }
-                            },
-                            {
-                                selector: ".Container__element",
-                                values: {
-                                    lineHeight: "3rh"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        };
-    });
+    containerRegistry.get.mockImplementation(() => registryData);
 
     const element: HTMLElement = document.createElement("div");
     const size: ContainerSize = { width: 200, height: 200 };
@@ -367,32 +381,33 @@ test("should always recalculate values", () => {
             removeProps: []
         }
     });
+    expect(registryData.queryState).toEqual([true, true, true]);
 });
 
 test("should be able to limit the precision of generated css values", () => {
-    const containerRegistry = require("./containerRegistry");
-    containerRegistry.get.mockImplementation(() => {
-        return {
-            instance: { opts: { valuePrecision: 2 } },
-            queryState: [false],
-            jsonStats: {
-                queries: [
-                    {
-                        conditionFunction: () => true,
-                        elements: [
-                            {
-                                selector: ".Container",
-                                values: {
-                                    fontSize: "22.5rh",
-                                    lineHeight: "22.4rh"
-                                }
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [false],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            values: {
+                                fontSize: "22.5rh",
+                                lineHeight: "22.4rh"
                             }
-                        ]
-                    }
-                ]
-            }
-        };
-    });
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => registryData);
 
     const element: HTMLElement = document.createElement("div");
     const size: ContainerSize = { width: 123, height: 123 };
@@ -405,4 +420,5 @@ test("should be able to limit the precision of generated css values", () => {
             removeProps: []
         }
     });
+    expect(registryData.queryState).toEqual([true]);
 });
