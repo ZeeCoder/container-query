@@ -4,16 +4,12 @@ console.warn = jest.fn();
 jest.mock("./processConfig", () => jest.fn(config => config));
 jest.mock("./adjustContainer", () => jest.fn());
 jest.mock("raf", () => jest.fn(cb => cb()));
-jest.mock("es6-weak-map", () => {
-    const mock = jest.fn();
-
-    mock.prototype.set = jest.fn();
-    mock.prototype.get = jest.fn();
-    mock.prototype.has = jest.fn();
-    mock.prototype.delete = jest.fn();
-
-    return mock;
-});
+jest.mock("./containerRegistry", () => ({
+    set: jest.fn(),
+    get: jest.fn(),
+    has: jest.fn(),
+    delete: jest.fn()
+}));
 
 jest.mock("resize-observer-polyfill", () => {
     const mock = jest.fn(cb => {
@@ -44,6 +40,11 @@ beforeEach(() => {
     const ResizeObserver = require("resize-observer-polyfill");
     ResizeObserver.prototype.observe.mockClear();
     ResizeObserver.prototype.unobserve.mockClear();
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockClear();
+    containerRegistry.set.mockClear();
+    containerRegistry.has.mockClear();
+    containerRegistry.delete.mockClear();
 });
 
 test("should instantiate properly", () => {
@@ -136,13 +137,17 @@ test("should be able to observe resize events and switch off initial adjust call
 });
 
 test("should call adjust() on resize changes", () => {
-    const WeakMap = require("es6-weak-map");
-    WeakMap.prototype.set = jest.fn();
-    WeakMap.prototype.get.mockImplementationOnce(() => undefined);
-    WeakMap.prototype.get.mockImplementationOnce(element => {
-        expect(element).toBe(containerElement);
+    const containerRegistry = require("./containerRegistry");
+    const randomElement = document.createElement("div");
+    containerRegistry.get.mockImplementationOnce(queriedContainerElement => {
+        expect(queriedContainerElement).toBe(randomElement);
 
-        return registeredContainer;
+        return undefined;
+    });
+    containerRegistry.get.mockImplementationOnce(queriedContainerElement => {
+        expect(queriedContainerElement).toBe(containerElement);
+
+        return registryData;
     });
     const ResizeObserver = require("resize-observer-polyfill");
     const parentElement = document.createElement("div");
@@ -153,15 +158,16 @@ test("should call adjust() on resize changes", () => {
         adjustOnInstantiation: false,
         adjustOnResize: true
     });
-    const registeredContainer = {
+    const registryData = {
         instance: containerInstance,
         jsonStats: {},
         queryState: []
     };
-    expect(WeakMap.prototype.set).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.set).toHaveBeenCalledWith(
+
+    expect(containerRegistry.set).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.set).toHaveBeenCalledWith(
         containerElement,
-        registeredContainer
+        registryData
     );
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
@@ -170,7 +176,7 @@ test("should call adjust() on resize changes", () => {
     expect(() => {
         ResizeObserver.triggerEvent([
             {
-                target: "<HTMLElement>"
+                target: randomElement
             }
         ]);
     }).not.toThrow();
@@ -189,7 +195,7 @@ test("should call adjust() on resize changes", () => {
         ]);
     }).not.toThrow();
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.get).toHaveBeenCalledTimes(2);
+    expect(containerRegistry.get).toHaveBeenCalledTimes(2);
     expect(containerInstance.adjust).toHaveBeenCalledTimes(1);
     expect(containerInstance.adjust).toHaveBeenCalledWith({
         width: 1,
@@ -198,9 +204,8 @@ test("should call adjust() on resize changes", () => {
 });
 
 test("should clean up after container element is detached from the DOM", () => {
-    const WeakMap = require("es6-weak-map");
-    WeakMap.prototype.set = jest.fn();
-    WeakMap.prototype.has = jest.fn(() => true);
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.has.mockImplementationOnce(() => true);
     const MutationObserver = require("mutation-observer");
     const ResizeObserver = require("resize-observer-polyfill");
     ResizeObserver.prototype.unobserve = jest.fn();
@@ -212,15 +217,15 @@ test("should clean up after container element is detached from the DOM", () => {
         adjustOnInstantiation: false,
         adjustOnResize: false
     });
-    const registeredContainer = {
+    const registryData = {
         instance: containerInstance,
         jsonStats: {},
         queryState: []
     };
-    expect(WeakMap.prototype.set).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.set).toHaveBeenCalledWith(
+    expect(containerRegistry.set).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.set).toHaveBeenCalledWith(
         containerElement,
-        registeredContainer
+        registryData
     );
 
     let mutationRecords = [
@@ -231,10 +236,10 @@ test("should clean up after container element is detached from the DOM", () => {
 
     MutationObserver.triggerEvent(mutationRecords);
 
-    expect(WeakMap.prototype.has).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.delete).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.has).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.delete).toHaveBeenCalledTimes(1);
     expect(ResizeObserver.prototype.unobserve).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.delete).toHaveBeenCalledWith(containerElement);
+    expect(containerRegistry.delete).toHaveBeenCalledWith(containerElement);
     expect(ResizeObserver.prototype.unobserve).toHaveBeenCalledWith(
         containerElement
     );
@@ -246,10 +251,10 @@ test("should clean up after container element is detached from the DOM", () => {
         }
     ];
 
-    WeakMap.prototype.has = jest.fn(() => false);
+    containerRegistry.has = jest.fn(() => false);
     MutationObserver.triggerEvent(mutationRecords);
 
-    expect(WeakMap.prototype.has).toHaveBeenCalledTimes(1);
-    expect(WeakMap.prototype.delete).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.has).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.delete).toHaveBeenCalledTimes(1);
     expect(ResizeObserver.prototype.unobserve).toHaveBeenCalledTimes(1);
 });
