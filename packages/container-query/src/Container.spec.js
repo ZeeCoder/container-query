@@ -51,6 +51,7 @@ test("should instantiate properly", () => {
     const ResizeObserver = require("resize-observer-polyfill");
     const processConfig = require("./processConfig");
     const adjustContainer = require("./adjustContainer");
+    const containerRegistry = require("./containerRegistry");
     const raf = require("raf");
 
     const containerElement = {
@@ -64,6 +65,13 @@ test("should instantiate properly", () => {
     containerInstance.adjust();
     containerInstance.adjust();
 
+    expect(containerRegistry.set).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
+        instance: containerInstance,
+        jsonStats: config,
+        queryState: []
+    });
+
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(1);
     expect(raf).toHaveBeenCalledTimes(1);
@@ -72,6 +80,25 @@ test("should instantiate properly", () => {
     expect(adjustContainer).toHaveBeenCalledTimes(4);
     expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
     expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);
+});
+
+test("should create the initial query state based on the number of queries", () => {
+    const containerRegistry = require("./containerRegistry");
+
+    const containerElement = {
+        parentNode: document.createElement("div")
+    };
+
+    const config = { queries: [{}, {}] };
+
+    const containerInstance = new Container(containerElement, config);
+
+    expect(containerRegistry.set).toHaveBeenCalledTimes(1);
+    expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
+        instance: containerInstance,
+        jsonStats: config,
+        queryState: [false, false]
+    });
 });
 
 test("should not call adjust if disabled by the options", () => {
