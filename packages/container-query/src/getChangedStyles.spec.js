@@ -1,5 +1,6 @@
 import getChangedStyles from "./getChangedStyles";
 import type { ContainerSize } from "./Container";
+import { HEIGHT_UNIT } from "../../common/src/constants";
 
 jest.mock("./containerRegistry", () => ({
     get: jest.fn()
@@ -421,4 +422,70 @@ test("should be able to limit the precision of generated css values", () => {
         }
     });
     expect(registryData.queryState).toEqual([true]);
+});
+
+test("should handle multiple prop removal over multiple queries", () => {
+    const registryData = {
+        instance: { opts: { valuePrecision: 2 } },
+        queryState: [false, false, true],
+        jsonStats: {
+            queries: [
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                border: "none",
+                                fontSize: "12px",
+                                lineHeight: "15px"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => true,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                fontSize: "13px"
+                            }
+                        }
+                    ]
+                },
+                {
+                    conditionFunction: () => false,
+                    elements: [
+                        {
+                            selector: ".Container",
+                            styles: {
+                                border: "1px solid"
+                            },
+                            values: {
+                                lineHeight: `2${HEIGHT_UNIT}`
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+    const containerRegistry = require("./containerRegistry");
+    containerRegistry.get.mockImplementation(() => registryData);
+
+    const element: HTMLElement = document.createElement("div");
+    const size: ContainerSize = { width: 100, height: 100 };
+    expect(getChangedStyles(element, size)).toEqual({
+        ".Container": {
+            addStyle: {
+                border: "none",
+                fontSize: "13px",
+                lineHeight: "15px"
+            },
+            removeProps: []
+        }
+    });
+    expect(registryData.queryState).toEqual([true, false, false]);
 });

@@ -37,6 +37,7 @@ export default function getChangedStyles(
 
     const queriesLength = jsonStats.queries.length - 1;
     for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
+        console.log("\n", "queryIndex", queryIndex);
         let queryData: QueryData = jsonStats.queries[queryIndex];
         // Default queries have no `conditionFunction`
         let doesCurrentlyApply =
@@ -54,6 +55,7 @@ export default function getChangedStyles(
                     removeProps: []
                 };
             }
+
             if (!previouslyAppliedProps[elementData.selector]) {
                 previouslyAppliedProps[elementData.selector] = [];
             }
@@ -133,6 +135,11 @@ export default function getChangedStyles(
                 // Also remove anything in the new addStyle object from the current removeProps
                 const currentAddStyle: Styles = {};
 
+                console.log(
+                    "elementPreviouslyAppliedProps",
+                    elementPreviouslyAppliedProps
+                );
+                console.log("elementData.styles", elementData.styles);
                 for (let prop in elementData.styles) {
                     if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
                         currentAddStyle[prop] = elementData.styles[prop];
@@ -149,13 +156,22 @@ export default function getChangedStyles(
                     currentAddStyle,
                     instance.opts.valuePrecision
                 );
+                console.log("currentAddStyle", currentAddStyle);
+                console.log(
+                    "applicableCurrentAddStyle",
+                    applicableCurrentAddStyle
+                );
 
                 // Removing props now about to be applied from previous removeProps array
                 for (let prop in applicableCurrentAddStyle) {
                     let index = styleChangeSet[
                         elementData.selector
                     ].removeProps.indexOf(prop);
+                    // console.log('no SPLICE yet', applicableCurrentAddStyle, styleChangeSet[
+                    //     elementData.selector
+                    //     ].removeProps,  elementData.selector, prop);
                     if (index !== -1) {
+                        // console.log('SPLICE');
                         styleChangeSet[elementData.selector].removeProps.splice(
                             index,
                             1
@@ -168,6 +184,11 @@ export default function getChangedStyles(
                     applicableCurrentAddStyle
                 );
             }
+
+            console.log(
+                "removeProps",
+                styleChangeSet[elementData.selector].removeProps
+            );
 
             previouslyAppliedProps[elementData.selector] = _union(
                 previouslyAppliedProps[elementData.selector],
