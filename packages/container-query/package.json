@@ -8,8 +8,6 @@
     "node": ">=4"
   },
   "main": "dist/bundle.cjs.js",
-  "module": "dist/bundle.es.js",
-  "browser": "dist/bundle.umd.js",
   "scripts": {
     "flow-check": "flow check",
     "prebuild": "flow check",
@@ -25,7 +23,6 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
