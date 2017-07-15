@@ -10,9 +10,13 @@ export default {
     flow(),
     commonjs(),
     babel({
+      babelrc: false,
       // For some reason if I add this to .babelrc, it doesn't
       // include the babel helpers in the bundle.
-      plugins: ["external-helpers"]
+      plugins: ["external-helpers"],
+      // The following also didn't work in a .babelrc, since that messed with
+      // jest's .babelrc, resulting in errors on import statements...
+      presets: [["es2015", { modules: false }]]
     }),
     uglify()
   ],
