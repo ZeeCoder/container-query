@@ -6,11 +6,11 @@
  * @returns {boolean}
  */
 export default function isEmptyObject(obj) {
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            return false;
-        }
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false;
     }
+  }
 
-    return true;
+  return true;
 }

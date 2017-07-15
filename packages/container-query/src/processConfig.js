@@ -11,23 +11,21 @@ import getConditionFunction from "./getConditionFunction";
  * @returns {Object|null} Return null for invalid configurations
  */
 export default function processConfig(origConfig) {
-    // Validate configuration before processing
-    if (
-        typeof origConfig !== "object" ||
-        typeof origConfig.selector !== "string" ||
-        !Array.isArray(origConfig.queries)
-    ) {
-        return null;
-    }
+  // Validate configuration before processing
+  if (
+    typeof origConfig !== "object" ||
+    typeof origConfig.selector !== "string" ||
+    !Array.isArray(origConfig.queries)
+  ) {
+    return null;
+  }
 
-    // Configuration seems valid, process it
-    let config = objectAssign({}, origConfig);
+  // Configuration seems valid, process it
+  let config = objectAssign({}, origConfig);
 
-    config.queries.forEach(queryData => {
-        queryData.conditionFunction = getConditionFunction(
-            queryData.conditions
-        );
-    });
+  config.queries.forEach(queryData => {
+    queryData.conditionFunction = getConditionFunction(queryData.conditions);
+  });
 
-    return config;
+  return config;
 }

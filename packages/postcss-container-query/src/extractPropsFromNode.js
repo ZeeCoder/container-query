@@ -1,10 +1,10 @@
 import camelCase from "lodash.camelcase";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import {
-    HEIGHT_UNIT,
-    WIDTH_UNIT,
-    MIN_UNIT,
-    MAX_UNIT
+  HEIGHT_UNIT,
+  WIDTH_UNIT,
+  MIN_UNIT,
+  MAX_UNIT
 } from "../../common/src/constants";
 import isEmptyObject from "./isEmptyObject";
 
@@ -35,91 +35,85 @@ import isEmptyObject from "./isEmptyObject";
  * @returns {Object}
  */
 export default function extractPropsFromNode(
-    ruleNode,
-    opts = {
-        isContainer: false,
-        onlyContainerUnits: false,
-        stripContainerUnits: false
-    }
+  ruleNode,
+  opts = {
+    isContainer: false,
+    onlyContainerUnits: false,
+    stripContainerUnits: false
+  }
 ) {
-    if (ruleNode.type !== "rule") {
-        throw new Error('`ruleNode` must be of type "rule".');
+  if (ruleNode.type !== "rule") {
+    throw new Error('`ruleNode` must be of type "rule".');
+  }
+
+  if (Array.isArray(ruleNode.nodes) === false) {
+    return {};
+  }
+
+  const response = {
+    styles: {},
+    values: {}
+  };
+  const nodesLength = ruleNode.nodes.length;
+
+  for (let i = 0; i < nodesLength; i++) {
+    let node = ruleNode.nodes[i];
+    if (typeof node === "undefined") {
+      continue;
     }
 
-    if (Array.isArray(ruleNode.nodes) === false) {
-        return {};
+    const containerUnitsUsed = isValueUsingContainerUnits(node.value);
+
+    if (
+      node.type !== "decl" ||
+      (opts.onlyContainerUnits && !containerUnitsUsed)
+    ) {
+      continue;
     }
 
-    const response = {
-        styles: {},
-        values: {}
-    };
-    const nodesLength = ruleNode.nodes.length;
+    if (opts.isContainer && containerUnitsUsed) {
+      if (
+        (node.prop === "width" || node.prop === "height") &&
+        (node.value.indexOf(MIN_UNIT) !== -1 ||
+          node.value.indexOf(MAX_UNIT) !== -1)
+      ) {
+        throw node.error(
+          `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+        );
+      }
 
-    for (let i = 0; i < nodesLength; i++) {
-        let node = ruleNode.nodes[i];
-        if (typeof node === "undefined") {
-            continue;
-        }
+      if (node.prop === "width" && node.value.indexOf(WIDTH_UNIT) !== -1) {
+        throw node.error(
+          `Containers cannot use ${WIDTH_UNIT} for the width property.`
+        );
+      }
 
-        const containerUnitsUsed = isValueUsingContainerUnits(node.value);
-
-        if (
-            node.type !== "decl" ||
-            (opts.onlyContainerUnits && !containerUnitsUsed)
-        ) {
-            continue;
-        }
-
-        if (opts.isContainer && containerUnitsUsed) {
-            if (
-                (node.prop === "width" || node.prop === "height") &&
-                (node.value.indexOf(MIN_UNIT) !== -1 ||
-                    node.value.indexOf(MAX_UNIT) !== -1)
-            ) {
-                throw node.error(
-                    `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
-                );
-            }
-
-            if (
-                node.prop === "width" &&
-                node.value.indexOf(WIDTH_UNIT) !== -1
-            ) {
-                throw node.error(
-                    `Containers cannot use ${WIDTH_UNIT} for the width property.`
-                );
-            }
-
-            if (
-                node.prop === "height" &&
-                node.value.indexOf(HEIGHT_UNIT) !== -1
-            ) {
-                throw node.error(
-                    `Containers cannot use ${HEIGHT_UNIT} for the height property.`
-                );
-            }
-        }
-
-        if (containerUnitsUsed) {
-            response.values[camelCase(node.prop)] = node.value;
-        } else {
-            response.styles[camelCase(node.prop)] = node.value;
-        }
-
-        if (opts.stripContainerUnits && containerUnitsUsed) {
-            ruleNode.nodes.splice(i, 1);
-            i--;
-        }
+      if (node.prop === "height" && node.value.indexOf(HEIGHT_UNIT) !== -1) {
+        throw node.error(
+          `Containers cannot use ${HEIGHT_UNIT} for the height property.`
+        );
+      }
     }
 
-    if (isEmptyObject(response.styles)) {
-        delete response.styles;
+    if (containerUnitsUsed) {
+      response.values[camelCase(node.prop)] = node.value;
+    } else {
+      response.styles[camelCase(node.prop)] = node.value;
     }
 
-    if (isEmptyObject(response.values)) {
-        delete response.values;
+    if (opts.stripContainerUnits && containerUnitsUsed) {
+      ruleNode.nodes.splice(i, 1);
+      i--;
     }
+  }
 
-    return response;
+  if (isEmptyObject(response.styles)) {
+    delete response.styles;
+  }
+
+  if (isEmptyObject(response.values)) {
+    delete response.values;
+  }
+
+  return response;
 }

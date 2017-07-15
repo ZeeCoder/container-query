@@ -1,15 +1,15 @@
 // @flow
 export type Styles = {
-    [property: string]: string
+  [property: string]: string
 };
 
 export type ElementData = {
-    selector: string,
-    styles: Styles,
-    values: Styles
+  selector: string,
+  styles: Styles,
+  values: Styles
 };
 
 export type QueryData = {
-    conditionFunction: Function,
-    elements: Array<ElementData>
+  conditionFunction: Function,
+  elements: Array<ElementData>
 };

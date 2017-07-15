@@ -7,26 +7,26 @@ import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
  * @returns {string|null} The container's selector
  */
 export default function detectContainerDefinition(
-    ruleNode,
-    removeDefinition = true
+  ruleNode,
+  removeDefinition = true
 ) {
-    let container = null;
+  let container = null;
 
-    const nodesLength = ruleNode.nodes.length;
-    let i = 0;
-    for (i; i < nodesLength; i++) {
-        if (
-            ruleNode.nodes[i].type === "atrule" &&
-            ruleNode.nodes[i].name === DEFINE_CONTAINER_NAME
-        ) {
-            container = ruleNode.selector;
-            break;
-        }
+  const nodesLength = ruleNode.nodes.length;
+  let i = 0;
+  for (i; i < nodesLength; i++) {
+    if (
+      ruleNode.nodes[i].type === "atrule" &&
+      ruleNode.nodes[i].name === DEFINE_CONTAINER_NAME
+    ) {
+      container = ruleNode.selector;
+      break;
     }
+  }
 
-    if (removeDefinition) {
-        ruleNode.nodes.splice(i, 1);
-    }
+  if (removeDefinition) {
+    ruleNode.nodes.splice(i, 1);
+  }
 
-    return container;
+  return container;
 }

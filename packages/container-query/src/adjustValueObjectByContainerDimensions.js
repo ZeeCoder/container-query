@@ -17,19 +17,19 @@ import type { Styles } from "../types";
  * }`
  */
 export default function adjustValueObjectByContainerDimensions(
-    containerDimensions: ContainerSize,
-    valueDefinition: Styles,
-    precision: number = 2
+  containerDimensions: ContainerSize,
+  valueDefinition: Styles,
+  precision: number = 2
 ): Styles {
-    let values = objectAssign({}, valueDefinition);
+  let values = objectAssign({}, valueDefinition);
 
-    for (let cssRule in values) {
-        values[cssRule] = convertCompositValue(
-            containerDimensions,
-            values[cssRule],
-            precision
-        );
-    }
+  for (let cssRule in values) {
+    values[cssRule] = convertCompositValue(
+      containerDimensions,
+      values[cssRule],
+      precision
+    );
+  }
 
-    return values;
+  return values;
 }

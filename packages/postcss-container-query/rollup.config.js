@@ -1,8 +1,8 @@
 import babili from "rollup-plugin-babili";
 
 export default {
-    entry: "src/containerQuery.js",
-    targets: [{ dest: "dist/bundle.cjs.js", format: "cjs" }],
-    plugins: [babili()],
-    external: ["postcss", "lodash.trim", "lodash.camelcase", "fs"]
+  entry: "src/containerQuery.js",
+  targets: [{ dest: "dist/bundle.cjs.js", format: "cjs" }],
+  plugins: [babili()],
+  external: ["postcss", "lodash.trim", "lodash.camelcase", "fs"]
 };

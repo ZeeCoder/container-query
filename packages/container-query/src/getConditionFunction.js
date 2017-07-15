@@ -7,14 +7,14 @@
  * @returns {boolean}
  */
 function andCondition(conditionFunctions, containerDimensions) {
-    let conditionFunctionsLength = conditionFunctions.length;
-    for (let i = 0; i < conditionFunctionsLength; i++) {
-        if (!conditionFunctions[i](containerDimensions)) {
-            return false;
-        }
+  let conditionFunctionsLength = conditionFunctions.length;
+  for (let i = 0; i < conditionFunctionsLength; i++) {
+    if (!conditionFunctions[i](containerDimensions)) {
+      return false;
     }
+  }
 
-    return true;
+  return true;
 }
 
 /**
@@ -26,18 +26,18 @@ function andCondition(conditionFunctions, containerDimensions) {
  * @returns {boolean}
  */
 function orCondition(conditionFunctions, containerDimensions) {
-    let conditionFunctionsLength = conditionFunctions.length;
-    for (let i = 0; i < conditionFunctionsLength; i++) {
-        if (conditionFunctions[i](containerDimensions)) {
-            return true;
-        }
+  let conditionFunctionsLength = conditionFunctions.length;
+  for (let i = 0; i < conditionFunctionsLength; i++) {
+    if (conditionFunctions[i](containerDimensions)) {
+      return true;
     }
+  }
 
-    return false;
+  return false;
 }
 
 function noCondition() {
-    return true;
+  return true;
 }
 
 /**
@@ -49,90 +49,78 @@ function noCondition() {
  * @returns {function}
  */
 function convertConditionArrayToFunction(condition) {
-    const feature = condition[0];
-    const operation = condition[1];
-    const value = condition[2];
+  const feature = condition[0];
+  const operation = condition[1];
+  const value = condition[2];
 
-    if (feature === "width") {
-        if (operation === ">") {
-            return containerDimensions => {
-                return containerDimensions.width > value;
-            };
-        } else if (operation === ">=") {
-            return containerDimensions => {
-                return containerDimensions.width >= value;
-            };
-        } else if (operation === "<") {
-            return containerDimensions => {
-                return containerDimensions.width < value;
-            };
-        } else if (operation === "<=") {
-            return containerDimensions => {
-                return containerDimensions.width <= value;
-            };
-        }
-    } else if (feature === "height") {
-        if (operation === ">") {
-            return containerDimensions => {
-                return containerDimensions.height > value;
-            };
-        } else if (operation === ">=") {
-            return containerDimensions => {
-                return containerDimensions.height >= value;
-            };
-        } else if (operation === "<") {
-            return containerDimensions => {
-                return containerDimensions.height < value;
-            };
-        } else if (operation === "<=") {
-            return containerDimensions => {
-                return containerDimensions.height <= value;
-            };
-        }
-    } else if (feature === "aspect-ratio") {
-        if (operation === ">") {
-            return containerDimensions => {
-                return (
-                    containerDimensions.width / containerDimensions.height >
-                    value
-                );
-            };
-        } else if (operation === ">=") {
-            return containerDimensions => {
-                return (
-                    containerDimensions.width / containerDimensions.height >=
-                    value
-                );
-            };
-        } else if (operation === "<") {
-            return containerDimensions => {
-                return (
-                    containerDimensions.width / containerDimensions.height <
-                    value
-                );
-            };
-        } else if (operation === "<=") {
-            return containerDimensions => {
-                return (
-                    containerDimensions.width / containerDimensions.height <=
-                    value
-                );
-            };
-        }
-    } else if (feature === "orientation") {
-        if (value === "portrait") {
-            return containerDimensions => {
-                return containerDimensions.height >= containerDimensions.width;
-            };
-        } else {
-            return containerDimensions => {
-                return containerDimensions.height < containerDimensions.width;
-            };
-        }
+  if (feature === "width") {
+    if (operation === ">") {
+      return containerDimensions => {
+        return containerDimensions.width > value;
+      };
+    } else if (operation === ">=") {
+      return containerDimensions => {
+        return containerDimensions.width >= value;
+      };
+    } else if (operation === "<") {
+      return containerDimensions => {
+        return containerDimensions.width < value;
+      };
+    } else if (operation === "<=") {
+      return containerDimensions => {
+        return containerDimensions.width <= value;
+      };
     }
+  } else if (feature === "height") {
+    if (operation === ">") {
+      return containerDimensions => {
+        return containerDimensions.height > value;
+      };
+    } else if (operation === ">=") {
+      return containerDimensions => {
+        return containerDimensions.height >= value;
+      };
+    } else if (operation === "<") {
+      return containerDimensions => {
+        return containerDimensions.height < value;
+      };
+    } else if (operation === "<=") {
+      return containerDimensions => {
+        return containerDimensions.height <= value;
+      };
+    }
+  } else if (feature === "aspect-ratio") {
+    if (operation === ">") {
+      return containerDimensions => {
+        return containerDimensions.width / containerDimensions.height > value;
+      };
+    } else if (operation === ">=") {
+      return containerDimensions => {
+        return containerDimensions.width / containerDimensions.height >= value;
+      };
+    } else if (operation === "<") {
+      return containerDimensions => {
+        return containerDimensions.width / containerDimensions.height < value;
+      };
+    } else if (operation === "<=") {
+      return containerDimensions => {
+        return containerDimensions.width / containerDimensions.height <= value;
+      };
+    }
+  } else if (feature === "orientation") {
+    if (value === "portrait") {
+      return containerDimensions => {
+        return containerDimensions.height >= containerDimensions.width;
+      };
+    } else {
+      return containerDimensions => {
+        return containerDimensions.height < containerDimensions.width;
+      };
+    }
+  }
 
-    // If the condition was unsupported
-    return noCondition;
+  // If the condition was unsupported
+  return noCondition;
 }
 
 /**
@@ -156,17 +144,17 @@ function convertConditionArrayToFunction(condition) {
  * @returns {function}
  */
 export default function getConditionFunction(conditions) {
-    if (!Array.isArray(conditions) || conditions.length === 0) {
-        return noCondition;
-    }
+  if (!Array.isArray(conditions) || conditions.length === 0) {
+    return noCondition;
+  }
 
-    return orCondition.bind(
+  return orCondition.bind(
+    this,
+    conditions.map(andConditions => {
+      return andCondition.bind(
         this,
-        conditions.map(andConditions => {
-            return andCondition.bind(
-                this,
-                andConditions.map(convertConditionArrayToFunction)
-            );
-        })
-    );
+        andConditions.map(convertConditionArrayToFunction)
+      );
+    })
+  );
 }

@@ -11,10 +11,10 @@ import saveJSON from "./saveJSON";
  * @param {Node} node
  */
 function shouldProcessNode(node) {
-    return (
-        (node.type === "rule" && node.parent.type === "root") ||
-        (node.type === "atrule" && node.name === "container")
-    );
+  return (
+    (node.type === "rule" && node.parent.type === "root") ||
+    (node.type === "atrule" && node.name === "container")
+  );
 }
 
 /**
@@ -25,13 +25,13 @@ function shouldProcessNode(node) {
  * @return {Object}
  */
 function extractContainerUnits(node, isContainer = false) {
-    return (
-        extractPropsFromNode(node, {
-            isContainer: isContainer,
-            onlyContainerUnits: true,
-            stripContainerUnits: true
-        }).values || null
-    );
+  return (
+    extractPropsFromNode(node, {
+      isContainer: isContainer,
+      onlyContainerUnits: true,
+      stripContainerUnits: true
+    }).values || null
+  );
 }
 
 /**
@@ -42,197 +42,196 @@ function extractContainerUnits(node, isContainer = false) {
  * }} options
  */
 function containerQuery(options = {}) {
-    const getJSON = options.getJSON || saveJSON;
-    const singleContainer = options.singleContainer !== false;
+  const getJSON = options.getJSON || saveJSON;
+  const singleContainer = options.singleContainer !== false;
 
-    return function(root) {
-        let containers = {};
-        let currentContainerSelector = null;
-        let currentDefaultQuery = null;
-        let currentDefaultQueryMap = null;
+  return function(root) {
+    let containers = {};
+    let currentContainerSelector = null;
+    let currentDefaultQuery = null;
+    let currentDefaultQueryMap = null;
 
-        const checkForPrecedingContainerDeclaration = node => {
-            if (currentContainerSelector === null) {
-                throw node.error(
-                    `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
-                );
-            }
-        };
+    const checkForPrecedingContainerDeclaration = node => {
+      if (currentContainerSelector === null) {
+        throw node.error(
+          `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
+        );
+      }
+    };
 
-        /**
+    /**
          * Any node under "root" could potentially have container units in them.
          * Add such nodes to the default query. (One without conditions which
          * means it'll always apply)
          *
          * @return {Node}
          */
-        const processRuleNodeForDefaultQuery = node => {
-            const isContainer = isContainerCheck(node);
+    const processRuleNodeForDefaultQuery = node => {
+      const isContainer = isContainerCheck(node);
 
-            // First check if container unites are used or not
-            const containerUnits = extractContainerUnits(node, isContainer);
-            if (containerUnits === null) {
-                return;
-            }
+      // First check if container unites are used or not
+      const containerUnits = extractContainerUnits(node, isContainer);
+      if (containerUnits === null) {
+        return;
+      }
 
-            checkForPrecedingContainerDeclaration(node);
+      checkForPrecedingContainerDeclaration(node);
 
-            // Check if we have a default query
-            if (
-                !containers[currentContainerSelector].queries[0] ||
-                containers[currentContainerSelector].queries[0].conditions
-            ) {
-                // Create the default query
-                containers[currentContainerSelector].queries.unshift({
-                    elements: []
-                });
-            }
+      // Check if we have a default query
+      if (
+        !containers[currentContainerSelector].queries[0] ||
+        containers[currentContainerSelector].queries[0].conditions
+      ) {
+        // Create the default query
+        containers[currentContainerSelector].queries.unshift({
+          elements: []
+        });
+      }
 
-            // The query at the 0 index is the default query, without conditions
-            // Fetch a previously added element data based on the selector, or
-            // create a new one
-            let elementData = null;
-            let elementslength =
-                containers[currentContainerSelector].queries[0].elements.length;
-            for (let i = 0; i < elementslength; i++) {
-                if (
-                    containers[currentContainerSelector].queries[0].elements[i]
-                        .selector === node.selector
-                ) {
-                    elementData =
-                        containers[currentContainerSelector].queries[0]
-                            .elements[i];
-                    break;
-                }
-            }
+      // The query at the 0 index is the default query, without conditions
+      // Fetch a previously added element data based on the selector, or
+      // create a new one
+      let elementData = null;
+      let elementslength =
+        containers[currentContainerSelector].queries[0].elements.length;
+      for (let i = 0; i < elementslength; i++) {
+        if (
+          containers[currentContainerSelector].queries[0].elements[i]
+            .selector === node.selector
+        ) {
+          elementData =
+            containers[currentContainerSelector].queries[0].elements[i];
+          break;
+        }
+      }
 
-            if (elementData === null) {
-                elementData = {
-                    selector: node.selector,
-                    values: {}
-                };
-
-                containers[currentContainerSelector].queries[0].elements.push(
-                    elementData
-                );
-            }
-
-            // Add the extracted container units
-            Object.assign(elementData.values, containerUnits);
+      if (elementData === null) {
+        elementData = {
+          selector: node.selector,
+          values: {}
         };
 
-        /**
+        containers[currentContainerSelector].queries[0].elements.push(
+          elementData
+        );
+      }
+
+      // Add the extracted container units
+      Object.assign(elementData.values, containerUnits);
+    };
+
+    /**
          * Processing a rule node under a container query.
          * @param  {Node} node
          * @returns {null|Object}
          */
-        const processRuleNode = node => {
-            const isContainer = isContainerCheck(node);
-            // @todo instead of creating a new elementData, check if the same selector was already processed under this container query
-            const elementData = {
-                selector: node.selector
-            };
+    const processRuleNode = node => {
+      const isContainer = isContainerCheck(node);
+      // @todo instead of creating a new elementData, check if the same selector was already processed under this container query
+      const elementData = {
+        selector: node.selector
+      };
 
-            const props = extractPropsFromNode(node, { isContainer });
+      const props = extractPropsFromNode(node, { isContainer });
 
-            if (!props.styles && !props.values) {
-                return null;
-            }
+      if (!props.styles && !props.values) {
+        return null;
+      }
 
-            Object.assign(elementData, props);
+      Object.assign(elementData, props);
 
-            return elementData;
-        };
+      return elementData;
+    };
 
-        /**
+    /**
          * Returns true if the node's selector is the same as the currently
          * processed container's.
          *
          * @param  {Node}  node
          * @return {boolean}
          */
-        const isContainerCheck = node => {
-            return currentContainerSelector === node.selector;
-        };
+    const isContainerCheck = node => {
+      return currentContainerSelector === node.selector;
+    };
 
-        root.walk((/** Node */ node) => {
-            if (!shouldProcessNode(node)) {
-                return;
-            }
+    root.walk((/** Node */ node) => {
+      if (!shouldProcessNode(node)) {
+        return;
+      }
 
-            if (node.type === "rule") {
-                // See if we have to auto-detect the container
-                if (!currentContainerSelector && singleContainer) {
-                    // @todo initialise new container method
-                    currentContainerSelector = node.selector;
-                    containers[currentContainerSelector] = {
-                        selector: currentContainerSelector,
-                        queries: []
-                    };
-                }
-
-                // Check if there's a new container declared in the rule node
-                const newContainerSelector = detectContainerDefinition(node);
-                if (newContainerSelector !== null) {
-                    // Throw if in singleContainer mode this container is
-                    // defined with a different selector
-                    if (singleContainer) {
-                        if (currentContainerSelector !== newContainerSelector) {
-                            throw node.error(
-                                `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${newContainerSelector}".`
-                            );
-                        }
-                    } else {
-                        // @todo initialise new container method
-                        currentContainerSelector = newContainerSelector;
-                        containers[currentContainerSelector] = {
-                            selector: currentContainerSelector,
-                            queries: []
-                        };
-                    }
-                }
-
-                // Process potential container unit usages to the default query
-                processRuleNodeForDefaultQuery(node);
-            } else {
-                // Process container query
-                checkForPrecedingContainerDeclaration(node);
-
-                let query = {
-                    conditions: getConditionsFromQueryParams(node.params),
-                    elements: []
-                };
-
-                node.nodes.forEach(ruleNode => {
-                    if (ruleNode.type !== "rule") {
-                        return;
-                    }
-
-                    const elementData = processRuleNode(ruleNode);
-                    if (elementData !== null) {
-                        query.elements.push(elementData);
-                    }
-                });
-
-                if (query.elements.length > 0) {
-                    containers[currentContainerSelector].queries.push(query);
-                }
-
-                node.remove();
-            }
-        });
-
-        let response = containers;
-        if (singleContainer) {
-            if (currentContainerSelector) {
-                response = containers[currentContainerSelector];
-            } else {
-                response = {};
-            }
+      if (node.type === "rule") {
+        // See if we have to auto-detect the container
+        if (!currentContainerSelector && singleContainer) {
+          // @todo initialise new container method
+          currentContainerSelector = node.selector;
+          containers[currentContainerSelector] = {
+            selector: currentContainerSelector,
+            queries: []
+          };
         }
 
-        getJSON(root.source.input.file, response);
-    };
+        // Check if there's a new container declared in the rule node
+        const newContainerSelector = detectContainerDefinition(node);
+        if (newContainerSelector !== null) {
+          // Throw if in singleContainer mode this container is
+          // defined with a different selector
+          if (singleContainer) {
+            if (currentContainerSelector !== newContainerSelector) {
+              throw node.error(
+                `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${newContainerSelector}".`
+              );
+            }
+          } else {
+            // @todo initialise new container method
+            currentContainerSelector = newContainerSelector;
+            containers[currentContainerSelector] = {
+              selector: currentContainerSelector,
+              queries: []
+            };
+          }
+        }
+
+        // Process potential container unit usages to the default query
+        processRuleNodeForDefaultQuery(node);
+      } else {
+        // Process container query
+        checkForPrecedingContainerDeclaration(node);
+
+        let query = {
+          conditions: getConditionsFromQueryParams(node.params),
+          elements: []
+        };
+
+        node.nodes.forEach(ruleNode => {
+          if (ruleNode.type !== "rule") {
+            return;
+          }
+
+          const elementData = processRuleNode(ruleNode);
+          if (elementData !== null) {
+            query.elements.push(elementData);
+          }
+        });
+
+        if (query.elements.length > 0) {
+          containers[currentContainerSelector].queries.push(query);
+        }
+
+        node.remove();
+      }
+    });
+
+    let response = containers;
+    if (singleContainer) {
+      if (currentContainerSelector) {
+        response = containers[currentContainerSelector];
+      } else {
+        response = {};
+      }
+    }
+
+    getJSON(root.source.input.file, response);
+  };
 }
 
 export default postcss.plugin("postcss-container-query", containerQuery);

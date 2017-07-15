@@ -11,33 +11,29 @@ import convertSingleValue from "./convertSingleValue";
  * @return {string} Ex: "123px 10px 42px"
  */
 export default function convertCompositValue(
-    dimensions,
-    compositValue,
-    precision = 2
+  dimensions,
+  compositValue,
+  precision = 2
 ) {
-    const valArr = compositValue.match(/\d+(\.\d+)?[rwhminax]+/gi);
+  const valArr = compositValue.match(/\d+(\.\d+)?[rwhminax]+/gi);
 
-    if (valArr === null) {
-        return compositValue;
-    }
+  if (valArr === null) {
+    return compositValue;
+  }
 
-    let convertedValues = {};
-    valArr.forEach(value => {
-        convertedValues[value] = convertSingleValue(
-            dimensions,
-            value,
-            precision
-        );
-    });
+  let convertedValues = {};
+  valArr.forEach(value => {
+    convertedValues[value] = convertSingleValue(dimensions, value, precision);
+  });
 
-    let compositPixelValue = compositValue;
+  let compositPixelValue = compositValue;
 
-    for (let unconvertedValue in convertedValues) {
-        compositPixelValue = compositPixelValue.replace(
-            new RegExp(unconvertedValue, "g"),
-            convertedValues[unconvertedValue]
-        );
-    }
+  for (let unconvertedValue in convertedValues) {
+    compositPixelValue = compositPixelValue.replace(
+      new RegExp(unconvertedValue, "g"),
+      convertedValues[unconvertedValue]
+    );
+  }
 
-    return compositPixelValue;
+  return compositPixelValue;
 }

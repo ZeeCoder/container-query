@@ -3,45 +3,45 @@ import Container from "@zeecoder/container-query";
 const containers = require("./containers.json");
 
 function initialiseContainer(jsonData) {
-    /**
+  /**
      * @type NodeList
      */
-    const htmlElements = document.querySelectorAll(jsonData.selector);
-    const htmlElementsLength = htmlElements.length;
+  const htmlElements = document.querySelectorAll(jsonData.selector);
+  const htmlElementsLength = htmlElements.length;
 
-    for (let i = 0; i < htmlElementsLength; i++) {
-        const containerInstance = new Container(htmlElements[i], jsonData);
+  for (let i = 0; i < htmlElementsLength; i++) {
+    const containerInstance = new Container(htmlElements[i], jsonData);
 
-        // const containerInstance = new Container(htmlElements[i], jsonData, {
-        //     adjustOnResize: false
-        // });
-        // window.addEventListener("resize", () => containerInstance.adjust());
-    }
+    // const containerInstance = new Container(htmlElements[i], jsonData, {
+    //     adjustOnResize: false
+    // });
+    // window.addEventListener("resize", () => containerInstance.adjust());
+  }
 }
 
 containers.forEach(containerFileName => {
-    initialiseContainer(
-        require(`../css/components/${containerFileName}/${containerFileName}.json`)
-    );
+  initialiseContainer(
+    require(`../css/components/${containerFileName}/${containerFileName}.json`)
+  );
 });
 
 function startAnimating() {
-    let isWide = false;
-    const element = document.getElementById("to-animate");
+  let isWide = false;
+  const element = document.getElementById("to-animate");
 
-    function doAnimate() {
-        if (isWide) {
-            element.style.width = "100px";
-        } else {
-            element.style.width = "700px";
-        }
-
-        isWide = !isWide;
-
-        setTimeout(doAnimate, 1000);
+  function doAnimate() {
+    if (isWide) {
+      element.style.width = "100px";
+    } else {
+      element.style.width = "700px";
     }
 
-    doAnimate();
+    isWide = !isWide;
+
+    setTimeout(doAnimate, 1000);
+  }
+
+  doAnimate();
 }
 
 setTimeout(startAnimating, 3000);

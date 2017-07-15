@@ -1,8 +1,8 @@
 import {
-    HEIGHT_UNIT,
-    WIDTH_UNIT,
-    MIN_UNIT,
-    MAX_UNIT
+  HEIGHT_UNIT,
+  WIDTH_UNIT,
+  MIN_UNIT,
+  MAX_UNIT
 } from "../../common/src/constants";
 
 /**
@@ -15,40 +15,38 @@ import {
  * @return {string} Ex: "123px"
  */
 export default function convertSingleValue(dimensions, value, precision = 2) {
-    const match = value
-        .toLowerCase()
-        .match(/^ *(\d+(\.\d+)?)([rwhminax]+) *$/i);
+  const match = value.toLowerCase().match(/^ *(\d+(\.\d+)?)([rwhminax]+) *$/i);
 
-    if (match === null) {
-        return value;
-    }
+  if (match === null) {
+    return value;
+  }
 
-    const num = match[1];
-    const unit = match[3];
+  const num = match[1];
+  const unit = match[3];
 
-    if (
-        !(
-            unit === HEIGHT_UNIT ||
-            unit === WIDTH_UNIT ||
-            unit === MIN_UNIT ||
-            unit === MAX_UNIT
-        )
-    ) {
-        return value;
-    }
+  if (
+    !(
+      unit === HEIGHT_UNIT ||
+      unit === WIDTH_UNIT ||
+      unit === MIN_UNIT ||
+      unit === MAX_UNIT
+    )
+  ) {
+    return value;
+  }
 
-    const relativeToHeight =
-        unit === HEIGHT_UNIT ||
-        (unit === MIN_UNIT && dimensions.height < dimensions.width) ||
-        (unit === MAX_UNIT && dimensions.height > dimensions.width);
+  const relativeToHeight =
+    unit === HEIGHT_UNIT ||
+    (unit === MIN_UNIT && dimensions.height < dimensions.width) ||
+    (unit === MAX_UNIT && dimensions.height > dimensions.width);
 
-    if (relativeToHeight) {
-        // relative to height
-        value = dimensions.height * parseFloat(num) / 100;
-    } else {
-        // relative to width
-        value = dimensions.width * parseFloat(num) / 100;
-    }
+  if (relativeToHeight) {
+    // relative to height
+    value = dimensions.height * parseFloat(num) / 100;
+  } else {
+    // relative to width
+    value = dimensions.width * parseFloat(num) / 100;
+  }
 
-    return `${value.toFixed(precision)}px`;
+  return `${value.toFixed(precision)}px`;
 }

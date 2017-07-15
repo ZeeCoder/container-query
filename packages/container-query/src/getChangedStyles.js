@@ -10,176 +10,169 @@ import objectAssign from "object-assign";
 // Styles to be applied and props to be removed from elements, based on their
 // state and json stat
 export type StyleChangeSet = {
-    [selector: string]: {
-        addStyle: Styles,
-        removeProps: string[]
-    }
+  [selector: string]: {
+    addStyle: Styles,
+    removeProps: string[]
+  }
 };
 
 function getAffectedPropsByElementData(elementData: ElementData): string[] {
-    const affectedStyles = {};
+  const affectedStyles = {};
 
-    objectAssign(affectedStyles, elementData.styles);
-    objectAssign(affectedStyles, elementData.values);
+  objectAssign(affectedStyles, elementData.styles);
+  objectAssign(affectedStyles, elementData.values);
 
-    return Object.keys(affectedStyles);
+  return Object.keys(affectedStyles);
 }
 
 export default function getChangedStyles(
-    element: HTMLElement,
-    size: ContainerSize
+  element: HTMLElement,
+  size: ContainerSize
 ) {
-    const { queryState, jsonStats, instance } = registry.get(element);
-    const styleChangeSet: StyleChangeSet = {};
-    const previouslyAppliedProps: {
-        [selector: string]: string[]
-    } = {};
+  const { queryState, jsonStats, instance } = registry.get(element);
+  const styleChangeSet: StyleChangeSet = {};
+  const previouslyAppliedProps: {
+    [selector: string]: string[]
+  } = {};
 
-    const queriesLength = jsonStats.queries.length - 1;
-    for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
-        let queryData: QueryData = jsonStats.queries[queryIndex];
-        // Default queries have no `conditionFunction`
-        let doesCurrentlyApply =
-            typeof queryData.conditionFunction === "function"
-                ? queryData.conditionFunction(size)
-                : true;
-        let didPreviouslyApply = queryState[queryIndex];
+  const queriesLength = jsonStats.queries.length - 1;
+  for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
+    let queryData: QueryData = jsonStats.queries[queryIndex];
+    // Default queries have no `conditionFunction`
+    let doesCurrentlyApply =
+      typeof queryData.conditionFunction === "function"
+        ? queryData.conditionFunction(size)
+        : true;
+    let didPreviouslyApply = queryState[queryIndex];
 
-        queryState[queryIndex] = doesCurrentlyApply;
+    queryState[queryIndex] = doesCurrentlyApply;
 
-        queryData.elements.forEach((elementData: ElementData) => {
-            if (!styleChangeSet[elementData.selector]) {
-                styleChangeSet[elementData.selector] = {
-                    addStyle: {},
-                    removeProps: []
-                };
+    queryData.elements.forEach((elementData: ElementData) => {
+      if (!styleChangeSet[elementData.selector]) {
+        styleChangeSet[elementData.selector] = {
+          addStyle: {},
+          removeProps: []
+        };
+      }
+
+      if (!previouslyAppliedProps[elementData.selector]) {
+        previouslyAppliedProps[elementData.selector] = [];
+      }
+
+      let elementStyleChangeSet = styleChangeSet[elementData.selector];
+      let elementPreviouslyAppliedProps =
+        previouslyAppliedProps[elementData.selector];
+
+      if (doesCurrentlyApply && didPreviouslyApply) {
+        // Only the values need to be recalculated
+        const applicableValueObject = {};
+        let applicableValuePropCount = 0;
+        for (let prop in elementData.values) {
+          if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
+            // Add value to addStyle if the prop wasn't affected by
+            // previous queries, or even if it was, it was about to
+            // be removed
+            applicableValuePropCount++;
+            applicableValueObject[prop] = elementData.values[prop];
+
+            // Also add the prop as applied unless it was added before
+            elementPreviouslyAppliedProps.push(prop);
+
+            let index = elementStyleChangeSet.removeProps.indexOf(prop);
+            if (index !== -1) {
+              elementStyleChangeSet.removeProps.splice(index, 1);
             }
+          }
+        }
 
-            if (!previouslyAppliedProps[elementData.selector]) {
-                previouslyAppliedProps[elementData.selector] = [];
-            }
+        const currentAddStyle = {};
 
-            let elementStyleChangeSet = styleChangeSet[elementData.selector];
-            let elementPreviouslyAppliedProps =
-                previouslyAppliedProps[elementData.selector];
+        // See if there's a property which needs to be readded and
+        // removed from "removeProps", since this query still keeps it
+        // in an applied state
+        for (let prop in elementData.styles) {
+          let index = elementStyleChangeSet.removeProps.indexOf(prop);
+          if (index !== -1) {
+            elementStyleChangeSet.removeProps.splice(index, 1);
+            currentAddStyle[prop] = elementData.styles[prop];
+          }
 
-            if (doesCurrentlyApply && didPreviouslyApply) {
-                // Only the values need to be recalculated
-                const applicableValueObject = {};
-                let applicableValuePropCount = 0;
-                for (let prop in elementData.values) {
-                    if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-                        // Add value to addStyle if the prop wasn't affected by
-                        // previous queries, or even if it was, it was about to
-                        // be removed
-                        applicableValuePropCount++;
-                        applicableValueObject[prop] = elementData.values[prop];
+          // Also add the prop as applied unless it was added before
+          if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
+            elementPreviouslyAppliedProps.push(prop);
+          }
+        }
 
-                        // Also add the prop as applied unless it was added before
-                        elementPreviouslyAppliedProps.push(prop);
+        // Merge in value object
+        if (applicableValuePropCount > 0) {
+          objectAssign(
+            currentAddStyle,
+            adjustValueObjectByContainerDimensions(
+              size,
+              applicableValueObject,
+              instance.opts.valuePrecision
+            )
+          );
+        }
 
-                        let index = elementStyleChangeSet.removeProps.indexOf(
-                            prop
-                        );
-                        if (index !== -1) {
-                            elementStyleChangeSet.removeProps.splice(index, 1);
-                        }
-                    }
-                }
+        // Adding changes to `addStyle`
+        objectAssign(
+          styleChangeSet[elementData.selector].addStyle,
+          currentAddStyle
+        );
+      } else if (!doesCurrentlyApply && didPreviouslyApply) {
+        let elementAffectedProps = getAffectedPropsByElementData(elementData);
 
-                const currentAddStyle = {};
+        // Create removeProps object from all affected styles, not touching previously applied props however
+        let applicableRemoveProps = _difference(
+          elementAffectedProps,
+          elementPreviouslyAppliedProps
+        );
+        styleChangeSet[elementData.selector].removeProps = _union(
+          styleChangeSet[elementData.selector].removeProps,
+          applicableRemoveProps
+        );
+      } else if (doesCurrentlyApply && !didPreviouslyApply) {
+        // Create new addStyle object, overshadowed by previouslyAppliedProps.
+        // Also remove anything in the new addStyle object from the current removeProps
+        const currentAddStyle: Styles = {};
 
-                // See if there's a property which needs to be readded and
-                // removed from "removeProps", since this query still keeps it
-                // in an applied state
-                for (let prop in elementData.styles) {
-                    let index = elementStyleChangeSet.removeProps.indexOf(prop);
-                    if (index !== -1) {
-                        elementStyleChangeSet.removeProps.splice(index, 1);
-                        currentAddStyle[prop] = elementData.styles[prop];
-                    }
+        for (let prop in elementData.styles) {
+          if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
+            currentAddStyle[prop] = elementData.styles[prop];
+            elementPreviouslyAppliedProps.push(prop);
+          }
+        }
+        for (let prop in elementData.values) {
+          if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
+            currentAddStyle[prop] = elementData.values[prop];
+            elementPreviouslyAppliedProps.push(prop);
+          }
+        }
 
-                    // Also add the prop as applied unless it was added before
-                    if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-                        elementPreviouslyAppliedProps.push(prop);
-                    }
-                }
+        const applicableCurrentAddStyle = adjustValueObjectByContainerDimensions(
+          size,
+          currentAddStyle,
+          instance.opts.valuePrecision
+        );
 
-                // Merge in value object
-                if (applicableValuePropCount > 0) {
-                    objectAssign(
-                        currentAddStyle,
-                        adjustValueObjectByContainerDimensions(
-                            size,
-                            applicableValueObject,
-                            instance.opts.valuePrecision
-                        )
-                    );
-                }
+        // Removing props now about to be applied from previous removeProps array
+        for (let prop in applicableCurrentAddStyle) {
+          let index = styleChangeSet[elementData.selector].removeProps.indexOf(
+            prop
+          );
+          if (index !== -1) {
+            styleChangeSet[elementData.selector].removeProps.splice(index, 1);
+          }
+        }
 
-                // Adding changes to `addStyle`
-                objectAssign(
-                    styleChangeSet[elementData.selector].addStyle,
-                    currentAddStyle
-                );
-            } else if (!doesCurrentlyApply && didPreviouslyApply) {
-                let elementAffectedProps = getAffectedPropsByElementData(
-                    elementData
-                );
+        objectAssign(
+          styleChangeSet[elementData.selector].addStyle,
+          applicableCurrentAddStyle
+        );
+      }
+    });
+  }
 
-                // Create removeProps object from all affected styles, not touching previously applied props however
-                let applicableRemoveProps = _difference(
-                    elementAffectedProps,
-                    elementPreviouslyAppliedProps
-                );
-                styleChangeSet[elementData.selector].removeProps = _union(
-                    styleChangeSet[elementData.selector].removeProps,
-                    applicableRemoveProps
-                );
-            } else if (doesCurrentlyApply && !didPreviouslyApply) {
-                // Create new addStyle object, overshadowed by previouslyAppliedProps.
-                // Also remove anything in the new addStyle object from the current removeProps
-                const currentAddStyle: Styles = {};
-
-                for (let prop in elementData.styles) {
-                    if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-                        currentAddStyle[prop] = elementData.styles[prop];
-                        elementPreviouslyAppliedProps.push(prop);
-                    }
-                }
-                for (let prop in elementData.values) {
-                    if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-                        currentAddStyle[prop] = elementData.values[prop];
-                        elementPreviouslyAppliedProps.push(prop);
-                    }
-                }
-
-                const applicableCurrentAddStyle = adjustValueObjectByContainerDimensions(
-                    size,
-                    currentAddStyle,
-                    instance.opts.valuePrecision
-                );
-
-                // Removing props now about to be applied from previous removeProps array
-                for (let prop in applicableCurrentAddStyle) {
-                    let index = styleChangeSet[
-                        elementData.selector
-                    ].removeProps.indexOf(prop);
-                    if (index !== -1) {
-                        styleChangeSet[elementData.selector].removeProps.splice(
-                            index,
-                            1
-                        );
-                    }
-                }
-
-                objectAssign(
-                    styleChangeSet[elementData.selector].addStyle,
-                    applicableCurrentAddStyle
-                );
-            }
-        });
-    }
-
-    return styleChangeSet;
+  return styleChangeSet;
 }

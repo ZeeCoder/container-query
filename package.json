@@ -22,18 +22,18 @@
     "jest": "^20.0.4",
     "lerna": "^2.0.0-rc.5",
     "lint-staged": "^4.0.0",
-    "prettier": "^1.5.2"
+    "prettier": "^1.5.3"
   },
   "scripts": {
     "test": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "watch:test": "jest --watch --notify",
     "precommit": "lint-staged",
-    "prettify": "prettier --write --tab-width 4 'packages/**/*.js'"
+    "prettify": "prettier --write 'packages/**/*.js'"
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write --tab-width=4",
+      "prettier --write",
       "git add"
     ]
   }
