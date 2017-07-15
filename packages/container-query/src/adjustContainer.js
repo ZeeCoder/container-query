@@ -1,19 +1,18 @@
+// @flow
 import getContainerDimensions from "./getContainerDimensions";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
 import isEmptyObject from "./isEmptyObject";
 import getChangedStyles from "./getChangedStyles";
+import type { ContainerSize } from "../../common/src/types";
 
 /**
  * Calculates and applies styles based on which queries applied to the element
  * previously.
- *
- * @param {HTMLElement} containerElement
- * @param {ContainerDimensions} [containerSize]
  */
 export default function adjustContainer(
-  containerElement,
-  containerSize = null
+  containerElement: HTMLElement,
+  containerSize: ?ContainerSize = null
 ) {
   const registryData = containerRegistry.get(containerElement);
 

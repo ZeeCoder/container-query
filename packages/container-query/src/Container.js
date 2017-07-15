@@ -6,6 +6,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
+import type { ContainerSize } from "../../common/src/types";
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
@@ -48,11 +49,6 @@ const mutationObserver = new MutationObserver(mutationsRecords => {
     });
   });
 });
-
-export type ContainerSize = {
-  width: number,
-  height: number
-};
 
 export default class Container {
   containerElement: HTMLElement;

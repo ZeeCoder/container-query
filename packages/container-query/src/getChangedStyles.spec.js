@@ -1,12 +1,9 @@
 import getChangedStyles from "./getChangedStyles";
-import type { ContainerSize } from "./Container";
 import { HEIGHT_UNIT } from "../../common/src/constants";
 
 jest.mock("./containerRegistry", () => ({
   get: jest.fn()
 }));
-
-// @todo replace rh / rw with constants
 
 test("should apply default queries without a condition function", () => {
   const containerRegistry = require("./containerRegistry");
@@ -21,14 +18,14 @@ test("should apply default queries without a condition function", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: "2rh",
-                  lineHeight: "1rh"
+                  fontSize: `2${HEIGHT_UNIT}`,
+                  lineHeight: `1${HEIGHT_UNIT}`
                 }
               },
               {
                 selector: ".Container__element",
                 values: {
-                  lineHeight: "3rh"
+                  lineHeight: `3${HEIGHT_UNIT}`
                 }
               }
             ]
@@ -39,8 +36,8 @@ test("should apply default queries without a condition function", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: "4rh",
-                  lineHeight: "2rh"
+                  fontSize: `4${HEIGHT_UNIT}`,
+                  lineHeight: `2${HEIGHT_UNIT}`
                 }
               },
               {
@@ -56,8 +53,8 @@ test("should apply default queries without a condition function", () => {
     };
   });
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 100, height: 100 };
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
@@ -91,7 +88,7 @@ test("should return change sets on first run", () => {
                 background: "#ccc"
               },
               values: {
-                lineHeight: "1rh"
+                lineHeight: `1${HEIGHT_UNIT}`
               }
             }
           ]
@@ -120,8 +117,8 @@ test("should return change sets on first run", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 100, height: 100 };
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
@@ -184,7 +181,7 @@ test("should generate remove change set", () => {
               selector: ".Container",
               styles: {},
               values: {
-                lineHeight: "10rh"
+                lineHeight: `10${HEIGHT_UNIT}`
               }
             }
           ]
@@ -199,7 +196,7 @@ test("should generate remove change set", () => {
                 background: "#bbb"
               },
               values: {
-                lineHeight: "2rh"
+                lineHeight: `2${HEIGHT_UNIT}`
               }
             },
             {
@@ -209,7 +206,7 @@ test("should generate remove change set", () => {
                 border: "none"
               },
               values: {
-                fontSize: "1rh"
+                fontSize: `1${HEIGHT_UNIT}`
               }
             }
           ]
@@ -221,8 +218,8 @@ test("should generate remove change set", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 100, height: 100 };
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
@@ -294,8 +291,8 @@ test("should generate empty change set if conditions allow", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 100, height: 100 };
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {},
@@ -321,13 +318,13 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: "2rh"
+                fontSize: `2${HEIGHT_UNIT}`
               }
             },
             {
               selector: ".Container__element",
               values: {
-                fontSize: "4rh"
+                fontSize: `4${HEIGHT_UNIT}`
               }
             }
           ]
@@ -338,7 +335,7 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: "3rh"
+                fontSize: `3${HEIGHT_UNIT}`
               }
             }
           ]
@@ -349,13 +346,13 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                lineHeight: "4rh"
+                lineHeight: `4${HEIGHT_UNIT}`
               }
             },
             {
               selector: ".Container__element",
               values: {
-                lineHeight: "3rh"
+                lineHeight: `3${HEIGHT_UNIT}`
               }
             }
           ]
@@ -366,8 +363,8 @@ test("should always recalculate values", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 200, height: 200 };
+  const element = document.createElement("div");
+  const size = { width: 200, height: 200 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
@@ -399,8 +396,8 @@ test("should be able to limit the precision of generated css values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: "22.5rh",
-                lineHeight: "22.4rh"
+                fontSize: `22.5${HEIGHT_UNIT}`,
+                lineHeight: `22.4${HEIGHT_UNIT}`
               }
             }
           ]
@@ -412,8 +409,8 @@ test("should be able to limit the precision of generated css values", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 123, height: 123 };
+  const element = document.createElement("div");
+  const size = { width: 123, height: 123 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
@@ -477,8 +474,8 @@ test("should handle multiple prop removal over multiple queries", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
-  const element: HTMLElement = document.createElement("div");
-  const size: ContainerSize = { width: 100, height: 100 };
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {

@@ -1,6 +1,8 @@
 [ignore]
+./dist
 
 [include]
+../common/src
 
 [libs]
 
