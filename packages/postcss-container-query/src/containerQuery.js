@@ -2,7 +2,6 @@ import postcss from "postcss";
 import detectContainerDefinition from "./detectContainerDefinition";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 import extractPropsFromNode from "./extractPropsFromNode";
-import isEmptyObject from "./isEmptyObject";
 import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
 import saveJSON from "./saveJSON";
 

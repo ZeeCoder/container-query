@@ -2,7 +2,7 @@
 import getContainerDimensions from "./getContainerDimensions";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
-import isEmptyObject from "./isEmptyObject";
+import isEmptyObject from "../../common/src/isEmptyObject";
 import getChangedStyles from "./getChangedStyles";
 import type { ContainerSize } from "../../common/src/types";
 

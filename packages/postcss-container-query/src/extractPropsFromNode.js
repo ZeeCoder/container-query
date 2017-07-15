@@ -6,7 +6,7 @@ import {
   MIN_UNIT,
   MAX_UNIT
 } from "../../common/src/constants";
-import isEmptyObject from "./isEmptyObject";
+import isEmptyObject from "../../common/src/isEmptyObject";
 
 /**
  * Creates a styles object from the css declarations found in the given rule
