@@ -1,5 +1,5 @@
 // @flow
-import getContainerDimensions from "./getContainerDimensions";
+import getContainerSize from "./getContainerSize";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
 import isEmptyObject from "../../common/src/isEmptyObject";
@@ -18,7 +18,7 @@ export default function adjustContainer(
 
   if (!containerSize) {
     // Get container size ourselves, if not given
-    containerSize = getContainerDimensions(containerElement);
+    containerSize = getContainerSize(containerElement);
   }
 
   // Fetching changed styles since the last time we checked.

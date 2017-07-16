@@ -1,15 +1,16 @@
+// @flow
+import type { ContainerSize } from "../../common/src/types";
+
 /**
  * Combines condition functions into a single "and" one.
- *
- * @param {function[]} conditionFunctions
- * @param {ContainerDimensions} containerDimensions
- *
- * @returns {boolean}
  */
-function andCondition(conditionFunctions, containerDimensions) {
+function andCondition(
+  conditionFunctions: Function[],
+  containerSize: ContainerSize
+): boolean {
   let conditionFunctionsLength = conditionFunctions.length;
   for (let i = 0; i < conditionFunctionsLength; i++) {
-    if (!conditionFunctions[i](containerDimensions)) {
+    if (!conditionFunctions[i](containerSize)) {
       return false;
     }
   }
@@ -19,16 +20,14 @@ function andCondition(conditionFunctions, containerDimensions) {
 
 /**
  * Combines condition functions into a single "or" one.
- *
- * @param {function[]} conditionFunctions
- * @param {ContainerDimensions} containerDimensions
- *
- * @returns {boolean}
  */
-function orCondition(conditionFunctions, containerDimensions) {
+function orCondition(
+  conditionFunctions: Function[],
+  containerSize: ContainerSize
+): boolean {
   let conditionFunctionsLength = conditionFunctions.length;
   for (let i = 0; i < conditionFunctionsLength; i++) {
-    if (conditionFunctions[i](containerDimensions)) {
+    if (conditionFunctions[i](containerSize)) {
       return true;
     }
   }
@@ -36,85 +35,83 @@ function orCondition(conditionFunctions, containerDimensions) {
   return false;
 }
 
-function noCondition() {
+function noCondition(): boolean {
   return true;
 }
 
 /**
  * Converts a condition array to a function like so:
- * `[ "orientation", ":", "portrait" ]` => function
- *
- * @param {string[]} condition
- *
- * @returns {function}
+ * `[ "orientation", ":", "portrait" ]` => Function
  */
-function convertConditionArrayToFunction(condition) {
+function convertConditionArrayToFunction(
+  condition: [string, string, number | string]
+): Function {
   const feature = condition[0];
   const operation = condition[1];
-  const value = condition[2];
+  let value = condition[2];
 
   if (feature === "width") {
     if (operation === ">") {
-      return containerDimensions => {
-        return containerDimensions.width > value;
+      return containerSize => {
+        return containerSize.width > parseInt(value);
       };
     } else if (operation === ">=") {
-      return containerDimensions => {
-        return containerDimensions.width >= value;
+      return containerSize => {
+        return containerSize.width >= parseInt(value);
       };
     } else if (operation === "<") {
-      return containerDimensions => {
-        return containerDimensions.width < value;
+      return containerSize => {
+        return containerSize.width < parseInt(value);
       };
     } else if (operation === "<=") {
-      return containerDimensions => {
-        return containerDimensions.width <= value;
+      return containerSize => {
+        return containerSize.width <= parseInt(value);
       };
     }
   } else if (feature === "height") {
     if (operation === ">") {
-      return containerDimensions => {
-        return containerDimensions.height > value;
+      return containerSize => {
+        return containerSize.height > parseInt(value);
       };
     } else if (operation === ">=") {
-      return containerDimensions => {
-        return containerDimensions.height >= value;
+      return containerSize => {
+        return containerSize.height >= parseInt(value);
       };
     } else if (operation === "<") {
-      return containerDimensions => {
-        return containerDimensions.height < value;
+      return containerSize => {
+        return containerSize.height < parseInt(value);
       };
     } else if (operation === "<=") {
-      return containerDimensions => {
-        return containerDimensions.height <= value;
+      return containerSize => {
+        return containerSize.height <= parseInt(value);
       };
     }
   } else if (feature === "aspect-ratio") {
     if (operation === ">") {
-      return containerDimensions => {
-        return containerDimensions.width / containerDimensions.height > value;
+      return containerSize => {
+        return containerSize.width / containerSize.height > parseFloat(value);
       };
     } else if (operation === ">=") {
-      return containerDimensions => {
-        return containerDimensions.width / containerDimensions.height >= value;
+      return containerSize => {
+        return containerSize.width / containerSize.height >= parseFloat(value);
       };
     } else if (operation === "<") {
-      return containerDimensions => {
-        return containerDimensions.width / containerDimensions.height < value;
+      return containerSize => {
+        return containerSize.width / containerSize.height < parseFloat(value);
       };
     } else if (operation === "<=") {
-      return containerDimensions => {
-        return containerDimensions.width / containerDimensions.height <= value;
+      return containerSize => {
+        return containerSize.width / containerSize.height <= parseFloat(value);
       };
     }
   } else if (feature === "orientation") {
     if (value === "portrait") {
-      return containerDimensions => {
-        return containerDimensions.height >= containerDimensions.width;
+      return containerSize => {
+        return containerSize.height >= containerSize.width;
       };
     } else {
-      return containerDimensions => {
-        return containerDimensions.height < containerDimensions.width;
+      return containerSize => {
+        return containerSize.height < containerSize.width;
       };
     }
   }
@@ -127,9 +124,8 @@ function convertConditionArrayToFunction(condition) {
  * Converts an array of condition arrays to a function, that accepts a container
  * dimension object with `with` and `height` props.
  *
- * @param {Array[]} [conditions] An array of conditions represented by a
- * multidimensional array where
- * "(width > 100) and (height > 100), (orientation: landscape)"
+ * `conditions`: An array of conditions represented by a multidimensional array
+ * where "(width > 100) and (height > 100), (orientation: landscape)"
  * is expected to be:
  * [
  *   [
@@ -140,10 +136,8 @@ function convertConditionArrayToFunction(condition) {
  *     [ "orientation", ":", "landscape" ]
  *   ]
  * ]
- *
- * @returns {function}
  */
-export default function getConditionFunction(conditions) {
+export default function getConditionFunction(conditions: []): Function {
   if (!Array.isArray(conditions) || conditions.length === 0) {
     return noCondition;
   }

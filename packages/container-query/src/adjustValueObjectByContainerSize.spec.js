@@ -1,9 +1,9 @@
 import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
-import adjustValueObjectByContainerDimensions from "./adjustValueObjectByContainerDimensions";
+import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 
 test("container value object gets all its values converted to pixels", () => {
   expect(
-    adjustValueObjectByContainerDimensions(
+    adjustValueObjectByContainerSize(
       { height: 100, width: 150 },
       {
         fontSize: `50${HEIGHT_UNIT}`,

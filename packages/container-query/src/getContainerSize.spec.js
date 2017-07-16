@@ -1,4 +1,4 @@
-import getContainerDimensions from "./getContainerDimensions";
+import getContainerSize from "./getContainerSize";
 
 test("should return an object with the expected width and height data", () => {
   const container = {
@@ -6,7 +6,7 @@ test("should return an object with the expected width and height data", () => {
     clientHeight: 50
   };
 
-  expect(getContainerDimensions(container)).toEqual({
+  expect(getContainerSize(container)).toEqual({
     width: 100,
     height: 50
   });

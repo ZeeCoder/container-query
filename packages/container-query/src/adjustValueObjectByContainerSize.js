@@ -15,8 +15,8 @@ import type { ContainerSize, Styles } from "../../common/src/types";
  *   padding: "10px 20px",
  * }`
  */
-export default function adjustValueObjectByContainerDimensions(
-  containerDimensions: ContainerSize,
+export default function adjustValueObjectByContainerSize(
+  containerSize: ContainerSize,
   valueDefinition: Styles,
   precision: number = 2
 ): Styles {
@@ -24,7 +24,7 @@ export default function adjustValueObjectByContainerDimensions(
 
   for (let cssRule in values) {
     values[cssRule] = convertCompositValue(
-      containerDimensions,
+      containerSize,
       values[cssRule],
       precision
     );

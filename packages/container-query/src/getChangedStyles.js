@@ -8,7 +8,7 @@ import type {
 import registry from "./containerRegistry";
 import _union from "lodash.union";
 import _difference from "lodash.difference";
-import adjustValueObjectByContainerDimensions from "./adjustValueObjectByContainerDimensions";
+import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 import objectAssign from "object-assign";
 
 // Styles to be applied and props to be removed from elements, based on their
@@ -111,7 +111,7 @@ export default function getChangedStyles(
         if (applicableValuePropCount > 0) {
           objectAssign(
             currentAddStyle,
-            adjustValueObjectByContainerDimensions(
+            adjustValueObjectByContainerSize(
               size,
               applicableValueObject,
               instance.opts.valuePrecision
@@ -154,7 +154,7 @@ export default function getChangedStyles(
           }
         }
 
-        const applicableCurrentAddStyle = adjustValueObjectByContainerDimensions(
+        const applicableCurrentAddStyle = adjustValueObjectByContainerSize(
           size,
           currentAddStyle,
           instance.opts.valuePrecision

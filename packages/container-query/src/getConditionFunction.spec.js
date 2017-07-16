@@ -127,11 +127,13 @@ test("should work with height conditions", () => {
   expect(gteCondFn({ height: 0 })).toBe(false);
 });
 
+// @todo test floating numbers
 test("should work with aspect-ratio conditions", () => {
   const ltCondFn = getConditionFunction([[["aspect-ratio", "<", 1]]]);
   const lteCondFn = getConditionFunction([[["aspect-ratio", "<=", 1]]]);
   const gtCondFn = getConditionFunction([[["aspect-ratio", ">", 1]]]);
   const gteCondFn = getConditionFunction([[["aspect-ratio", ">=", 1]]]);
+  const floatCondFn = getConditionFunction([[["aspect-ratio", ">", 1.5]]]);
 
   expect(typeof ltCondFn).toBe("function");
   expect(ltCondFn({ width: 10, height: 9 })).toBe(false);
@@ -156,6 +158,11 @@ test("should work with aspect-ratio conditions", () => {
   expect(gteCondFn({ width: 10, height: 10 })).toBe(true);
   expect(gteCondFn({ width: 10, height: 11 })).toBe(false);
   expect(gteCondFn({ width: 10, height: 100 })).toBe(false);
+
+  expect(typeof floatCondFn).toBe("function");
+  expect(floatCondFn({ width: 16, height: 10 })).toBe(true);
+  expect(floatCondFn({ width: 15, height: 10 })).toBe(false);
+  expect(floatCondFn({ width: 14, height: 10 })).toBe(false);
 });
 
 test("should work for multiple conditions", () => {
