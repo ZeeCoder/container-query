@@ -9,7 +9,6 @@
   },
   "main": "dist/bundle.cjs.js",
   "scripts": {
-    "flow-check": "flow check",
     "prebuild": "flow check",
     "build": "rollup -c",
     "watch:build": "rollup -c -w"

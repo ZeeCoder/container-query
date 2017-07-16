@@ -1,3 +1,4 @@
+// @flow
 import camelCase from "lodash.camelcase";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import {
@@ -7,41 +8,39 @@ import {
   MAX_UNIT
 } from "../../common/src/constants";
 import isEmptyObject from "../../common/src/isEmptyObject";
+import type { Styles, Node } from "../../common/src/types";
 
 /**
- * Creates a styles object from the css declarations found in the given rule
- * node.
+ * Extracts styles and container units to an object from the given node.
  *
- * @param {Node} ruleNode
- * @param {{
- *  isContainer: boolean,
- *  onlyContainerUnits: boolean,
- *  stripContainerUnits: boolean,
- * }} opts
- * @todo clean up docs
- * @param {boolean} [isContainer] If the current node is a container, then the
- * usage of container units with the with and height props will be limited, and
- * may throw
- * @param {boolean} [onlyContainerUnits] If set, then only container units are
- * returned.
- * @param {boolean} [stripContainerUnits] If set, then all declaration nodes
- * using container units will be stripped away.
+ * `opts` description:
+ * - `isContainer` If true, then certain properties container unit usages will
+ * trigger errors. (See @throws descriptions)
+ * - `onlyContainerUnits` If true, only container units will be extracted
+ * - `stripContainerUnits` If true, then all declarations using container units
+ * will be removed from the original node
  *
- * @throws Error if the ruleNode is not actually a rule
- * @throws Error if onlyContainerUnits is true, and ruleNode is a container
- * where container units were found to be used with either the `width` or
- * `height` properties.
- *
- * @returns {Object}
+ * @throws Error if the ruleNode's type is not "rule"
+ * @throws Error if `isContainer` is true, and either a width or height property
+ * used a min or max r-unit.
+ * @throws Error if `isContainer` is true and a width property used a width r-unit.
+ * @throws Error if `isContainer` is true and a height property used a height r-unit.
  */
 export default function extractPropsFromNode(
-  ruleNode,
-  opts = {
+  ruleNode: Node,
+  opts: {
+    isContainer?: boolean,
+    onlyContainerUnits?: boolean,
+    stripContainerUnits?: boolean
+  } = {
     isContainer: false,
     onlyContainerUnits: false,
     stripContainerUnits: false
   }
-) {
+): {
+  styles?: Styles,
+  values?: Styles
+} {
   if (ruleNode.type !== "rule") {
     throw new Error('`ruleNode` must be of type "rule".');
   }
@@ -54,13 +53,10 @@ export default function extractPropsFromNode(
     styles: {},
     values: {}
   };
-  const nodesLength = ruleNode.nodes.length;
 
+  let nodesLength = ruleNode.nodes.length;
   for (let i = 0; i < nodesLength; i++) {
     let node = ruleNode.nodes[i];
-    if (typeof node === "undefined") {
-      continue;
-    }
 
     const containerUnitsUsed = isValueUsingContainerUnits(node.value);
 
@@ -102,11 +98,14 @@ export default function extractPropsFromNode(
     }
 
     if (opts.stripContainerUnits && containerUnitsUsed) {
+      // Removing declaration, and updating the variables for the loop
       ruleNode.nodes.splice(i, 1);
       i--;
+      nodesLength--;
     }
   }
 
+  // Getting rid of empty objects
   if (isEmptyObject(response.styles)) {
     delete response.styles;
   }

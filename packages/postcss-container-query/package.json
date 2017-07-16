@@ -10,10 +10,13 @@
   "main": "dist/bundle.cjs.js",
   "scripts": {
     "build": "rollup -c",
+    "prebuild": "flow check",
     "watch:build": "rollup -c -w"
   },
   "devDependencies": {
-    "rollup": "^0.42.0"
+    "flow-bin": "^0.50.0",
+    "rollup": "^0.42.0",
+    "rollup-plugin-flow": "^1.1.1"
   },
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
