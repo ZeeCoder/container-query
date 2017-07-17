@@ -1,6 +1,4 @@
 // @flow
-import Container from "../../container-query/src/Container";
-
 export type Styles = {
   [property: string]: string
 };
@@ -26,7 +24,7 @@ export type Node = {
 };
 
 export type RegistryData = {
-  instance: Container,
+  instance: Object,
   jsonStats: QueryStats,
   queryState: boolean[]
 };
