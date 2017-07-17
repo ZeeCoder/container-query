@@ -1,6 +1,6 @@
+// @flow
 import Container from "../../container-query/src/Container";
 
-// @flow
 export type Styles = {
   [property: string]: string
 };

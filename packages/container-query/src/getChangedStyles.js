@@ -32,8 +32,13 @@ function getAffectedPropsByElementData(elementData: ElementData): string[] {
 export default function getChangedStyles(
   element: HTMLElement,
   size: ContainerSize
-) {
-  const { queryState, jsonStats, instance } = registry.get(element);
+): StyleChangeSet {
+  const registryData = registry.get(element);
+  if (!registryData) {
+    return {};
+  }
+
+  const { queryState, jsonStats, instance } = registryData;
   const styleChangeSet: StyleChangeSet = {};
   const previouslyAppliedProps: {
     [selector: string]: string[]

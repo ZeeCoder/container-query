@@ -16,6 +16,10 @@ export default function adjustContainer(
 ) {
   const registryData = containerRegistry.get(containerElement);
 
+  if (!registryData) {
+    return;
+  }
+
   if (!containerSize) {
     // Get container size ourselves, if not given
     containerSize = getContainerSize(containerElement);
