@@ -14,6 +14,13 @@ beforeEach(() => {
   require("./containerRegistry").get.mockClear();
 });
 
+test("should ignore call if the element is not registered", () => {
+  const getContainerSize = require("./getContainerSize").default;
+  const containerElement = document.createElement("div");
+  adjustContainer(containerElement);
+  expect(getContainerSize).toHaveBeenCalledTimes(0);
+});
+
 test("should be able to get the container size itself, and ignore empty change sets", () => {
   const containerRegistry = require("./containerRegistry");
   const applyStylesToElements = require("./applyStylesToElements").default;

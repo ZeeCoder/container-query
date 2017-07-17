@@ -5,6 +5,12 @@ jest.mock("./containerRegistry", () => ({
   get: jest.fn()
 }));
 
+test("should return empty object if the element is not registered", () => {
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
+  expect(getChangedStyles(element, size)).toEqual({});
+});
+
 test("should apply default queries without a condition function", () => {
   const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => {
