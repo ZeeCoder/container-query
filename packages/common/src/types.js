@@ -32,6 +32,19 @@ export type Node = {
 
 export type RegistryData = {
   instance: Container,
-  jsonStats: Object,
+  jsonStats: QueryStats,
   queryState: boolean[]
+};
+
+export type QueryStats = {
+  selector: string,
+  queries: Array<{
+    conditions: [string, string, string | number],
+    conditionFunction: Function,
+    elements: Array<{
+      selector: string,
+      styles: Styles,
+      Values: Styles
+    }>
+  }>
 };

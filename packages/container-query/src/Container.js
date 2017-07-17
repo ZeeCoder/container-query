@@ -6,7 +6,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
-import type { ContainerSize } from "../../common/src/types";
+import type { ContainerSize, QueryStats } from "../../common/src/types";
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
@@ -55,7 +55,11 @@ export default class Container {
   processedJsonStats: {};
   opts: {};
 
-  constructor(containerElement: HTMLElement, jsonStats: {}, opts: {} = {}) {
+  constructor(
+    containerElement: HTMLElement,
+    jsonStats: QueryStats,
+    opts: {} = {}
+  ) {
     this.containerElement = containerElement;
     this.processedJsonStats = processConfig(jsonStats);
 
