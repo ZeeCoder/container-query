@@ -15,7 +15,9 @@ export default function processConfig(origConfig: QueryStats): QueryStats {
     typeof origConfig.selector !== "string" ||
     !Array.isArray(origConfig.queries)
   ) {
-    throw new Error("better message needed");
+    throw new Error(
+      "Invalid query stats object. It's either not an object, or it's missing the 'selectors' and/or the 'queries' property."
+    );
   }
 
   // Configuration seems valid, process it

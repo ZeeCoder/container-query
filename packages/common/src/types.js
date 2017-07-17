@@ -11,11 +11,6 @@ export type ElementData = {
   values: Styles
 };
 
-export type QueryData = {
-  conditionFunction: Function,
-  elements: Array<ElementData>
-};
-
 export type ContainerSize = {
   width: number,
   height: number

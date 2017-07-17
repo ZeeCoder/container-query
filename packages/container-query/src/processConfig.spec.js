@@ -38,10 +38,12 @@ test("should turn conditions to functions", () => {
 });
 
 test("should return null for invalid configurations", () => {
-  expect(processConfig()).toEqual(null);
-  expect(processConfig({})).toEqual(null);
-  expect(processConfig([])).toEqual(null);
-  expect(processConfig("")).toEqual(null);
-  expect(processConfig(false)).toEqual(null);
-  expect(processConfig(42)).toEqual(null);
+  const errorRegex = /^Invalid query stats object/;
+
+  expect(() => processConfig()).toThrow(errorRegex);
+  expect(() => processConfig({})).toThrow(errorRegex);
+  expect(() => processConfig([])).toThrow(errorRegex);
+  expect(() => processConfig("")).toThrow(errorRegex);
+  expect(() => processConfig(false)).toThrow(errorRegex);
+  expect(() => processConfig(42)).toThrow(errorRegex);
 });
