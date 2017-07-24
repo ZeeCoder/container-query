@@ -1,12 +1,6 @@
 // @flow
 import camelCase from "lodash.camelcase";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
-import {
-  HEIGHT_UNIT,
-  WIDTH_UNIT,
-  MIN_UNIT,
-  MAX_UNIT
-} from "../../common/src/constants";
 import isEmptyObject from "../../common/src/isEmptyObject";
 import type { Styles, Node } from "../../common/src/types";
 
@@ -70,24 +64,19 @@ export default function extractPropsFromNode(
     if (opts.isContainer && containerUnitsUsed) {
       if (
         (node.prop === "width" || node.prop === "height") &&
-        (node.value.indexOf(MIN_UNIT) !== -1 ||
-          node.value.indexOf(MAX_UNIT) !== -1)
+        (node.value.indexOf("rmin") !== -1 || node.value.indexOf("rmax") !== -1)
       ) {
         throw node.error(
-          `Width and height properties on containers cannot use ${MIN_UNIT} or ${MAX_UNIT} units.`
+          `Width and height properties on containers cannot use rmin or rmax units.`
         );
       }
 
-      if (node.prop === "width" && node.value.indexOf(WIDTH_UNIT) !== -1) {
-        throw node.error(
-          `Containers cannot use ${WIDTH_UNIT} for the width property.`
-        );
+      if (node.prop === "width" && node.value.indexOf("rw") !== -1) {
+        throw node.error(`Containers cannot use rw for the width property.`);
       }
 
-      if (node.prop === "height" && node.value.indexOf(HEIGHT_UNIT) !== -1) {
-        throw node.error(
-          `Containers cannot use ${HEIGHT_UNIT} for the height property.`
-        );
+      if (node.prop === "height" && node.value.indexOf("rh") !== -1) {
+        throw node.error(`Containers cannot use rh for the height property.`);
       }
     }
 

@@ -1,52 +1,43 @@
-import {
-  HEIGHT_UNIT,
-  WIDTH_UNIT,
-  MIN_UNIT,
-  MAX_UNIT
-} from "../../common/src/constants";
+// @flow
+import type { ContainerSize } from "../../common/src/types";
 
 /**
  * Converts a value possibly using a container unit into a pixel value.
- *
- * @param {ContainerDimensions} dimensions
- * @param {string} value Ex: "1<HEIGHT_UNIT>", "20<WIDTH_UNIT>"
- * @param {number} precision
- *
- * @return {string} Ex: "123px"
+ * Examples:
+ * - "1rh" => "123px"
+ * - "10px" => 10px
  */
-export default function convertSingleValue(dimensions, value, precision = 2) {
+export default function convertSingleValue(
+  dimensions: ContainerSize,
+  value: string,
+  precision: number = 2
+): string {
   const match = value.toLowerCase().match(/^ *(\d+(\.\d+)?)([rwhminax]+) *$/i);
 
-  if (match === null) {
+  if (!Array.isArray(match)) {
     return value;
   }
 
   const num = match[1];
   const unit = match[3];
 
-  if (
-    !(
-      unit === HEIGHT_UNIT ||
-      unit === WIDTH_UNIT ||
-      unit === MIN_UNIT ||
-      unit === MAX_UNIT
-    )
-  ) {
+  if (!(unit === "rh" || unit === "rw" || unit === "rmin" || unit === "rmax")) {
     return value;
   }
 
   const relativeToHeight =
-    unit === HEIGHT_UNIT ||
-    (unit === MIN_UNIT && dimensions.height < dimensions.width) ||
-    (unit === MAX_UNIT && dimensions.height > dimensions.width);
+    unit === "rh" ||
+    (unit === "rmin" && dimensions.height < dimensions.width) ||
+    (unit === "rmax" && dimensions.height > dimensions.width);
 
+  let valueNum: number;
   if (relativeToHeight) {
     // relative to height
-    value = dimensions.height * parseFloat(num) / 100;
+    valueNum = dimensions.height * parseFloat(num) / 100;
   } else {
     // relative to width
-    value = dimensions.width * parseFloat(num) / 100;
+    valueNum = dimensions.width * parseFloat(num) / 100;
   }
 
-  return `${value.toFixed(precision)}px`;
+  return `${valueNum.toFixed(precision)}px`;
 }

@@ -116,7 +116,7 @@ export default class Container {
   /**
      * Adjusts the container to it's current dimensions, or to the ones given.
      */
-  adjust(containerDimensions: ?ContainerSize = null) {
-    adjustContainer(this.containerElement, containerDimensions);
+  adjust(containerSize: ?ContainerSize = null) {
+    adjustContainer(this.containerElement, containerSize);
   }
 }

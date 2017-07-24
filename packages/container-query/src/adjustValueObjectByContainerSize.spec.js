@@ -1,4 +1,3 @@
-import { HEIGHT_UNIT, WIDTH_UNIT } from "../../common/src/constants";
 import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 
 test("container value object gets all its values converted to pixels", () => {
@@ -6,10 +5,10 @@ test("container value object gets all its values converted to pixels", () => {
     adjustValueObjectByContainerSize(
       { height: 100, width: 150 },
       {
-        fontSize: `50${HEIGHT_UNIT}`,
-        lineHeight: `100${HEIGHT_UNIT}`,
-        borderWidth: `50${WIDTH_UNIT}`,
-        padding: `10${HEIGHT_UNIT} 10${WIDTH_UNIT} 10${HEIGHT_UNIT}`
+        fontSize: `50rh`,
+        lineHeight: `100rh`,
+        borderWidth: `50rw`,
+        padding: `10rh 10rw 10rh`
       }
     )
   ).toEqual({

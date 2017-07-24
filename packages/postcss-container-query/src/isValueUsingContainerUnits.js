@@ -1,11 +1,4 @@
 // @flow
-import {
-  HEIGHT_UNIT,
-  WIDTH_UNIT,
-  MIN_UNIT,
-  MAX_UNIT
-} from "../../common/src/constants";
-
 export default function isValueUsingContainerUnits(value: string): boolean {
   if (typeof value !== "string") {
     return false;
@@ -22,10 +15,5 @@ export default function isValueUsingContainerUnits(value: string): boolean {
 
   const unit = match[3];
 
-  return (
-    unit === HEIGHT_UNIT ||
-    unit === WIDTH_UNIT ||
-    unit === MIN_UNIT ||
-    unit === MAX_UNIT
-  );
+  return unit === "rh" || unit === "rw" || unit === "rmin" || unit === "rmax";
 }

@@ -1,5 +1,4 @@
 import getChangedStyles from "./getChangedStyles";
-import { HEIGHT_UNIT } from "../../common/src/constants";
 
 jest.mock("./containerRegistry", () => ({
   get: jest.fn()
@@ -24,14 +23,14 @@ test("should apply default queries without a condition function", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `2${HEIGHT_UNIT}`,
-                  lineHeight: `1${HEIGHT_UNIT}`
+                  fontSize: `2rh`,
+                  lineHeight: `1rh`
                 }
               },
               {
                 selector: ".Container__element",
                 values: {
-                  lineHeight: `3${HEIGHT_UNIT}`
+                  lineHeight: `3rh`
                 }
               }
             ]
@@ -42,8 +41,8 @@ test("should apply default queries without a condition function", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `4${HEIGHT_UNIT}`,
-                  lineHeight: `2${HEIGHT_UNIT}`
+                  fontSize: `4rh`,
+                  lineHeight: `2rh`
                 }
               },
               {
@@ -94,7 +93,7 @@ test("should return change sets on first run", () => {
                 background: "#ccc"
               },
               values: {
-                lineHeight: `1${HEIGHT_UNIT}`
+                lineHeight: `1rh`
               }
             }
           ]
@@ -187,7 +186,7 @@ test("should generate remove change set", () => {
               selector: ".Container",
               styles: {},
               values: {
-                lineHeight: `10${HEIGHT_UNIT}`
+                lineHeight: `10rh`
               }
             }
           ]
@@ -202,7 +201,7 @@ test("should generate remove change set", () => {
                 background: "#bbb"
               },
               values: {
-                lineHeight: `2${HEIGHT_UNIT}`
+                lineHeight: `2rh`
               }
             },
             {
@@ -212,7 +211,7 @@ test("should generate remove change set", () => {
                 border: "none"
               },
               values: {
-                fontSize: `1${HEIGHT_UNIT}`
+                fontSize: `1rh`
               }
             }
           ]
@@ -324,13 +323,13 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: `2${HEIGHT_UNIT}`
+                fontSize: `2rh`
               }
             },
             {
               selector: ".Container__element",
               values: {
-                fontSize: `4${HEIGHT_UNIT}`
+                fontSize: `4rh`
               }
             }
           ]
@@ -341,7 +340,7 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: `3${HEIGHT_UNIT}`
+                fontSize: `3rh`
               }
             }
           ]
@@ -352,13 +351,13 @@ test("should always recalculate values", () => {
             {
               selector: ".Container",
               values: {
-                lineHeight: `4${HEIGHT_UNIT}`
+                lineHeight: `4rh`
               }
             },
             {
               selector: ".Container__element",
               values: {
-                lineHeight: `3${HEIGHT_UNIT}`
+                lineHeight: `3rh`
               }
             }
           ]
@@ -402,8 +401,8 @@ test("should be able to limit the precision of generated css values", () => {
             {
               selector: ".Container",
               values: {
-                fontSize: `22.5${HEIGHT_UNIT}`,
-                lineHeight: `22.4${HEIGHT_UNIT}`
+                fontSize: `22.5rh`,
+                lineHeight: `22.4rh`
               }
             }
           ]
@@ -468,7 +467,7 @@ test("should handle multiple prop removal over multiple queries", () => {
                 border: "1px solid"
               },
               values: {
-                lineHeight: `2${HEIGHT_UNIT}`
+                lineHeight: `2rh`
               }
             }
           ]

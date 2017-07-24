@@ -2,7 +2,6 @@ import postcss from "postcss";
 import detectContainerDefinition from "./detectContainerDefinition";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 import extractPropsFromNode from "./extractPropsFromNode";
-import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
 import saveJSON from "./saveJSON";
 
 /**
@@ -53,7 +52,7 @@ function containerQuery(options = {}) {
     const checkForPrecedingContainerDeclaration = node => {
       if (currentContainerSelector === null) {
         throw node.error(
-          `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
+          `Missing @define-container declaration before the processed node.`
         );
       }
     };
@@ -177,7 +176,7 @@ function containerQuery(options = {}) {
           if (singleContainer) {
             if (currentContainerSelector !== newContainerSelector) {
               throw node.error(
-                `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${newContainerSelector}".`
+                `define-container declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${newContainerSelector}".`
               );
             }
           } else {

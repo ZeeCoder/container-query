@@ -1,15 +1,13 @@
-import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
+// @flow
+import type { Node } from "../../common/src/types";
 
 /**
- * @param {Node} ruleNode
- * @param {boolean} [removeDefinition]
- *
- * @returns {string|null} The container's selector
+ * Returns the container's selector, or null if no @define-container was found.
  */
 export default function detectContainerDefinition(
-  ruleNode,
-  removeDefinition = true
-) {
+  ruleNode: Node,
+  removeDefinition: boolean = true
+): string | null {
   let container = null;
 
   const nodesLength = ruleNode.nodes.length;
@@ -17,7 +15,7 @@ export default function detectContainerDefinition(
   for (i; i < nodesLength; i++) {
     if (
       ruleNode.nodes[i].type === "atrule" &&
-      ruleNode.nodes[i].name === DEFINE_CONTAINER_NAME
+      ruleNode.nodes[i].name === "define-container"
     ) {
       container = ruleNode.selector;
       break;

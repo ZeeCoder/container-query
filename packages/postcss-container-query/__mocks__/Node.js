@@ -1,8 +1,3 @@
-import {
-  DEFINE_CONTAINER_NAME,
-  CONTAINER_QUERY
-} from "../../common/src/constants";
-
 export default class Node {
   /**
      * @param {{
@@ -73,11 +68,11 @@ export default class Node {
   }
 
   addContainerDefinition() {
-    return this.addAtRule(DEFINE_CONTAINER_NAME);
+    return this.addAtRule("define-container");
   }
 
   addContainerQuery(params) {
-    return this.addAtRule(CONTAINER_QUERY, params);
+    return this.addAtRule("container", params);
   }
 
   walk(cb) {

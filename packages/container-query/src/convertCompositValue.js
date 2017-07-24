@@ -1,23 +1,21 @@
+// @flow
+import type { ContainerSize } from "../../common/src/types";
 import convertSingleValue from "./convertSingleValue";
 
 /**
  * Converts a value possibly using one or more container units into a proper
  * value.
- *
- * @param  {ContainerDimensions} dimensions
- * @param  {string} compositValue Ex: "10<HEIGHT_UNIT> 5<WIDTH_UNIT>"
- * @param {number} precision
- *
- * @return {string} Ex: "123px 10px 42px"
+ * Example:
+ * - "10rh 5rw 5rh" => "5px 10px 2.5px"
  */
 export default function convertCompositValue(
-  dimensions,
-  compositValue,
-  precision = 2
-) {
+  dimensions: ContainerSize,
+  compositValue: string,
+  precision: number = 2
+): string {
   const valArr = compositValue.match(/\d+(\.\d+)?[rwhminax]+/gi);
 
-  if (valArr === null) {
+  if (!Array.isArray(valArr)) {
     return compositValue;
   }
 

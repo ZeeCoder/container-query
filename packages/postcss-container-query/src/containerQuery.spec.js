@@ -1,9 +1,4 @@
 import postcss from "postcss";
-import {
-  WIDTH_UNIT,
-  HEIGHT_UNIT,
-  DEFINE_CONTAINER_NAME
-} from "../../common/src/constants";
 import containerQuery from "./containerQuery";
 import Root from "../__mocks__/Root";
 import Node from "../__mocks__/Node";
@@ -26,7 +21,7 @@ test("missing container declaration", () => {
   expect(() => {
     pluginInstance(new Root().addContainerQuery("(orientation: landscape)"));
   }).toThrowError(
-    `Missing @${DEFINE_CONTAINER_NAME} declaration before the processed node.`
+    `Missing @define-container declaration before the processed node.`
   );
 });
 
@@ -43,16 +38,16 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                 {
                   selector: ".Container",
                   values: {
-                    lineHeight: `3${HEIGHT_UNIT}`,
-                    fontSize: `1${HEIGHT_UNIT}`,
-                    marginLeft: `2${WIDTH_UNIT}`
+                    lineHeight: `3rh`,
+                    fontSize: `1rh`,
+                    marginLeft: `2rw`
                   }
                 },
                 {
                   selector: ".Container__element",
                   values: {
-                    fontSize: `1${WIDTH_UNIT}`,
-                    lineHeight: `2${WIDTH_UNIT}`
+                    fontSize: `1rw`,
+                    lineHeight: `2rw`
                   }
                 }
               ]
@@ -80,16 +75,13 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
       )
       .addNode(
         new RuleNode(".Container")
-          .addDeclaration("line-height", `2${HEIGHT_UNIT}`)
+          .addDeclaration("line-height", `2rh`)
           .addContainerDefinition()
           .addDeclaration("border", "none")
       )
       .addNode(
         // This should be noticed, and processed as expected
-        new RuleNode(".Container").addDeclaration(
-          "font-size",
-          `1${HEIGHT_UNIT}`
-        )
+        new RuleNode(".Container").addDeclaration("font-size", `1rh`)
       )
       .addNode(
         new Node({
@@ -120,28 +112,19 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
       // should process container values even after container queries
       .addNode(
         new RuleNode(".Container")
-          .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
-          .addDeclaration("margin-left", `2${WIDTH_UNIT}`)
+          .addDeclaration("line-height", `3rh`)
+          .addDeclaration("margin-left", `2rw`)
       )
       // should process default elements using values
       .addNode(
-        new RuleNode(".Container__element").addDeclaration(
-          "font-size",
-          `1${WIDTH_UNIT}`
-        )
+        new RuleNode(".Container__element").addDeclaration("font-size", `1rw`)
       )
       // This should be overriden by the following node
       .addNode(
-        new RuleNode(".Container__element").addDeclaration(
-          "line-height",
-          `1${WIDTH_UNIT}`
-        )
+        new RuleNode(".Container__element").addDeclaration("line-height", `1rw`)
       )
       .addNode(
-        new RuleNode(".Container__element").addDeclaration(
-          "line-height",
-          `2${WIDTH_UNIT}`
-        )
+        new RuleNode(".Container__element").addDeclaration("line-height", `2rw`)
       )
   );
 });
@@ -158,16 +141,16 @@ test("proper json and css output", () => {
     .process(
       `
                 .Container {
-                    @${DEFINE_CONTAINER_NAME};
+                    @define-container;
                     border: none;
-                    font-size: 50${HEIGHT_UNIT};
+                    font-size: 50rh;
                     /* Ignore this */
-                    line-height: 100${HEIGHT_UNIT};
+                    line-height: 100rh;
                 }
 
                 @container (height >= 100px) and (width >= 100px) {
                     .Container {
-                        font-size: 70${HEIGHT_UNIT};
+                        font-size: 70rh;
                     }
                 }
 
@@ -187,25 +170,25 @@ test("proper json and css output", () => {
                 /* Ignore this */
 
                 .Container2 {
-                    @${DEFINE_CONTAINER_NAME}
+                    @define-container
                     font-size: 10px;
                     border: 1px solid;
                 }
 
                 .Container2__element {
-                    width: 50${WIDTH_UNIT};
-                    height: 50${HEIGHT_UNIT};
+                    width: 50rw;
+                    height: 50rh;
                     background: green;
                 }
 
                 @container (orientation: portrait) {
                     .Container2 {
-                        font-size: 70${HEIGHT_UNIT};
+                        font-size: 70rh;
                     }
 
                     .Container2__element {
-                        width: 75${WIDTH_UNIT};
-                        height: 75${HEIGHT_UNIT};
+                        width: 75rw;
+                        height: 75rh;
                         background: red;
                     }
                 }
@@ -241,8 +224,8 @@ test("proper json and css output", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `50${HEIGHT_UNIT}`,
-                  lineHeight: `100${HEIGHT_UNIT}`
+                  fontSize: `50rh`,
+                  lineHeight: `100rh`
                 }
               }
             ]
@@ -253,7 +236,7 @@ test("proper json and css output", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `70${HEIGHT_UNIT}`
+                  fontSize: `70rh`
                 }
               }
             ]
@@ -295,8 +278,8 @@ test("proper json and css output", () => {
               {
                 selector: ".Container2__element",
                 values: {
-                  width: `50${WIDTH_UNIT}`,
-                  height: `50${HEIGHT_UNIT}`
+                  width: `50rw`,
+                  height: `50rh`
                 }
               }
             ]
@@ -307,7 +290,7 @@ test("proper json and css output", () => {
               {
                 selector: ".Container2",
                 values: {
-                  fontSize: `70${HEIGHT_UNIT}`
+                  fontSize: `70rh`
                 }
               },
               {
@@ -316,8 +299,8 @@ test("proper json and css output", () => {
                   background: "red"
                 },
                 values: {
-                  width: `75${WIDTH_UNIT}`,
-                  height: `75${HEIGHT_UNIT}`
+                  width: `75rw`,
+                  height: `75rh`
                 }
               }
             ]
@@ -338,8 +321,8 @@ test("should auto-detect the container by default", done => {
               {
                 selector: ".Container",
                 values: {
-                  lineHeight: `3${HEIGHT_UNIT}`,
-                  fontSize: `2${HEIGHT_UNIT}`
+                  lineHeight: `3rh`,
+                  fontSize: `2rh`
                 }
               }
             ]
@@ -354,13 +337,13 @@ test("should auto-detect the container by default", done => {
     new Root()
       .addNode(
         new RuleNode(".Container")
-          .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
+          .addDeclaration("line-height", `3rh`)
           .addDeclaration("border", "none")
       )
       .addNode(
         new RuleNode(".Container")
           .addContainerDefinition()
-          .addDeclaration("font-size", `2${HEIGHT_UNIT}`)
+          .addDeclaration("font-size", `2rh`)
       )
   );
 });
@@ -373,17 +356,17 @@ test("should throw in non singleContainer mode for defining a different containe
       new Root()
         .addNode(
           new RuleNode(".Container")
-            .addDeclaration("line-height", `3${HEIGHT_UNIT}`)
+            .addDeclaration("line-height", `3rh`)
             .addDeclaration("border", "none")
         )
         .addNode(
           new RuleNode(".AnotherContainer")
             .addContainerDefinition()
-            .addDeclaration("font-size", `2${HEIGHT_UNIT}`)
+            .addDeclaration("font-size", `2rh`)
         )
     );
   }).toThrow(
-    `${DEFINE_CONTAINER_NAME} declaration detected in singleContainer mode. Tried to override ".Container" with ".AnotherContainer".`
+    `define-container declaration detected in singleContainer mode. Tried to override ".Container" with ".AnotherContainer".`
   );
 });
 
