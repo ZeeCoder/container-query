@@ -10,11 +10,11 @@ export default {
   },
 
   get: function(element: HTMLElement) {
-    containerRegistry.get(element);
+    return containerRegistry.get(element);
   },
 
   has: function(element: HTMLElement) {
-    containerRegistry.has(element);
+    return containerRegistry.has(element);
   },
 
   delete: function(element: HTMLElement) {
