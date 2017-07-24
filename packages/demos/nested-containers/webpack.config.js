@@ -1,7 +1,3 @@
-const fs = require("fs");
-const browserslist = fs.readFileSync(__dirname + "/browserslist").toString();
-const browsers = browserslist.split("\n").filter(query => query !== "");
-
 module.exports = {
   entry: "./src/js/main.js",
   output: {
@@ -14,19 +10,7 @@ module.exports = {
         test: /.*\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader",
-          options: {
-            presets: [
-              [
-                "env",
-                {
-                  targets: {
-                    browsers
-                  }
-                }
-              ]
-            ]
-          }
+          loader: "babel-loader"
         }
       }
     ]

@@ -1,4 +1,7 @@
-import { DEFINE_CONTAINER_NAME, CONTAINER_QUERY } from "../src/constants";
+import {
+  DEFINE_CONTAINER_NAME,
+  CONTAINER_QUERY
+} from "../../common/src/constants";
 
 export default class Node {
   /**

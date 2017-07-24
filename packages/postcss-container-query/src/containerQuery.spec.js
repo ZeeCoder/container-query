@@ -5,9 +5,9 @@ import {
   DEFINE_CONTAINER_NAME
 } from "../../common/src/constants";
 import containerQuery from "./containerQuery";
-import Root from "../../common/__mocks__/Root";
-import Node from "../../common/__mocks__/Node";
-import RuleNode from "../../common/__mocks__/RuleNode";
+import Root from "../__mocks__/Root";
+import Node from "../__mocks__/Node";
+import RuleNode from "../__mocks__/RuleNode";
 jest.mock("./saveJSON");
 
 test("should use the default json saving function if none was supplied", () => {

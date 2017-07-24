@@ -1,6 +1,6 @@
 import detectContainerDefinition from "./detectContainerDefinition";
-import Node from "../../common/__mocks__/Node";
-import RuleNode from "../../common/__mocks__/RuleNode";
+import Node from "../__mocks__/Node";
+import RuleNode from "../__mocks__/RuleNode";
 import { DEFINE_CONTAINER_NAME } from "../../common/src/constants";
 
 test("Container definition should be detected anywhere inside the rule", () => {

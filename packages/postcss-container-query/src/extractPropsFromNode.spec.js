@@ -1,6 +1,6 @@
 import extractPropsFromNode from "./extractPropsFromNode";
-import Node from "../../common/__mocks__/Node";
-import RuleNode from "../../common/__mocks__/RuleNode";
+import Node from "../__mocks__/Node";
+import RuleNode from "../__mocks__/RuleNode";
 import {
   HEIGHT_UNIT,
   WIDTH_UNIT,

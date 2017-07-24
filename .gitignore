@@ -1,6 +1,5 @@
 node_modules
 dist
-build
 coverage
 npm-debug.log
 lerna-debug.log
