@@ -1,4 +1,4 @@
-import trim from "lodash.trim";
+import { trim } from "lodash";
 
 /**
  * Extracts conditions as arrays from a single "param" string PostCSS provides

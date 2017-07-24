@@ -6,5 +6,5 @@
         }
       }]
     ],
-    "plugins": ["transform-flow-strip-types"]
+    "plugins": ["transform-flow-strip-types", "lodash"]
 }

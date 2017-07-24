@@ -1,8 +1,7 @@
 // @flow
 import type { ContainerSize, Styles, ElementData } from "../flow/types";
 import registry from "./containerRegistry";
-import _union from "lodash.union";
-import _difference from "lodash.difference";
+import { union, difference } from "lodash";
 import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 import objectAssign from "object-assign";
 
@@ -124,11 +123,11 @@ export default function getChangedStyles(
         let elementAffectedProps = getAffectedPropsByElementData(elementData);
 
         // Create removeProps object from all affected styles, not touching previously applied props however
-        let applicableRemoveProps = _difference(
+        let applicableRemoveProps = difference(
           elementAffectedProps,
           elementPreviouslyAppliedProps
         );
-        styleChangeSet[elementData.selector].removeProps = _union(
+        styleChangeSet[elementData.selector].removeProps = union(
           styleChangeSet[elementData.selector].removeProps,
           applicableRemoveProps
         );

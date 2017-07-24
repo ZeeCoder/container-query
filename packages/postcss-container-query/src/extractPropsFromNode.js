@@ -1,5 +1,5 @@
 // @flow
-import camelCase from "lodash.camelcase";
+import { camelCase } from "lodash";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import type { Styles, Node } from "../flow/types";
 

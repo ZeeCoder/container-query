@@ -25,8 +25,8 @@ export default {
   external: [
     "es6-weak-map",
     "object-assign",
-    "lodash.union",
-    "lodash.difference",
+    "lodash/difference",
+    "lodash/union",
     "raf",
     "mutation-observer",
     "resize-observer-polyfill"
