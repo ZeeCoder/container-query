@@ -5,8 +5,11 @@ import extractPropsFromNode from "./extractPropsFromNode";
 import saveJSON from "./saveJSON";
 
 /**
- * @todo comments
+ * Decides if a node should be processed or not.
+ * Only processing root-level rules and @container at-rules.
+ *
  * @param {Node} node
+ * @returns {boolean}
  */
 function shouldProcessNode(node) {
   return (
@@ -46,8 +49,6 @@ function containerQuery(options = {}) {
   return function(root) {
     let containers = {};
     let currentContainerSelector = null;
-    let currentDefaultQuery = null;
-    let currentDefaultQueryMap = null;
 
     const checkForPrecedingContainerDeclaration = node => {
       if (currentContainerSelector === null) {
@@ -58,12 +59,12 @@ function containerQuery(options = {}) {
     };
 
     /**
-         * Any node under "root" could potentially have container units in them.
-         * Add such nodes to the default query. (One without conditions which
-         * means it'll always apply)
-         *
-         * @return {Node}
-         */
+     * Any node under "root" could potentially have container units in them.
+     * Add such nodes to the default query. (One without conditions which
+     * means it'll always apply)
+     *
+     * @return {Node}
+     */
     const processRuleNodeForDefaultQuery = node => {
       const isContainer = isContainerCheck(node);
 
@@ -119,13 +120,13 @@ function containerQuery(options = {}) {
     };
 
     /**
-         * Processing a rule node under a container query.
-         * @param  {Node} node
-         * @returns {null|Object}
-         */
+     * Processing a rule node under a container query.
+     *
+     * @param  {Node} node
+     * @returns {null|Object}
+     */
     const processRuleNode = node => {
       const isContainer = isContainerCheck(node);
-      // @todo instead of creating a new elementData, check if the same selector was already processed under this container query
       const elementData = {
         selector: node.selector
       };
@@ -142,14 +143,19 @@ function containerQuery(options = {}) {
     };
 
     /**
-         * Returns true if the node's selector is the same as the currently
-         * processed container's.
-         *
-         * @param  {Node}  node
-         * @return {boolean}
-         */
+     * Returns true if the node's selector is the same as the currently
+     * processed container's.
+     *
+     * @param  {Node}  node
+     * @return {boolean}
+     */
     const isContainerCheck = node => {
       return currentContainerSelector === node.selector;
+    };
+
+    const initialiseContainer = selector => {
+      currentContainerSelector = selector;
+      containers[selector] = { selector, queries: [] };
     };
 
     root.walk((/** Node */ node) => {
@@ -160,12 +166,7 @@ function containerQuery(options = {}) {
       if (node.type === "rule") {
         // See if we have to auto-detect the container
         if (!currentContainerSelector && singleContainer) {
-          // @todo initialise new container method
-          currentContainerSelector = node.selector;
-          containers[currentContainerSelector] = {
-            selector: currentContainerSelector,
-            queries: []
-          };
+          initialiseContainer(node.selector);
         }
 
         // Check if there's a new container declared in the rule node
@@ -180,12 +181,7 @@ function containerQuery(options = {}) {
               );
             }
           } else {
-            // @todo initialise new container method
-            currentContainerSelector = newContainerSelector;
-            containers[currentContainerSelector] = {
-              selector: currentContainerSelector,
-              queries: []
-            };
+            initialiseContainer(newContainerSelector);
           }
         }
 

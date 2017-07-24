@@ -25,6 +25,22 @@ test("missing container declaration", () => {
   );
 });
 
+test("missing container declaration when the container has r-units", () => {
+  const pluginInstance = containerQuery({
+    singleContainer: false
+  });
+
+  expect(() => {
+    pluginInstance(
+      new Root().addNode(
+        new RuleNode(".Container").addDeclaration("line-height", `2rh`)
+      )
+    );
+  }).toThrowError(
+    `Missing @define-container declaration before the processed node.`
+  );
+});
+
 test("should ignore unrecognised at-rules, like @keyframes", done => {
   const pluginInstance = containerQuery({
     singleContainer: false,
@@ -310,6 +326,7 @@ test("proper json and css output", () => {
     });
 });
 
+// This also tests that containers are processed even without queries
 test("should auto-detect the container by default", done => {
   const pluginInstance = containerQuery({
     getJSON: (path, json) => {
@@ -368,16 +385,4 @@ test("should throw in non singleContainer mode for defining a different containe
   }).toThrow(
     `define-container declaration detected in singleContainer mode. Tried to override ".Container" with ".AnotherContainer".`
   );
-});
-
-test("should process containers without queries", () => {
-  // @todo notice and process values after a container was defined
-});
-
-test("should throw if container units were used without a preceding container declaration", () => {
-  // @todo
-});
-
-test("should throw if container rule in container query uses container units with prohibited props", () => {
-  // @todo
 });

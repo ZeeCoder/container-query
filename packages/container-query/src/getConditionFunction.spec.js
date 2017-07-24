@@ -127,7 +127,6 @@ test("should work with height conditions", () => {
   expect(gteCondFn({ height: 0 })).toBe(false);
 });
 
-// @todo test floating numbers
 test("should work with aspect-ratio conditions", () => {
   const ltCondFn = getConditionFunction([[["aspect-ratio", "<", 1]]]);
   const lteCondFn = getConditionFunction([[["aspect-ratio", "<=", 1]]]);
