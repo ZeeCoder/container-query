@@ -1,7 +1,6 @@
 // @flow
 import camelCase from "lodash.camelcase";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
-import isEmptyObject from "../../common/src/isEmptyObject";
 import type { Styles, Node } from "../../common/src/types";
 
 /**
@@ -95,11 +94,11 @@ export default function extractPropsFromNode(
   }
 
   // Getting rid of empty objects
-  if (isEmptyObject(response.styles)) {
+  if (Object.keys(response.styles).length === 0) {
     delete response.styles;
   }
 
-  if (isEmptyObject(response.values)) {
+  if (Object.keys(response.values).length === 0) {
     delete response.values;
   }
 

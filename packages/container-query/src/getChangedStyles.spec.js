@@ -65,14 +65,12 @@ test("should apply default queries without a condition function", () => {
       addStyle: {
         fontSize: "4.000px",
         lineHeight: "2.000px"
-      },
-      removeProps: []
+      }
     },
     ".Container__element": {
       addStyle: {
         lineHeight: "10px"
-      },
-      removeProps: []
+      }
     }
   });
 });
@@ -128,16 +126,14 @@ test("should return change sets on first run", () => {
     ".Container": {
       addStyle: {
         background: "#000"
-      },
-      removeProps: []
+      }
     },
     ".Container__element": {
       addStyle: {
         fontSize: "14px",
         lineHeight: "1.00px",
         background: "#ccc"
-      },
-      removeProps: []
+      }
     }
   });
   expect(
@@ -299,14 +295,8 @@ test("should generate empty change set if conditions allow", () => {
   const element = document.createElement("div");
   const size = { width: 100, height: 100 };
   expect(getChangedStyles(element, size)).toEqual({
-    ".Container": {
-      addStyle: {},
-      removeProps: []
-    },
-    ".Container__element": {
-      addStyle: {},
-      removeProps: []
-    }
+    ".Container": {},
+    ".Container__element": {}
   });
   expect(registryData.queryState).toEqual([false, true]);
 });
@@ -375,15 +365,13 @@ test("should always recalculate values", () => {
       addStyle: {
         lineHeight: "8.00px",
         fontSize: "6.00px"
-      },
-      removeProps: []
+      }
     },
     ".Container__element": {
       addStyle: {
         lineHeight: "6.00px",
         fontSize: "8.00px"
-      },
-      removeProps: []
+      }
     }
   });
   expect(registryData.queryState).toEqual([true, true, true]);
@@ -421,8 +409,7 @@ test("should be able to limit the precision of generated css values", () => {
       addStyle: {
         fontSize: "27.68px",
         lineHeight: "27.55px"
-      },
-      removeProps: []
+      }
     }
   });
   expect(registryData.queryState).toEqual([true]);
@@ -487,8 +474,7 @@ test("should handle multiple prop removal over multiple queries", () => {
         border: "none",
         fontSize: "13px",
         lineHeight: "15px"
-      },
-      removeProps: []
+      }
     }
   });
   expect(registryData.queryState).toEqual([true, true, false]);

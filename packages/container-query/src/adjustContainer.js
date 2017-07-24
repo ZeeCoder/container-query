@@ -2,7 +2,6 @@
 import getContainerSize from "./getContainerSize";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
-import isEmptyObject from "../../common/src/isEmptyObject";
 import getChangedStyles from "./getChangedStyles";
 import type { ContainerSize } from "../../common/src/types";
 
@@ -31,19 +30,20 @@ export default function adjustContainer(
 
   for (let elementSelector in changedStyles) {
     // Skip if no changes were detected
-    // @todo this could be smarter?
     if (
-      isEmptyObject(changedStyles[elementSelector].addStyle) &&
-      changedStyles[elementSelector].removeProps.length === 0
+      !changedStyles[elementSelector].addStyle &&
+      !Array.isArray(changedStyles[elementSelector].removeProps)
     ) {
       continue;
     }
 
     // Normalise to a single changeSet that can be applied by applyStylesToElements
-    const changeSet = changedStyles[elementSelector].addStyle;
-    changedStyles[elementSelector].removeProps.forEach(prop => {
-      changeSet[prop] = "";
-    });
+    const changeSet = changedStyles[elementSelector].addStyle || {};
+    if (Array.isArray(changedStyles[elementSelector].removeProps)) {
+      changedStyles[elementSelector].removeProps.forEach(prop => {
+        changeSet[prop] = "";
+      });
+    }
 
     // What element(s) do we need to add these styles to?
     const elements =

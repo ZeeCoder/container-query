@@ -10,15 +10,6 @@ import _difference from "lodash.difference";
 import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 import objectAssign from "object-assign";
 
-// Styles to be applied and props to be removed from elements, based on their
-// state and json stat
-export type StyleChangeSet = {
-  [selector: string]: {
-    addStyle: Styles,
-    removeProps: string[]
-  }
-};
-
 function getAffectedPropsByElementData(elementData: ElementData): string[] {
   const affectedStyles = {};
 
@@ -31,14 +22,19 @@ function getAffectedPropsByElementData(elementData: ElementData): string[] {
 export default function getChangedStyles(
   element: HTMLElement,
   size: ContainerSize
-): StyleChangeSet {
+): {
+  [selector: string]: {
+    addStyle?: Styles,
+    removeProps?: string[]
+  }
+} {
   const registryData = registry.get(element);
   if (!registryData) {
     return {};
   }
 
   const { queryState, jsonStats, instance } = registryData;
-  const styleChangeSet: StyleChangeSet = {};
+  const styleChangeSet = {};
   const previouslyAppliedProps: {
     [selector: string]: string[]
   } = {};
@@ -180,6 +176,17 @@ export default function getChangedStyles(
         );
       }
     });
+  }
+
+  // Remove empty objects / arrays
+  for (let selector in styleChangeSet) {
+    if (Object.keys(styleChangeSet[selector].addStyle).length === 0) {
+      delete styleChangeSet[selector].addStyle;
+    }
+
+    if (styleChangeSet[selector].removeProps.length === 0) {
+      delete styleChangeSet[selector].removeProps;
+    }
   }
 
   return styleChangeSet;
