@@ -1,7 +1,7 @@
 // @flow
 import camelCase from "lodash.camelcase";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
-import type { Styles, Node } from "../../common/src/types";
+import type { Styles, Node } from "../flow/types";
 
 /**
  * Extracts styles and container units to an object from the given node.

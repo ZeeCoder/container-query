@@ -1,9 +1,5 @@
 // @flow
-import type {
-  ContainerSize,
-  Styles,
-  ElementData
-} from "../../common/src/types";
+import type { ContainerSize, Styles, ElementData } from "../flow/types";
 import registry from "./containerRegistry";
 import _union from "lodash.union";
 import _difference from "lodash.difference";

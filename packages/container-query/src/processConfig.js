@@ -1,7 +1,7 @@
 // @flow
 import objectAssign from "object-assign";
 import getConditionFunction from "./getConditionFunction";
-import type { QueryStats } from "../../common/src/types";
+import type { QueryStats } from "../flow/types";
 
 /**
  * Returns an processed copy of the given configuration object.

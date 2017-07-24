@@ -3,7 +3,7 @@ import getContainerSize from "./getContainerSize";
 import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
 import getChangedStyles from "./getChangedStyles";
-import type { ContainerSize } from "../../common/src/types";
+import type { ContainerSize } from "../flow/types";
 
 /**
  * Calculates and applies styles based on which queries applied to the element

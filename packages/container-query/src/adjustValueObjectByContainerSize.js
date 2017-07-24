@@ -1,7 +1,7 @@
 // @flow
 import objectAssign from "object-assign";
 import convertCompositValue from "./convertCompositValue";
-import type { ContainerSize, Styles } from "../../common/src/types";
+import type { ContainerSize, Styles } from "../flow/types";
 
 /**
  * Ex:

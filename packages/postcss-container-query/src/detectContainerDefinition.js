@@ -1,5 +1,5 @@
 // @flow
-import type { Node } from "../../common/src/types";
+import type { Node } from "../flow/types";
 
 /**
  * Returns the container's selector, or null if no @define-container was found.

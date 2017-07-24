@@ -1,5 +1,5 @@
 // @flow
-import type { ContainerSize } from "../../common/src/types";
+import type { ContainerSize } from "../flow/types";
 import convertSingleValue from "./convertSingleValue";
 
 /**

@@ -1,4 +1,8 @@
-// @flow
+export type ContainerSize = {
+  width: number,
+  height: number
+};
+
 export type Styles = {
   [property: string]: string
 };
@@ -7,26 +11,6 @@ export type ElementData = {
   selector: string,
   styles: Styles,
   values: Styles
-};
-
-export type ContainerSize = {
-  width: number,
-  height: number
-};
-
-export type Node = {
-  type: string,
-  prop: string,
-  value: string,
-  selector: string,
-  error: Function,
-  nodes: Node[]
-};
-
-export type RegistryData = {
-  instance: Object,
-  jsonStats: QueryStats,
-  queryState: boolean[]
 };
 
 export type QueryStats = {
@@ -40,4 +24,10 @@ export type QueryStats = {
       Values: Styles
     }>
   }>
+};
+
+export type RegistryData = {
+  instance: Object,
+  jsonStats: QueryStats,
+  queryState: boolean[]
 };

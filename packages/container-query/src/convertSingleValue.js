@@ -1,5 +1,5 @@
 // @flow
-import type { ContainerSize } from "../../common/src/types";
+import type { ContainerSize } from "../flow/types";
 
 /**
  * Converts a value possibly using a container unit into a pixel value.

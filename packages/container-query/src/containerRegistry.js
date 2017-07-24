@@ -1,6 +1,6 @@
 // @flow
 import WeakMap from "es6-weak-map";
-import type { RegistryData } from "../../common/src/types";
+import type { RegistryData } from "../flow/types";
 
 const containerRegistry: WeakMap = new WeakMap();
 
