@@ -7,7 +7,7 @@ export default function applyStylesToElements(styles, elements) {
 
   for (let i = 0; i < elementsLength; i++) {
     for (let prop in styles) {
-      elements[i].style[prop] = styles[prop];
+      elements[i].style.setProperty(prop, styles[prop]);
     }
   }
 }

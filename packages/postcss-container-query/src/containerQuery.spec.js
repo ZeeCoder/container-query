@@ -54,16 +54,16 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
                 {
                   selector: ".Container",
                   values: {
-                    lineHeight: `3rh`,
-                    fontSize: `1rh`,
-                    marginLeft: `2rw`
+                    "line-height": `3rh`,
+                    "font-size": `1rh`,
+                    "margin-left": `2rw`
                   }
                 },
                 {
                   selector: ".Container__element",
                   values: {
-                    fontSize: `1rw`,
-                    lineHeight: `2rw`
+                    "font-size": `1rw`,
+                    "line-height": `2rw`
                   }
                 }
               ]
@@ -73,7 +73,7 @@ test("should ignore unrecognised at-rules, like @keyframes", done => {
               elements: [
                 {
                   selector: ".Container",
-                  styles: { fontSize: "24px" }
+                  styles: { "font-size": "24px" }
                 }
               ]
             }
@@ -240,8 +240,8 @@ test("proper json and css output", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `50rh`,
-                  lineHeight: `100rh`
+                  "font-size": `50rh`,
+                  "line-height": `100rh`
                 }
               }
             ]
@@ -252,7 +252,7 @@ test("proper json and css output", () => {
               {
                 selector: ".Container",
                 values: {
-                  fontSize: `70rh`
+                  "font-size": `70rh`
                 }
               }
             ]
@@ -306,7 +306,7 @@ test("proper json and css output", () => {
               {
                 selector: ".Container2",
                 values: {
-                  fontSize: `70rh`
+                  "font-size": `70rh`
                 }
               },
               {
@@ -338,8 +338,8 @@ test("should auto-detect the container by default", done => {
               {
                 selector: ".Container",
                 values: {
-                  lineHeight: `3rh`,
-                  fontSize: `2rh`
+                  "line-height": `3rh`,
+                  "font-size": `2rh`
                 }
               }
             ]
@@ -384,5 +384,41 @@ test("should throw in non singleContainer mode for defining a different containe
     );
   }).toThrow(
     `define-container declaration detected in singleContainer mode. Tried to override ".Container" with ".AnotherContainer".`
+  );
+});
+
+test("should extract css custom properties", done => {
+  const pluginInstance = containerQuery({
+    getJSON: (path, json) => {
+      expect(json).toEqual({
+        selector: ".Container",
+        queries: [
+          {
+            elements: [
+              {
+                selector: ".Container",
+                values: {
+                  "--rw": `1rw`,
+                  "--rh": `1rh`,
+                  "--rmin": `1rmin`,
+                  "--rmax": `1rmax`
+                }
+              }
+            ]
+          }
+        ]
+      });
+      done();
+    }
+  });
+
+  pluginInstance(
+    new Root().addNode(
+      new RuleNode(".Container")
+        .addDeclaration("--rw", `1rw`)
+        .addDeclaration("--rh", `1rh`)
+        .addDeclaration("--rmin", `1rmin`)
+        .addDeclaration("--rmax", `1rmax`)
+    )
   );
 });

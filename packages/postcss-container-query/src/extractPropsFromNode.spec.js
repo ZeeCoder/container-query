@@ -17,7 +17,7 @@ test("should only accept rule nodes", () => {
 test("should extract all styles", () => {
   expect(
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addDeclaration("height", "42px")
         .addDeclaration("width", "42px")
         .addDeclaration("font-size", `50rh`)
@@ -31,18 +31,18 @@ test("should extract all styles", () => {
       border: "none"
     },
     values: {
-      fontSize: `50rh`,
-      lineHeight: `100rw`
+      "font-size": `50rh`,
+      "line-height": `100rw`
     }
   });
 });
 
 test("should extract all container unit styles", () => {
-  expect(extractPropsFromNode(new RuleNode(".container"), true)).toEqual({});
+  expect(extractPropsFromNode(new RuleNode(".Container"), true)).toEqual({});
 
   expect(
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("width", "42px")
         .addDeclaration("height", `150rw`)
@@ -57,8 +57,8 @@ test("should extract all container unit styles", () => {
   ).toEqual({
     values: {
       height: `150rw`,
-      fontSize: `5rmin`,
-      lineHeight: `42rmax`
+      "font-size": `5rmin`,
+      "line-height": `42rmax`
     }
   });
 });
@@ -66,7 +66,7 @@ test("should extract all container unit styles", () => {
 test("should throw if with / height are using the wrong container units", () => {
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("width", `42rminpx`),
       {
@@ -80,7 +80,7 @@ test("should throw if with / height are using the wrong container units", () => 
 
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("height", `42rminpx`),
       {
@@ -94,7 +94,7 @@ test("should throw if with / height are using the wrong container units", () => 
 
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("width", `42rmaxpx`),
       {
@@ -108,7 +108,7 @@ test("should throw if with / height are using the wrong container units", () => 
 
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("height", `42rmaxpx`),
       {
@@ -122,7 +122,7 @@ test("should throw if with / height are using the wrong container units", () => 
 
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("height", `42rh`),
       {
@@ -134,7 +134,7 @@ test("should throw if with / height are using the wrong container units", () => 
 
   expect(() => {
     extractPropsFromNode(
-      new RuleNode(".container")
+      new RuleNode(".Container")
         .addContainerDefinition()
         .addDeclaration("width", `42rw`),
       {
@@ -146,7 +146,7 @@ test("should throw if with / height are using the wrong container units", () => 
 });
 
 test("should strip container units", () => {
-  const node = new RuleNode(".container")
+  const node = new RuleNode(".Container")
     .addDeclaration("border", "none")
     .addDeclaration("margin-left", `2rw`)
     .addDeclaration("font-size", "12px")
@@ -160,4 +160,25 @@ test("should strip container units", () => {
   expect(node.nodes.length).toBe(2);
   expect(node.nodes[0].prop).toBe("border");
   expect(node.nodes[1].prop).toBe("font-size");
+});
+
+test("should handle css custom properties", () => {
+  const node = new RuleNode(".Container")
+    .addDeclaration("--rw", "1rw")
+    .addDeclaration("--rh", "1rh")
+    .addDeclaration("--rmin", "1rmin")
+    .addDeclaration("--rmax", "1rmax")
+    .addDeclaration("--r-unit", "1rh");
+
+  const props = extractPropsFromNode(node);
+
+  expect(props).toEqual({
+    values: {
+      "--rw": "1rw",
+      "--rh": "1rh",
+      "--rmin": "1rmin",
+      "--rmax": "1rmax",
+      "--r-unit": "1rh"
+    }
+  });
 });

@@ -3,26 +3,29 @@
   overflow: hidden;
   background: #ccc;
   border: 1px solid #aaa;
+  --rw: 1rw;
+  --rh: 1rh;
+  --rmin: 1rmin;
 
   &__info {
     width: 100%;
     display: flex;
-    padding: 2rw;
+    padding: calc(2*var(--rw));
     box-sizing: border-box;
-    font-size: 6rw;
+    font-size: calc(6*var(--rw));
     align-items: center;
   }
 
   &__avatar {
     border-radius: 100%;
     background: #eee;
-    border: 0.5rmin solid #666;
-    flex: 0 0 13rw;
-    height: 13rw;
+    border: calc(0.5*var(--rmin)) solid #666;
+    flex: 0 0 calc(13*var(--rw));
+    height: calc(13*var(--rw));
   }
 
   &__name {
-    padding-left: 2rw;
+    padding-left: calc(2*var(--rw));
     white-space: nowrap;
     flex: 0 0 auto;
     overflow: hidden;
@@ -31,7 +34,7 @@
   }
 
   &__username {
-    padding: 0 2rw;
+    padding: 0 calc(2*var(--rw));
     white-space: nowrap;
     flex: 1 0 auto;
     overflow: hidden;
@@ -51,7 +54,7 @@
     background: #ccc;
     padding-bottom: 75%;
     height: 0;
-    font-size: 20rh;
+    font-size: calc(20*var(--rh));
     color: #999;
     position: relative;
     margin: 4% 5% 5% 10%;
@@ -68,8 +71,8 @@
 
   &__actions {
     display: flex;
-    font-size: 5rh;
-    line-height: 10rh;
+    font-size: calc(5*var(--rh));
+    line-height: calc(10*var(--rh));
     border-top: 1px solid #aaa;
   }
 

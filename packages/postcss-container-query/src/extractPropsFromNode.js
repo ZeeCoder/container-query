@@ -80,9 +80,9 @@ export default function extractPropsFromNode(
     }
 
     if (containerUnitsUsed) {
-      response.values[camelCase(node.prop)] = node.value;
+      response.values[node.prop] = node.value;
     } else {
-      response.styles[camelCase(node.prop)] = node.value;
+      response.styles[node.prop] = node.value;
     }
 
     if (opts.stripContainerUnits && containerUnitsUsed) {
