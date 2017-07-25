@@ -1,0 +1,40 @@
+body {
+  padding: 15px;
+  background: #ddd;
+}
+
+.App {
+  font-family: sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+
+  &__post {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+  }
+
+  @media (width > 320px) {
+    &__post {
+      width: 50%;
+    }
+  }
+
+  @media (width > 640px) {
+    &__post {
+      width: 33.33%;
+    }
+  }
+
+  @media (width > 1200px) {
+    &__post {
+      width: 25%;
+    }
+  }
+
+  @media (width > 1600px) {
+    &__post {
+      width: 20%;
+    }
+  }
+}

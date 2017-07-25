@@ -1,0 +1,86 @@
+.Post {
+  position: relative;
+  overflow: hidden;
+  background: #ccc;
+  border: 1px solid #aaa;
+
+  &__info {
+    width: 100%;
+    display: flex;
+    padding: 2rw;
+    box-sizing: border-box;
+    font-size: 6rw;
+    align-items: center;
+  }
+
+  &__avatar {
+    border-radius: 100%;
+    background: #eee;
+    border: 0.5rmin solid #666;
+    flex: 0 0 13rw;
+    height: 13rw;
+  }
+
+  &__name {
+    padding-left: 2rw;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #444;
+  }
+
+  &__username {
+    padding: 0 2rw;
+    white-space: nowrap;
+    flex: 1 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #444;
+
+    &:before {
+      content: ' • @';
+    }
+  }
+
+  &__since {
+    color: #444;
+  }
+
+  &__image {
+    background: #ccc;
+    padding-bottom: 75%;
+    height: 0;
+    font-size: 20rh;
+    color: #999;
+    position: relative;
+    margin: 4% 5% 5% 10%;
+    border: 1px solid #999;
+
+    &:before {
+      content: 'IMG';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    font-size: 5rh;
+    line-height: 10rh;
+    border-top: 1px solid #aaa;
+  }
+
+  &__action {
+    cursor: pointer;
+    flex: 1 0 25%;
+    text-align: center;
+    transition: background-color .2s;
+
+    &:hover {
+      background-color: #bbb;
+    }
+  }
+}

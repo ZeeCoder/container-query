@@ -5,7 +5,6 @@
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@zeecoder/container-query": "^1.0.3",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.23.1",
     "babel-loader": "^7.1.1",
