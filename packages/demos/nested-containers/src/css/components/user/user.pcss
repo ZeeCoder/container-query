@@ -1,12 +1,16 @@
 .user {
     @define-container;
 
+    --rw: 1rw;
+    --rmin: 1rmin;
+    --rmax: 1rmax;
+
     display: flex;
     flex-direction: column;
     background: #ccc;
     overflow: hidden;
-    border: 0.5rmax solid;
-    border-radius: 3rmin;
+    border: calc(0.5*var(--rmax)) solid;
+    border-radius: calc(3*var(--rmin));
     min-height: 200px;
     max-height: 300px;
     position: fixed;
@@ -18,7 +22,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1rmax;
+        padding: calc(var(--rmax));
 
         @container (width > 300px) {
             flex-direction: row;
@@ -28,14 +32,14 @@
     &__image {
         min-height: 60px;
         min-width: 60px;
-        max-width: 100rw;
-        height: 30rw;
-        width: 30rw;
+        max-width: calc(100*var(--rw));
+        height: calc(30*var(--rw));
+        width: calc(30*var(--rw));
         max-height: 100px;
         max-width: 100px;
         border-radius: 100%;
         border: 1px solid #666;
-        border-width: 1.25rmin;
+        border-width: calc(1.25*var(--rmin));
         background: #eee;
     }
 
@@ -57,7 +61,7 @@
         @container (width > 300px) {
             text-align: left;
             width: auto;
-            padding-left: 5rw;
+            padding-left: calc(5*var(--rw));
             margin: 0;
         }
     }

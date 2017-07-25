@@ -1,15 +1,20 @@
 .social-link {
     @define-container;
+
+    --rh: 1rh;
+    --rw: 1rw;
+    --rmin: 1rmin;
+
     overflow: hidden;
     background: #ccc;
-    border: calc(0.2rh + 0.2rw) solid #999;
-    border-radius: calc(0.3rh + 0.3rw);
+    border: calc((0.2*var(--rh)) + (0.2*var(--rw))) solid #999;
+    border-radius: calc((0.3*var(--rh)) + (0.3*var(--rw)));
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     color: #333;
-    font-size: 85rmin;
+    font-size: calc(85*var(--rmin));
     position: absolute;
     left: 0;
     top: 0;
@@ -18,7 +23,7 @@
     transition: background-color .3s, color .3s;
 
     @container (aspect-ratio > 3) {
-        font-size: 60rh;
+        font-size: calc(60*var(--rh));
     }
 
     &:hover {
@@ -28,7 +33,7 @@
 
     &__icon {
         @container (aspect-ratio > 3) {
-            margin-left: 20rh;
+            margin-left: calc(20*var(--rh));
         }
     }
 
@@ -40,8 +45,8 @@
 
         @container (aspect-ratio > 3) {
             display: block;
-            margin-left: 5rw;
-            margin-right: 20rh;
+            margin-left: calc(5*var(--rw));
+            margin-right: calc(20*var(--rh));
         }
     }
 }
