@@ -1,6 +1,4 @@
-.user {
-    @define-container;
-
+.User {
     --rw: 1rw;
     --rmin: 1rmin;
     --rmax: 1rmax;
@@ -32,21 +30,18 @@
     &__image {
         min-height: 60px;
         min-width: 60px;
-        max-width: calc(100*var(--rw));
         height: calc(30*var(--rw));
         width: calc(30*var(--rw));
         max-height: 100px;
         max-width: 100px;
         border-radius: 100%;
-        border: 1px solid #666;
-        border-width: calc(1.25*var(--rmin));
+        border: calc(1.25*var(--rmin)) solid #666;
         background: #eee;
     }
 
     &__name {
         display: none;
         font-family: sans-serif;
-        margin: 10px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
