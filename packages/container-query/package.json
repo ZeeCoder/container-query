@@ -8,11 +8,11 @@
     "node": ">=4"
   },
   "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.es.js",
   "scripts": {
     "test": "jest",
     "prebuild": "flow check",
-    "build": "rollup -c",
-    "watch:build": "rollup -c -w"
+    "build": "rollup -c rollup/rollup.es.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
@@ -25,7 +25,9 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-uglify": "^2.0.1"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "uglify-es": "^3.0.26"
   },
   "dependencies": {
     "es6-weak-map": "^2.0.2",

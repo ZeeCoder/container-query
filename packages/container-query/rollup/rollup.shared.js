@@ -1,10 +1,10 @@
-import commonjs from "rollup-plugin-commonjs";
+import fs from "fs";
 import flow from "rollup-plugin-flow";
 import babel from "rollup-plugin-babel";
-import uglify from "rollup-plugin-uglify";
-import fs from "fs";
 
-const babelrc = JSON.parse(fs.readFileSync("./.babelrc").toString());
+const babelrc = JSON.parse(
+  fs.readFileSync(__dirname + "/../.babelrc").toString()
+);
 
 // To make jest work, we have a "base" babelrc config in the directory, which
 // however needs some tweaks to make rollup happy too.
@@ -19,9 +19,8 @@ babelrc.presets.forEach(preset => {
 });
 
 export default {
-  entry: "src/Container.js",
-  targets: [{ dest: "dist/bundle.cjs.js", format: "cjs" }],
-  plugins: [flow(), commonjs(), babel(babelrc), uglify()],
+  entry: __dirname + "/../src/Container.js",
+  plugins: [flow(), babel(babelrc)],
   external: [
     "es6-weak-map",
     "object-assign",
