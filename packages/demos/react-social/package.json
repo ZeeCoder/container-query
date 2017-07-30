@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "react-social",
   "version": "1.0.0",
   "description": "",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -25,5 +25,6 @@
   "scripts": {
     "build": "webpack"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "private": true
 }

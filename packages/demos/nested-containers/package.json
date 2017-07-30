@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "nested-containers",
   "version": "1.0.0",
   "description": "",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -21,5 +21,6 @@
   },
   "dependencies": {
     "style-loader": "^0.18.2"
-  }
+  },
+  "private": true
 }
