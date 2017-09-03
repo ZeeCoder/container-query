@@ -5,10 +5,12 @@
 As previous examples show, containers can be declared by adding
 `@define-container;` inside a rule that's meant to be used as a container.
 
+(Unnecessary in `singleContainer` mode)
+
 Multiple such definitions in a single CSS file are allowed. All container
 queries and units will be relative to the previous declaration.
 
-Like so:
+**Example**
 
 ```pcss
 .User {
@@ -81,9 +83,9 @@ size.
 
 The supported units are: **rh**, **rw**, **rmin**, **rmax**.
 
-**Syntax**: `<value><ch/cw>px`
+**Syntax**: `<value><rh/rw/rmin/rmax>`
 
-Depending on whether ch or cw is used, value stands for a percentage of the
+Depending on whether rh or rw is used, value stands for a percentage of the
 container's width or height.
 
 If a container's size is:
@@ -114,12 +116,12 @@ And so on.
     
     &__avatar {
         border-radius: 100%;
-        border: 1vminpx solid;
+        border: 1rmin solid;
     }
     
     @container (height > 150px) {
         font-size: 15rh;
-        border: 5vminpx solid;
+        border: 5rmin solid;
     }
 }
 ```
@@ -127,9 +129,34 @@ And so on.
 Note that recalculating and applying these values is costly, since it's
 done on each resize event (or `adjust` call).
 
-@todo explain calc trick
+### CSS Custom Properties
 
-**Example**
+Setting custom properties are supported, which you can use to improve
+performance.
+
+```pcss
+.User {
+    @define-container;
+    --rh: 1rh;
+    --rmin: 1rmin;
+    
+    &__name {
+        font-size: calc(10*var(--rh));
+    }
+    
+    &__avatar {
+        border-radius: 100%;
+        border: calc(1*var(--rmin)) solid;
+    }
+    
+    @container (height > 150px) {
+        font-size: calc(15*var(--rh));
+        border: calc(5*var(--rmin)) solid;
+    }
+}
+```
+
+## Note
 
 You might be tempted to use container units to set an aspect ratio between the
 container's width / height:
@@ -146,3 +173,5 @@ While this works, there's a [pure CSS solution too](https://codepen.io/ZeeCaptei
 
 Admittedly more boilerplate, but it might worth avoiding JS when it's not really
 necessary by using flexbox, CSS grid and other vanilla CSS solutions instead.
+
+**Next:** [Api](api.md)

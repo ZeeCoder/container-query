@@ -13,21 +13,25 @@ plugin, and options are extra options about how the instance should behave.
 
 ```js
 {
-    adjustOnResize: false, // Will be true by default in ^2.0.0
-    adjustOnInstantiation: true
+    adjustOnResize: true,
+    adjustOnInstantiation: true,
+    valuePrecision: 2,
 }
 ```
 
 - *adjustOnResize*: If true, then the container will readjust itself based on the
 element's height automatically.
-This is done by using a [ResizeObserver](https://github.com/que-etc/resize-observer-polyfill) polyfill.
+This is done by using a [ResizeObserver](https://github.com/que-etc/resize-observer-polyfill)
+polyfill.
 - *adjustOnInstantiation*: Whether to do an initial adjustment call on instantiation.
+- *valuePrecision*: "2" would produce values like "1.23px", "3" would result in
+"1.234px" and so on.
 
 These options may be useful to you, if you want to fine-tune when readjustments
 should happen.
 
-*For example*: You could optimise animations, or only readjust containers on window
-resize, if that fits your needs.
+*For example*: You could optimise for animations, or only readjust containers on
+window resize, if that fits your needs.
 
 **Instance methods**
 
@@ -53,14 +57,11 @@ postCSS([
             // 
             // `jsonStats`: the json stats having all the container-related data
             // needed for the Container instances.
-            // Structural Reminder:
-            // {
-            //   ".SomeComponent": {},
-            //   ".OtherComponent": {},
-            // }
-            // Keys here are the selectors having the `@define-container`
-            // declaration.
+            // It's structure was previously described in the "Multiple Containers"
+            // section.
         }
     })
 ])
 ```
+
+**Next:** [CSS Preprocessors](css-preprocessors.md)

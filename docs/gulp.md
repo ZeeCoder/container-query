@@ -1,30 +1,34 @@
 # Usage with Gulp
 
 If you're not a fan of processing styles with webpack, then you can use a task
-runner instead, like Gulp.
+runner instead (like Gulp), to process your CSS and generate the JSON file(s).
 
-Your task could look something like this:
+Your gulpfile could look something like this:
 
 ```js
 const gulp = require('gulp');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
-const postcssImport = require('postcss-import');
 const postcssNested = require('postcss-nested');
-const containerQuery = require('@zeecoder/container-query/containerQuery');
+const containerQuery = require('@zeecoder/postcss-container-query');
 
 gulp.task('styles', () => {
-    return gulp.src('styles/main.pcss')
+    return gulp.src('styles.pcss')
         .pipe(postcss([
-            postcssImport(),
             postcssNested({ bubble: ['container'] }),
-            containerQuery(),
+            containerQuery({
+              singleContainer: false
+            }),
         ]))
-        .pipe(rename('main.css'))
-        .pipe(gulp.dest('web/dist'));
+        .pipe(rename('styles.css'))
+        .pipe(gulp.dest('dist'));
 });
-
 ```
 
-Now you'll have both main.css and main.json. The CSS can then be served separately
-from the JS, while webpack could still `require()` the JSON and do its thing. 
+The above CSS can include multiple containers thanks to `singleContainer: false`,
+and [@define-container](docs/define-container.md) declarations.
+
+This task creates a styles.css and styles.json file, which can then be used by
+webpack as [you've seen it before](webpack-and-react.md).
+
+**Next:** [Multiple Containers](multiple-containers.md)

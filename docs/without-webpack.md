@@ -13,7 +13,9 @@ information
 4) Create a Container instance for all container html elements
 
 For instance, imagine you have a main.pcss file, which imports all other
-components.(Using Gulp as described above.)
+components. 
+
+(Using Gulp as described previously.)
 
 Then, you can serve the JSON from the backend, and bundle the JS with your
 favourite JS bundler, to grab that JSON and instantiate the Container class for
@@ -44,4 +46,6 @@ for (let containerSelector in containerStats) {
 }
 ```
 
-The above doesn't cover dynamically created elements, but you get the idea.
+The above doesn't cover dynamically created elements, but that's the general idea.
+
+**Next:** [Syntax](syntax.md)
