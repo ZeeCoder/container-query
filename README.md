@@ -23,7 +23,7 @@ A container is just an HTML element, which may contain other elements.
 You may want to think of them as "**Blocks**" ([BEM](http://getbem.com/naming/))
 or "**Components**" ([React](https://facebook.github.io/react/docs/components-and-props.html)).
 
-### Highlights
+## Highlights
 
 - Built with webpack / React in mind, but can be used with legacy projects too.
 - Uses a [ResizeObserver polyfill](https://github.com/que-etc/resize-observer-polyfill)
@@ -35,7 +35,7 @@ and other properties to a value that's changing with the container's size.)
 - Diffing algorithm which applies / removes only the necessary styles when a
 change occurs.
 
-### How does it look
+## Look and feel
 
 ```pcss
 // User.pcss
@@ -103,7 +103,11 @@ or
 - [API](docs/api.md)
 - [Usage with CSS Preprocessors](docs/css-preprocessors.md)
 
-### Browser Support
+## Demos
+
+You can check out the demos in this repository under the `packages/demos` path.
+
+## Browser Support
 
 Works with all modern browsers and IE10+
 
