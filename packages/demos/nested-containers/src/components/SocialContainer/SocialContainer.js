@@ -22,10 +22,6 @@ export default class SocialContainer extends Component {
   }
 
   render() {
-    return (
-      <div className="SocialContainer">
-        {this.renderChildren()}
-      </div>
-    );
+    return <div className="SocialContainer">{this.renderChildren()}</div>;
   }
 }

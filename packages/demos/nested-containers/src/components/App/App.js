@@ -15,10 +15,6 @@ export default class App extends Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.renderUsers()}
-      </div>
-    );
+    return <div>{this.renderUsers()}</div>;
   }
 }
