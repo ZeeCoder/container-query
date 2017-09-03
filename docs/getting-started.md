@@ -7,11 +7,12 @@ The plugin analyses the your CSS and extracts all container query related
 data, producing a JSON file.
 
 Depending on your setup (Gulp / webpack, etc) this file may or may not contain
-more than one container's data. See [Multiple Containers](multiple-containers.md)
-for more details.
+more than one container's data.
 
-For each containers you have in your app, you'll need to create a new `Container`
-instance, fed with the extracted css stats.
+(See [Multiple Containers](multiple-containers.md) for more details.)
+
+For each containers you have in your app, you'll need to instantiate a new
+`Container` with the extracted css stats.
 
 Once you've done that, the runtime will take care of the rest.
 

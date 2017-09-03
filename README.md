@@ -10,10 +10,6 @@ A PostCSS plugin and Javascript runtime combination, which allows you to write
 
 ## Introduction
 
-**The Way It Works**
-
-> CSS → PostCSS plugin → JSON → Runtime
-
 Container queries work the same way media queries do: they allow you to apply
 styles to elements when certain conditions are met.
 
@@ -23,6 +19,7 @@ relative to a container element's size.
 **What is a Container?**
 
 A container is just an HTML element, which may contain other elements.
+
 You may want to think of them as "**Blocks**" ([BEM](http://getbem.com/naming/))
 or "**Components**" ([React](https://facebook.github.io/react/docs/components-and-props.html)).
 
@@ -63,11 +60,11 @@ change occurs.
 }
 ```
 
-The above example assumes webpack, using BEM naming conventions and the
-postcss-loader.
+The above example assumes **webpack**, using **BEM** naming conventions and the
+**postcss-loader**.
 
 `.User` is automatically detected to be the container (the first class in the
-proccessed file), and all following container queries / units will be relative
+proccessed file), and all following container queries / units will be related
 to the containing `.User` element.
 
 The html then could look like this:

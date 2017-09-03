@@ -1,6 +1,3 @@
-
-@todo document @define-container; here.
-@todo document multiple containers in a single file (singleContainer: false)
 # Multiple Containers
 
 Instead of processing each container individually, you might want to instead
