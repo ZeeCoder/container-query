@@ -47,5 +47,8 @@
     "javascript",
     "component",
     "module"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
