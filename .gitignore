@@ -1,6 +1,8 @@
-node_modules/
-build/
-coverage/
+node_modules
+dist
+coverage
 npm-debug.log
+lerna-debug.log
+yarn-error.log
 .idea
 .DS_Store

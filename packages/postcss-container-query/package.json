@@ -1,0 +1,51 @@
+{
+  "name": "@zeecoder/postcss-container-query",
+  "description": "PostCSS processing for container queries, using a media query like syntax.",
+  "license": "MIT",
+  "version": "2.0.0",
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
+  "engines": {
+    "node": ">=4"
+  },
+  "main": "dist/bundle.cjs.js",
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c",
+    "prebuild": "flow check"
+  },
+  "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.0",
+    "flow-bin": "^0.50.0",
+    "jest": "^20.0.4",
+    "rollup": "^0.42.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-babili": "^3.1.0",
+    "rollup-plugin-flow": "^1.1.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "postcss": "^6.0.1"
+  },
+  "keywords": [
+    "rwd",
+    "responsive-design",
+    "responsive",
+    "postcss",
+    "postcss-plugin",
+    "container-query",
+    "container-queries",
+    "element-query",
+    "element-queries",
+    "media-query",
+    "media-queries",
+    "css",
+    "browser",
+    "query",
+    "javascript",
+    "component",
+    "module"
+  ]
+}

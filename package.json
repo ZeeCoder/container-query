@@ -1,39 +1,7 @@
 {
-  "name": "@zeecoder/container-query",
-  "version": "1.3.0",
-  "description": "A PostCSS plugin and Javascript runtime combination, which allows you to write @container queries in your CSS the same way you would write @media queries.",
-  "main": "index.js",
-  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
-  "engines": {
-    "node": ">=4"
-  },
-  "keywords": [
-    "rwd",
-    "responsive-design",
-    "responsive",
-    "postcss",
-    "postcss-plugin",
-    "container-query",
-    "element-query",
-    "css",
-    "media-query",
-    "browser",
-    "query",
-    "javascript",
-    "component",
-    "module"
-  ],
+  "name": "container-query-monorepo",
   "license": "MIT",
-  "dependencies": {
-    "es6-weak-map": "^2.0.2",
-    "lodash.camelcase": "^4.3.0",
-    "lodash.trim": "^4.5.1",
-    "mutation-observer": "^1.0.2",
-    "object-assign": "^4.1.1",
-    "postcss": "^6.0.0",
-    "raf": "^3.3.2",
-    "resize-observer-polyfill": "^1.4.2"
-  },
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ZeeCoder/container-query"
@@ -41,37 +9,25 @@
   "bugs": {
     "url": "https://github.com/ZeeCoder/container-query/issues"
   },
+  "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.23.1",
-    "babel-jest": "^20.0.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-es2015": "^6.22.0",
     "coveralls": "^2.11.16",
-    "eslint": "^3.19.0",
-    "eslint-config-prettier": "^2.1.0",
-    "eslint-plugin-prettier": "^2.0.1",
     "husky": "^0.14.3",
     "jest": "^20.0.4",
-    "lint-staged": "^4.0.1",
-    "prettier": "^1.3.1"
+    "lerna": "2.1.2",
+    "lint-staged": "^4.0.4",
+    "prettier": "^1.6.1"
   },
   "scripts": {
-    "pretest": "yarn run lint",
     "test": "jest --coverage",
-    "lint": "eslint src",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "build": "babel src --out-dir build --ignore spec.js",
-    "watch:build": "babel src --watch --out-dir build --ignore spec.js",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "watch:test": "jest --watch --notify",
-    "prepublish": "yarn run build",
     "precommit": "lint-staged",
-    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
-    "prettify": "prettier --write --tab-width 4 '{src,__mocks__}/**/*.js'"
+    "prettify": "prettier --write 'packages/**/*.js'"
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write --tab-width=4",
+      "prettier --write",
       "git add"
     ]
   }

@@ -1,0 +1,58 @@
+{
+  "name": "@zeecoder/container-query",
+  "description": "A modern container-query solution.",
+  "license": "MIT",
+  "version": "2.0.0",
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
+  "engines": {
+    "node": ">=4"
+  },
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.es.js",
+  "scripts": {
+    "test": "jest",
+    "prebuild": "flow check",
+    "build": "rollup -c rollup/rollup.es.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js"
+  },
+  "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.0",
+    "flow-bin": "^0.47.0",
+    "jest": "^20.0.4",
+    "rollup": "^0.42.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-flow": "^1.1.1",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "uglify-es": "^3.0.26"
+  },
+  "dependencies": {
+    "es6-weak-map": "^2.0.2",
+    "lodash": "^4.17.4",
+    "mutation-observer": "^1.0.2",
+    "object-assign": "^4.1.1",
+    "raf": "^3.3.2",
+    "resize-observer-polyfill": "^1.4.2"
+  },
+  "keywords": [
+    "rwd",
+    "responsive-design",
+    "responsive",
+    "postcss",
+    "container-query",
+    "container-queries",
+    "element-query",
+    "element-queries",
+    "media-query",
+    "media-queries",
+    "css",
+    "browser",
+    "query",
+    "javascript",
+    "component",
+    "module"
+  ]
+}

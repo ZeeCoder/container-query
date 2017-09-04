@@ -1,0 +1,16 @@
+{
+    "presets": [
+      ["env", {
+        "targets": {
+          "browsers": [
+            "IE >= 10",
+            "Chrome >= 10",
+            "Opera >= 15",
+            "FF >= 10",
+            "Edge >= 12"
+          ]
+        }
+      }]
+    ],
+    "plugins": ["transform-flow-strip-types", "lodash"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "nested-containers",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "core-js": "^2.4.1",
+    "postcss": "^5.2.13",
+    "postcss-loader": "^2.0.6",
+    "postcss-media-minmax": "^3.0.0",
+    "postcss-nested": "^2.1.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpack": "^3.3.0"
+  },
+  "dependencies": {
+    "style-loader": "^0.18.2"
+  },
+  "private": true
+}
