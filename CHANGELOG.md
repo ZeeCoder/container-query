@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0] - 2017-09-04
 ### Added
 - New diffing algorithm, which keeps track of the container's status (which
 query was applied already) and applies / removes the least amount of new styles
@@ -18,7 +20,7 @@ Component-based architecture.)
 
 ### Changed
 - Published the runtime and the postcss plugin separately, both of which reside
-in the same monorepo.
+in the same monorepo. (Thanks to [Lerna](https://github.com/lerna/lerna))
 - Container instances are auto-adjusting themselves on size change by default.
 (`adjustOnResize` option.)
 - Bundling with Rollup instead of just transpiling the source. This gives better
@@ -65,7 +67,7 @@ load
 - Improved browser support:
     - Object.assign replacement
     - Removed forEach calls on NodeList objects
-    
+
 ### Added
 - Started working on a new demo
 
