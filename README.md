@@ -1,4 +1,9 @@
-# Container Query
+<h1 align="center">
+	<br>
+	<img width="360" src="https://rawgit.com/ZeeCoder/container-query/master/media/Logo.png" alt="Container Query">
+	<br>
+    <br>
+</h1>
 
 [![npm version](https://badge.fury.io/js/%40zeecoder%2Fcontainer-query.svg)](https://npmjs.com/package/@zeecoder/container-query)
 [![build](https://travis-ci.org/ZeeCoder/container-query.svg?branch=master)](https://travis-ci.org/ZeeCoder/container-query)
