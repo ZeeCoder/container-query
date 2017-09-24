@@ -10,9 +10,11 @@
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest && yarn run build && yarn run size",
     "prebuild": "flow check",
-    "build": "rollup -c rollup/rollup.es.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js"
+    "build":
+      "rollup -c rollup/rollup.es.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js",
+    "size": "size-limit"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
@@ -27,6 +29,7 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
+    "size-limit": "^0.11.4",
     "uglify-es": "^3.0.26"
   },
   "dependencies": {
@@ -57,5 +60,19 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "dist/bundle.cjs.js",
+      "limit": "14KB"
+    },
+    {
+      "path": "dist/bundle.es.js",
+      "limit": "14KB"
+    },
+    {
+      "path": "dist/bundle.umd.js",
+      "limit": "14KB"
+    }
+  ]
 }
