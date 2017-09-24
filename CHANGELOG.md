@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - [size-limit](https://github.com/ai/size-limit) for limiting bundle sizes
 
+### Changed
+- Dependency updates
+
 ## [2.0.0] - 2017-09-04
 ### Added
 - New diffing algorithm, which keeps track of the container's status (which

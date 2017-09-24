@@ -12,7 +12,7 @@
     "babel-preset-react": "^6.24.1",
     "core-js": "^2.4.1",
     "lodash": "^4.17.4",
-    "postcss": "^5.2.13",
+    "postcss": "^6.0.11",
     "postcss-loader": "^2.0.6",
     "postcss-media-minmax": "^3.0.0",
     "postcss-nested": "^2.0.4",
