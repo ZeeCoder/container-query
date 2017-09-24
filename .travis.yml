@@ -6,7 +6,7 @@ cache:
     yarn: true
 script:
     - lerna bootstrap --ignore={demos}
-    - yarn test
+    - lerna run test
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
