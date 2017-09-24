@@ -2,9 +2,9 @@ import uglify from "rollup-plugin-uglify";
 import { minify } from "uglify-es";
 import sharedConfig from "./rollup.shared";
 
-sharedConfig.targets = [
+sharedConfig.output = [
   {
-    dest: __dirname + "/../dist/bundle.es.js",
+    file: __dirname + "/../dist/bundle.es.js",
     format: "es"
   }
 ];

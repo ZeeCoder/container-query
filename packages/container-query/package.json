@@ -63,11 +63,11 @@
   "size-limit": [
     {
       "path": "dist/bundle.cjs.js",
-      "limit": "14KB"
+      "limit": "14.20KB"
     },
     {
       "path": "dist/bundle.es.js",
-      "limit": "14KB"
+      "limit": "14.20KB"
     },
     {
       "path": "dist/bundle.umd.js",

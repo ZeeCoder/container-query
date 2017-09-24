@@ -18,8 +18,8 @@ babelrc.presets.forEach(preset => {
 });
 
 export default {
-  entry: "src/containerQuery.js",
-  targets: [{ dest: "dist/bundle.cjs.js", format: "cjs" }],
+  input: "src/containerQuery.js",
+  output: [{ file: "dist/bundle.cjs.js", format: "cjs" }],
   plugins: [flow(), babel(babelrc), babili()],
   external: ["postcss", "lodash/trim", "lodash/camelCase", "fs"]
 };

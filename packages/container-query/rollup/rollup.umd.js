@@ -3,11 +3,11 @@ import uglify from "rollup-plugin-uglify";
 import sharedConfig from "./rollup.shared";
 import commonjs from "rollup-plugin-commonjs";
 
-sharedConfig.targets = [
+sharedConfig.output = [
   {
-    dest: __dirname + "/../dist/bundle.umd.js",
+    file: __dirname + "/../dist/bundle.umd.js",
     format: "iife",
-    moduleName: "Container"
+    name: "Container"
   }
 ];
 
