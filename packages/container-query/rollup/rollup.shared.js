@@ -19,7 +19,7 @@ babelrc.presets.forEach(preset => {
 });
 
 export default {
-  entry: __dirname + "/../src/Container.js",
+  input: __dirname + "/../src/Container.js",
   plugins: [flow(), babel(babelrc)],
   external: [
     "es6-weak-map",
