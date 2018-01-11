@@ -5,14 +5,14 @@
   "version": "2.0.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "main": "dist/bundle.cjs.js",
-  "module": "dist/bundle.es.js",
+  "module": "dist/bundle.esm.js",
   "scripts": {
     "test": "jest && yarn run build && yarn run size",
     "prebuild": "flow check",
-    "build": "rollup -c rollup/rollup.es.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js",
+    "build": "rollup -c rollup/rollup.esm.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js",
     "size": "size-limit"
   },
   "devDependencies": {

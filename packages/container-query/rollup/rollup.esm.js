@@ -4,7 +4,7 @@ import sharedConfig from "./rollup.shared";
 
 sharedConfig.output = [
   {
-    file: __dirname + "/../dist/bundle.es.js",
+    file: __dirname + "/../dist/bundle.esm.js",
     format: "es"
   }
 ];
