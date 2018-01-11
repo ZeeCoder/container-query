@@ -11,11 +11,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "coveralls": "^2.11.16",
+    "coveralls": "^3.0.0",
     "husky": "^0.14.3",
     "jest": "^22.0.5",
     "lerna": "2.2.0",
-    "lint-staged": "^4.0.4",
+    "lint-staged": "^6.0.0",
     "prettier": "^1.6.1"
   },
   "scripts": {
