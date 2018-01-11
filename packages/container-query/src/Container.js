@@ -102,22 +102,22 @@ export default class Container {
   }
 
   /**
-     * Starts observing resize changes.
-     */
+   * Starts observing resize changes.
+   */
   observeResize() {
     resizeObserver.observe(this.containerElement);
   }
 
   /**
-     * Stops observing resize changes.
-     */
+   * Stops observing resize changes.
+   */
   unobserveResize() {
     resizeObserver.unobserve(this.containerElement);
   }
 
   /**
-     * Adjusts the container to it's current dimensions, or to the ones given.
-     */
+   * Adjusts the container to it's current dimensions, or to the ones given.
+   */
   adjust(containerSize: ?ContainerSize = null) {
     adjustContainer(this.containerElement, containerSize);
   }

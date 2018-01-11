@@ -1,16 +1,16 @@
 export default class Node {
   /**
-     * @param {{
-     *   [selector]: string,
-     *   [params]: string,
-     *   [name]: string,
-     *   [type]: string,
-     *   [prop]: string,
-     *   [value]: string,
-     *   [parent]: { type: string },
-     *   [source]: object,
-     * }} props
-     */
+   * @param {{
+   *   [selector]: string,
+   *   [params]: string,
+   *   [name]: string,
+   *   [type]: string,
+   *   [prop]: string,
+   *   [value]: string,
+   *   [parent]: { type: string },
+   *   [source]: object,
+   * }} props
+   */
   constructor(props) {
     this.nodes = props.nodes || [];
     this.selector = props.selector;
@@ -24,10 +24,10 @@ export default class Node {
   }
 
   /**
-     * @param {Node} node
-     *
-     * @returns {Node}
-     */
+   * @param {Node} node
+   *
+   * @returns {Node}
+   */
   addNode(node) {
     node.parent = this;
 
