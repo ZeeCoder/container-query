@@ -8,6 +8,7 @@ import * as containerAutoDetectionTest from "./test/container-auto-detection";
 import * as unrecognisedAtRulesTest from "./test/unrecognised-at-rules";
 import * as missingContainerDelcarationTest from "./test/missing-container-declaration";
 import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-with-r-units";
+import * as selfTest from "./test/self";
 
 jest.mock("./saveJSON");
 
@@ -106,3 +107,5 @@ test("should throw in non singleContainer mode for defining a different containe
 
 test("should extract css custom properties", () =>
   assertProcessingResult(customPropertiesTest));
+
+test("should handle :self", () => assertProcessingResult(selfTest));
