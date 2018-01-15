@@ -29,14 +29,12 @@ test("should be able to get the container size itself, and ignore empty change s
   const containerElement = document.createElement("div");
   const containerSize = { width: 1, height: 2 };
   getContainerSize.mockImplementationOnce(() => containerSize);
-  containerRegistry.get.mockImplementationOnce(() => {
-    return {
-      queryState: [],
-      jsonStats: {
-        queries: []
-      }
-    };
-  });
+  containerRegistry.get.mockImplementationOnce(() => ({
+    queryState: [],
+    jsonStats: {
+      queries: []
+    }
+  }));
   getChangedStyles.mockImplementationOnce(() => ({
     ".Container": {}
   }));
@@ -73,15 +71,13 @@ test("should apply changed styles", () => {
   });
 
   const containerSize = { width: 1, height: 2 };
-  containerRegistry.get.mockImplementationOnce(() => {
-    return {
-      queryState: [],
-      jsonStats: {
-        selector: ".Container",
-        queries: []
-      }
-    };
-  });
+  containerRegistry.get.mockImplementationOnce(() => ({
+    queryState: [],
+    jsonStats: {
+      selector: ".Container",
+      queries: []
+    }
+  }));
   getChangedStyles.mockImplementationOnce(() => ({
     ".Container": {
       addStyle: {

@@ -47,7 +47,8 @@ export default function adjustContainer(
 
     // What element(s) do we need to add these styles to?
     const elements =
-      elementSelector === registryData.jsonStats.selector
+      elementSelector === registryData.jsonStats.selector ||
+      elementSelector === ":self"
         ? [containerElement]
         : containerElement.querySelectorAll(elementSelector);
 
