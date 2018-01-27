@@ -1,26 +1,28 @@
 {
-  "name": "@zeecoder/container-query",
-  "description": "A modern container-query solution.",
-  "license": "MIT",
+  "name": "@zeecoder/react-container-query",
+  "description":
+    "React higher order component to manage a single Container instance.",
   "version": "2.1.0",
+  "license": "MIT",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
-  "engines": {
-    "node": ">=6"
-  },
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
   "scripts": {
     "test": "jest && yarn run build && yarn run size",
-    "prebuild": "flow check",
-    "build": "rollup -c rollup/rollup.esm.js && rollup -c rollup/rollup.cjs.js && rollup -c rollup/rollup.umd.js",
+    "build":
+      "rollup -c rollup/rollup.esm.js && rollup -c rollup/rollup.cjs.js",
     "size": "size-limit"
+  },
+  "dependencies": {
+    "@zeecoder/container-query": "^2.1.0",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
+    "hoist-non-react-statics": "^2.3.1"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-env": "^1.6.0",
-    "flow-bin": "^0.55.0",
     "jest": "^21.1.0",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
@@ -31,19 +33,17 @@
     "size-limit": "^0.11.4",
     "uglify-es": "^3.0.26"
   },
-  "dependencies": {
-    "es6-weak-map": "^2.0.2",
-    "lodash": "^4.17.4",
-    "mutation-observer": "^1.0.2",
-    "object-assign": "^4.1.1",
-    "raf": "^3.3.2",
-    "resize-observer-polyfill": "^1.4.2"
+  "peerDependencies": {
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0"
   },
   "keywords": [
+    "react",
     "rwd",
     "responsive-design",
     "responsive",
     "postcss",
+    "postcss-plugin",
     "container-query",
     "container-queries",
     "element-query",
@@ -63,15 +63,11 @@
   "size-limit": [
     {
       "path": "dist/bundle.cjs.js",
-      "limit": "14.30KB"
+      "limit": "15.6KB"
     },
     {
       "path": "dist/bundle.esm.js",
-      "limit": "14.30KB"
-    },
-    {
-      "path": "dist/bundle.umd.js",
-      "limit": "14.30KB"
+      "limit": "15.6KB"
     }
   ]
 }
