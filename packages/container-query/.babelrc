@@ -1,6 +1,9 @@
 {
-    "presets": [
-      ["env", {
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
         "targets": {
           "browsers": [
             "IE >= 10",
@@ -10,7 +13,25 @@
             "Edge >= 12"
           ]
         }
-      }]
-    ],
-    "plugins": ["transform-flow-strip-types", "lodash"]
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions"]
+            }
+          }
+        ]
+      ],
+      "plugins": ["transform-flow-strip-types"]
+    },
+    "production": {
+      "plugins": ["transform-flow-strip-types", "lodash", "external-helpers"]
+    }
+  }
 }

@@ -1,6 +1,7 @@
 {
   "name": "@zeecoder/postcss-container-query",
-  "description": "PostCSS processing for container queries, using a media query like syntax.",
+  "description":
+    "PostCSS processing for container queries, using a media query like syntax.",
   "license": "MIT",
   "version": "2.1.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -8,6 +9,9 @@
     "node": ">=4"
   },
   "main": "dist/bundle.cjs.js",
+  "browser": {
+    "fs": false
+  },
   "scripts": {
     "test": "jest",
     "build": "rollup -c",
