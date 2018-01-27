@@ -16,7 +16,8 @@
     "build:cjs": "BABEL_ENV=production rollup -c rollup/rollup.cjs.js",
     "build:umd": "BABEL_ENV=production rollup -c rollup/rollup.umd.js",
     "build": "npm-run-all build:*",
-    "size": "size-limit"
+    "size": "size-limit",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",

@@ -12,7 +12,8 @@
     "build:esm": "rollup -c rollup/rollup.esm.js",
     "build:cjs": "rollup -c rollup/rollup.cjs.js",
     "build": "npm-run-all build:*",
-    "size": "size-limit"
+    "size": "size-limit",
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "@zeecoder/container-query": "^2.1.0",
