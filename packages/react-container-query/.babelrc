@@ -4,6 +4,7 @@
     [
       "env",
       {
+        "modules": false,
         "targets": {
           "browsers": [
             "IE >= 10",
@@ -16,5 +17,5 @@
       }
     ]
   ],
-  "plugins": []
+  "plugins": ["external-helpers", "transform-object-rest-spread"]
 }

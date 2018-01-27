@@ -28,7 +28,7 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
-    "size-limit": "^0.11.4",
+    "size-limit": "^0.14.0",
     "uglify-es": "^3.0.26"
   },
   "dependencies": {
@@ -59,19 +59,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "size-limit": [
-    {
-      "path": "dist/bundle.cjs.js",
-      "limit": "14.30KB"
-    },
-    {
-      "path": "dist/bundle.esm.js",
-      "limit": "14.30KB"
-    },
-    {
-      "path": "dist/bundle.umd.js",
-      "limit": "14.30KB"
-    }
-  ]
+  }
 }

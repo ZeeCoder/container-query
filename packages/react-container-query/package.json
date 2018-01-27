@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "jest": "^21.1.0",
@@ -30,7 +31,7 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
-    "size-limit": "^0.11.4",
+    "size-limit": "^0.14.0",
     "uglify-es": "^3.0.26"
   },
   "peerDependencies": {
@@ -59,15 +60,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "size-limit": [
-    {
-      "path": "dist/bundle.cjs.js",
-      "limit": "15.6KB"
-    },
-    {
-      "path": "dist/bundle.esm.js",
-      "limit": "15.6KB"
-    }
-  ]
+  }
 }
