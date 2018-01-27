@@ -2,7 +2,7 @@
   "name": "@zeecoder/container-query",
   "description": "A modern container-query solution.",
   "license": "MIT",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=6"
@@ -26,6 +26,7 @@
     "babel-preset-env": "^1.6.0",
     "flow-bin": "^0.55.0",
     "jest": "^21.1.0",
+    "npm-run-all": "^4.1.2",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.0.2",
@@ -33,8 +34,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "size-limit": "^0.14.0",
-    "uglify-es": "^3.0.26",
-    "npm-run-all": "^4.1.2"
+    "uglify-es": "^3.0.26"
   },
   "dependencies": {
     "es6-weak-map": "^2.0.2",
