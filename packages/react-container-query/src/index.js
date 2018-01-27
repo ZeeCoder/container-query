@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Container from "@zeecoder/container-query";
-import hoistStatics from "hoist-non-react-statics";
 
 /**
  * A HoC to initialise a single `Container` based on the given stats.
@@ -30,7 +29,7 @@ const withContainerQuery = (WrappedComponent, stats, options = {}) => {
     ")";
   HoC.WrappedComponent = WrappedComponent;
 
-  return hoistStatics(HoC, WrappedComponent);
+  return HoC;
 };
 
 export default withContainerQuery;
