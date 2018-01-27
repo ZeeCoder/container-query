@@ -14,27 +14,27 @@ queries and units will be relative to the previous declaration.
 
 ```pcss
 .User {
-    @define-container;
-    
-    &__name {
-        display: none;
-        font-size: 10rh;
-    }
-    
-    @container (width > 200px) {
-        display: block;
-    }
+  @define-container;
+
+  &__name {
+    display: none;
+    font-size: 10rh;
+  }
+
+  @container (width > 200px) {
+    display: block;
+  }
 }
 
 .Avatar {
-    @define-container;
-    
-    border-radius: 100%;
-    border: 1rh solid;
-    
-    @container (width < 30px), (height < 30px) {
-        background: grey;
-    }
+  @define-container;
+
+  border-radius: 100%;
+  border: 1rh solid;
+
+  @container (width < 30px), (height < 30px) {
+    background: grey;
+  }
 }
 ```
 
@@ -51,7 +51,7 @@ Container queries have the same syntax media queries do:
 
 ```pcss
 @container (condition) and (condition), (condition) {
-    // styles
+  // styles
 }
 ```
 
@@ -65,12 +65,18 @@ The following conditions are supported: width, height, aspect-ratio, orientation
 **Examples**
 
 ```pcss
-@condition (orientation: landscape) {}
-@condition (orientation: portrait) {}
-@condition (width > 100px) {}
-@condition (height < 100px) {}
-@condition (aspect-ratio > 3) {}
-@condition (orientation: landscape) and (aspect-ratio > 3) {}
+@condition (orientation: landscape) {
+}
+@condition (orientation: portrait) {
+}
+@condition (width > 100px) {
+}
+@condition (height < 100px) {
+}
+@condition (aspect-ratio > 3) {
+}
+@condition (orientation: landscape) and (aspect-ratio > 3) {
+}
 ```
 
 If you want the same syntax for your media queries, then I recommend [this plugin](https://github.com/postcss/postcss-media-minmax).
@@ -90,17 +96,17 @@ container's width or height.
 
 If a container's size is:
 
-- width: 120px
-- height: 130px
+* width: 120px
+* height: 130px
 
 then
 
-- 100rw → 120px
-- 100rh → 130px
-- 100rmin → 120px
-- 100rmax → 130px
-- 15rh → 11.53846px
-- 15rw → 12.5px
+* 100rw → 120px
+* 100rh → 130px
+* 100rmin → 120px
+* 100rmax → 130px
+* 15rh → 11.53846px
+* 15rw → 12.5px
 
 And so on.
 
@@ -108,21 +114,21 @@ And so on.
 
 ```pcss
 .User {
-    @define-container;
-    
-    &__name {
-        font-size: 10rh;
-    }
-    
-    &__avatar {
-        border-radius: 100%;
-        border: 1rmin solid;
-    }
-    
-    @container (height > 150px) {
-        font-size: 15rh;
-        border: 5rmin solid;
-    }
+  @define-container;
+
+  &__name {
+    font-size: 10rh;
+  }
+
+  &__avatar {
+    border-radius: 100%;
+    border: 1rmin solid;
+  }
+
+  @container (height > 150px) {
+    font-size: 15rh;
+    border: 5rmin solid;
+  }
 }
 ```
 
@@ -136,23 +142,23 @@ performance.
 
 ```pcss
 .User {
-    @define-container;
-    --rh: 1rh;
-    --rmin: 1rmin;
-    
-    &__name {
-        font-size: calc(10*var(--rh));
-    }
-    
-    &__avatar {
-        border-radius: 100%;
-        border: calc(1*var(--rmin)) solid;
-    }
-    
-    @container (height > 150px) {
-        font-size: calc(15*var(--rh));
-        border: calc(5*var(--rmin)) solid;
-    }
+  @define-container;
+  --rh: 1rh;
+  --rmin: 1rmin;
+
+  &__name {
+    font-size: calc(10*var(--rh));
+  }
+
+  &__avatar {
+    border-radius: 100%;
+    border: calc(1*var(--rmin)) solid;
+  }
+
+  @container (height > 150px) {
+    font-size: calc(15*var(--rh));
+    border: calc(5*var(--rmin)) solid;
+  }
 }
 ```
 
@@ -163,9 +169,9 @@ container's width / height:
 
 ```pcss
 .Container {
-    @define-container;
-    height: 50rw;
-    // Height will now be 50% of it's width
+  @define-container;
+  height: 50rw;
+  // Height will now be 50% of it's width
 }
 ```
 

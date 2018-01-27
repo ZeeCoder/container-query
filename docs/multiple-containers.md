@@ -18,13 +18,13 @@ the postcss plugin.
 
 ```pcss
 .Component1 {
-    @define-container;
-    // ...
+  @define-container;
+  // ...
 }
 
 .Component2 {
-    @define-container;
-    // ...
+  @define-container;
+  // ...
 }
 
 // etc
@@ -37,9 +37,9 @@ Normally you don't have to care about the structure of the JSON file.
 change with new releases.)
 
 However, if you incorporate all you styles into a single file before processing
-it with the PostCSS plugin - using a workflow similar to what's described in [Usage with Gulp](gulp.md) for
-example -, you'll instead have the extracted container stats grouped by
-component selector in the resulting JSON:
+it with the PostCSS plugin - using a workflow similar to what's described in
+[Usage with Gulp](gulp.md) for example -, you'll instead have the extracted
+container stats grouped by component selector in the resulting JSON:
 
 ```json
 {

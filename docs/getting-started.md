@@ -1,6 +1,7 @@
 # Getting Started
 
 This solution consists of a PostCSS plugin and a JS (`Container`) class.
+
 > PostCSS plugin → JSON → Runtime
 
 The plugin analyses the your CSS and extracts all container query related

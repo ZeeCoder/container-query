@@ -6,22 +6,25 @@ runner instead (like Gulp), to process your CSS and generate the JSON file(s).
 Your gulpfile could look something like this:
 
 ```js
-const gulp = require('gulp');
-const postcss = require('gulp-postcss');
-const rename = require('gulp-rename');
-const postcssNested = require('postcss-nested');
-const containerQuery = require('@zeecoder/postcss-container-query');
+const gulp = require("gulp");
+const postcss = require("gulp-postcss");
+const rename = require("gulp-rename");
+const postcssNested = require("postcss-nested");
+const containerQuery = require("@zeecoder/postcss-container-query");
 
-gulp.task('styles', () => {
-    return gulp.src('styles.pcss')
-        .pipe(postcss([
-            postcssNested({ bubble: ['container'] }),
-            containerQuery({
-              singleContainer: false
-            }),
-        ]))
-        .pipe(rename('styles.css'))
-        .pipe(gulp.dest('dist'));
+gulp.task("styles", () => {
+  return gulp
+    .src("styles.pcss")
+    .pipe(
+      postcss([
+        postcssNested({ bubble: ["container"] }),
+        containerQuery({
+          singleContainer: false
+        })
+      ])
+    )
+    .pipe(rename("styles.css"))
+    .pipe(gulp.dest("dist"));
 });
 ```
 

@@ -4,60 +4,93 @@ I recommend you to set up [postcss-loader](https://github.com/postcss/postcss-lo
 with [postcss-nested](https://github.com/postcss/postcss-nested) with
 `bubble: ['container']` option, or to use SASS.
 
+**Example postcss.config.json**
+
+```js
+module.exports = context => {
+  const plugins = [
+    simpleVars(),
+    nested({ bubble: ["container"] }),
+    autoprefixer(),
+    mediaMinmax(),
+    containerQuery()
+  ];
+
+  return { plugins };
+};
+```
+
 **Avatar.pcss**
+
 ```pcss
 .Avatar {
+  /* ... */
+
+  &__image {
     /* ... */
-    
-    &__image {
-        /* ... */
-        
-        @container (width > 100px) {
-            /*
-                Change some styles on the image element when the container is
-                wider than 100px
-            */
-        }
+
+    @container (width > 100px) {
+      /*
+                                  Change some styles on the image element when the container is
+                                  wider than 100px
+                              */
     }
-    
-    @container (aspect-ratio: > 3) {
-        /* Change styles on the avatar itself, when the aspect-ratio is grater than 3 */
-    }
-    
-    @container (width > 100px) and (height > 100px) {
-        /* ... */
-    }
+  }
+
+  @container (aspect-ratio > 3) {
+    /* Change styles on the avatar itself, when the aspect-ratio is grater than 3 */
+  }
+
+  @container (width > 100px) and (height > 100px) {
+    /* ... */
+  }
 }
 ```
 
-**Avatar.js**
-```js
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import Container from "@zeecoder/container-query";
+**With @zeecoder/react-container-query**
 
-// `Avatar.json` gets generated in the same folder.
-require('./Avatar.pcss'); 
-const queryStats = require('./Avatar.json');
+```js
+import React, { Component } from "react";
+import withContainerQuery from "@zeecoder/react-container-query";
+import "./Avatar.pcss";
+import stats from "./Avatar.pcss.json"; // generated automatically
+
+const Avatar = props => (
+  <div className="Avatar">
+    <img className="Avatar__image" />
+  </div>
+);
+
+export default withContainerQuery(Avatar, stats);
+```
+
+**without the higher-order component**
+
+```js
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import Container from "@zeecoder/container-query";
+import "./Avatar.pcss";
+import stats from "./Avatar.pcss.json"; // generated automatically
 
 export default class Avatar extends Component {
-    componentDidMount() {
-        new Container(ReactDOM.findDOMNode(this), queryStats);
-    }
+  componentDidMount() {
+    new Container(ReactDOM.findDOMNode(this), stats);
+  }
 
-    render() {
-        return (
-            <div className="Avatar">
-                <img className="Avatar__image"/>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="Avatar">
+        <img className="Avatar__image" />
+      </div>
+    );
+  }
 }
 ```
 
 **That's it!**
 
-Now all new *Avatar* components will automatically adjust to the size of the
+Now all new _Avatar_ components will automatically adjust to the size of the
 component individually.
 
 As you can see from the example, you can affect descendants' styles too, based

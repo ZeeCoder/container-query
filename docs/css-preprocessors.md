@@ -14,16 +14,15 @@ You can write things like:
 
 ```pcss
 .Avatar {
-    @define-container;
+  /* ... */
+
+  @container (width > 200px) {
     /* ... */
-    
-    @container (width > 200px) {
-        /* ... */
-    }
-    
-    @container (height > 200px) {
-        /* ... */
-    }
+  }
+
+  @container (height > 200px) {
+    /* ... */
+  }
 }
 ```
 
@@ -31,20 +30,19 @@ Which compiles to:
 
 ```css
 .Avatar {
-    @define-container;
-    /* ... */
+  /* ... */
 }
 
 @container (width > 200px) {
-    .Avatar {
-        /* ... */
-    }
+  .Avatar {
+    /* ... */
+  }
 }
 
 @container (height > 200px) {
-    .Avatar {
-        /* ... */
-    }
+  .Avatar {
+    /* ... */
+  }
 }
 ```
 
