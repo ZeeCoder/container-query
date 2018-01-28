@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.2.1]
+
+### Fixed
+
+* postcss-container-query default `getJSON` function now only overwrites a
+  previous file if there's an actual change.
+
 ## [2.2.0]
 
 ### Added
