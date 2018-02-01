@@ -7,8 +7,7 @@ import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
 import type { ContainerSize, QueryStats } from "../flow/types";
-// Issue#72
-import "./NodeList.forEach.polyfill";
+import "./NodeList.forEach.polyfill"; // Issue#72
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {

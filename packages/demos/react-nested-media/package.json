@@ -1,0 +1,32 @@
+{
+  "name": "react-nested-media",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@zeecoder/postcss-container-query": "^2.1.0",
+    "@zeecoder/react-container-query": "^2.1.0",
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "lodash": "^4.17.4",
+    "postcss": "^6.0.11",
+    "postcss-loader": "^2.0.6",
+    "postcss-media-minmax": "^3.0.0",
+    "postcss-nested": "^2.0.4",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.3.0",
+    "webpack-bundle-analyzer": "^2.8.3"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {},
+  "private": true
+}

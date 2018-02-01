@@ -5,19 +5,19 @@ import type { RegistryData } from "../flow/types";
 const containerRegistry: WeakMap = new WeakMap();
 
 export default {
-  set: function(element: HTMLElement, data: RegistryData) {
+  set: function(element: Element, data: RegistryData) {
     containerRegistry.set(element, data);
   },
 
-  get: function(element: HTMLElement) {
+  get: function(element: Element) {
     return containerRegistry.get(element);
   },
 
-  has: function(element: HTMLElement) {
+  has: function(element: Element) {
     return containerRegistry.has(element);
   },
 
-  delete: function(element: HTMLElement) {
+  delete: function(element: Element) {
     containerRegistry.delete(element);
   }
 };

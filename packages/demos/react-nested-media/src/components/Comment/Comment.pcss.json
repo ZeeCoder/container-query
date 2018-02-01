@@ -1,0 +1,1 @@
+{"selector":".Comment","queries":[{"conditions":[[["width",">",500]]],"elements":[{"selector":".Comment","styles":{"background":"white","color":"black"}}]}]}
