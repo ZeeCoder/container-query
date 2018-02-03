@@ -1,17 +1,12 @@
 import adjustContainer from "./adjustContainer";
+import containerRegistry from "./containerRegistry";
 
-jest.mock("./applyStylesToElements");
 jest.mock("./getChangedStyles");
 jest.mock("./getContainerSize");
-jest.mock("./containerRegistry", () => ({
-  get: jest.fn()
-}));
 
 beforeEach(() => {
-  require("./applyStylesToElements").default.mockClear();
   require("./getChangedStyles").default.mockClear();
   require("./getContainerSize").default.mockClear();
-  require("./containerRegistry").get.mockClear();
 });
 
 test("should ignore call if the element is not registered", () => {
@@ -22,62 +17,51 @@ test("should ignore call if the element is not registered", () => {
 });
 
 test("should be able to get the container size itself, and ignore empty change sets", () => {
-  const containerRegistry = require("./containerRegistry");
-  const applyStylesToElements = require("./applyStylesToElements").default;
   const getChangedStyles = require("./getChangedStyles").default;
   const getContainerSize = require("./getContainerSize").default;
   const containerElement = document.createElement("div");
   const containerSize = { width: 1, height: 2 };
   getContainerSize.mockImplementationOnce(() => containerSize);
-  containerRegistry.get.mockImplementationOnce(() => ({
+  containerRegistry.set(containerElement, {
     queryState: [],
     jsonStats: {
       queries: []
     }
-  }));
+  });
+
   getChangedStyles.mockImplementationOnce(() => ({
     ".Container": {}
   }));
 
   adjustContainer(containerElement);
 
-  expect(containerRegistry.get).toHaveBeenCalledTimes(1);
-  expect(containerRegistry.get).toHaveBeenCalledWith(containerElement);
-  expect(getContainerSize).toHaveBeenCalledTimes(1);
   expect(getContainerSize).toHaveBeenCalledWith(containerElement);
-  expect(getChangedStyles).toHaveBeenCalledTimes(1);
   expect(getChangedStyles).toHaveBeenCalledWith(
     containerElement,
     containerSize
   );
 
-  // This proves that empty change sets are ignored
-  expect(applyStylesToElements).toHaveBeenCalledTimes(0);
+  expect(containerElement.style._values).toEqual({});
 });
 
 test("should apply changed styles", () => {
-  const containerRegistry = require("./containerRegistry");
-  const applyStylesToElements = require("./applyStylesToElements").default;
   const getChangedStyles = require("./getChangedStyles").default;
   const getContainerSize = require("./getContainerSize").default;
   const containerElement = document.createElement("div");
   const containerChildElement1 = document.createElement("div");
   const containerChildElement2 = document.createElement("div");
   const containerChildren = [containerChildElement1, containerChildElement2];
-  containerElement.querySelectorAll = jest.fn(selector => {
-    expect(selector).toBe(".Container__element");
-
-    return containerChildren;
-  });
+  containerElement.querySelectorAll = jest.fn(() => containerChildren);
 
   const containerSize = { width: 1, height: 2 };
-  containerRegistry.get.mockImplementationOnce(() => ({
+  containerRegistry.set(containerElement, {
     queryState: [],
     jsonStats: {
       selector: ".Container",
       queries: []
     }
-  }));
+  });
+
   getChangedStyles.mockImplementationOnce(() => ({
     ".Container": {
       addStyle: {
@@ -96,30 +80,78 @@ test("should apply changed styles", () => {
 
   adjustContainer(containerElement, containerSize);
 
-  expect(containerRegistry.get).toHaveBeenCalledTimes(1);
-  expect(containerRegistry.get).toHaveBeenCalledWith(containerElement);
+  expect(containerElement.querySelectorAll).toHaveBeenCalledWith(
+    ".Container__element"
+  );
   expect(getContainerSize).toHaveBeenCalledTimes(0);
-  expect(getChangedStyles).toHaveBeenCalledTimes(1);
   expect(getChangedStyles).toHaveBeenCalledWith(
     containerElement,
     containerSize
   );
 
   // This proves that empty change sets are ignored
-  expect(applyStylesToElements).toHaveBeenCalledTimes(2);
-  expect(applyStylesToElements).toHaveBeenCalledWith(
-    {
-      lineHeight: "10px",
-      background: "none",
-      fontSize: "",
-      border: ""
+  expect(containerElement.style.background).toBe("none");
+  expect(containerElement.style.lineHeight).toBe("10px");
+  expect(containerElement.style.fontSize).toBe("");
+  expect(containerElement.style.border).toBe("");
+  // Note: `border: "none"` is normalised to empty string
+  expect(containerChildElement1.style.border).toBe("");
+  expect(containerChildElement2.style.border).toBe("");
+});
+
+test("should respect container boundaries while applying styles", () => {
+  const getChangedStyles = require("./getChangedStyles").default;
+  const getContainerSize = require("./getContainerSize").default;
+  const container1 = document.createElement("div");
+  const container2 = document.createElement("div");
+  const container1Descendant1 = document.createElement("div");
+  const container2Descendant = document.createElement("div");
+  const container1Descendant2 = document.createElement("div");
+  const container1Descendant2Parent = document.createElement("div");
+  container1.appendChild(container1Descendant1);
+  container1.appendChild(container1Descendant2Parent);
+  container1Descendant2Parent.appendChild(container1Descendant2);
+  container1.appendChild(container2);
+  container2.appendChild(container2Descendant);
+
+  // Simulate the case where Container2 is nested under Container1, and where
+  // all child elements respond to the "div" selector
+  container1.querySelectorAll = jest.fn(() => [
+    container1Descendant1,
+    container1Descendant2,
+    container2Descendant
+  ]);
+
+  containerRegistry.set(container1, {
+    queryState: [],
+    jsonStats: {
+      selector: ".Container",
+      queries: []
+    }
+  });
+
+  containerRegistry.set(container2, {
+    queryState: [],
+    jsonStats: {
+      selector: ".Container2",
+      queries: []
+    }
+  });
+
+  const containerSize = { width: 1, height: 2 };
+  getChangedStyles.mockImplementationOnce(() => ({
+    div: {
+      addStyle: {
+        background: "red"
+      }
     },
-    [containerElement]
-  );
-  expect(applyStylesToElements).toHaveBeenCalledWith(
-    {
-      border: "none"
-    },
-    containerChildren
-  );
+    // Covers `adjustContainer`'s fallback to an empty `addStyle` object
+    ".some-nonexistent-selector-with-empty-change-sets": { removeProps: [] }
+  }));
+
+  adjustContainer(container1, containerSize);
+
+  expect(container1Descendant1.style.background).toBe("red");
+  expect(container1Descendant2.style.background).toBe("red");
+  expect(container2Descendant.style.background).toBe("");
 });
