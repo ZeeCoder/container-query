@@ -36,7 +36,6 @@ function extractContainerUnits(node, isContainer = false) {
 }
 
 /**
- * @todo refactor this to use a builder, which'll make testing easier too
  * @param {{
  *   getJSON: function,
  *   singleContainer: boolean,
