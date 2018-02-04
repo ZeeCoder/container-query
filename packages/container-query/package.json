@@ -10,8 +10,9 @@
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
   "scripts": {
-    "test": "jest && yarn run build && yarn run size",
-    "prebuild": "flow check",
+    "test": "yarn run flow && jest && yarn run build && yarn run size",
+    "flow": "flow check",
+    "prebuild": "yarn run flow",
     "build:esm": "BABEL_ENV=production rollup -c rollup/rollup.esm.js",
     "build:cjs": "BABEL_ENV=production rollup -c rollup/rollup.cjs.js",
     "build:umd": "BABEL_ENV=production rollup -c rollup/rollup.umd.js",

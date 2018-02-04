@@ -12,9 +12,10 @@
     "fs": false
   },
   "scripts": {
-    "test": "jest",
+    "test": "yarn run flow && jest",
     "build": "rollup -c",
-    "prebuild": "flow check",
+    "flow": "flow check",
+    "prebuild": "yarn run flow",
     "prepublish": "yarn build"
   },
   "devDependencies": {
