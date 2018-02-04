@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+* `container-query`
+  * `Node.forEach` is no longer globally polyfilled. (using a simple for loop
+    instead internally)
+    
 ## [2.3.0]
 
 ### Fixed

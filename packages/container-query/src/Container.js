@@ -6,8 +6,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
-import type { ContainerSize, QueryStats } from "../flow/types";
-import "./NodeList.forEach.polyfill"; // Issue#72
+import type { ContainerSize, QueryStats, RegistryData } from "../flow/types";
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
@@ -15,13 +14,13 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   }
 
   entries.forEach(entry => {
-    const container = containerRegistry.get(entry.target);
+    const data: RegistryData = containerRegistry.get(entry.target);
 
     if (
-      typeof container === "undefined" ||
-      typeof container !== "object" ||
-      typeof container.instance !== "object" ||
-      typeof container.instance.adjust !== "function"
+      typeof data === "undefined" ||
+      typeof data !== "object" ||
+      typeof data.instance !== "object" ||
+      typeof data.instance.adjust !== "function"
     ) {
       console.warn(
         "Could not find Container instance for element:",
@@ -30,24 +29,27 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
       return;
     }
 
-    container.instance.adjust({
+    const container: Container = data.instance;
+
+    container.adjust({
       width: entry.contentRect.width,
       height: entry.contentRect.height
     });
   });
 });
 
-const mutationObserver = new MutationObserver(mutationsRecords => {
-  mutationsRecords.forEach(mutationsRecord => {
+const mutationObserver = new MutationObserver(mutationRecords => {
+  mutationRecords.forEach(mutationRecord => {
     // Remove container element from registry and unobserve resize changes
-    mutationsRecord.removedNodes.forEach(node => {
-      if (containerRegistry.has(node) === false) {
-        return;
-      }
+    const removedNodesLength = mutationRecord.removedNodes.length;
+    for (let i = 0; i < removedNodesLength; i++) {
+      const node: Node = mutationRecord.removedNodes[i];
 
-      resizeObserver.unobserve(node);
-      containerRegistry.delete(node);
-    });
+      if (containerRegistry.has(node)) {
+        resizeObserver.unobserve(node);
+        containerRegistry.delete(node);
+      }
+    }
   });
 });
 
