@@ -1,5 +1,8 @@
 # Usage with webpack and React
 
+For examples on the `<ResizeObserver>` and `<ContainerQuery>` components, check
+out the package's [readme](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query).
+
 I recommend you to set up [postcss-loader](https://github.com/postcss/postcss-loader)
 with [postcss-nested](https://github.com/postcss/postcss-nested) with
 `bubble: ['container']` option, or to use SASS.
@@ -31,9 +34,9 @@ module.exports = context => {
 
     @container (width > 100px) {
       /*
-                                  Change some styles on the image element when the container is
-                                  wider than 100px
-                              */
+      Change some styles on the image element when the container is
+      wider than 100px
+      */
     }
   }
 
@@ -51,11 +54,11 @@ module.exports = context => {
 
 ```js
 import React, { Component } from "react";
-import withContainerQuery from "@zeecoder/react-container-query";
+import { withContainerQuery } from "@zeecoder/react-container-query";
 import "./Avatar.pcss";
 import stats from "./Avatar.pcss.json"; // generated automatically
 
-const Avatar = props => (
+const Avatar = () => (
   <div className="Avatar">
     <img className="Avatar__image" />
   </div>

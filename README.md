@@ -86,7 +86,7 @@ and the extracted css stats) everything will just work.
 
 _Note:_ A file can have multiple containers, with the [@define-container](docs/multiple-containers.md)
 declaration, but it's encouraged to have a dedicated file for each component.
-(Which is also the assumtion of the `@zeecoder/react-container-query` package).
+(Which is also the assumption of the [@zeecoder/react-container-query](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query) package).
 
 ## Installation
 
