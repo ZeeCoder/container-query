@@ -15,7 +15,11 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@zeecoder/container-query": "^2.3.1"
+    "@zeecoder/container-query": "^2.3.1",
+    "resize-observer-polyfill": "^1.5.0",
+    "prop-types": "^15.6.0",
+    "es6-weak-map": "^2.0.2",
+    "object-assign": "^4.1.1"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",

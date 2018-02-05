@@ -54,7 +54,7 @@ const mutationObserver = new MutationObserver(mutationRecords => {
 });
 
 export default class Container {
-  containerElement: HTMLElement;
+  container: HTMLElement;
   processedJsonStats: {};
   opts: {};
 
@@ -63,7 +63,7 @@ export default class Container {
     jsonStats: QueryStats,
     opts: {} = {}
   ) {
-    this.containerElement = containerElement;
+    this.container = containerElement;
     this.processedJsonStats = processConfig(jsonStats);
 
     this.opts = objectAssign(
@@ -89,7 +89,7 @@ export default class Container {
       queryState: getInitialQueryState()
     });
 
-    mutationObserver.observe(this.containerElement.parentNode, {
+    mutationObserver.observe(this.container.parentNode, {
       childList: true
     });
 
@@ -106,20 +106,24 @@ export default class Container {
    * Starts observing resize changes.
    */
   observeResize() {
-    resizeObserver.observe(this.containerElement);
+    resizeObserver.observe(this.container);
   }
 
   /**
    * Stops observing resize changes.
    */
   unobserveResize() {
-    resizeObserver.unobserve(this.containerElement);
+    resizeObserver.unobserve(this.container);
   }
 
   /**
    * Adjusts the container to it's current dimensions, or to the ones given.
    */
-  adjust(containerSize: ?ContainerSize = null) {
-    adjustContainer(this.containerElement, containerSize);
+  adjust(size: ?ContainerSize = null) {
+    adjustContainer(this.container, size);
+
+    if (typeof this.opts.handleResize === "function") {
+      this.opts.handleResize(size);
+    }
   }
 }

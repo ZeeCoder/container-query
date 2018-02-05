@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.0]
+
+### Added
+
+* `react-container-query`
+  * New `ContainerQuery` and `ResizeObserver` components
+
+
 ## [2.3.1]
 
 ### Fixed

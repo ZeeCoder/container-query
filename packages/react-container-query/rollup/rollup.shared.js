@@ -7,6 +7,9 @@ export default {
     "react",
     "react-dom",
     "@zeecoder/container-query",
-    "hoist-non-react-statics"
+    "prop-types",
+    "object-assign",
+    "es6-weak-map",
+    "resize-observer-polyfill"
   ]
 };
