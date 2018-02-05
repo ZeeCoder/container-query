@@ -1,7 +1,7 @@
 {
   "name": "@zeecoder/react-container-query",
   "description": "React higher order component to manage a single Container instance.",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "license": "MIT",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "main": "dist/bundle.cjs.js",
@@ -15,11 +15,11 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@zeecoder/container-query": "^2.3.1",
-    "resize-observer-polyfill": "^1.5.0",
-    "prop-types": "^15.6.0",
+    "@zeecoder/container-query": "^2.4.0",
     "es6-weak-map": "^2.0.2",
-    "object-assign": "^4.1.1"
+    "object-assign": "^4.1.1",
+    "prop-types": "^15.6.0",
+    "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
