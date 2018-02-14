@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.1]
+
+### Fixed
+
+* `postcss-container-query`
+  * Build is now transpiled down to es5
+
 ## [2.4.0]
 
 ### Added
 
 * `react-container-query`
   * New `ContainerQuery` and `ResizeObserver` components
-
 
 ## [2.3.1]
 
