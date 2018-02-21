@@ -1,7 +1,7 @@
 {
   "name": "@zeecoder/react-container-query",
   "description": "React higher order component to manage a single Container instance.",
-  "version": "2.4.0",
+  "version": "2.4.2",
   "license": "MIT",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "main": "dist/bundle.cjs.js",
