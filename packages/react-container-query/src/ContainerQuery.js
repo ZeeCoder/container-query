@@ -18,6 +18,10 @@ export default class ContainerQuery extends Component {
   }
 
   handleResize(size) {
+    if (this.unMounting) {
+      return;
+    }
+
     this.setState({ size });
   }
 
@@ -44,6 +48,10 @@ export default class ContainerQuery extends Component {
         this.containerOptions
       );
     }
+  }
+
+  componentWillUnmount() {
+    this.unMounting = true;
   }
 
   render() {

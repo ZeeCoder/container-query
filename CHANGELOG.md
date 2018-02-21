@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.2]
+
+### Fixed
+
+* `react-container-query`
+  * `ContainerQuery` no longer tries to set state for an unmounting component
+
 ## [2.4.1]
 
 ### Fixed
