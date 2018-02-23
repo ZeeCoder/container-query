@@ -67,10 +67,21 @@ export default class ResizeObserverComponent extends Component {
   }
 
   render() {
+    if (this.props.children) {
+      return this.props.children(this.state.size);
+    }
+
     return this.props.render(this.state.size);
   }
 }
 
+ResizeObserverComponent.defaultProps = {
+  render: size => (
+    <div>My size is: {size ? `${size.width}x${size.height}` : "?"}</div>
+  )
+};
+
 ResizeObserverComponent.propTypes = {
-  render: PropTypes.func
+  render: PropTypes.func,
+  children: PropTypes.func
 };

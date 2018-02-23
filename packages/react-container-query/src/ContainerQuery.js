@@ -12,9 +12,15 @@ export default class ContainerQuery extends Component {
 
     this.handleResize = this.handleResize.bind(this);
 
-    this.containerOptions = objectAssign({}, this.props.options, {
-      handleResize: this.handleResize
-    });
+    this.containerOptions = objectAssign({}, this.props.options);
+
+    // Listen to size changes only if needed
+    if (
+      typeof this.props.render === "function" ||
+      typeof this.props.children === "function"
+    ) {
+      this.containerOptions.handleResize = this.handleResize;
+    }
   }
 
   handleResize(size) {
@@ -55,6 +61,12 @@ export default class ContainerQuery extends Component {
   }
 
   render() {
+    if (typeof this.props.children === "function") {
+      return this.props.children(this.state.size);
+    } else if (this.props.children) {
+      return this.props.children;
+    }
+
     return this.props.render(this.state.size);
   }
 }
@@ -67,5 +79,6 @@ ContainerQuery.defaultProps = {
 ContainerQuery.propTypes = {
   render: PropTypes.func,
   stats: PropTypes.object,
-  options: PropTypes.object
+  options: PropTypes.object,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
 };
