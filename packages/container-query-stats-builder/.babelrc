@@ -1,0 +1,36 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": [
+            "IE >= 10",
+            "Chrome >= 10",
+            "Opera >= 15",
+            "FF >= 10",
+            "Edge >= 12"
+          ]
+        }
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions"]
+            }
+          }
+        ]
+      ]
+    },
+    "production": {
+      "plugins": ["external-helpers"]
+    }
+  }
+}
