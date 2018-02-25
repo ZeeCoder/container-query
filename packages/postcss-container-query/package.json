@@ -24,9 +24,9 @@
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.0",
-    "flow-bin": "^0.55.0",
-    "jest": "^21.1.0",
-    "rollup": "^0.50.0",
+    "flow-bin": "^0.66.0",
+    "jest": "^22.4.2",
+    "rollup": "^0.56.2",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babili": "^3.1.0",
     "rollup-plugin-flow": "^1.1.1"
