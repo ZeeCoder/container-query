@@ -1,7 +1,7 @@
 # Usage with webpack and React
 
-For examples on the `<ResizeObserver>` and `<ContainerQuery>` components, check
-out the package's [readme](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query).
+With React, I recommend using `<ResizeObserver>` and `<ContainerQuery>` components.
+You can find detailed documentation on them in the package's [readme](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query).
 
 I recommend you to set up [postcss-loader](https://github.com/postcss/postcss-loader)
 with [postcss-nested](https://github.com/postcss/postcss-nested) with

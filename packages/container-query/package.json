@@ -1,6 +1,7 @@
 {
   "name": "@zeecoder/container-query",
   "description": "A modern container-query solution.",
+  "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
   "version": "2.4.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",

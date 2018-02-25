@@ -90,11 +90,11 @@ declaration, but it's encouraged to have a dedicated file for each component.
 
 ## Installation
 
-`yarn add --dev @zeecoder/postcss-container-query @zeecoder/container-query`
-
-or
-
-`npm install --save-dev @zeecoder/postcss-container-query @zeecoder/container-query`
+```
+yarn add --dev @zeecoder/postcss-container-query @zeecoder/container-query`
+# or
+npm install --save-dev @zeecoder/postcss-container-query @zeecoder/container-query
+```
 
 ## Documentation
 
@@ -126,12 +126,13 @@ Works with all modern browsers and IE10+
 
 ## Caveats / Notes
 
-* The ResizeObserver reacts in ~20ms. For the most part that should be ok, but
+* The ResizeObserver polyfill reacts in ~20ms. For the most part that should be ok, but
   if you need more control over when a container applies new styles, however, you
   can switch off the observing behaviour, and call the `adjust` method on the
   Container instance manually, when you see fit.
-* Due to the above mentioned 20ms reaction time, the more you nest containers,
-  the slower change propagates from top to bottom.
+  Due to this 20ms reaction time, the more you nest containers, the slower change
+  propagates from top to bottom. (**This is a no longer an issue** if the native
+  `ResizeObserver` is available, for example in Chrome 64 and up.)
 * Styles are applied with the `Element.style.setProperty` method by default.
   This logic will probably be configurable in the future (#50) which will allow for
   different approaches. (Using [Styletron](https://github.com/rtsao/styletron), for
@@ -170,6 +171,18 @@ convinced by this solution, then I encourage you to look at these alternatives:
 * [CQ Prolyfill](https://github.com/ausi/cq-prolyfill)
 * [React Container Query](https://github.com/d6u/react-container-query)
 * [CSS Element Queries](https://github.com/marcj/css-element-queries)
+
+## WICG
+
+We at the WICG dived into 2018 with renewed effort to make native
+Container Queries a reality in browsers.
+
+If you're interested in how things are progressing, please feel free to visit
+the following links, where the disussions are happening:
+
+* https://github.com/WICG/cq-usecases
+* https://github.com/WICG/container-queries
+* [Slack](https://join.slack.com/t/containerqueries/shared_invite/enQtMzA2OTc5MDUwNjk1LTEwMWEzNjcwMTY1MGYzYWMyOGMxM2MzNDM1OGZjMjM3NDNiMDMxYTk0YjQxN2FjYTZkYmZkMDZmOWE1ODRkZWI)
 
 ## License
 

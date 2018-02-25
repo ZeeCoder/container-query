@@ -1,6 +1,7 @@
 {
   "name": "@zeecoder/postcss-container-query",
   "description": "PostCSS processing for container queries, using a media query like syntax.",
+  "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
   "version": "2.4.1",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
