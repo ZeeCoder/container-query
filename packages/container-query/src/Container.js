@@ -43,7 +43,7 @@ const mutationObserver = new MutationObserver(mutationRecords => {
     // Remove container element from registry and unobserve resize changes
     const removedNodesLength = mutationRecord.removedNodes.length;
     for (let i = 0; i < removedNodesLength; i++) {
-      const node: Node = mutationRecord.removedNodes[i];
+      const node: Element = mutationRecord.removedNodes[i];
 
       if (containerRegistry.has(node)) {
         resizeObserver.unobserve(node);

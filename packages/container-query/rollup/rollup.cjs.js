@@ -1,4 +1,3 @@
-import uglify from "rollup-plugin-uglify";
 import sharedConfig from "./rollup.shared";
 
 sharedConfig.output = [
@@ -7,7 +6,5 @@ sharedConfig.output = [
     format: "cjs"
   }
 ];
-
-sharedConfig.plugins.push(uglify());
 
 export default sharedConfig;

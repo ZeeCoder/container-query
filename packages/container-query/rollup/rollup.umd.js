@@ -1,5 +1,4 @@
 import resolve from "rollup-plugin-node-resolve";
-import uglify from "rollup-plugin-uglify";
 import sharedConfig from "./rollup.shared";
 import commonjs from "rollup-plugin-commonjs";
 
@@ -11,9 +10,9 @@ sharedConfig.output = [
   }
 ];
 
-sharedConfig.plugins.unshift(commonjs());
-sharedConfig.plugins.unshift(resolve());
-sharedConfig.plugins.push(uglify());
+// flow plugin has to be the first one
+sharedConfig.plugins.splice(1, 0, commonjs());
+sharedConfig.plugins.splice(1, 0, resolve());
 
 delete sharedConfig.external;
 
