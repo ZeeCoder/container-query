@@ -7,11 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.5.0]
+
 ### Added
 
 * `react-container-query`
   * `ContainerQuery` now accepts the render function through the `children` prop
   * `ResizeObserver` does the same
+  * dependency updates
+  * rollup build update
+* `container-query`
+  * dependency updates
+  * rollup build update
+* `postcss-container-query`
+  * dependency updates
+  * rollup build update
 
 ## [2.4.2]
 
