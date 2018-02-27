@@ -49,7 +49,7 @@ export default function extractPropsFromNode(
 
   let nodesLength = ruleNode.nodes.length;
   for (let i = 0; i < nodesLength; i++) {
-    let node = ruleNode.nodes[i];
+    const node = ruleNode.nodes[i];
 
     const containerUnitsUsed = isValueUsingContainerUnits(node.value);
 

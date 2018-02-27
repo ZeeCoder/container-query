@@ -46,7 +46,7 @@ function containerQuery(options = {}) {
   const singleContainer = options.singleContainer !== false;
 
   return function(root) {
-    let containers = {};
+    const containers = {};
     let currentContainerSelector = null;
 
     const checkForPrecedingContainerDeclaration = node => {
@@ -90,7 +90,7 @@ function containerQuery(options = {}) {
       // Fetch a previously added element data based on the selector, or
       // create a new one
       let elementData = null;
-      let elementslength =
+      const elementslength =
         containers[currentContainerSelector].queries[0].elements.length;
       for (let i = 0; i < elementslength; i++) {
         if (
@@ -190,7 +190,7 @@ function containerQuery(options = {}) {
         // Process container query
         checkForPrecedingContainerDeclaration(node);
 
-        let query = {
+        const query = {
           conditions: getConditionsFromQueryParams(node.params),
           elements: []
         };

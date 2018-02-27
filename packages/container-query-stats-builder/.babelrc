@@ -16,6 +16,7 @@
       }
     ]
   ],
+  "plugins": ["transform-flow-strip-types", "lodash"],
   "env": {
     "test": {
       "presets": [
