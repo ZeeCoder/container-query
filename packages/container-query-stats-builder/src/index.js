@@ -2,6 +2,12 @@ import _ from "lodash";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 
+export const CONDITIONS = "a";
+export const ELEMENTS = "b";
+export const VALUES = "c";
+export const STYLES = "d";
+export const SELECTOR = "e";
+
 export default class StatsBuilder {
   constructor() {
     this.stats = [];
@@ -23,23 +29,23 @@ export default class StatsBuilder {
     const stat = {};
 
     if (!_.isEmpty(this.current.conditions)) {
-      stat.conditions = this.current.conditions;
+      stat[CONDITIONS] = this.current.conditions;
     }
 
     if (this.current.selector) {
-      elementStat.selector = this.current.selector;
+      elementStat[SELECTOR] = this.current.selector;
     }
 
     if (!_.isEmpty(this.current.styles)) {
-      elementStat.styles = this.current.styles;
+      elementStat[STYLES] = this.current.styles;
       this.current.styles = {};
     }
     if (!_.isEmpty(this.current.values)) {
-      elementStat.values = this.current.values;
+      elementStat[VALUES] = this.current.values;
       this.current.values = {};
     }
 
-    stat.elements = [elementStat];
+    stat[ELEMENTS] = [elementStat];
 
     this.stats.push(stat);
 

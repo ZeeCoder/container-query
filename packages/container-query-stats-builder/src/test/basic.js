@@ -1,4 +1,10 @@
-import StatsBuilder from "../.";
+import StatsBuilder, {
+  ELEMENTS,
+  VALUES,
+  STYLES,
+  SELECTOR,
+  CONDITIONS
+} from "../.";
 
 export const build = () =>
   new StatsBuilder()
@@ -26,46 +32,46 @@ export const build = () =>
 
 export const out = [
   {
-    elements: [
+    [ELEMENTS]: [
       {
-        values: {
+        [VALUES]: {
           "font-size": "15rh"
         }
       }
     ]
   },
   {
-    conditions: [[[["width", ">", 200]]]],
-    elements: [
+    [CONDITIONS]: [[[["width", ">", 200]]]],
+    [ELEMENTS]: [
       {
-        values: {
+        [VALUES]: {
           "font-size": "25rh"
         },
-        styles: {
+        [STYLES]: {
           background: "none"
         }
       }
     ]
   },
   {
-    elements: [
+    [ELEMENTS]: [
       {
-        selector: ".child",
-        values: {
+        [SELECTOR]: ".child",
+        [VALUES]: {
           "font-size": "10rh"
         }
       }
     ]
   },
   {
-    conditions: [[[["width", ">", 200], ["height", ">", 200]]]],
-    elements: [
+    [CONDITIONS]: [[[["width", ">", 200], ["height", ">", 200]]]],
+    [ELEMENTS]: [
       {
-        selector: ".child",
-        values: {
+        [SELECTOR]: ".child",
+        [VALUES]: {
           "font-size": "20rh"
         },
-        styles: {
+        [STYLES]: {
           "line-height": "1.5",
           border: "none"
         }
@@ -73,24 +79,24 @@ export const out = [
     ]
   },
   {
-    elements: [
+    [ELEMENTS]: [
       {
-        selector: ".child2",
-        values: {
+        [SELECTOR]: ".child2",
+        [VALUES]: {
           "font-size": "30rh"
         }
       }
     ]
   },
   {
-    conditions: [[[["orientation", ":", "portrait"]]]],
-    elements: [
+    [CONDITIONS]: [[[["orientation", ":", "portrait"]]]],
+    [ELEMENTS]: [
       {
-        selector: ".child2",
-        values: {
+        [SELECTOR]: ".child2",
+        [VALUES]: {
           "font-size": "10rh"
         },
-        styles: {
+        [STYLES]: {
           "line-height": "1.5"
         }
       }

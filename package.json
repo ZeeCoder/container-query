@@ -22,7 +22,7 @@
   "scripts": {
     "test": "lerna run flow && jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "watch:test": "jest --watch --notify",
+    "watch:test": "jest --watch",
     "precommit": "lint-staged",
     "prettify": "prettier --write 'packages/**/*.js'",
     "build": "lerna run build",
