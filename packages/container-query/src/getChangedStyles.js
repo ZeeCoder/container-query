@@ -1,7 +1,7 @@
 // @flow
 import type { ContainerSize, Styles, ElementData } from "../flow/types";
 import registry from "./containerRegistry";
-import { union, difference } from "lodash";
+import _ from "lodash";
 import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 import objectAssign from "object-assign";
 
@@ -36,13 +36,13 @@ export default function getChangedStyles(
 
   const queriesLength = meta.queries.length - 1;
   for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
-    let queryData = meta.queries[queryIndex];
+    const queryData = meta.queries[queryIndex];
     // Default queries have no `conditionFunction`
-    let doesCurrentlyApply =
+    const doesCurrentlyApply =
       typeof queryData.conditionFunction === "function"
         ? queryData.conditionFunction(size)
         : true;
-    let didPreviouslyApply = queryState[queryIndex];
+    const didPreviouslyApply = queryState[queryIndex];
 
     queryState[queryIndex] = doesCurrentlyApply;
 
@@ -58,8 +58,8 @@ export default function getChangedStyles(
         previouslyAppliedProps[elementData.selector] = [];
       }
 
-      let elementStyleChangeSet = styleChangeSet[elementData.selector];
-      let elementPreviouslyAppliedProps =
+      const elementStyleChangeSet = styleChangeSet[elementData.selector];
+      const elementPreviouslyAppliedProps =
         previouslyAppliedProps[elementData.selector];
 
       if (doesCurrentlyApply && didPreviouslyApply) {
@@ -77,7 +77,7 @@ export default function getChangedStyles(
             // Also add the prop as applied unless it was added before
             elementPreviouslyAppliedProps.push(prop);
 
-            let index = elementStyleChangeSet.removeProps.indexOf(prop);
+            const index = elementStyleChangeSet.removeProps.indexOf(prop);
             if (index !== -1) {
               elementStyleChangeSet.removeProps.splice(index, 1);
             }
@@ -90,7 +90,7 @@ export default function getChangedStyles(
         // removed from "removeProps", since this query still keeps it
         // in an applied state
         for (let prop in elementData.styles) {
-          let index = elementStyleChangeSet.removeProps.indexOf(prop);
+          const index = elementStyleChangeSet.removeProps.indexOf(prop);
           if (index !== -1) {
             elementStyleChangeSet.removeProps.splice(index, 1);
             currentAddStyle[prop] = elementData.styles[prop];
@@ -120,14 +120,14 @@ export default function getChangedStyles(
           currentAddStyle
         );
       } else if (!doesCurrentlyApply && didPreviouslyApply) {
-        let elementAffectedProps = getAffectedPropsByElementData(elementData);
+        const elementAffectedProps = getAffectedPropsByElementData(elementData);
 
         // Create removeProps object from all affected styles, not touching previously applied props however
-        let applicableRemoveProps = difference(
+        const applicableRemoveProps = _.difference(
           elementAffectedProps,
           elementPreviouslyAppliedProps
         );
-        styleChangeSet[elementData.selector].removeProps = union(
+        styleChangeSet[elementData.selector].removeProps = _.union(
           styleChangeSet[elementData.selector].removeProps,
           applicableRemoveProps
         );
@@ -157,9 +157,10 @@ export default function getChangedStyles(
 
         // Removing props now about to be applied from previous removeProps array
         for (let prop in applicableCurrentAddStyle) {
-          let index = styleChangeSet[elementData.selector].removeProps.indexOf(
-            prop
-          );
+          const index = styleChangeSet[
+            elementData.selector
+          ].removeProps.indexOf(prop);
+
           if (index !== -1) {
             styleChangeSet[elementData.selector].removeProps.splice(index, 1);
           }

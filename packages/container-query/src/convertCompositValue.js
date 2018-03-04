@@ -19,7 +19,7 @@ export default function convertCompositValue(
     return compositValue;
   }
 
-  let convertedValues = {};
+  const convertedValues = {};
   valArr.forEach(value => {
     convertedValues[value] = convertSingleValue(dimensions, value, precision);
   });

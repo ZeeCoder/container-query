@@ -8,7 +8,7 @@ function andCondition(
   conditionFunctions: Function[],
   containerSize: ContainerSize
 ): boolean {
-  let conditionFunctionsLength = conditionFunctions.length;
+  const conditionFunctionsLength = conditionFunctions.length;
   for (let i = 0; i < conditionFunctionsLength; i++) {
     if (!conditionFunctions[i](containerSize)) {
       return false;
@@ -25,7 +25,7 @@ function orCondition(
   conditionFunctions: Function[],
   containerSize: ContainerSize
 ): boolean {
-  let conditionFunctionsLength = conditionFunctions.length;
+  const conditionFunctionsLength = conditionFunctions.length;
   for (let i = 0; i < conditionFunctionsLength; i++) {
     if (conditionFunctions[i](containerSize)) {
       return true;
@@ -48,7 +48,7 @@ function convertConditionArrayToFunction(
 ): Function {
   const feature = condition[0];
   const operation = condition[1];
-  let value = condition[2];
+  const value = condition[2];
 
   if (feature === "width") {
     if (operation === ">") {

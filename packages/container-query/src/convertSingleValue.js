@@ -30,14 +30,10 @@ export default function convertSingleValue(
     (unit === "rmin" && dimensions.height < dimensions.width) ||
     (unit === "rmax" && dimensions.height > dimensions.width);
 
-  let valueNum: number;
-  if (relativeToHeight) {
-    // relative to height
-    valueNum = dimensions.height * parseFloat(num) / 100;
-  } else {
-    // relative to width
-    valueNum = dimensions.width * parseFloat(num) / 100;
-  }
+  const valueNum: number =
+    (relativeToHeight ? dimensions.height : dimensions.width) *
+    parseFloat(num) /
+    100;
 
   return `${valueNum.toFixed(precision)}px`;
 }

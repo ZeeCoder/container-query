@@ -20,7 +20,7 @@ export default function adjustValueObjectByContainerSize(
   valueDefinition: Styles,
   precision: number = 2
 ): Styles {
-  let values = objectAssign({}, valueDefinition);
+  const values = objectAssign({}, valueDefinition);
 
   for (let cssRule in values) {
     values[cssRule] = convertCompositValue(
