@@ -3,11 +3,12 @@ import MetaBuilder, {
   VALUES,
   STYLES,
   SELECTOR,
-  CONDITIONS
+  CONDITIONS,
+  QUERIES
 } from "../.";
 
 export const build = () =>
-  new MetaBuilder()
+  new MetaBuilder(".Container")
     .setDescendant(".child")
     .addStyle("font-size: 5rh")
 
@@ -38,91 +39,94 @@ export const build = () =>
 
     .build();
 
-export const out = [
-  {
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "10rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "10rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child3",
-        [VALUES]: {
-          "line-height": "10rh"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 100]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "10rh"
+export const out = {
+  [SELECTOR]: "Container",
+  [QUERIES]: [
+    {
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child",
+          [VALUES]: {
+            "font-size": "10rh"
+          }
         },
-        [STYLES]: {
-          border: "none"
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "10rh"
+          }
+        },
+        {
+          [SELECTOR]: ".child3",
+          [VALUES]: {
+            "line-height": "10rh"
+          }
         }
-      },
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "11rh"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 100]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child",
+          [VALUES]: {
+            "font-size": "10rh"
+          },
+          [STYLES]: {
+            border: "none"
+          }
+        },
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "11rh"
+          }
         }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 200]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "12rh"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 200]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "12rh"
+          }
         }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 10]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child3",
-        [VALUES]: {
-          "font-size": "10rh"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 10]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child3",
+          [VALUES]: {
+            "font-size": "10rh"
+          }
         }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 20]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child3",
-        [VALUES]: {
-          "font-size": "20rh"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 20]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child3",
+          [VALUES]: {
+            "font-size": "20rh"
+          }
         }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 30]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child3",
-        [VALUES]: {
-          "font-size": "30rh"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 30]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child3",
+          [VALUES]: {
+            "font-size": "30rh"
+          }
         }
-      }
-    ]
-  }
-];
+      ]
+    }
+  ]
+};

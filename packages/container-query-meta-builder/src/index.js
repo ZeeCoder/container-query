@@ -8,12 +8,14 @@ export const ELEMENTS = "b";
 export const VALUES = "c";
 export const STYLES = "d";
 export const SELECTOR = "e";
+export const QUERIES = "f";
 
 // export const CONDITIONS = "conditions";
 // export const ELEMENTS = "elements";
 // export const VALUES = "values";
 // export const STYLES = "styles";
 // export const SELECTOR = "selector";
+// export const QUERIES = "queries";
 
 const getElementData = (stats, conditions = null, selector = null) => {
   const newElementData = {};
@@ -61,8 +63,9 @@ const getElementData = (stats, conditions = null, selector = null) => {
 };
 
 export default class MetaBuilder {
-  constructor() {
-    this.stats = [];
+  constructor(selector) {
+    this.selector = selector;
+    this.queries = [];
     this.current = {
       conditions: null,
       selector: null,
@@ -78,7 +81,7 @@ export default class MetaBuilder {
     }
 
     const storedElementData = getElementData(
-      this.stats,
+      this.queries,
       this.current.conditions,
       this.current.selector
     );
@@ -178,6 +181,9 @@ export default class MetaBuilder {
   build() {
     this.flush();
 
-    return this.stats;
+    return {
+      [SELECTOR]: this.selector,
+      [QUERIES]: this.queries
+    };
   }
 }

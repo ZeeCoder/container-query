@@ -14,15 +14,15 @@ test("should output a json that minimises redundancy", () => {
 
   expect(meta).toEqual(reducedRedundancyTest.out);
 });
-
-test("should handle a lot of different descendants fine", () => {
-  const meta = descendantsTest.build();
-
-  expect(meta).toEqual(descendantsTest.out);
-});
-
-test("should handle normal CSS flow fine", () => {
-  const meta = normalCssFlowTest.build();
-
-  expect(meta).toEqual(normalCssFlowTest.out);
-});
+//
+// test("should handle a lot of different descendants fine", () => {
+//   const meta = descendantsTest.build();
+//
+//   expect(meta).toEqual(descendantsTest.out);
+// });
+//
+// test("should handle normal CSS flow fine", () => {
+//   const meta = normalCssFlowTest.build();
+//
+//   expect(meta).toEqual(normalCssFlowTest.out);
+// });

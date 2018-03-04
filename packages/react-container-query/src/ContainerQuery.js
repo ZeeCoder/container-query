@@ -32,16 +32,20 @@ export default class ContainerQuery extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.stats) {
+    if (!this.props.queries) {
       return;
     }
 
     this.lastContainer = ReactDOM.findDOMNode(this);
-    new Container(this.lastContainer, this.props.stats, this.containerOptions);
+    new Container(
+      this.lastContainer,
+      this.props.queries,
+      this.containerOptions
+    );
   }
 
   componentDidUpdate() {
-    if (!this.props.stats) {
+    if (!this.props.queries) {
       return;
     }
 
@@ -50,7 +54,7 @@ export default class ContainerQuery extends Component {
       this.lastContainer = element;
       new Container(
         this.lastContainer,
-        this.props.stats,
+        this.props.queries,
         this.containerOptions
       );
     }

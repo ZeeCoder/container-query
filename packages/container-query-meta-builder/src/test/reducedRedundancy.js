@@ -3,11 +3,12 @@ import MetaBuilder, {
   VALUES,
   STYLES,
   SELECTOR,
-  CONDITIONS
+  CONDITIONS,
+  QUERIES
 } from "../.";
 
 export const build = () =>
-  new MetaBuilder()
+  new MetaBuilder(".Container")
     .addStyle("font-size: 10rh")
     .addStyle("font-size: 15rh")
     .addStyle("line-height: 15rh")
@@ -41,57 +42,60 @@ export const build = () =>
 
     .build();
 
-export const out = [
-  {
-    [ELEMENTS]: [
-      {
-        [VALUES]: {
-          "font-size": "17rh",
-          "line-height": "15rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "5rh",
-          "line-height": "5rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "20rh",
-          "line-height": "30rh"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 100]]],
-    [ELEMENTS]: [
-      {
-        [VALUES]: {
-          "font-size": "20rh",
-          "line-height": "21rh"
+export const out = {
+  [SELECTOR]: ".Container",
+  [QUERIES]: [
+    {
+      [ELEMENTS]: [
+        {
+          [VALUES]: {
+            "font-size": "17rh",
+            "line-height": "15rh"
+          }
         },
-        [STYLES]: {
-          background: "transparent"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 200]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "25rh"
+        {
+          [SELECTOR]: ".child",
+          [VALUES]: {
+            "font-size": "5rh",
+            "line-height": "5rh"
+          }
         },
-        [STYLES]: {
-          border: "none"
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "20rh",
+            "line-height": "30rh"
+          }
         }
-      }
-    ]
-  }
-];
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 100]]],
+      [ELEMENTS]: [
+        {
+          [VALUES]: {
+            "font-size": "20rh",
+            "line-height": "21rh"
+          },
+          [STYLES]: {
+            background: "transparent"
+          }
+        }
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 200]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "25rh"
+          },
+          [STYLES]: {
+            border: "none"
+          }
+        }
+      ]
+    }
+  ]
+};

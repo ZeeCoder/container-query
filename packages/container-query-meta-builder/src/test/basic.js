@@ -3,11 +3,12 @@ import MetaBuilder, {
   VALUES,
   STYLES,
   SELECTOR,
-  CONDITIONS
+  CONDITIONS,
+  QUERIES
 } from "../.";
 
 export const build = () =>
-  new MetaBuilder()
+  new MetaBuilder(".Container")
     .addStyle("font-size: 15rh")
 
     .setQuery("(width > 200px)")
@@ -33,68 +34,71 @@ export const build = () =>
 
     .build();
 
-export const out = [
-  {
-    [ELEMENTS]: [
-      {
-        [VALUES]: {
-          "font-size": "15rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "10rh"
-        }
-      },
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "30rh"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 200]]],
-    [ELEMENTS]: [
-      {
-        [VALUES]: {
-          "font-size": "25rh"
+export const out = {
+  [SELECTOR]: ".Container",
+  [QUERIES]: [
+    {
+      [ELEMENTS]: [
+        {
+          [VALUES]: {
+            "font-size": "15rh"
+          }
         },
-        [STYLES]: {
-          background: "none"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["width", ">", 200], ["height", ">", 200]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "20rh"
+        {
+          [SELECTOR]: ".child",
+          [VALUES]: {
+            "font-size": "10rh"
+          }
         },
-        [STYLES]: {
-          "line-height": "1.5",
-          border: "none"
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "30rh"
+          }
         }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[["orientation", ":", "portrait"]]],
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "10rh"
-        },
-        [STYLES]: {
-          "line-height": "1.5"
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 200]]],
+      [ELEMENTS]: [
+        {
+          [VALUES]: {
+            "font-size": "25rh"
+          },
+          [STYLES]: {
+            background: "none"
+          }
         }
-      }
-    ]
-  }
-];
+      ]
+    },
+    {
+      [CONDITIONS]: [[["width", ">", 200], ["height", ">", 200]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child",
+          [VALUES]: {
+            "font-size": "20rh"
+          },
+          [STYLES]: {
+            "line-height": "1.5",
+            border: "none"
+          }
+        }
+      ]
+    },
+    {
+      [CONDITIONS]: [[["orientation", ":", "portrait"]]],
+      [ELEMENTS]: [
+        {
+          [SELECTOR]: ".child2",
+          [VALUES]: {
+            "font-size": "10rh"
+          },
+          [STYLES]: {
+            "line-height": "1.5"
+          }
+        }
+      ]
+    }
+  ]
+};
