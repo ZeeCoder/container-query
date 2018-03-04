@@ -1,7 +1,7 @@
 {
-  "name": "@zeecoder/container-query-stats-builder",
-  "description": "Stats object builder for Container Queries.",
-  "homepage": "https://github.com/ZeeCoder/container-query",
+  "name": "@zeecoder/container-query-meta-builder",
+  "description": "Meta object builder for Container Queries.",
+  "homepage": "https://github.com/ZeeCoder/container-query/tree/master/packages/container-query-meta-builder",
   "license": "MIT",
   "version": "2.5.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -14,9 +14,9 @@
     "test": "jest && yarn run build && yarn run size",
     "build:esm": "BABEL_ENV=production rollup -c rollup/rollup.esm.js",
     "build:cjs": "BABEL_ENV=production rollup -c rollup/rollup.cjs.js",
-    "//build": "npm-run-all build:*",
+    "build": "npm-run-all build:*",
     "size": "size-limit",
-    "//prepublish": "yarn build"
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "babel-core": "6",
