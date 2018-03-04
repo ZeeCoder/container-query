@@ -1,31 +1,32 @@
 // @flow
 import objectAssign from "object-assign";
 import getConditionFunction from "./getConditionFunction";
-import type { QueryStats } from "../flow/types";
+import type { Meta } from "../flow/types";
 
 /**
  * Returns an processed copy of the given configuration object.
  * Enhancements:
  * - Condition arrays are converted to functions that accept container dimensions
  */
-export default function processConfig(origConfig: QueryStats): QueryStats {
+export default function processMeta(meta: Meta): Meta {
   // Validate configuration before processing
   if (
-    typeof origConfig !== "object" ||
-    typeof origConfig.selector !== "string" ||
-    !Array.isArray(origConfig.queries)
+    typeof meta !== "object" ||
+    typeof meta.selector !== "string" ||
+    !Array.isArray(meta.queries)
   ) {
     throw new Error(
-      "Invalid query stats object. It's either not an object, or it's missing the 'selectors' and/or the 'queries' property."
+      "Invalid meta object. It's either not an object, or it's missing the 'selectors' and/or the 'queries' property."
     );
   }
 
   // Configuration seems valid, process it
-  let config = objectAssign({}, origConfig);
+  // TODO make a deep copy
+  const processedMeta = objectAssign({}, meta);
 
-  config.queries.forEach(queryData => {
+  processedMeta.queries.forEach(queryData => {
     queryData.conditionFunction = getConditionFunction(queryData.conditions);
   });
 
-  return config;
+  return processedMeta;
 }

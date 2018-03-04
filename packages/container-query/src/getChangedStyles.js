@@ -28,15 +28,15 @@ export default function getChangedStyles(
     return {};
   }
 
-  const { queryState, jsonStats, instance } = registryData;
+  const { queryState, meta, instance } = registryData;
   const styleChangeSet = {};
   const previouslyAppliedProps: {
     [selector: string]: string[]
   } = {};
 
-  const queriesLength = jsonStats.queries.length - 1;
+  const queriesLength = meta.queries.length - 1;
   for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
-    let queryData = jsonStats.queries[queryIndex];
+    let queryData = meta.queries[queryIndex];
     // Default queries have no `conditionFunction`
     let doesCurrentlyApply =
       typeof queryData.conditionFunction === "function"

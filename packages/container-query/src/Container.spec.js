@@ -1,7 +1,7 @@
 import Container from "./Container";
 
 console.warn = jest.fn();
-jest.mock("./processConfig", () => jest.fn(config => config));
+jest.mock("./processMeta", () => jest.fn(config => config));
 jest.mock("./adjustContainer", () => jest.fn());
 jest.mock("raf", () => jest.fn(cb => cb()));
 jest.mock("./containerRegistry", () => ({
@@ -35,7 +35,7 @@ jest.mock("mutation-observer", () => {
 
 beforeEach(() => {
   require("raf").mockClear();
-  require("./processConfig").mockClear();
+  require("./processMeta").mockClear();
   require("./adjustContainer").mockClear();
   const ResizeObserver = require("resize-observer-polyfill");
   ResizeObserver.prototype.observe.mockClear();
@@ -49,7 +49,7 @@ beforeEach(() => {
 
 test("should instantiate properly", () => {
   const ResizeObserver = require("resize-observer-polyfill");
-  const processConfig = require("./processConfig");
+  const processMeta = require("./processMeta");
   const adjustContainer = require("./adjustContainer");
   const containerRegistry = require("./containerRegistry");
   const raf = require("raf");
@@ -68,15 +68,15 @@ test("should instantiate properly", () => {
   expect(containerRegistry.set).toHaveBeenCalledTimes(1);
   expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
     instance: containerInstance,
-    jsonStats: config,
+    meta: config,
     queryState: []
   });
 
   expect(ResizeObserver).toHaveBeenCalledTimes(1);
   expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(1);
   expect(raf).toHaveBeenCalledTimes(1);
-  expect(processConfig).toHaveBeenCalledTimes(1);
-  expect(processConfig.mock.calls[0][0]).toBe(config);
+  expect(processMeta).toHaveBeenCalledTimes(1);
+  expect(processMeta.mock.calls[0][0]).toBe(config);
   expect(adjustContainer).toHaveBeenCalledTimes(4);
   expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
   expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);
@@ -96,14 +96,14 @@ test("should create the initial query state based on the number of queries", () 
   expect(containerRegistry.set).toHaveBeenCalledTimes(1);
   expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
     instance: containerInstance,
-    jsonStats: config,
+    meta: config,
     queryState: [false, false]
   });
 });
 
 test("should not call adjust if disabled by the options", () => {
   const ResizeObserver = require("resize-observer-polyfill");
-  const processConfig = require("./processConfig");
+  const processMeta = require("./processMeta");
   const adjustContainer = require("./adjustContainer");
   const raf = require("raf");
 
@@ -121,8 +121,8 @@ test("should not call adjust if disabled by the options", () => {
   expect(ResizeObserver).toHaveBeenCalledTimes(1);
   expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(0);
   expect(raf).toHaveBeenCalledTimes(0);
-  expect(processConfig).toHaveBeenCalledTimes(1);
-  expect(processConfig.mock.calls[0][0]).toBe(config);
+  expect(processMeta).toHaveBeenCalledTimes(1);
+  expect(processMeta.mock.calls[0][0]).toBe(config);
   expect(adjustContainer).toHaveBeenCalledTimes(0);
 });
 
@@ -187,7 +187,7 @@ test("should call adjust() on resize changes", () => {
   });
   const registryData = {
     instance: containerInstance,
-    jsonStats: {},
+    meta: {},
     queryState: []
   };
 
@@ -246,7 +246,7 @@ test("should clean up after container element is detached from the DOM", () => {
   });
   const registryData = {
     instance: containerInstance,
-    jsonStats: {},
+    meta: {},
     queryState: []
   };
   expect(containerRegistry.set).toHaveBeenCalledTimes(1);

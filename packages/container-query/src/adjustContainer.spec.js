@@ -24,7 +24,7 @@ test("should be able to get the container size itself, and ignore empty change s
   getContainerSize.mockImplementationOnce(() => containerSize);
   containerRegistry.set(containerElement, {
     queryState: [],
-    jsonStats: {
+    meta: {
       queries: []
     }
   });
@@ -56,7 +56,7 @@ test("should apply changed styles", () => {
   const containerSize = { width: 1, height: 2 };
   containerRegistry.set(containerElement, {
     queryState: [],
-    jsonStats: {
+    meta: {
       selector: ".Container",
       queries: []
     }
@@ -124,7 +124,7 @@ test("should respect container boundaries while applying styles", () => {
 
   containerRegistry.set(container1, {
     queryState: [],
-    jsonStats: {
+    meta: {
       selector: ".Container",
       queries: []
     }
@@ -132,7 +132,7 @@ test("should respect container boundaries while applying styles", () => {
 
   containerRegistry.set(container2, {
     queryState: [],
-    jsonStats: {
+    meta: {
       selector: ".Container2",
       queries: []
     }

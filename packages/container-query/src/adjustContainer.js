@@ -78,7 +78,7 @@ export default function adjustContainer(
     }
 
     // What element(s) do we need to add these styles to?
-    const containerSelector = registryData.jsonStats.selector;
+    const containerSelector = registryData.meta.selector;
     const elements = findContainerDescendants(
       container,
       containerSelector,

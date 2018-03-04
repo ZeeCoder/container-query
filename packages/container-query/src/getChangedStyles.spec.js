@@ -16,7 +16,7 @@ test("should apply default queries without a condition function", () => {
     return {
       instance: { opts: { valuePrecision: 3 } },
       queryState: [false, false],
-      jsonStats: {
+      meta: {
         queries: [
           {
             elements: [
@@ -79,7 +79,7 @@ test("should return change sets on first run", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false, false],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: jest.fn(() => true),
@@ -136,18 +136,18 @@ test("should return change sets on first run", () => {
       }
     }
   });
-  expect(
-    registryData.jsonStats.queries[0].conditionFunction
-  ).toHaveBeenCalledTimes(1);
-  expect(
-    registryData.jsonStats.queries[0].conditionFunction
-  ).toHaveBeenCalledWith(size);
-  expect(
-    registryData.jsonStats.queries[1].conditionFunction
-  ).toHaveBeenCalledTimes(1);
-  expect(
-    registryData.jsonStats.queries[1].conditionFunction
-  ).toHaveBeenCalledWith(size);
+  expect(registryData.meta.queries[0].conditionFunction).toHaveBeenCalledTimes(
+    1
+  );
+  expect(registryData.meta.queries[0].conditionFunction).toHaveBeenCalledWith(
+    size
+  );
+  expect(registryData.meta.queries[1].conditionFunction).toHaveBeenCalledTimes(
+    1
+  );
+  expect(registryData.meta.queries[1].conditionFunction).toHaveBeenCalledWith(
+    size
+  );
   expect(registryData.queryState).toEqual([true, true]);
 });
 
@@ -155,7 +155,7 @@ test("should generate remove change set", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, true, true],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: () => true,
@@ -243,7 +243,7 @@ test("should generate empty change set if conditions allow", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, true],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: () => false,
@@ -305,7 +305,7 @@ test("should always recalculate values", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, false, true],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: () => true,
@@ -381,7 +381,7 @@ test("should be able to limit the precision of generated css values", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: () => true,
@@ -419,7 +419,7 @@ test("should handle multiple prop removal over multiple queries", () => {
   const registryData = {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false, false, true],
-    jsonStats: {
+    meta: {
       queries: [
         {
           conditionFunction: () => true,

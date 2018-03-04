@@ -44,7 +44,8 @@
     "mutation-observer": "^1.0.2",
     "object-assign": "^4.1.1",
     "raf": "^3.3.2",
-    "resize-observer-polyfill": "^1.4.2"
+    "resize-observer-polyfill": "^1.4.2",
+    "@zeecoder/container-query-meta-builder": "^2.5.0"
   },
   "keywords": [
     "rwd",

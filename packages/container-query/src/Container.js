@@ -1,12 +1,12 @@
 // @flow
-import processConfig from "./processConfig";
+import processMeta from "./processMeta";
 import adjustContainer from "./adjustContainer";
 import objectAssign from "object-assign";
 import ResizeObserver from "resize-observer-polyfill";
 import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
-import type { ContainerSize, QueryStats, RegistryData } from "../flow/types";
+import type { ContainerSize, Meta, RegistryData } from "../flow/types";
 
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
@@ -55,16 +55,12 @@ const mutationObserver = new MutationObserver(mutationRecords => {
 
 export default class Container {
   container: HTMLElement;
-  processedJsonStats: {};
+  meta: {};
   opts: {};
 
-  constructor(
-    containerElement: HTMLElement,
-    jsonStats: QueryStats,
-    opts: {} = {}
-  ) {
+  constructor(containerElement: HTMLElement, meta: Meta, opts: {} = {}) {
     this.container = containerElement;
-    this.processedJsonStats = processConfig(jsonStats);
+    this.meta = processMeta(meta);
 
     this.opts = objectAssign(
       {
@@ -76,16 +72,16 @@ export default class Container {
     );
 
     const getInitialQueryState = () => {
-      if (!Array.isArray(jsonStats.queries)) {
+      if (!Array.isArray(meta.queries)) {
         return [];
       }
 
-      return jsonStats.queries.map(() => false);
+      return meta.queries.map(() => false);
     };
 
     containerRegistry.set(containerElement, {
       instance: this,
-      jsonStats: jsonStats,
+      meta: meta,
       queryState: getInitialQueryState()
     });
 

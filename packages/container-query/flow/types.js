@@ -13,21 +13,17 @@ export type ElementData = {
   values: Styles
 };
 
-export type QueryStats = {
+export type Meta = {
   selector: string,
   queries: Array<{
     conditions: [string, string, string | number],
     conditionFunction: Function,
-    elements: Array<{
-      selector: string,
-      styles: Styles,
-      Values: Styles
-    }>
+    elements: Array<ElementData>
   }>
 };
 
 export type RegistryData = {
   instance: Object,
-  jsonStats: QueryStats,
+  meta: Meta,
   queryState: boolean[]
 };
