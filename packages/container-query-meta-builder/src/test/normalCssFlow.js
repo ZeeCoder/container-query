@@ -1,4 +1,4 @@
-import StatsBuilder, {
+import MetaBuilder, {
   ELEMENTS,
   VALUES,
   STYLES,
@@ -7,7 +7,7 @@ import StatsBuilder, {
 } from "../.";
 
 export const build = () =>
-  new StatsBuilder()
+  new MetaBuilder()
     .setDescendant(".child")
     .addStyle("font-size: 10rh")
     .setDescendant(".child2")

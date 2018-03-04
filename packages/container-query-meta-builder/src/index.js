@@ -60,7 +60,7 @@ const getElementData = (stats, conditions = null, selector = null) => {
   return newElementData;
 };
 
-export default class StatsBuilder {
+export default class MetaBuilder {
   constructor() {
     this.stats = [];
     this.current = {

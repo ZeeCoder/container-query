@@ -4,25 +4,25 @@ import * as descendantsTest from "./test/descendants";
 import * as normalCssFlowTest from "./test/normalCssFlow";
 
 test("should be able to generate the usual stats structure", () => {
-  const stats = basicTest.build();
+  const meta = basicTest.build();
 
-  expect(stats).toEqual(basicTest.out);
+  expect(meta).toEqual(basicTest.out);
 });
 
 test("should output a json that minimises redundancy", () => {
-  const stats = reducedRedundancyTest.build();
+  const meta = reducedRedundancyTest.build();
 
-  expect(stats).toEqual(reducedRedundancyTest.out);
+  expect(meta).toEqual(reducedRedundancyTest.out);
 });
 
 test("should handle a lot of different descendants fine", () => {
-  const stats = descendantsTest.build();
+  const meta = descendantsTest.build();
 
-  expect(stats).toEqual(descendantsTest.out);
+  expect(meta).toEqual(descendantsTest.out);
 });
 
 test("should handle normal CSS flow fine", () => {
-  const stats = normalCssFlowTest.build();
+  const meta = normalCssFlowTest.build();
 
-  expect(stats).toEqual(normalCssFlowTest.out);
+  expect(meta).toEqual(normalCssFlowTest.out);
 });
