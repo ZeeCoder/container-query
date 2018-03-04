@@ -9,21 +9,24 @@ import StatsBuilder, {
 export const build = () =>
   new StatsBuilder()
     .addStyle("font-size: 15rh")
+
     .setQuery("(width > 200px)")
     .addStyle("font-size: 25rh")
     .addStyle("background: none")
-    .resetQuery()
 
+    .resetQuery()
     .setDescendant(".child")
     .addStyle("font-size: 10rh")
+
     .setQuery("   (width > 200px) and (height > 200px)   ")
     .addStyle("line-height: 1.5")
     .addStyle("font-size: 20rh")
     .addStyle("  border: none")
-    .resetQuery()
 
+    .resetQuery()
     .setDescendant(".child2")
     .addStyle("font-size: 30rh")
+
     .setQuery("(orientation: portrait)  ")
     .addStyle({ prop: "line-height", value: "1.5" })
     .addStyle({ prop: "font-size", value: "10rh" })
@@ -37,11 +40,23 @@ export const out = [
         [VALUES]: {
           "font-size": "15rh"
         }
+      },
+      {
+        [SELECTOR]: ".child",
+        [VALUES]: {
+          "font-size": "10rh"
+        }
+      },
+      {
+        [SELECTOR]: ".child2",
+        [VALUES]: {
+          "font-size": "30rh"
+        }
       }
     ]
   },
   {
-    [CONDITIONS]: [[[["width", ">", 200]]]],
+    [CONDITIONS]: [[["width", ">", 200]]],
     [ELEMENTS]: [
       {
         [VALUES]: {
@@ -54,17 +69,7 @@ export const out = [
     ]
   },
   {
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child",
-        [VALUES]: {
-          "font-size": "10rh"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[[["width", ">", 200], ["height", ">", 200]]]],
+    [CONDITIONS]: [[["width", ">", 200], ["height", ">", 200]]],
     [ELEMENTS]: [
       {
         [SELECTOR]: ".child",
@@ -79,17 +84,7 @@ export const out = [
     ]
   },
   {
-    [ELEMENTS]: [
-      {
-        [SELECTOR]: ".child2",
-        [VALUES]: {
-          "font-size": "30rh"
-        }
-      }
-    ]
-  },
-  {
-    [CONDITIONS]: [[[["orientation", ":", "portrait"]]]],
+    [CONDITIONS]: [[["orientation", ":", "portrait"]]],
     [ELEMENTS]: [
       {
         [SELECTOR]: ".child2",

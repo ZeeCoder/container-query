@@ -34,7 +34,8 @@
     "size-limit": "^0.15.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "object-assign": "^4.1.1"
   },
   "keywords": [
     "rwd",

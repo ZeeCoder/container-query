@@ -1,4 +1,5 @@
 import _ from "lodash";
+import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 
@@ -8,11 +9,62 @@ export const VALUES = "c";
 export const STYLES = "d";
 export const SELECTOR = "e";
 
+// export const CONDITIONS = "conditions";
+// export const ELEMENTS = "elements";
+// export const VALUES = "values";
+// export const STYLES = "styles";
+// export const SELECTOR = "selector";
+
+const getElementData = (stats, conditions = null, selector = null) => {
+  const newElementData = {};
+
+  if (selector) {
+    newElementData[SELECTOR] = selector;
+  }
+
+  const statsLength = stats.length;
+  for (let i = 0; i < statsLength; i++) {
+    const query = stats[i];
+
+    if (
+      (!query[CONDITIONS] && !conditions) ||
+      _.isEqual(query[CONDITIONS], conditions)
+    ) {
+      const elementsLength = query[ELEMENTS].length;
+      for (let j = 0; j < elementsLength; j++) {
+        const elementData = query[ELEMENTS][j];
+        if (
+          (!elementData[SELECTOR] && !selector) ||
+          elementData[SELECTOR] === selector
+        ) {
+          return elementData;
+        }
+      }
+
+      // no element data was found with this selector, so add one
+      query[ELEMENTS].push(newElementData);
+
+      return newElementData;
+    }
+  }
+
+  const query = { [ELEMENTS]: [] };
+
+  if (conditions) {
+    query[CONDITIONS] = conditions;
+  }
+
+  query[ELEMENTS].push(newElementData);
+  stats.push(query);
+
+  return newElementData;
+};
+
 export default class StatsBuilder {
   constructor() {
     this.stats = [];
     this.current = {
-      conditions: [],
+      conditions: null,
       selector: null,
       styles: {},
       values: {}
@@ -25,29 +77,31 @@ export default class StatsBuilder {
       return;
     }
 
-    const elementStat = {};
-    const stat = {};
+    const storedElementData = getElementData(
+      this.stats,
+      this.current.conditions,
+      this.current.selector
+    );
 
-    if (!_.isEmpty(this.current.conditions)) {
-      stat[CONDITIONS] = this.current.conditions;
-    }
-
-    if (this.current.selector) {
-      elementStat[SELECTOR] = this.current.selector;
-    }
-
+    // Merge new styles to the stored element data
     if (!_.isEmpty(this.current.styles)) {
-      elementStat[STYLES] = this.current.styles;
-      this.current.styles = {};
+      if (!storedElementData[STYLES]) {
+        storedElementData[STYLES] = {};
+      }
+
+      objectAssign(storedElementData[STYLES], this.current.styles);
     }
+
     if (!_.isEmpty(this.current.values)) {
-      elementStat[VALUES] = this.current.values;
-      this.current.values = {};
+      if (!storedElementData[VALUES]) {
+        storedElementData[VALUES] = {};
+      }
+
+      objectAssign(storedElementData[VALUES], this.current.values);
     }
 
-    stat[ELEMENTS] = [elementStat];
-
-    this.stats.push(stat);
+    this.current.styles = {};
+    this.current.values = {};
 
     return this;
   }
@@ -74,10 +128,7 @@ export default class StatsBuilder {
       throw new Error(`Unrecognised style: ${node}`);
     }
 
-    if (
-      !isValueUsingContainerUnits(style[1]) &&
-      _.isEmpty(this.current.conditions)
-    ) {
+    if (!isValueUsingContainerUnits(style[1]) && !this.current.conditions) {
       throw new Error(
         'Styles without container units (e.g. "rw") can only be added with a @container query.'
       );
@@ -95,7 +146,7 @@ export default class StatsBuilder {
   resetQuery() {
     this.flush();
 
-    this.current.conditions = [];
+    this.current.conditions = null;
 
     return this;
   }
@@ -103,7 +154,7 @@ export default class StatsBuilder {
   setQuery(conditions) {
     this.flush();
 
-    this.current.conditions.push(getConditionsFromQueryParams(conditions));
+    this.current.conditions = getConditionsFromQueryParams(conditions);
 
     return this;
   }
@@ -123,8 +174,6 @@ export default class StatsBuilder {
 
     return this;
   }
-
-  optimise() {}
 
   build() {
     this.flush();
