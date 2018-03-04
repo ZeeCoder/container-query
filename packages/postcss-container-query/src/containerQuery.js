@@ -11,12 +11,9 @@ import saveJSON from "./saveJSON";
  * @param {Node} node
  * @returns {boolean}
  */
-function shouldProcessNode(node) {
-  return (
-    (node.type === "rule" && node.parent.type === "root") ||
-    (node.type === "atrule" && node.name === "container")
-  );
-}
+const shouldProcessNode = node =>
+  (node.type === "rule" && node.parent.type === "root") ||
+  (node.type === "atrule" && node.name === "container");
 
 /**
  * Extracts container units with their props from an object.
@@ -25,15 +22,12 @@ function shouldProcessNode(node) {
  * @param  {boolean} isContainer
  * @return {Object}
  */
-function extractContainerUnits(node, isContainer = false) {
-  return (
-    extractPropsFromNode(node, {
-      isContainer: isContainer,
-      onlyContainerUnits: true,
-      stripContainerUnits: true
-    }).values || null
-  );
-}
+const extractContainerUnits = (node, isContainer = false) =>
+  extractPropsFromNode(node, {
+    isContainer: isContainer,
+    onlyContainerUnits: true,
+    stripContainerUnits: true
+  }).values || null;
 
 /**
  * @param {{
@@ -148,9 +142,7 @@ function containerQuery(options = {}) {
      * @param  {Node}  node
      * @return {boolean}
      */
-    const isContainerCheck = node => {
-      return currentContainerSelector === node.selector;
-    };
+    const isContainerCheck = node => currentContainerSelector === node.selector;
 
     const initialiseContainer = selector => {
       currentContainerSelector = selector;
