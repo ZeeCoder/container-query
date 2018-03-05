@@ -40,7 +40,7 @@ export const build = () =>
     .build();
 
 export const out = {
-  [SELECTOR]: "Container",
+  [SELECTOR]: ".Container",
   [QUERIES]: [
     {
       [ELEMENTS]: [

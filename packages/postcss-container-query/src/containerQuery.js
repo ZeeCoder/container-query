@@ -1,8 +1,8 @@
 import postcss from "postcss";
 import detectContainerDefinition from "./detectContainerDefinition";
-import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 import extractPropsFromNode from "./extractPropsFromNode";
 import saveJSON from "./saveJSON";
+import MetaBuilder from "@zeecoder/container-query-meta-builder";
 
 /**
  * Decides if a node should be processed or not.
@@ -69,60 +69,33 @@ function containerQuery(options = {}) {
 
       checkForPrecedingContainerDeclaration(node);
 
-      // Check if we have a default query
+      const builder = containers[currentContainerSelector];
+
+      builder.resetDescendant().resetQuery();
+
+      // Only store selectors that are not referring to the container
       if (
-        !containers[currentContainerSelector].queries[0] ||
-        containers[currentContainerSelector].queries[0].conditions
+        node.selector !== currentContainerSelector &&
+        node.selector !== ":self"
       ) {
-        // Create the default query
-        containers[currentContainerSelector].queries.unshift({
-          elements: []
-        });
+        builder.setDescendant(node.selector);
       }
 
-      // The query at the 0 index is the default query, without conditions
-      // Fetch a previously added element data based on the selector, or
-      // create a new one
-      let elementData = null;
-      const elementslength =
-        containers[currentContainerSelector].queries[0].elements.length;
-      for (let i = 0; i < elementslength; i++) {
-        if (
-          containers[currentContainerSelector].queries[0].elements[i]
-            .selector === node.selector
-        ) {
-          elementData =
-            containers[currentContainerSelector].queries[0].elements[i];
-          break;
-        }
+      for (let prop in containerUnits) {
+        const value = containerUnits[prop];
+        builder.addStyle({ prop, value });
       }
-
-      if (elementData === null) {
-        elementData = {
-          selector: node.selector,
-          values: {}
-        };
-
-        containers[currentContainerSelector].queries[0].elements.push(
-          elementData
-        );
-      }
-
-      // Add the extracted container units
-      Object.assign(elementData.values, containerUnits);
     };
 
     /**
      * Processing a rule node under a container query.
      *
      * @param  {Node} node
+     * @param  {string} conditions
      * @returns {null|Object}
      */
-    const processRuleNode = node => {
+    const processRuleNode = (node, conditions) => {
       const isContainer = isContainerCheck(node);
-      const elementData = {
-        selector: node.selector
-      };
 
       const props = extractPropsFromNode(node, { isContainer });
 
@@ -130,9 +103,25 @@ function containerQuery(options = {}) {
         return null;
       }
 
-      Object.assign(elementData, props);
+      const builder = containers[currentContainerSelector];
 
-      return elementData;
+      builder.setQuery(conditions).resetDescendant();
+      // Only store selectors that are not referring to the container
+      if (
+        node.selector !== currentContainerSelector &&
+        node.selector !== ":self"
+      ) {
+        builder.setDescendant(node.selector);
+      }
+
+      for (let prop in props.styles) {
+        const value = props.styles[prop];
+        builder.addStyle({ prop, value });
+      }
+      for (let prop in props.values) {
+        const value = props.values[prop];
+        builder.addStyle({ prop, value });
+      }
     };
 
     /**
@@ -146,7 +135,8 @@ function containerQuery(options = {}) {
 
     const initialiseContainer = selector => {
       currentContainerSelector = selector;
-      containers[selector] = { selector, queries: [] };
+      // containers[selector] = { selector, queries: [] };
+      containers[selector] = new MetaBuilder(selector);
     };
 
     root.walk((/** Node */ node) => {
@@ -155,8 +145,8 @@ function containerQuery(options = {}) {
       }
 
       if (node.type === "rule") {
-        // See if we have to auto-detect the container
-        if (!currentContainerSelector && singleContainer) {
+        // Pick up the first selector as the container selector in singleContainer mode
+        if (singleContainer && !currentContainerSelector) {
           initialiseContainer(node.selector);
         }
 
@@ -182,29 +172,22 @@ function containerQuery(options = {}) {
         // Process container query
         checkForPrecedingContainerDeclaration(node);
 
-        const query = {
-          conditions: getConditionsFromQueryParams(node.params),
-          elements: []
-        };
-
         node.nodes.forEach(ruleNode => {
           if (ruleNode.type !== "rule") {
             return;
           }
 
-          const elementData = processRuleNode(ruleNode);
-          if (elementData !== null) {
-            query.elements.push(elementData);
-          }
+          processRuleNode(ruleNode, node.params);
         });
-
-        if (query.elements.length > 0) {
-          containers[currentContainerSelector].queries.push(query);
-        }
 
         node.remove();
       }
     });
+
+    // Map builders to metadata
+    for (let selector in containers) {
+      containers[selector] = containers[selector].build();
+    }
 
     let response = containers;
     if (singleContainer) {

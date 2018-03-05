@@ -1,3 +1,11 @@
+import {
+  SELECTOR,
+  QUERIES,
+  ELEMENTS,
+  VALUES,
+  CONDITIONS
+} from "@zeecoder/container-query-meta-builder";
+
 export const cssInput = `
 .Container {
   --rw: 1rw;
@@ -13,13 +21,12 @@ export const cssOutput = `
 `;
 
 export const statsOutput = {
-  selector: ".Container",
-  queries: [
+  [SELECTOR]: ".Container",
+  [QUERIES]: [
     {
-      elements: [
+      [ELEMENTS]: [
         {
-          selector: ".Container",
-          values: {
+          [VALUES]: {
             "--rw": `1rw`,
             "--rh": `1rh`,
             "--rmin": `1rmin`,

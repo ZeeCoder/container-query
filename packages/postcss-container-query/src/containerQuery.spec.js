@@ -9,6 +9,7 @@ import * as unrecognisedAtRulesTest from "./test/unrecognised-at-rules";
 import * as missingContainerDelcarationTest from "./test/missing-container-declaration";
 import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-with-r-units";
 import * as selfTest from "./test/self";
+import * as simpleTest from "./test/simple";
 
 jest.mock("./saveJSON");
 
@@ -38,12 +39,14 @@ const processCss = (css, options = {}) =>
  * }} testObj
  * @param {{}} options plugin options
  * @return {Promise<{
- *  actualCssOutput: string,
- *  actualStatsOutput: {},
+ *  cssOutput: string,
+ *  statsOutput: {},
  * }>}
  */
 const assertProcessingResult = (testObj, options = {}) =>
   processCss(testObj.cssInput, options).then(({ css, stats }) => {
+    // console.log(JSON.stringify(stats));
+
     expect(css).toBe(testObj.cssOutput);
     expect(stats).toEqual(testObj.statsOutput);
 
@@ -65,6 +68,7 @@ test("should use the default json saving function if none was supplied", () => {
 
 test("should throw on missing container declaration", () => {
   expect.assertions(1);
+
   return processCss(missingContainerDelcarationTest.cssInput, {
     singleContainer: false
   }).catch(e => {
@@ -76,6 +80,7 @@ test("should throw on missing container declaration", () => {
 
 test("should throw on missing container declaration when the container has r-units", () => {
   expect.assertions(1);
+
   return processCss(missingDeclarationWithRUnitsTest.cssInput, {
     singleContainer: false
   }).catch(e => {
@@ -97,6 +102,7 @@ test("should detect the first class as the container by default", () =>
 
 test("should throw in non singleContainer mode for defining a different container", () => {
   expect.assertions(1);
+
   return processCss(exessContainerDeclarationTest.cssInput).catch(e => {
     expect(e.reason).toBe(
       "define-container declaration detected in singleContainer mode. " +
@@ -109,3 +115,6 @@ test("should extract css custom properties", () =>
   assertProcessingResult(customPropertiesTest));
 
 test("should handle :self", () => assertProcessingResult(selfTest));
+
+test("should be able to run this simple test", () =>
+  assertProcessingResult(simpleTest));

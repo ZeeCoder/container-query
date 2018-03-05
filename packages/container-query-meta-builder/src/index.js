@@ -3,30 +3,30 @@ import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 
-export const CONDITIONS = "a";
-export const ELEMENTS = "b";
-export const VALUES = "c";
-export const STYLES = "d";
-export const SELECTOR = "e";
-export const QUERIES = "f";
+// export const CONDITIONS = "a";
+// export const ELEMENTS = "b";
+// export const VALUES = "c";
+// export const STYLES = "d";
+// export const SELECTOR = "e";
+// export const QUERIES = "f";
 
-// export const CONDITIONS = "conditions";
-// export const ELEMENTS = "elements";
-// export const VALUES = "values";
-// export const STYLES = "styles";
-// export const SELECTOR = "selector";
-// export const QUERIES = "queries";
+export const CONDITIONS = "conditions";
+export const ELEMENTS = "elements";
+export const VALUES = "values";
+export const STYLES = "styles";
+export const SELECTOR = "selector";
+export const QUERIES = "queries";
 
-const getElementData = (stats, conditions = null, selector = null) => {
+const getElementData = (queries, conditions = null, selector = null) => {
   const newElementData = {};
 
   if (selector) {
     newElementData[SELECTOR] = selector;
   }
 
-  const statsLength = stats.length;
-  for (let i = 0; i < statsLength; i++) {
-    const query = stats[i];
+  const queriesLength = queries.length;
+  for (let i = 0; i < queriesLength; i++) {
+    const query = queries[i];
 
     if (
       (!query[CONDITIONS] && !conditions) ||
@@ -57,7 +57,7 @@ const getElementData = (stats, conditions = null, selector = null) => {
   }
 
   query[ELEMENTS].push(newElementData);
-  stats.push(query);
+  queries.push(query);
 
   return newElementData;
 };

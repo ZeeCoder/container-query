@@ -1,3 +1,11 @@
+import {
+  SELECTOR,
+  QUERIES,
+  ELEMENTS,
+  VALUES,
+  CONDITIONS
+} from "@zeecoder/container-query-meta-builder";
+
 export const cssInput = `
 .Container {
   line-height: 3rh;
@@ -20,13 +28,12 @@ export const cssOutput = `
 `;
 
 export const statsOutput = {
-  selector: ".Container",
-  queries: [
+  [SELECTOR]: ".Container",
+  [QUERIES]: [
     {
-      elements: [
+      [ELEMENTS]: [
         {
-          selector: ".Container",
-          values: {
+          [VALUES]: {
             "line-height": `3rh`,
             "font-size": `2rh`
           }

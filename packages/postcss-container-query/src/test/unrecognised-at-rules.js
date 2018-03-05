@@ -1,3 +1,12 @@
+import {
+  SELECTOR,
+  QUERIES,
+  ELEMENTS,
+  VALUES,
+  STYLES,
+  CONDITIONS
+} from "@zeecoder/container-query-meta-builder";
+
 export const cssInput = `
 .unrelated-class {
   color: black;
@@ -99,21 +108,20 @@ export const cssOutput = `
 
 export const statsOutput = {
   ".Container": {
-    selector: ".Container",
-    queries: [
+    [SELECTOR]: ".Container",
+    [QUERIES]: [
       {
-        elements: [
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            values: {
+            [VALUES]: {
               "line-height": `3rh`,
               "font-size": `1rh`,
               "margin-left": `2rw`
             }
           },
           {
-            selector: ".Container__element",
-            values: {
+            [SELECTOR]: ".Container__element",
+            [VALUES]: {
               "font-size": `1rw`,
               "line-height": `2rw`
             }
@@ -121,11 +129,10 @@ export const statsOutput = {
         ]
       },
       {
-        conditions: [[["orientation", ":", "landscape"]]],
-        elements: [
+        [CONDITIONS]: [[["orientation", ":", "landscape"]]],
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            styles: { "font-size": "24px" }
+            [STYLES]: { "font-size": "24px" }
           }
         ]
       }

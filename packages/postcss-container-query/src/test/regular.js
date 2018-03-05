@@ -1,3 +1,12 @@
+import {
+  SELECTOR,
+  QUERIES,
+  ELEMENTS,
+  VALUES,
+  STYLES,
+  CONDITIONS
+} from "@zeecoder/container-query-meta-builder";
+
 export const cssInput = `
 .Container {
     @define-container;
@@ -72,13 +81,12 @@ export const cssOutput = `
 
 export const statsOutput = {
   ".Container": {
-    selector: ".Container",
-    queries: [
+    [SELECTOR]: ".Container",
+    [QUERIES]: [
       {
-        elements: [
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            values: {
+            [VALUES]: {
               "font-size": `50rh`,
               "line-height": `100rh`
             }
@@ -86,36 +94,33 @@ export const statsOutput = {
         ]
       },
       {
-        conditions: [[["height", ">=", 100], ["width", ">=", 100]]],
-        elements: [
+        [CONDITIONS]: [[["height", ">=", 100], ["width", ">=", 100]]],
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            values: {
+            [VALUES]: {
               "font-size": `70rh`
             }
           }
         ]
       },
       {
-        conditions: [[["height", ">=", 100]]],
-        elements: [
+        [CONDITIONS]: [[["height", ">=", 100]]],
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            styles: {
+            [STYLES]: {
               background: "none"
             }
           }
         ]
       },
       {
-        conditions: [
+        [CONDITIONS]: [
           [["height", ">=", 100], ["width", ">=", 100]],
           [["aspect-ratio", ">", 3.5]]
         ],
-        elements: [
+        [ELEMENTS]: [
           {
-            selector: ".Container",
-            styles: {
+            [STYLES]: {
               background: "#000"
             }
           }
@@ -124,13 +129,13 @@ export const statsOutput = {
     ]
   },
   ".Container2": {
-    selector: ".Container2",
-    queries: [
+    [SELECTOR]: ".Container2",
+    [QUERIES]: [
       {
-        elements: [
+        [ELEMENTS]: [
           {
-            selector: ".Container2__element",
-            values: {
+            [SELECTOR]: ".Container2__element",
+            [VALUES]: {
               width: `50rw`,
               height: `50rh`
             }
@@ -138,20 +143,19 @@ export const statsOutput = {
         ]
       },
       {
-        conditions: [[["orientation", ":", "portrait"]]],
-        elements: [
+        [CONDITIONS]: [[["orientation", ":", "portrait"]]],
+        [ELEMENTS]: [
           {
-            selector: ".Container2",
-            values: {
+            [VALUES]: {
               "font-size": `70rh`
             }
           },
           {
-            selector: ".Container2__element",
-            styles: {
+            [SELECTOR]: ".Container2__element",
+            [STYLES]: {
               background: "red"
             },
-            values: {
+            [VALUES]: {
               width: `75rw`,
               height: `75rh`
             }
