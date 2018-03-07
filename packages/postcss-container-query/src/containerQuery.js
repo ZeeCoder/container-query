@@ -4,53 +4,41 @@ import extractPropsFromNode from "./extractPropsFromNode";
 import saveJSON from "./saveJSON";
 import MetaBuilder from "@zeecoder/container-query-meta-builder";
 
-const hasContainerQuery = node =>
+const isContainerQuery = node =>
   node.type === "atrule" && node.name === "container";
 
-/**
- * Extracts container units with their props from an object.
- *
- * @param  {Node}  node
- * @param  {boolean} isContainer
- * @return {Object}
- */
-const extractContainerUnits = (node, isContainer = false) =>
-  extractPropsFromNode(node, {
-    isContainer: isContainer,
-    onlyContainerUnits: true,
-    stripContainerUnits: true
-  }).values || null;
+const walkRules = (root, opts, handler) => {
+  const containerSelectors = [];
 
-const containerSelectors = [];
-const walkRules = (root, handler) =>
-  root.walk(node => {
-    const handleRule = (rule, parentAtRule) => {
-      const data = {
-        rule,
-        isContainer:
-          !!detectContainerDefinition(rule) ||
-          containerSelectors.indexOf(rule.selector) !== -1 ||
-          rule.selector === ":self"
-      };
+  const hasContainerSelector = selector =>
+    containerSelectors.indexOf(selector) !== -1;
 
-      if (parentAtRule) {
-        data.parentAtRule = parentAtRule;
-      }
-
-      if (
-        data.isContainer &&
-        containerSelectors.indexOf(rule.selector) === -1
-      ) {
-        containerSelectors.push(rule.selector);
-      }
-
-      handler(data);
+  const handleRule = (rule, parentAtRule) => {
+    const data = {
+      rule,
+      isContainer:
+        !!detectContainerDefinition(rule) ||
+        hasContainerSelector(rule.selector) ||
+        rule.selector === ":self" ||
+        (opts.singleContainer && containerSelectors.length === 0)
     };
 
+    if (parentAtRule) {
+      data.parentAtRule = parentAtRule;
+    }
+
+    if (data.isContainer && !hasContainerSelector(rule.selector)) {
+      containerSelectors.push(rule.selector);
+    }
+
+    handler(data);
+  };
+
+  root.walk(node => {
     if (node.type === "rule") {
       handleRule(node);
     } else if (node.type === "atrule") {
-      if (!hasContainerQuery(node)) {
+      if (!isContainerQuery(node)) {
         return;
       }
 
@@ -65,6 +53,7 @@ const walkRules = (root, handler) =>
       node.remove();
     }
   });
+};
 
 /**
  * @param {{
@@ -80,82 +69,85 @@ function containerQuery(options = {}) {
     const containers = {};
     let currentContainerSelector = null;
 
-    walkRules(root, ({ rule, isContainer, parentAtRule }) => {
-      if (
-        rule.selector !== ":self" &&
-        !containers[rule.selector] &&
-        (isContainer || (singleContainer && !currentContainerSelector))
-      ) {
-        const nextContainerSelector = rule.selector;
-        if (currentContainerSelector && singleContainer) {
-          throw rule.error(
-            `define-container declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${
-              rule.selector
-            }".`
+    walkRules(
+      root,
+      { singleContainer },
+      ({ rule, isContainer, parentAtRule }) => {
+        if (
+          rule.selector !== ":self" &&
+          !containers[rule.selector] &&
+          (isContainer || (singleContainer && !currentContainerSelector))
+        ) {
+          const nextContainerSelector = rule.selector;
+          if (currentContainerSelector && singleContainer) {
+            throw rule.error(
+              `define-container declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${
+                rule.selector
+              }".`
+            );
+          }
+
+          currentContainerSelector = nextContainerSelector;
+          containers[nextContainerSelector] = new MetaBuilder(
+            nextContainerSelector
           );
         }
 
-        currentContainerSelector = nextContainerSelector;
-        containers[nextContainerSelector] = new MetaBuilder(
-          nextContainerSelector
-        );
-      }
+        const props = extractPropsFromNode(rule, {
+          isContainer: isContainer,
+          stripContainerUnits: true
+        });
 
-      const props = extractPropsFromNode(rule, {
-        isContainer: isContainer,
-        stripContainerUnits: true
-      });
-
-      if (!props.values && (!parentAtRule || !props.styles)) {
-        return;
-      }
-
-      if (!currentContainerSelector) {
-        // todo better error
-        throw rule.error(
-          `Missing @define-container declaration before the processed node.`
-        );
-      }
-
-      const builder = containers[currentContainerSelector];
-
-      builder.resetQuery().resetDescendant();
-      if (parentAtRule) {
-        builder.setQuery(parentAtRule.params);
-      }
-
-      if (!parentAtRule && props.values) {
-        // store values only
-        if (!isContainer) {
-          builder.setDescendant(rule.selector);
+        if (!props.values && (!parentAtRule || !props.styles)) {
+          return;
         }
 
-        for (let prop in props.values) {
-          const value = props.values[prop];
-          builder.addStyle({ prop, value });
-        }
-      }
-
-      if (parentAtRule && (props.styles || props.values)) {
-        if (!isContainer) {
-          builder.setDescendant(rule.selector);
+        if (!currentContainerSelector) {
+          throw rule.error(
+            `Missing @define-container declaration before the processed node.`
+          );
         }
 
-        if (props.values) {
+        const builder = containers[currentContainerSelector];
+
+        builder.resetQuery().resetDescendant();
+        if (parentAtRule) {
+          builder.setQuery(parentAtRule.params);
+        }
+
+        if (!parentAtRule && props.values) {
+          // store values only
+          if (!isContainer) {
+            builder.setDescendant(rule.selector);
+          }
+
           for (let prop in props.values) {
             const value = props.values[prop];
             builder.addStyle({ prop, value });
           }
         }
 
-        if (props.styles) {
-          for (let prop in props.styles) {
-            const value = props.styles[prop];
-            builder.addStyle({ prop, value });
+        if (parentAtRule && (props.styles || props.values)) {
+          if (!isContainer) {
+            builder.setDescendant(rule.selector);
+          }
+
+          if (props.values) {
+            for (let prop in props.values) {
+              const value = props.values[prop];
+              builder.addStyle({ prop, value });
+            }
+          }
+
+          if (props.styles) {
+            for (let prop in props.styles) {
+              const value = props.styles[prop];
+              builder.addStyle({ prop, value });
+            }
           }
         }
       }
-    });
+    );
 
     // Map builders to metadata
     for (let selector in containers) {
