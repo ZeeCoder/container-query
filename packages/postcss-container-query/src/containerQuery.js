@@ -74,16 +74,15 @@ function containerQuery(options = {}) {
       { singleContainer },
       ({ rule, isContainer, parentAtRule }) => {
         if (
+          isContainer &&
           rule.selector !== ":self" &&
-          !containers[rule.selector] &&
-          (isContainer || (singleContainer && !currentContainerSelector))
+          !containers[rule.selector]
         ) {
           const nextContainerSelector = rule.selector;
-          if (currentContainerSelector && singleContainer) {
+          if (singleContainer && currentContainerSelector) {
             throw rule.error(
-              `define-container declaration detected in singleContainer mode. Tried to override "${currentContainerSelector}" with "${
-                rule.selector
-              }".`
+              `define-container declaration detected in singleContainer mode. ` +
+                `Tried to override "${currentContainerSelector}" with "${nextContainerSelector}".`
             );
           }
 
@@ -154,14 +153,9 @@ function containerQuery(options = {}) {
       containers[selector] = containers[selector].build();
     }
 
-    let response = containers;
-    if (singleContainer) {
-      if (currentContainerSelector) {
-        response = containers[currentContainerSelector];
-      } else {
-        response = {};
-      }
-    }
+    const response = !singleContainer
+      ? containers
+      : currentContainerSelector ? containers[currentContainerSelector] : {};
 
     getJSON(root.source.input.file, response);
   };
