@@ -1,4 +1,4 @@
-import detectContainerDefinition from "./detectContainerDefinition";
+import hasContainerDefinition from "./hasContainerDefinition";
 import RuleNode from "../__mocks__/RuleNode";
 
 test("Container definition should be detected anywhere inside the rule", () => {
@@ -11,7 +11,7 @@ test("Container definition should be detected anywhere inside the rule", () => {
     .addContainerDefinition()
     .addDeclaration();
 
-  expect(detectContainerDefinition(ruleNode)).toBe(".container");
+  expect(hasContainerDefinition(ruleNode)).toBe(true);
 });
 
 test("Return null if no container definition was found", () => {
@@ -20,7 +20,7 @@ test("Return null if no container definition was found", () => {
     .addAtRule("something")
     .addDeclaration();
 
-  expect(detectContainerDefinition(ruleNode)).toBeNull();
+  expect(hasContainerDefinition(ruleNode)).toBe(false);
 });
 
 test("should be able to keep container-definition when detected", () => {
@@ -29,7 +29,7 @@ test("should be able to keep container-definition when detected", () => {
     .addContainerDefinition()
     .addDeclaration();
 
-  expect(detectContainerDefinition(ruleNode, false)).toBe(".container");
+  expect(hasContainerDefinition(ruleNode, false)).toBe(true);
   expect(ruleNode.nodes.length).toBe(3);
   expect(ruleNode.nodes[0].type).toBe("decl");
   expect(ruleNode.nodes[1].type).toBe("atrule");
@@ -41,5 +41,5 @@ test("should handle empty node", () => {
   const ruleNode = new RuleNode(".Container");
   delete ruleNode.nodes;
 
-  expect(detectContainerDefinition(ruleNode, false)).toBe(null);
+  expect(hasContainerDefinition(ruleNode, false)).toBe(false);
 });

@@ -1,5 +1,5 @@
 import postcss from "postcss";
-import detectContainerDefinition from "./detectContainerDefinition";
+import hasContainerDefinition from "./hasContainerDefinition";
 import extractPropsFromNode from "./extractPropsFromNode";
 import saveJSON from "./saveJSON";
 import MetaBuilder from "@zeecoder/container-query-meta-builder";
@@ -17,7 +17,7 @@ const walkRules = (root, opts, handler) => {
     const data = {
       rule,
       isContainer:
-        !!detectContainerDefinition(rule) ||
+        hasContainerDefinition(rule) ||
         hasContainerSelector(rule.selector) ||
         rule.selector === ":self" ||
         (opts.singleContainer && containerSelectors.length === 0)
@@ -86,6 +86,7 @@ function containerQuery(options = {}) {
             );
           }
 
+          // Register new container's meta builder
           currentContainerSelector = nextContainerSelector;
           containers[nextContainerSelector] = new MetaBuilder(
             nextContainerSelector
@@ -97,6 +98,8 @@ function containerQuery(options = {}) {
           stripContainerUnits: true
         });
 
+        // Only proceed if there are container units to be extracted, or if there
+        // are styles under a container query at-rule
         if (!props.values && (!parentAtRule || !props.styles)) {
           return;
         }
@@ -113,36 +116,22 @@ function containerQuery(options = {}) {
         if (parentAtRule) {
           builder.setQuery(parentAtRule.params);
         }
+        if (!isContainer) {
+          builder.setDescendant(rule.selector);
+        }
 
-        if (!parentAtRule && props.values) {
+        if (props.values) {
           // store values only
-          if (!isContainer) {
-            builder.setDescendant(rule.selector);
-          }
-
           for (let prop in props.values) {
             const value = props.values[prop];
             builder.addStyle({ prop, value });
           }
         }
 
-        if (parentAtRule && (props.styles || props.values)) {
-          if (!isContainer) {
-            builder.setDescendant(rule.selector);
-          }
-
-          if (props.values) {
-            for (let prop in props.values) {
-              const value = props.values[prop];
-              builder.addStyle({ prop, value });
-            }
-          }
-
-          if (props.styles) {
-            for (let prop in props.styles) {
-              const value = props.styles[prop];
-              builder.addStyle({ prop, value });
-            }
+        if (parentAtRule && props.styles) {
+          for (let prop in props.styles) {
+            const value = props.styles[prop];
+            builder.addStyle({ prop, value });
           }
         }
       }

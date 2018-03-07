@@ -2,16 +2,14 @@
 import type { Node } from "../flow/types";
 
 /**
- * Returns the container's selector, or null if no @define-container was found.
- *
- * @return {null|string}
+ * Checks whether a `@define-container` declaration is present or not.
  */
-export default function detectContainerDefinition(
+export default function hasContainerDefinition(
   ruleNode: Node,
   removeDefinition: boolean = true
-): string | null {
+): boolean {
   if (!ruleNode.nodes) {
-    return null;
+    return false;
   }
 
   const nodesLength = ruleNode.nodes.length;
@@ -25,9 +23,9 @@ export default function detectContainerDefinition(
         ruleNode.nodes.splice(i, 1);
       }
 
-      return ruleNode.selector;
+      return true;
     }
   }
 
-  return null;
+  return false;
 }
