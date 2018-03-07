@@ -7,31 +7,30 @@ import MetaBuilder from "@zeecoder/container-query-meta-builder";
 const isContainerQuery = node =>
   node.type === "atrule" && node.name === "container";
 
-const walkRules = (root, opts, handler) => {
+const walkRules = (root, opts, ruleHandler) => {
   const containerSelectors = [];
 
   const hasContainerSelector = selector =>
     containerSelectors.indexOf(selector) !== -1;
 
-  const handleRule = (rule, parentAtRule) => {
-    const data = {
-      rule,
-      isContainer:
-        hasContainerDefinition(rule) ||
-        hasContainerSelector(rule.selector) ||
-        rule.selector === ":self" ||
-        (opts.singleContainer && containerSelectors.length === 0)
-    };
+  const handleRule = (rule, parentCQAtRule) => {
+    const isContainer =
+      hasContainerDefinition(rule) ||
+      hasContainerSelector(rule.selector) ||
+      rule.selector === ":self" ||
+      (opts.singleContainer && containerSelectors.length === 0);
 
-    if (parentAtRule) {
-      data.parentAtRule = parentAtRule;
-    }
+    const data = { rule, isContainer };
 
-    if (data.isContainer && !hasContainerSelector(rule.selector)) {
+    if (isContainer && !hasContainerSelector(rule.selector)) {
       containerSelectors.push(rule.selector);
     }
 
-    handler(data);
+    if (parentCQAtRule) {
+      data.parentCQAtRule = parentCQAtRule;
+    }
+
+    ruleHandler(data);
   };
 
   root.walk(node => {
@@ -72,7 +71,7 @@ function containerQuery(options = {}) {
     walkRules(
       root,
       { singleContainer },
-      ({ rule, isContainer, parentAtRule }) => {
+      ({ rule, isContainer, parentCQAtRule }) => {
         if (
           isContainer &&
           rule.selector !== ":self" &&
@@ -100,7 +99,7 @@ function containerQuery(options = {}) {
 
         // Only proceed if there are container units to be extracted, or if there
         // are styles under a container query at-rule
-        if (!props.values && (!parentAtRule || !props.styles)) {
+        if (!props.values && (!parentCQAtRule || !props.styles)) {
           return;
         }
 
@@ -113,8 +112,8 @@ function containerQuery(options = {}) {
         const builder = containers[currentContainerSelector];
 
         builder.resetQuery().resetDescendant();
-        if (parentAtRule) {
-          builder.setQuery(parentAtRule.params);
+        if (parentCQAtRule) {
+          builder.setQuery(parentCQAtRule.params);
         }
         if (!isContainer) {
           builder.setDescendant(rule.selector);
@@ -128,7 +127,7 @@ function containerQuery(options = {}) {
           }
         }
 
-        if (parentAtRule && props.styles) {
+        if (parentCQAtRule && props.styles) {
           for (let prop in props.styles) {
             const value = props.styles[prop];
             builder.addStyle({ prop, value });
