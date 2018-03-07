@@ -47,20 +47,21 @@ export default function getChangedStyles(
     queryState[queryIndex] = doesCurrentlyApply;
 
     queryData.elements.forEach((elementData: ElementData) => {
-      if (!styleChangeSet[elementData.selector]) {
-        styleChangeSet[elementData.selector] = {
+      const selector = elementData.selector || ":self";
+
+      if (!styleChangeSet[selector]) {
+        styleChangeSet[selector] = {
           addStyle: {},
           removeProps: []
         };
       }
 
-      if (!previouslyAppliedProps[elementData.selector]) {
-        previouslyAppliedProps[elementData.selector] = [];
+      if (!previouslyAppliedProps[selector]) {
+        previouslyAppliedProps[selector] = [];
       }
 
-      const elementStyleChangeSet = styleChangeSet[elementData.selector];
-      const elementPreviouslyAppliedProps =
-        previouslyAppliedProps[elementData.selector];
+      const elementStyleChangeSet = styleChangeSet[selector];
+      const elementPreviouslyAppliedProps = previouslyAppliedProps[selector];
 
       if (doesCurrentlyApply && didPreviouslyApply) {
         // Only the values need to be recalculated
@@ -115,10 +116,7 @@ export default function getChangedStyles(
         }
 
         // Adding changes to `addStyle`
-        objectAssign(
-          styleChangeSet[elementData.selector].addStyle,
-          currentAddStyle
-        );
+        objectAssign(styleChangeSet[selector].addStyle, currentAddStyle);
       } else if (!doesCurrentlyApply && didPreviouslyApply) {
         const elementAffectedProps = getAffectedPropsByElementData(elementData);
 
@@ -127,8 +125,8 @@ export default function getChangedStyles(
           elementAffectedProps,
           elementPreviouslyAppliedProps
         );
-        styleChangeSet[elementData.selector].removeProps = _.union(
-          styleChangeSet[elementData.selector].removeProps,
+        styleChangeSet[selector].removeProps = _.union(
+          styleChangeSet[selector].removeProps,
           applicableRemoveProps
         );
       } else if (doesCurrentlyApply && !didPreviouslyApply) {
@@ -157,17 +155,15 @@ export default function getChangedStyles(
 
         // Removing props now about to be applied from previous removeProps array
         for (let prop in applicableCurrentAddStyle) {
-          const index = styleChangeSet[
-            elementData.selector
-          ].removeProps.indexOf(prop);
+          const index = styleChangeSet[selector].removeProps.indexOf(prop);
 
           if (index !== -1) {
-            styleChangeSet[elementData.selector].removeProps.splice(index, 1);
+            styleChangeSet[selector].removeProps.splice(index, 1);
           }
         }
 
         objectAssign(
-          styleChangeSet[elementData.selector].addStyle,
+          styleChangeSet[selector].addStyle,
           applicableCurrentAddStyle
         );
       }

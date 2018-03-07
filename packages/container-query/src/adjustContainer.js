@@ -60,30 +60,30 @@ export default function adjustContainer(
   // This contains addStyles and removeProps
   const changedStyles = getChangedStyles(container, containerSize);
 
-  for (let descendantSelector in changedStyles) {
+  for (let selector in changedStyles) {
     // Skip if no changes were detected
     if (
-      !changedStyles[descendantSelector].addStyle &&
-      !Array.isArray(changedStyles[descendantSelector].removeProps)
+      !changedStyles[selector].addStyle &&
+      !Array.isArray(changedStyles[selector].removeProps)
     ) {
       continue;
     }
 
     // Normalise to a single changeSet that can be applied by applyStylesToElements
-    const changeSet = changedStyles[descendantSelector].addStyle || {};
-    if (Array.isArray(changedStyles[descendantSelector].removeProps)) {
-      changedStyles[descendantSelector].removeProps.forEach(prop => {
+    const changeSet = changedStyles[selector].addStyle || {};
+    if (Array.isArray(changedStyles[selector].removeProps)) {
+      changedStyles[selector].removeProps.forEach(prop => {
         changeSet[prop] = "";
       });
     }
 
     // What element(s) do we need to add these styles to?
     const containerSelector = registryData.meta.selector;
-    const elements = findContainerDescendants(
-      container,
-      containerSelector,
-      descendantSelector
-    );
+
+    const elements =
+      selector === ":self"
+        ? [container]
+        : findContainerDescendants(container, containerSelector, selector);
 
     // Finally, apply the change set to the elements
     applyStylesToElements(changeSet, elements);

@@ -8,7 +8,6 @@ import raf from "raf";
 import containerRegistry from "./containerRegistry";
 import type { ContainerSize, Meta, RegistryData } from "../flow/types";
 
-// TODO recognise missing selector as the container itself being targeted
 // TODO fix test picking up all sorts of js files
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
