@@ -36,3 +36,10 @@ test("should be able to keep container-definition when detected", () => {
   expect(ruleNode.nodes[1].name).toBe("define-container");
   expect(ruleNode.nodes[2].type).toBe("decl");
 });
+
+test("should handle empty node", () => {
+  const ruleNode = new RuleNode(".Container");
+  delete ruleNode.nodes;
+
+  expect(detectContainerDefinition(ruleNode, false)).toBe(null);
+});

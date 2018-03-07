@@ -3,12 +3,16 @@ import type { Node } from "../flow/types";
 
 /**
  * Returns the container's selector, or null if no @define-container was found.
+ *
+ * @return {null|string}
  */
 export default function detectContainerDefinition(
   ruleNode: Node,
   removeDefinition: boolean = true
 ): string | null {
-  let container = null;
+  if (!ruleNode.nodes) {
+    return null;
+  }
 
   const nodesLength = ruleNode.nodes.length;
   let i = 0;
@@ -17,14 +21,13 @@ export default function detectContainerDefinition(
       ruleNode.nodes[i].type === "atrule" &&
       ruleNode.nodes[i].name === "define-container"
     ) {
-      container = ruleNode.selector;
-      break;
+      if (removeDefinition) {
+        ruleNode.nodes.splice(i, 1);
+      }
+
+      return ruleNode.selector;
     }
   }
 
-  if (removeDefinition) {
-    ruleNode.nodes.splice(i, 1);
-  }
-
-  return container;
+  return null;
 }

@@ -132,8 +132,9 @@ export default class MetaBuilder {
     }
 
     if (!isValueUsingContainerUnits(style[1]) && !this.current.conditions) {
+      const decl = `${style[0]}: ${style[1]}`;
       throw new Error(
-        'Styles without container units (e.g. "rw") can only be added with a @container query.'
+        `Styles without container units (e.g. "rw") can only be added with a @container query. Tried to add: "${decl}"`
       );
     }
 
