@@ -7,6 +7,7 @@ import MutationObserver from "mutation-observer";
 import raf from "raf";
 import containerRegistry from "./containerRegistry";
 import type { ContainerSize, Meta, RegistryData } from "../flow/types";
+import { QUERIES } from "@zeecoder/container-query-meta-builder";
 
 // TODO fix test picking up all sorts of js files
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
@@ -73,11 +74,11 @@ export default class Container {
     );
 
     const getInitialQueryState = () => {
-      if (!Array.isArray(meta.queries)) {
+      if (!Array.isArray(meta[QUERIES])) {
         return [];
       }
 
-      return meta.queries.map(() => false);
+      return meta[QUERIES].map(() => false);
     };
 
     containerRegistry.set(containerElement, {

@@ -1,4 +1,11 @@
 import getChangedStyles from "./getChangedStyles";
+import {
+  QUERIES,
+  SELECTOR,
+  ELEMENTS,
+  STYLES,
+  VALUES
+} from "@zeecoder/container-query-meta-builder";
 
 jest.mock("./containerRegistry", () => ({
   get: jest.fn()
@@ -17,19 +24,19 @@ test("should apply default queries without a condition function", () => {
       instance: { opts: { valuePrecision: 3 } },
       queryState: [false, false],
       meta: {
-        queries: [
+        [QUERIES]: [
           {
-            elements: [
+            [ELEMENTS]: [
               {
-                selector: ".Container",
-                values: {
+                [SELECTOR]: ".Container",
+                [VALUES]: {
                   fontSize: `2rh`,
                   lineHeight: `1rh`
                 }
               },
               {
-                selector: ".Container__element",
-                values: {
+                [SELECTOR]: ".Container__element",
+                [VALUES]: {
                   lineHeight: `3rh`
                 }
               }
@@ -37,17 +44,17 @@ test("should apply default queries without a condition function", () => {
           },
           {
             conditionFunction: () => true,
-            elements: [
+            [ELEMENTS]: [
               {
-                selector: ".Container",
-                values: {
+                [SELECTOR]: ".Container",
+                [VALUES]: {
                   fontSize: `4rh`,
                   lineHeight: `2rh`
                 }
               },
               {
-                selector: ".Container__element",
-                styles: {
+                [SELECTOR]: ".Container__element",
+                [STYLES]: {
                   lineHeight: "10px"
                 }
               }
@@ -80,17 +87,17 @@ test("should return change sets on first run", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false, false],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: jest.fn(() => true),
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 fontSize: "12px",
                 background: "#ccc"
               },
-              values: {
+              [VALUES]: {
                 lineHeight: `1rh`
               }
             }
@@ -98,16 +105,16 @@ test("should return change sets on first run", () => {
         },
         {
           conditionFunction: jest.fn(() => true),
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 background: "#000"
               }
             },
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 fontSize: "14px"
               }
             }
@@ -156,20 +163,20 @@ test("should generate remove change set", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, true, true],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 background: "#aaa"
               },
-              values: {}
+              [VALUES]: {}
             },
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 background: "#bbb"
               }
             }
@@ -177,11 +184,11 @@ test("should generate remove change set", () => {
         },
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {},
-              values: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {},
+              [VALUES]: {
                 lineHeight: `10rh`
               }
             }
@@ -189,24 +196,24 @@ test("should generate remove change set", () => {
         },
         {
           conditionFunction: () => false,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 fontSize: "14px",
                 background: "#bbb"
               },
-              values: {
+              [VALUES]: {
                 lineHeight: `2rh`
               }
             },
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 background: "#ccc",
                 border: "none"
               },
-              values: {
+              [VALUES]: {
                 fontSize: `1rh`
               }
             }
@@ -244,21 +251,21 @@ test("should generate empty change set if conditions allow", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, true],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: () => false,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 fontSize: "14px",
                 background: "#bbb",
                 lineHeight: "16px"
               }
             },
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 fontSize: "8px",
                 background: "#eee"
               }
@@ -267,18 +274,18 @@ test("should generate empty change set if conditions allow", () => {
         },
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 fontSize: "16px",
                 background: "#ccc",
                 lineHeight: "18px"
               }
             },
             {
-              selector: ".Container__element",
-              styles: {
+              [SELECTOR]: ".Container__element",
+              [STYLES]: {
                 fontSize: "9px",
                 background: "#fff"
               }
@@ -306,19 +313,19 @@ test("should always recalculate values", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [true, false, true],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              values: {
+              [SELECTOR]: ".Container",
+              [VALUES]: {
                 fontSize: `2rh`
               }
             },
             {
-              selector: ".Container__element",
-              values: {
+              [SELECTOR]: ".Container__element",
+              [VALUES]: {
                 fontSize: `4rh`
               }
             }
@@ -326,10 +333,10 @@ test("should always recalculate values", () => {
         },
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              values: {
+              [SELECTOR]: ".Container",
+              [VALUES]: {
                 fontSize: `3rh`
               }
             }
@@ -337,16 +344,16 @@ test("should always recalculate values", () => {
         },
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              values: {
+              [SELECTOR]: ".Container",
+              [VALUES]: {
                 lineHeight: `4rh`
               }
             },
             {
-              selector: ".Container__element",
-              values: {
+              [SELECTOR]: ".Container__element",
+              [VALUES]: {
                 lineHeight: `3rh`
               }
             }
@@ -382,13 +389,13 @@ test("should be able to limit the precision of generated css values", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              values: {
+              [SELECTOR]: ".Container",
+              [VALUES]: {
                 fontSize: `22.5rh`,
                 lineHeight: `22.4rh`
               }
@@ -420,13 +427,13 @@ test("should handle multiple prop removal over multiple queries", () => {
     instance: { opts: { valuePrecision: 2 } },
     queryState: [false, false, true],
     meta: {
-      queries: [
+      [QUERIES]: [
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 border: "none",
                 fontSize: "12px",
                 lineHeight: "15px"
@@ -436,10 +443,10 @@ test("should handle multiple prop removal over multiple queries", () => {
         },
         {
           conditionFunction: () => true,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 fontSize: "13px"
               }
             }
@@ -447,13 +454,13 @@ test("should handle multiple prop removal over multiple queries", () => {
         },
         {
           conditionFunction: () => false,
-          elements: [
+          [ELEMENTS]: [
             {
-              selector: ".Container",
-              styles: {
+              [SELECTOR]: ".Container",
+              [STYLES]: {
                 border: "1px solid"
               },
-              values: {
+              [VALUES]: {
                 lineHeight: `2rh`
               }
             }

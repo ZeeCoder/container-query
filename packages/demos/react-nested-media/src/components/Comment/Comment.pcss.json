@@ -1,1 +1,1 @@
-{"selector":".Comment","queries":[{"conditions":[[["width",">",500]]],"elements":[{"selector":".Comment","styles":{"background":"white","color":"black"}}]}]}
+{"e":".Comment","f":[{"b":[{"d":{"background":"white","color":"black"}}],"a":[[["width",">",500]]]}]}

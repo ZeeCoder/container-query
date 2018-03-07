@@ -4,12 +4,19 @@ import registry from "./containerRegistry";
 import _ from "lodash";
 import adjustValueObjectByContainerSize from "./adjustValueObjectByContainerSize";
 import objectAssign from "object-assign";
+import {
+  SELECTOR,
+  STYLES,
+  VALUES,
+  QUERIES,
+  ELEMENTS
+} from "@zeecoder/container-query-meta-builder";
 
 function getAffectedPropsByElementData(elementData: ElementData): string[] {
   const affectedStyles = {};
 
-  objectAssign(affectedStyles, elementData.styles);
-  objectAssign(affectedStyles, elementData.values);
+  objectAssign(affectedStyles, elementData[STYLES]);
+  objectAssign(affectedStyles, elementData[VALUES]);
 
   return Object.keys(affectedStyles);
 }
@@ -34,9 +41,9 @@ export default function getChangedStyles(
     [selector: string]: string[]
   } = {};
 
-  const queriesLength = meta.queries.length - 1;
+  const queriesLength = meta[QUERIES].length - 1;
   for (let queryIndex = queriesLength; queryIndex >= 0; queryIndex--) {
-    const queryData = meta.queries[queryIndex];
+    const queryData = meta[QUERIES][queryIndex];
     // Default queries have no `conditionFunction`
     const doesCurrentlyApply =
       typeof queryData.conditionFunction === "function"
@@ -46,8 +53,9 @@ export default function getChangedStyles(
 
     queryState[queryIndex] = doesCurrentlyApply;
 
-    queryData.elements.forEach((elementData: ElementData) => {
-      const selector = elementData.selector || ":self";
+    queryData[ELEMENTS].forEach((elementData: ElementData) => {
+      // No selector refers to the container
+      const selector = elementData[SELECTOR] || ":self";
 
       if (!styleChangeSet[selector]) {
         styleChangeSet[selector] = {
@@ -67,13 +75,13 @@ export default function getChangedStyles(
         // Only the values need to be recalculated
         const applicableValueObject = {};
         let applicableValuePropCount = 0;
-        for (let prop in elementData.values) {
+        for (let prop in elementData[VALUES]) {
           if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
             // Add value to addStyle if the prop wasn't affected by
             // previous queries, or even if it was, it was about to
             // be removed
             applicableValuePropCount++;
-            applicableValueObject[prop] = elementData.values[prop];
+            applicableValueObject[prop] = elementData[VALUES][prop];
 
             // Also add the prop as applied unless it was added before
             elementPreviouslyAppliedProps.push(prop);
@@ -90,11 +98,11 @@ export default function getChangedStyles(
         // See if there's a property which needs to be readded and
         // removed from "removeProps", since this query still keeps it
         // in an applied state
-        for (let prop in elementData.styles) {
+        for (let prop in elementData[STYLES]) {
           const index = elementStyleChangeSet.removeProps.indexOf(prop);
           if (index !== -1) {
             elementStyleChangeSet.removeProps.splice(index, 1);
-            currentAddStyle[prop] = elementData.styles[prop];
+            currentAddStyle[prop] = elementData[STYLES][prop];
           }
 
           // Also add the prop as applied unless it was added before
@@ -134,15 +142,15 @@ export default function getChangedStyles(
         // Also remove anything in the new addStyle object from the current removeProps
         const currentAddStyle: Styles = {};
 
-        for (let prop in elementData.styles) {
+        for (let prop in elementData[STYLES]) {
           if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-            currentAddStyle[prop] = elementData.styles[prop];
+            currentAddStyle[prop] = elementData[STYLES][prop];
             elementPreviouslyAppliedProps.push(prop);
           }
         }
-        for (let prop in elementData.values) {
+        for (let prop in elementData[VALUES]) {
           if (elementPreviouslyAppliedProps.indexOf(prop) === -1) {
-            currentAddStyle[prop] = elementData.values[prop];
+            currentAddStyle[prop] = elementData[VALUES][prop];
             elementPreviouslyAppliedProps.push(prop);
           }
         }

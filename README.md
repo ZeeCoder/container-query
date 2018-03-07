@@ -10,6 +10,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/ZeeCoder/container-query/badge.svg?branch=master)](https://coveralls.io/github/ZeeCoder/container-query?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ZeeCoder/container-query.svg)](https://greenkeeper.io/)
 
+// TODO: stats => meta
+
 A PostCSS plugin and Javascript runtime combination, which allows you to write
 **container queries** in your CSS the same way you would write **media queries**.
 

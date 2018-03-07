@@ -4,6 +4,7 @@ import applyStylesToElements from "./applyStylesToElements";
 import containerRegistry from "./containerRegistry";
 import getChangedStyles from "./getChangedStyles";
 import type { ContainerSize } from "../flow/types";
+import { SELECTOR } from "@zeecoder/container-query-meta-builder";
 
 const findContainerDescendants = (
   container: HTMLElement,
@@ -78,7 +79,7 @@ export default function adjustContainer(
     }
 
     // What element(s) do we need to add these styles to?
-    const containerSelector = registryData.meta.selector;
+    const containerSelector = registryData.meta[SELECTOR];
 
     const elements =
       selector === ":self"

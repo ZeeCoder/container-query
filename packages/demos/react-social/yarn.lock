@@ -13,9 +13,9 @@
     raf "^3.3.2"
     resize-observer-polyfill "^1.4.2"
 
-"@zeecoder/postcss-container-query@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@zeecoder/postcss-container-query/-/postcss-container-query-2.1.0.tgz#dad0523413882602091657079aacac79941a1818"
+"@zeecoder/postcss-container-query@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@zeecoder/postcss-container-query/-/postcss-container-query-2.5.0.tgz#046e81efcd97d51e71eec7ec905b57f08947b7e6"
   dependencies:
     lodash "^4.17.4"
     postcss "^6.0.1"

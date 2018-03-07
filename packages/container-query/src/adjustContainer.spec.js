@@ -1,5 +1,6 @@
 import adjustContainer from "./adjustContainer";
 import containerRegistry from "./containerRegistry";
+import { SELECTOR, QUERIES } from "@zeecoder/container-query-meta-builder";
 
 jest.mock("./getChangedStyles");
 jest.mock("./getContainerSize");
@@ -25,7 +26,7 @@ test("should be able to get the container size itself, and ignore empty change s
   containerRegistry.set(containerElement, {
     queryState: [],
     meta: {
-      queries: []
+      [QUERIES]: []
     }
   });
 
@@ -57,8 +58,8 @@ test("should apply changed styles", () => {
   containerRegistry.set(containerElement, {
     queryState: [],
     meta: {
-      selector: ".Container",
-      queries: []
+      [SELECTOR]: ".Container",
+      [QUERIES]: []
     }
   });
 
@@ -125,16 +126,16 @@ test("should respect container boundaries while applying styles", () => {
   containerRegistry.set(container1, {
     queryState: [],
     meta: {
-      selector: ".Container",
-      queries: []
+      [SELECTOR]: ".Container",
+      [QUERIES]: []
     }
   });
 
   containerRegistry.set(container2, {
     queryState: [],
     meta: {
-      selector: ".Container2",
-      queries: []
+      [SELECTOR]: ".Container2",
+      [QUERIES]: []
     }
   });
 

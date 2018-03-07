@@ -3,19 +3,19 @@ import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 
-// export const CONDITIONS = "a";
-// export const ELEMENTS = "b";
-// export const VALUES = "c";
-// export const STYLES = "d";
-// export const SELECTOR = "e";
-// export const QUERIES = "f";
+export const CONDITIONS = "a";
+export const ELEMENTS = "b";
+export const VALUES = "c";
+export const STYLES = "d";
+export const SELECTOR = "e";
+export const QUERIES = "f";
 
-export const CONDITIONS = "conditions";
-export const ELEMENTS = "elements";
-export const VALUES = "values";
-export const STYLES = "styles";
-export const SELECTOR = "selector";
-export const QUERIES = "queries";
+// export const CONDITIONS = "conditions";
+// export const ELEMENTS = "elements";
+// export const VALUES = "values";
+// export const STYLES = "styles";
+// export const SELECTOR = "selector";
+// export const QUERIES = "queries";
 
 const getElementData = (queries, conditions = null, selector = null) => {
   const newElementData = {};
