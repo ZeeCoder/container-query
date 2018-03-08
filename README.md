@@ -10,8 +10,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/ZeeCoder/container-query/badge.svg?branch=master)](https://coveralls.io/github/ZeeCoder/container-query?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ZeeCoder/container-query.svg)](https://greenkeeper.io/)
 
-// TODO: stats => meta
-
 A PostCSS plugin and Javascript runtime combination, which allows you to write
 **container queries** in your CSS the same way you would write **media queries**.
 
@@ -27,8 +25,8 @@ relative to a container element's size.
 
 A container is just an HTML element, which may contain other elements.
 
-You may want to think of them as "**Blocks**" ([BEM](http://getbem.com/naming/))
-or "**Components**" ([React](https://facebook.github.io/react/docs/components-and-props.html)).
+You may want to think of them as "**Components**" ([React](https://facebook.github.io/react/docs/components-and-props.html))
+or "**Blocks**" ([BEM](http://getbem.com/naming/)).
 
 ## Highlights
 
@@ -79,24 +77,16 @@ The html then could look like this:
 ```html
 <div class="User">
     <div class="User__name"></div>
-    <img class="User__avatar">
+    <img class="User__avatar" src="..." />
 </div>
 ```
 
-Finally, after you create a new `Container` instance, (passing in the HTMLElement,
-and the extracted css stats) everything will just work.
+Finally, after you create a new `Container` instance, (passing in the container
+HTMLElement, and the extracted metadata) everything will just work.
 
 _Note:_ A file can have multiple containers, with the [@define-container](docs/multiple-containers.md)
 declaration, but it's encouraged to have a dedicated file for each component.
 (Which is also the assumption of the [@zeecoder/react-container-query](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query) package).
-
-## Installation
-
-```
-yarn add --dev @zeecoder/postcss-container-query @zeecoder/container-query`
-# or
-npm install --save-dev @zeecoder/postcss-container-query @zeecoder/container-query
-```
 
 ## Documentation
 
@@ -115,8 +105,8 @@ Note that because these demos are hosted on [CodeSandbox](https://codesandbox.io
 where webpack cannot be configured, styles are simply imported as strings and
 processed in the browser. (using [@zeecoder/cq-demo-utils](https://github.com/ZeeCoder/cq-demo-utils))
 
-In a real application however, it is strongly recommended to process styles
-build-time.
+While this works for the demos, in a real application it is strongly recommended
+to process styles build-time.
 
 * [Nested components](https://codesandbox.io/s/k9n28rkkl7)
 * [Social Posts](https://codesandbox.io/s/0l71yp80w)

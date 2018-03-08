@@ -12,6 +12,12 @@ yarn add @zeecoder/react-container-query
 npm install --save @zeecoder/react-container-query
 ```
 
+### Set up PostCSS with webpack
+
+[Here](https://github.com/ZeeCoder/container-query/blob/master/docs/postcss.md)
+is a documentiation on how to do just that, in order to get the same syntax I've
+been using.
+
 ## Usage
 
 Assuming the following CSS:
