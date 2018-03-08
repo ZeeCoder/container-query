@@ -32,27 +32,26 @@ export default class ContainerQuery extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.stats) {
+    if (!this.props.meta && !this.props.stats) {
       return;
     }
 
     this.lastContainer = ReactDOM.findDOMNode(this);
-    new Container(this.lastContainer, this.props.stats, this.containerOptions);
+    const meta = this.props.meta || this.props.stats;
+    new Container(this.lastContainer, meta, this.containerOptions);
   }
 
   componentDidUpdate() {
-    if (!this.props.stats) {
+    if (!this.props.meta && !this.props.stats) {
       return;
     }
+
+    const meta = this.props.meta || this.props.stats;
 
     const element = ReactDOM.findDOMNode(this);
     if (this.lastContainer !== element) {
       this.lastContainer = element;
-      new Container(
-        this.lastContainer,
-        this.props.stats,
-        this.containerOptions
-      );
+      new Container(this.lastContainer, meta, this.containerOptions);
     }
   }
 
@@ -73,12 +72,14 @@ export default class ContainerQuery extends Component {
 
 ContainerQuery.defaultProps = {
   stats: {},
+  meta: {},
   options: {}
 };
 
 ContainerQuery.propTypes = {
   render: PropTypes.func,
   stats: PropTypes.object,
+  meta: PropTypes.object,
   options: PropTypes.object,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
 };
