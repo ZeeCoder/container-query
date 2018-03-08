@@ -30,7 +30,7 @@ Assuming the following CSS:
 }
 ```
 
-And assuming that `stats` is the object obtained by running the above CSS
+And assuming that `meta` is the object obtained by running the above CSS
 through the [postcss plugin](https://github.com/ZeeCoder/container-query/tree/master/packages/postcss-container-query).
 
 The one thing you need to keep in mind is that the container css class
@@ -46,11 +46,11 @@ This is probably the easiest way of enabling container queries.
 import { withContainerQuery } from "@zeecoder/react-container-query";
 // Assuming postcss-loader to be set up
 import "./App.pcss";
-import stats from "./App.pcss.json";
+import meta from "./App.pcss.json";
 
 const App = () => <div className="App">My App</div>;
 
-export default withContainerQuery(App, stats);
+export default withContainerQuery(App, meta);
 ```
 
 ### `<ContainerQuery>`
@@ -61,10 +61,10 @@ A render-prop approach.
 import { ContainerQuery } from "@zeecoder/react-container-query";
 // Assuming postcss-loader to be set up
 import "./App.pcss";
-import stats from "./App.pcss.json";
+import meta from "./App.pcss.json";
 
 const App = () => (
-  <ContainerQuery stats={stats}>
+  <ContainerQuery stats={meta}>
     <div className="App">My App</div>
   </ContainerQuery>
 );
@@ -78,10 +78,10 @@ If you're also interested in the component's size:
 import { ContainerQuery } from "@zeecoder/react-container-query";
 // Assuming postcss-loader to be set up
 import "./App.pcss";
-import stats from "./App.pcss.json";
+import meta from "./App.pcss.json";
 
 const App = () => (
-  <ContainerQuery stats={stats}>
+  <ContainerQuery stats={meta}>
     {size => (
       // size can be "null" when size is still not available
       <div className="App">

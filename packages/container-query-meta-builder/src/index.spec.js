@@ -3,13 +3,13 @@ import * as reducedRedundancyTest from "./test/reducedRedundancy";
 import * as descendantsTest from "./test/descendants";
 import * as normalCssFlowTest from "./test/normalCssFlow";
 
-test("should be able to generate the usual stats structure", () => {
+test("should be able to generate the usual meta structure", () => {
   const meta = basicTest.build();
 
   expect(meta).toEqual(basicTest.out);
 });
 
-test("should output a json that minimises redundancy", () => {
+test("should output metadata with minimised redundancy", () => {
   const meta = reducedRedundancyTest.build();
 
   expect(meta).toEqual(reducedRedundancyTest.out);

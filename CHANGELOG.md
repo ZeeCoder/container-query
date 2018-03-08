@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.6.0]
+
+### Added
+
+* `postcss-container-query`
+  * made the metadata file much smaller
+* `container-query`
+  * accepts the new meta object
+* `react-container-query`
+  * `ContainerQuery` accepts `meta` alongside `stats`.
+
+### Deprecated
+
+* `react-container-query`
+  * `ContainerQuery` won't accept`stats` in the future, only `meta`.
+
 ## [2.5.0]
 
 ### Added
