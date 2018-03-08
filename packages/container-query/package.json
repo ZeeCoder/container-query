@@ -3,7 +3,7 @@
   "description": "A modern container-query solution.",
   "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
-  "version": "2.5.0",
+  "version": "2.6.0-alpha.97fec537",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=6"
@@ -39,13 +39,13 @@
     "size-limit": "^0.15.1"
   },
   "dependencies": {
+    "@zeecoder/container-query-meta-builder": "^2.6.0-alpha.97fec537",
     "es6-weak-map": "^2.0.2",
     "lodash": "^4.17.4",
     "mutation-observer": "^1.0.2",
     "object-assign": "^4.1.1",
     "raf": "^3.3.2",
-    "resize-observer-polyfill": "^1.4.2",
-    "@zeecoder/container-query-meta-builder": "^2.6.0"
+    "resize-observer-polyfill": "^1.4.2"
   },
   "keywords": [
     "rwd",
