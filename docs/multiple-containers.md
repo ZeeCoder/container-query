@@ -1,9 +1,7 @@
 # Multiple Containers
 
-Instead of processing each container individually, you might want to instead
-import all styles containing containers in a single file, and then process that.
-
-(This is the case described in [Usage with Gulp](gulp.md))
+Instead of processing each container individually, you might want to import all
+styles containing container query syntax in a single file, and process that.
 
 To do so, you'll have to switch off container auto-detection (which takes the
 first class found in a processed file as the selector for a container) to allow
@@ -11,8 +9,9 @@ for the `@define-container;` declaration instead.
 
 With that, you'll be able to declare multiple containers in a single file.
 
-This is as simple as setting the `singleContainer` option to false, when using
-the postcss plugin.
+This is as simple as setting the `singleContainer` option to false.
+
+(Also showcased in the [Usage with Gulp](gulp.md)) section.)
 
 ### Example
 
@@ -30,21 +29,19 @@ the postcss plugin.
 // etc
 ```
 
-**JSON structure**
+**Metadata structure**
 
-Normally you don't have to care about the structure of the JSON file.
+Normally you don't have to care about the structure of the JSON meta file.
 (In fact, I encourage you not to depend on anything in it, as it could potentially
 change with new releases.)
 
-However, if you incorporate all you styles into a single file before processing
-it with the PostCSS plugin - using a workflow similar to what's described in
-[Usage with Gulp](gulp.md) for example -, you'll instead have the extracted
-container stats grouped by component selector in the resulting JSON:
+However, if you run the plugin in `singleContainer: false` mode, you'll have the
+extracted container metadata grouped by component selector in the resulting JSON:
 
 ```json
 {
-  ".Component1": {},
-  ".Component2": {}
+  ".Component1": {...},
+  ".Component2": {...}
 }
 ```
 

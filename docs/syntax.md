@@ -5,7 +5,7 @@
 As previous examples show, containers can be declared by adding
 `@define-container;` inside a rule that's meant to be used as a container.
 
-(Unnecessary in `singleContainer` mode)
+(Unnecessary in `singleContainer` mode.)
 
 Multiple such definitions in a single CSS file are allowed. All container
 queries and units will be relative to the previous declaration.
@@ -137,8 +137,7 @@ done on each resize event (or `adjust` call).
 
 ### CSS Custom Properties
 
-Setting custom properties are supported, which you can use to improve
-performance.
+Setting custom properties are supported, which can be used to improve performance.
 
 ```pcss
 .User {

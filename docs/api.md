@@ -4,9 +4,11 @@
 
 **Instantiation**
 
-`new Container(element, stats, options)`
+```js
+new Container(element, meta, options)
+```
 
-Where `element` is an HTMLElement, `stats` is a json object from the PostCSS
+Where `element` is an HTMLElement, `meta` is a json object from the PostCSS
 plugin, and options are extra options about how the instance should behave.
 
 **Default options:**
@@ -49,10 +51,10 @@ window resize, if that fits your needs.
 ```js
 postCSS([
   containerQuery({
-    getJSON: function(cssFilePath, stats) {
+    getJSON: function(cssFilePath, meta) {
       // `cssFilePath`: the original css file's path that was processed. Useful
       // if you want to save the JSON relative to the original css.
-      // `stats`: the json stats having all the container-related data
+      // `meta`: the JSON metadata having all the container-related data
       // needed for the Container instances.
       // It's structure was previously described in the "Multiple Containers"
       // section.

@@ -31,7 +31,7 @@ gulp.task("styles", () => {
 The above CSS can include multiple containers thanks to `singleContainer: false`,
 and [@define-container](docs/define-container.md) declarations.
 
-This task creates a styles.css and styles.json file, which can then be used by
-webpack as [you've seen it before](webpack-and-react.md).
+This task creates a `styles.css` and `styles.css.json` file, which can then be
+used by webpack as [you've seen it before](webpack-and-react.md).
 
 **Next:** [Multiple Containers](multiple-containers.md)

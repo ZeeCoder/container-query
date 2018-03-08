@@ -2,7 +2,7 @@
 
 This solution consists of a PostCSS plugin and a JS (`Container`) class.
 
-> PostCSS plugin → Metadata → Runtime
+> PostCSS → Metadata → Runtime
 
 The plugin analyses your CSS and extracts all container query related
 data, producing a metadata JSON file.
