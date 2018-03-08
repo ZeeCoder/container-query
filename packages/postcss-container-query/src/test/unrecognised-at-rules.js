@@ -106,7 +106,7 @@ export const cssOutput = `
 }
 `;
 
-export const statsOutput = {
+export const meta = {
   ".Container": {
     [SELECTOR]: ".Container",
     [QUERIES]: [

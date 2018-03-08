@@ -20,7 +20,7 @@ export const cssOutput = `
 }
 `;
 
-export const statsOutput = {
+export const meta = {
   [SELECTOR]: ".Container",
   [QUERIES]: [
     {

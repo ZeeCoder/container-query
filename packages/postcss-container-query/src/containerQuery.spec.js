@@ -18,41 +18,39 @@ jest.mock("./saveJSON");
  * @param {{}} options plugin options
  * @return {Promise<{
  *   css: string,
- *   stats: {},
+ *   meta: {},
  * }>}
  */
 const processCss = (css, options = {}) =>
   Promise.resolve().then(() => {
-    let stats = null;
-    options.getJSON = (path, json) => (stats = json);
+    let meta = null;
+    options.getJSON = (path, metaJson) => (meta = metaJson);
 
     return postcss([containerQuery(options)])
       .process(css, { from: "from.css", to: "to.css" })
-      .then(result => ({ css: result.css, stats }));
+      .then(({ css }) => ({ css, meta }));
   });
 
 /**
  * @param {{
  *   cssInput: string,
  *   cssOutput: string,
- *   statsOutput: {},
+ *   meta: {},
  * }} testObj
  * @param {{}} options plugin options
  * @return {Promise<{
  *  cssOutput: string,
- *  statsOutput: {},
+ *  meta: {},
  * }>}
  */
 const assertProcessingResult = (testObj, options = {}) =>
-  processCss(testObj.cssInput, options).then(({ css, stats }) => {
-    // console.log(JSON.stringify(stats));
-
+  processCss(testObj.cssInput, options).then(({ css, meta }) => {
     expect(css).toBe(testObj.cssOutput);
-    expect(stats).toEqual(testObj.statsOutput);
+    expect(meta).toEqual(testObj.meta);
 
     return {
       cssOutput: css,
-      statsOutput: stats
+      meta: meta
     };
   });
 

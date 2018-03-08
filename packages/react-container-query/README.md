@@ -64,7 +64,7 @@ import "./App.pcss";
 import meta from "./App.pcss.json";
 
 const App = () => (
-  <ContainerQuery stats={meta}>
+  <ContainerQuery meta={meta}>
     <div className="App">My App</div>
   </ContainerQuery>
 );
@@ -81,7 +81,7 @@ import "./App.pcss";
 import meta from "./App.pcss.json";
 
 const App = () => (
-  <ContainerQuery stats={meta}>
+  <ContainerQuery meta={meta}>
     {size => (
       // size can be "null" when size is still not available
       <div className="App">

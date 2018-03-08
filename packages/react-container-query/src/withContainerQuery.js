@@ -3,17 +3,17 @@ import ReactDOM from "react-dom";
 import Container from "@zeecoder/container-query";
 
 /**
- * A HoC to initialise a single `Container` based on the given stats.
+ * A HoC to initialise a single `Container` based on the given meta.
  *
  * @param {Component} WrappedComponent
- * @param {{}} stats
+ * @param {{}} meta
  * @param {{}} [options]
  * @return {Component}
  */
-const withContainerQuery = (WrappedComponent, stats, options = {}) => {
+const withContainerQuery = (WrappedComponent, meta, options = {}) => {
   const HoC = class extends Component {
     componentDidMount() {
-      new Container(ReactDOM.findDOMNode(this), stats, options);
+      new Container(ReactDOM.findDOMNode(this), meta, options);
     }
 
     render() {
