@@ -4,7 +4,7 @@ This solution consists of a PostCSS plugin and a JS (`Container`) class.
 
 > PostCSS plugin → Metadata → Runtime
 
-The plugin analyses the your CSS and extracts all container query related
+The plugin analyses your CSS and extracts all container query related
 data, producing a metadata JSON file.
 
 Depending on your setup (Gulp / webpack, etc) this file could contain more than
