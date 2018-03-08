@@ -1,6 +1,5 @@
 import Container from "./Container";
-
-// TODO fix the tests
+import { QUERIES } from "@zeecoder/container-query-meta-builder";
 
 console.warn = jest.fn();
 jest.mock("./processMeta", () => jest.fn(config => config));
@@ -91,7 +90,7 @@ test("should create the initial query state based on the number of queries", () 
     parentNode: document.createElement("div")
   };
 
-  const config = { queries: [{}, {}] };
+  const config = { [QUERIES]: [{}, {}] };
 
   const containerInstance = new Container(containerElement, config);
 

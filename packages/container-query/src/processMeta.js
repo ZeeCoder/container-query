@@ -21,7 +21,7 @@ export default function processMeta(meta: Meta): Meta {
     !Array.isArray(meta[QUERIES])
   ) {
     throw new Error(
-      "Invalid meta object. It's either not an object, or it's missing the 'selectors' and/or the 'queries' property."
+      `Invalid meta object. It's either not an object, or it's missing the '${SELECTOR}' and/or the '${QUERIES}' property.`
     );
   }
 

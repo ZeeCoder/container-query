@@ -143,16 +143,16 @@ test("should return change sets on first run", () => {
       }
     }
   });
-  expect(registryData.meta.queries[0].conditionFunction).toHaveBeenCalledTimes(
+  expect(registryData.meta[QUERIES][0].conditionFunction).toHaveBeenCalledTimes(
     1
   );
-  expect(registryData.meta.queries[0].conditionFunction).toHaveBeenCalledWith(
+  expect(registryData.meta[QUERIES][0].conditionFunction).toHaveBeenCalledWith(
     size
   );
-  expect(registryData.meta.queries[1].conditionFunction).toHaveBeenCalledTimes(
+  expect(registryData.meta[QUERIES][1].conditionFunction).toHaveBeenCalledTimes(
     1
   );
-  expect(registryData.meta.queries[1].conditionFunction).toHaveBeenCalledWith(
+  expect(registryData.meta[QUERIES][1].conditionFunction).toHaveBeenCalledWith(
     size
   );
   expect(registryData.queryState).toEqual([true, true]);
@@ -485,4 +485,39 @@ test("should handle multiple prop removal over multiple queries", () => {
     }
   });
   expect(registryData.queryState).toEqual([true, true, false]);
+});
+
+test("should use :self if the selector is not available", () => {
+  const registryData = {
+    instance: { opts: {} },
+    queryState: [false],
+    meta: {
+      [QUERIES]: [
+        {
+          conditionFunction: () => true,
+          [ELEMENTS]: [
+            {
+              [STYLES]: {
+                color: "inherit"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  };
+
+  const containerRegistry = require("./containerRegistry");
+  containerRegistry.get.mockImplementation(() => registryData);
+
+  const element = document.createElement("div");
+  const size = { width: 100, height: 100 };
+  expect(getChangedStyles(element, size)).toEqual({
+    ":self": {
+      addStyle: {
+        color: "inherit"
+      }
+    }
+  });
+  expect(registryData.queryState).toEqual([true]);
 });

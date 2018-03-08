@@ -1,4 +1,9 @@
 import processMeta from "./processMeta";
+import {
+  QUERIES,
+  CONDITIONS,
+  SELECTOR
+} from "@zeecoder/container-query-meta-builder";
 
 jest.mock("./getConditionFunction");
 
@@ -10,11 +15,11 @@ test("should turn conditions to functions", () => {
     .mockImplementationOnce(() => () => 3);
 
   const meta = {
-    selector: ".some-container",
-    queries: [
-      { conditions: [["orientation", ":", "landscape"]] },
-      { conditions: [["orientation", ":", "portrait"]] },
-      { conditions: [["width", ">", 100]] }
+    [SELECTOR]: ".some-container",
+    [QUERIES]: [
+      { [CONDITIONS]: [["orientation", ":", "landscape"]] },
+      { [CONDITIONS]: [["orientation", ":", "portrait"]] },
+      { [CONDITIONS]: [["width", ">", 100]] }
     ]
   };
 
@@ -29,12 +34,12 @@ test("should turn conditions to functions", () => {
     ["orientation", ":", "portrait"]
   ]);
   expect(getConditionFunction.mock.calls[2][0]).toEqual([["width", ">", 100]]);
-  expect(typeof processedMeta.queries[0].conditionFunction).toBe("function");
-  expect(processedMeta.queries[0].conditionFunction()).toBe(1);
-  expect(typeof processedMeta.queries[1].conditionFunction).toBe("function");
-  expect(processedMeta.queries[1].conditionFunction()).toBe(2);
-  expect(typeof processedMeta.queries[2].conditionFunction).toBe("function");
-  expect(processedMeta.queries[2].conditionFunction()).toBe(3);
+  expect(typeof processedMeta[QUERIES][0].conditionFunction).toBe("function");
+  expect(processedMeta[QUERIES][0].conditionFunction()).toBe(1);
+  expect(typeof processedMeta[QUERIES][1].conditionFunction).toBe("function");
+  expect(processedMeta[QUERIES][1].conditionFunction()).toBe(2);
+  expect(typeof processedMeta[QUERIES][2].conditionFunction).toBe("function");
+  expect(processedMeta[QUERIES][2].conditionFunction()).toBe(3);
 });
 
 test("should return null for invalid configurations", () => {
