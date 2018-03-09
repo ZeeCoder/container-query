@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Container from "@zeecoder/container-query";
-import objectAssign from "object-assign";
 
 export default class ContainerQuery extends Component {
   constructor(props) {
@@ -12,7 +11,7 @@ export default class ContainerQuery extends Component {
 
     this.handleResize = this.handleResize.bind(this);
 
-    this.containerOptions = objectAssign({}, this.props.options);
+    this.containerOptions = { ...this.props.options };
 
     // Listen to size changes only if needed
     if (
@@ -71,8 +70,8 @@ export default class ContainerQuery extends Component {
 }
 
 ContainerQuery.defaultProps = {
-  stats: {},
-  meta: {},
+  stats: null,
+  meta: null,
   options: {}
 };
 

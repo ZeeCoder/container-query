@@ -9,7 +9,6 @@ export default {
     "react-dom",
     "@zeecoder/container-query",
     "prop-types",
-    "object-assign",
     "es6-weak-map",
     "resize-observer-polyfill"
   ]
