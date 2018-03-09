@@ -3,7 +3,7 @@
   "description": "PostCSS processing for container queries, using a media query like syntax.",
   "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
-  "version": "2.6.0-alpha.97fec537",
+  "version": "2.6.0",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=4"
@@ -32,7 +32,7 @@
     "rollup-plugin-flow": "^1.1.1"
   },
   "dependencies": {
-    "@zeecoder/container-query-meta-builder": "^2.6.0-alpha.97fec537",
+    "@zeecoder/container-query-meta-builder": "^2.6.0",
     "lodash": "^4.17.4",
     "postcss": "^6.0.1"
   },
