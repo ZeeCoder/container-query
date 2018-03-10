@@ -1,5 +1,5 @@
 import postcss from "postcss";
-import containerQuery from "./containerQuery";
+import containerQuery, { getMetadataFromMessages } from "./containerQuery";
 import Root from "../__mocks__/Root";
 import * as regularTest from "./test/regular";
 import * as customPropertiesTest from "./test/custom-properties";
@@ -11,25 +11,32 @@ import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-wi
 import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
 
-jest.mock("./saveJSON");
+jest.mock("./saveMeta");
 
 /**
- * @param {string} css Raw CSS containing container queries
- * @param {{}} options plugin options
+ * @param {string} rawCSS Raw CSS containing container queries
+ * @param {{}} [options] plugin options
  * @return {Promise<{
  *   css: string,
  *   meta: {},
  * }>}
  */
-const processCss = (css, options = {}) =>
-  Promise.resolve().then(() => {
-    let meta = null;
-    options.getJSON = (path, metaJson) => (meta = metaJson);
+const processCss = async (rawCSS, options = {}) => {
+  let getJsonMeta = null;
+  options.getJSON = (path, meta) => (getJsonMeta = meta);
 
-    return postcss([containerQuery(options)])
-      .process(css, { from: "from.css", to: "to.css" })
-      .then(({ css }) => ({ css, meta }));
-  });
+  const { css, messages } = await postcss([containerQuery(options)]).process(
+    rawCSS,
+    { from: "from.css", to: "to.css" }
+  );
+
+  const meta = getMetadataFromMessages(messages);
+
+  // As long as the `getJSON` option is supported, this is important
+  expect(getJsonMeta).toEqual(meta);
+
+  return { css, meta };
+};
 
 /**
  * @param {{
@@ -37,31 +44,23 @@ const processCss = (css, options = {}) =>
  *   cssOutput: string,
  *   meta: {},
  * }} testObj
- * @param {{}} options plugin options
- * @return {Promise<{
- *  cssOutput: string,
- *  meta: {},
- * }>}
+ * @param {{}} [options] plugin options
  */
-const assertProcessingResult = (testObj, options = {}) =>
-  processCss(testObj.cssInput, options).then(({ css, meta }) => {
-    expect(css).toBe(testObj.cssOutput);
-    expect(meta).toEqual(testObj.meta);
+const assertProcessingResult = async (testObj, options = {}) => {
+  const { css, meta } = await processCss(testObj.cssInput, options);
 
-    return {
-      cssOutput: css,
-      meta: meta
-    };
-  });
+  expect(css).toBe(testObj.cssOutput);
+  expect(meta).toEqual(testObj.meta);
+};
 
 test("should use the default json saving function if none was supplied", () => {
-  const saveJSON = require("./saveJSON").default;
+  const saveMeta = require("./saveMeta").default;
 
   const pluginInstance = containerQuery();
 
-  pluginInstance(new Root());
+  pluginInstance(new Root(), { messages: [] });
 
-  expect(saveJSON).toHaveBeenCalledTimes(1);
+  expect(saveMeta).toHaveBeenCalledTimes(1);
 });
 
 test("should throw on missing container declaration", () => {

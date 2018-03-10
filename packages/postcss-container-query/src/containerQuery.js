@@ -1,8 +1,10 @@
 import postcss from "postcss";
 import hasContainerDefinition from "./hasContainerDefinition";
 import extractPropsFromNode from "./extractPropsFromNode";
-import saveJSON from "./saveJSON";
+import saveMeta from "./saveMeta";
 import MetaBuilder from "@zeecoder/container-query-meta-builder";
+
+const plugin = "postcss-container-query";
 
 const isContainerQuery = node =>
   node.type === "atrule" && node.name === "container";
@@ -61,10 +63,10 @@ const walkRules = (root, opts, ruleHandler) => {
  * }} options
  */
 function containerQuery(options = {}) {
-  const getJSON = options.getJSON || saveJSON;
+  const getJSON = options.getJSON || saveMeta;
   const singleContainer = options.singleContainer !== false;
 
-  return function(root) {
+  return function(root, result) {
     const containers = {};
     let currentContainerSelector = null;
 
@@ -141,12 +143,41 @@ function containerQuery(options = {}) {
       containers[selector] = containers[selector].build();
     }
 
-    const response = !singleContainer
+    const meta = !singleContainer
       ? containers
       : currentContainerSelector ? containers[currentContainerSelector] : {};
 
-    getJSON(root.source.input.file, response);
+    const filepath = root.source.input.file;
+
+    result.messages.push({
+      type: "metadata",
+      plugin,
+      meta,
+      filepath
+    });
+
+    getJSON(filepath, meta);
   };
 }
 
-export default postcss.plugin("postcss-container-query", containerQuery);
+/**
+ * @param {Array<{plugin: string, type: string, [meta]: {}}>} messages
+ * @return {null|{}}
+ */
+export function getMetadataFromMessages(messages) {
+  const filteredMessages = messages.filter(
+    message =>
+      message.plugin === "postcss-container-query" &&
+      message.type === "metadata"
+  );
+
+  if (!filteredMessages.length) {
+    return null;
+  }
+
+  return filteredMessages[0].meta;
+}
+
+export { saveMeta };
+
+export default postcss.plugin(plugin, containerQuery);

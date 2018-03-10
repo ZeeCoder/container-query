@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+* `postcss-container-query`
+  * Now uses messages to provide the metadata.
+  * `getMetadataFromMessages` to help extracting metadata from an array of messages
+  * `saveMeta` function to save the extracted metadata alongside the CSS file
+
+### Deprecated
+
+* `postcss-container-query`
+  * `getJSON` will be removed, in favour of `getMetadataFromMessages` and `saveMeta`
+
 ## [2.6.0]
 
 ### Added

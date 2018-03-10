@@ -1,12 +1,12 @@
 import { readFile, writeFile } from "fs";
 
-const saveJSON = (cssFile, json) =>
+const saveMeta = (cssFile, meta) =>
   new Promise(resolve => {
-    const jsonData = JSON.stringify(json);
+    const stringMeta = JSON.stringify(meta);
     const jsonFilePath = `${cssFile}.json`;
 
     const writeJson = () =>
-      writeFile(jsonFilePath, jsonData, e => {
+      writeFile(jsonFilePath, stringMeta, e => {
         if (e) {
           console.error(`Failed to save container query json file: ${e}`);
         }
@@ -16,7 +16,7 @@ const saveJSON = (cssFile, json) =>
 
     readFile(jsonFilePath, "utf8", (e, contents) => {
       // Write file if it doesn't exist yet, or if the contents changed
-      if (e || contents !== jsonData) {
+      if (e || contents !== stringMeta) {
         writeJson();
       } else {
         resolve();
@@ -24,4 +24,4 @@ const saveJSON = (cssFile, json) =>
     });
   });
 
-export default saveJSON;
+export default saveMeta;

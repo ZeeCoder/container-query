@@ -1,10 +1,10 @@
-import saveJSON from "./saveJSON";
+import saveMeta from "./saveMeta";
 
 jest.mock("fs");
 
 test("should write contents when file does not exist", () => {
   const fs = require("fs");
-  const cssFilePath = __dirname + "/tmp/saveJSON.test.css";
+  const cssFilePath = __dirname + "/tmp/saveMeta.test.css";
   const jsonFilePath = `${cssFilePath}.json`;
   const json = { some: "JSON" };
 
@@ -14,7 +14,7 @@ test("should write contents when file does not exist", () => {
   expect.hasAssertions();
 
   return Promise.resolve()
-    .then(() => saveJSON(cssFilePath, json))
+    .then(() => saveMeta(cssFilePath, json))
     .then(() => {
       expect(fs.readFile).toHaveBeenCalledTimes(1);
       expect(fs.writeFile).toHaveBeenCalledTimes(1);
@@ -25,7 +25,7 @@ test("should write contents when file does not exist", () => {
 
 test("should not write contents when file already with same contents", () => {
   const fs = require("fs");
-  const cssFilePath = __dirname + "/tmp/saveJSON.test.css";
+  const cssFilePath = __dirname + "/tmp/saveMeta.test.css";
   const jsonFilePath = `${cssFilePath}.json`;
   const json = { some: "JSON" };
 
@@ -35,7 +35,7 @@ test("should not write contents when file already with same contents", () => {
   expect.hasAssertions();
 
   return Promise.resolve()
-    .then(() => saveJSON(cssFilePath, json))
+    .then(() => saveMeta(cssFilePath, json))
     .then(() => {
       expect(fs.readFile).toHaveBeenCalledTimes(1);
       expect(fs.writeFile).toHaveBeenCalledTimes(0);
@@ -44,7 +44,7 @@ test("should not write contents when file already with same contents", () => {
 
 test("should log error in case there's an issue writing the file", () => {
   const fs = require("fs");
-  const cssFilePath = __dirname + "/tmp/saveJSON.test.css";
+  const cssFilePath = __dirname + "/tmp/saveMeta.test.css";
   const jsonFilePath = `${cssFilePath}.json`;
   const json = { some: "JSON" };
 
@@ -55,7 +55,7 @@ test("should log error in case there's an issue writing the file", () => {
   expect.hasAssertions();
 
   return Promise.resolve()
-    .then(() => saveJSON(cssFilePath, json))
+    .then(() => saveMeta(cssFilePath, json))
     .then(() => {
       expect(fs.readFile).toHaveBeenCalledTimes(1);
       expect(fs.writeFile).toHaveBeenCalledTimes(1);
