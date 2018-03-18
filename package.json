@@ -38,10 +38,11 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "postcss-container-query/dist/saveMeta.js",
+      "postcss-container-query/src/test",
+      "postcss-container-query/saveMeta.js",
+      "postcss-container-query/getMetadataFromMessages.js",
       "container-query-meta-builder/dist",
-      "container-query-meta-builder/src/test",
-      "postcss-container-query/src/test"
+      "container-query-meta-builder/src/test"
     ]
   }
 }

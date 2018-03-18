@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.7.2]
+
+### Fixed
+
+* `postcss-container-query`
+  * Made `saveMeta` and `getMetadataFromMessages` available for imports
+
 ## [2.7.1]
 
 ### Fixed

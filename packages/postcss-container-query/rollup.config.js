@@ -22,10 +22,10 @@ export default [
   }),
   generate({
     input: "src/saveMeta.js",
-    output: "dist/saveMeta.js"
+    output: "./saveMeta.js"
   }),
   generate({
     input: "src/getMetadataFromMessages.js",
-    output: "dist/getMetadataFromMessages.js"
+    output: "./getMetadataFromMessages.js"
   })
 ];

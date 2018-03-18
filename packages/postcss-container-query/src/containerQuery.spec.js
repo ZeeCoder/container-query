@@ -11,8 +11,8 @@ import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
 
 const containerQuery = require("../dist");
-const getMetadataFromMessages = require("../dist/getMetadataFromMessages");
-const saveMeta = require("../dist/saveMeta");
+const getMetadataFromMessages = require("../getMetadataFromMessages");
+const saveMeta = require("../saveMeta");
 
 jest.mock("fs");
 
