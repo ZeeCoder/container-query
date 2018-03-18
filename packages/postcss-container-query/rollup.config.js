@@ -1,11 +1,31 @@
 import flow from "rollup-plugin-flow";
 import babel from "rollup-plugin-babel";
-import babili from "rollup-plugin-babili";
+import uglify from "rollup-plugin-uglify";
 import fs from "fs";
 
-export default {
-  input: "src/containerQuery.js",
-  output: [{ file: "dist/bundle.cjs.js", format: "cjs" }],
-  plugins: [flow(), babel(), babili()],
-  external: ["postcss", "lodash/trim", "fs"]
-};
+const generate = ({ input, output }) => ({
+  input,
+  output: [{ file: output, format: "cjs" }],
+  plugins: [flow(), babel(), uglify()],
+  external: [
+    "postcss",
+    "lodash/trim",
+    "fs",
+    "@zeecoder/container-query-meta-builder"
+  ]
+});
+
+export default [
+  generate({
+    input: "src/containerQuery.js",
+    output: "dist/index.js"
+  }),
+  generate({
+    input: "src/saveMeta.js",
+    output: "dist/saveMeta.js"
+  }),
+  generate({
+    input: "src/getMetadataFromMessages.js",
+    output: "dist/getMetadataFromMessages.js"
+  })
+];

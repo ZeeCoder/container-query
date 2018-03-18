@@ -20,10 +20,11 @@
     "prettier": "^1.10.2"
   },
   "scripts": {
-    "test": "lerna run flow && jest --coverage",
+    "test": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "watch:test": "jest --watch",
     "precommit": "lint-staged",
+    "pretest": "lerna run flow && yarn run build",
     "prettify": "prettier --write 'packages/**/*.js'",
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap"
@@ -32,6 +33,15 @@
     "*.js": [
       "prettier --write",
       "git add"
+    ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "postcss-container-query/dist/saveMeta.js",
+      "container-query-meta-builder/dist",
+      "container-query-meta-builder/src/test",
+      "postcss-container-query/src/test"
     ]
   }
 }

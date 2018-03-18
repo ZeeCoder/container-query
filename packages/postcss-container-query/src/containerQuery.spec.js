@@ -1,5 +1,4 @@
 import postcss from "postcss";
-import containerQuery, { getMetadataFromMessages } from "./containerQuery";
 import Root from "../__mocks__/Root";
 import * as regularTest from "./test/regular";
 import * as customPropertiesTest from "./test/custom-properties";
@@ -11,7 +10,11 @@ import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-wi
 import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
 
-jest.mock("./saveMeta");
+const containerQuery = require("../dist");
+const getMetadataFromMessages = require("../dist/getMetadataFromMessages");
+const saveMeta = require("../dist/saveMeta");
+
+jest.mock("fs");
 
 /**
  * @param {string} rawCSS Raw CSS containing container queries
@@ -53,14 +56,22 @@ const assertProcessingResult = async (testObj, options = {}) => {
   expect(meta).toEqual(testObj.meta);
 };
 
-test("should use the default json saving function if none was supplied", () => {
-  const saveMeta = require("./saveMeta").default;
+test('should avoid accidentally creating ".default" exports', () => {
+  expect(typeof saveMeta).toBe("function");
+  expect(typeof getMetadataFromMessages).toBe("function");
+  expect(typeof containerQuery).toBe("function");
+  expect(typeof saveMeta.default).toBe("undefined");
+  expect(typeof getMetadataFromMessages.default).toBe("undefined");
+  expect(typeof containerQuery.default).toBe("undefined");
+});
 
+test("should use the default json saving function if none was supplied", () => {
+  const fs = require("fs");
   const pluginInstance = containerQuery();
 
   pluginInstance(new Root(), { messages: [] });
 
-  expect(saveMeta).toHaveBeenCalledTimes(1);
+  expect(fs.readFile).toHaveBeenCalledTimes(1);
 });
 
 test("should throw on missing container declaration", () => {

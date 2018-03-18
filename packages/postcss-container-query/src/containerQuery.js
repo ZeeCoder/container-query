@@ -160,24 +160,4 @@ function containerQuery(options = {}) {
   };
 }
 
-/**
- * @param {Array<{plugin: string, type: string, [meta]: {}}>} messages
- * @return {null|{}}
- */
-export function getMetadataFromMessages(messages) {
-  const filteredMessages = messages.filter(
-    message =>
-      message.plugin === "postcss-container-query" &&
-      message.type === "metadata"
-  );
-
-  if (!filteredMessages.length) {
-    return null;
-  }
-
-  return filteredMessages[0].meta;
-}
-
-export { saveMeta };
-
 export default postcss.plugin(plugin, containerQuery);

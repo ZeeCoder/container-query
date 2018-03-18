@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.7.1]
+
+### Fixed
+
+* Exluded some irrelevant paths from test coverage
+
+* `postcss-container-query`
+  * `watch:build` package script to help development
+  * testing build files
+  * Fixed exports (#90)
+
 ## [2.7.0]
 
 ### Added

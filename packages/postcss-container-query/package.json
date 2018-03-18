@@ -1,6 +1,7 @@
 {
   "name": "@zeecoder/postcss-container-query",
-  "description": "PostCSS processing for container queries, using a media query like syntax.",
+  "description":
+    "PostCSS processing for container queries, using a media query like syntax.",
   "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
   "version": "2.7.0",
@@ -8,13 +9,14 @@
   "engines": {
     "node": ">=4"
   },
-  "main": "dist/bundle.cjs.js",
+  "main": "dist/index.js",
   "browser": {
     "fs": false
   },
   "scripts": {
     "test": "yarn run flow && jest",
     "build": "rollup -c",
+    "watch:build": "rollup -c --watch",
     "flow": "flow check",
     "prebuild": "yarn run flow",
     "prepublish": "yarn build"
@@ -28,8 +30,8 @@
     "jest": "^22.4.2",
     "rollup": "^0.56.2",
     "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-babili": "^3.1.0",
-    "rollup-plugin-flow": "^1.1.1"
+    "rollup-plugin-flow": "^1.1.1",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "dependencies": {
     "@zeecoder/container-query-meta-builder": "^2.6.0",

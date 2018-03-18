@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs";
 
-const saveMeta = (cssFile, meta) =>
-  new Promise(resolve => {
+export default function saveMeta(cssFile, meta) {
+  return new Promise(resolve => {
     const stringMeta = JSON.stringify(meta);
     const jsonFilePath = `${cssFile}.json`;
 
@@ -23,5 +23,4 @@ const saveMeta = (cssFile, meta) =>
       }
     });
   });
-
-export default saveMeta;
+}
