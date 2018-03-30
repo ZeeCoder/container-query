@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.7.4]
+
+### Fixed
+
+* `container-query-meta-builder`
+  * Removed a forgotten import
+
+## [2.7.3]
+
+### Fixed
+
+* `container-query-meta-builder`
+  * Removed lodash
+
 ## [2.7.2]
 
 ### Fixed
