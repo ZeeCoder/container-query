@@ -1,4 +1,3 @@
-import _ from "lodash";
 import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
