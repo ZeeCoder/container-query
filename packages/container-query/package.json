@@ -3,7 +3,7 @@
   "description": "A modern container-query solution.",
   "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
-  "version": "2.6.0",
+  "version": "2.7.3",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=6"
@@ -39,7 +39,7 @@
     "size-limit": "^0.15.1"
   },
   "dependencies": {
-    "@zeecoder/container-query-meta-builder": "^2.6.0",
+    "@zeecoder/container-query-meta-builder": "^2.7.3",
     "es6-weak-map": "^2.0.2",
     "lodash": "^4.17.4",
     "mutation-observer": "^1.0.2",
