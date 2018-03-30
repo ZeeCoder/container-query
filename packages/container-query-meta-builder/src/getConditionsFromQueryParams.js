@@ -1,5 +1,3 @@
-import { trim } from "lodash";
-
 /**
  * Extracts conditions as arrays from a single "param" string PostCSS provides
  * for at-rules.
@@ -11,18 +9,15 @@ import { trim } from "lodash";
 export default function getConditionsFromQueryParams(params) {
   return params.split(",").map(andParams => {
     return andParams.match(/\(([^\)]*)\)/g).map(condition => {
-      let conditionArr = trim(condition, "()");
+      const conditionArr = condition.match(
+        /\(([a-z-]*) *([:><=]*) *([a-z0-9\.]*)\)/i
+      );
 
-      conditionArr = conditionArr.match(/([a-z-]*)([ :><=]*)([a-z0-9\.]*)/i);
-      conditionArr.shift();
-
-      conditionArr = conditionArr.map(trim);
-
-      if (["landscape", "portrait"].indexOf(conditionArr[2]) === -1) {
-        conditionArr[2] = parseFloat(conditionArr[2]);
+      if (["landscape", "portrait"].indexOf(conditionArr[3]) === -1) {
+        conditionArr[3] = parseFloat(conditionArr[3]);
       }
 
-      return conditionArr;
+      return conditionArr.slice(1);
     });
   });
 }
