@@ -17,6 +17,38 @@ export const QUERIES = "f";
 // export const SELECTOR = "selector";
 // export const QUERIES = "queries";
 
+const isEmpty = obj => Object.keys(obj).length === 0;
+
+const sameCondition = (cond1, cond2) => {
+  if (!Array.isArray(cond1) || !Array.isArray(cond2)) {
+    return cond1 === cond2;
+  }
+
+  if (cond1.length !== cond2.length) {
+    return false;
+  }
+
+  cond1 = cond1[0];
+  cond2 = cond2[0];
+
+  if (cond1.length !== cond2.length) {
+    return false;
+  }
+
+  const outerArrLength = cond1.length;
+  for (let i = 0; i < outerArrLength; i++) {
+    const innerArrLength = cond1[i].length;
+
+    for (let j = 0; j < innerArrLength; j++) {
+      if (cond1[i][j] !== cond2[i][j]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
 const getElementData = (queries, conditions = null, selector = null) => {
   const newElementData = {};
 
@@ -30,7 +62,7 @@ const getElementData = (queries, conditions = null, selector = null) => {
 
     if (
       (!query[CONDITIONS] && !conditions) ||
-      _.isEqual(query[CONDITIONS], conditions)
+      sameCondition(query[CONDITIONS], conditions)
     ) {
       const elementsLength = query[ELEMENTS].length;
       for (let j = 0; j < elementsLength; j++) {
@@ -75,7 +107,7 @@ export default class MetaBuilder {
   }
 
   flush() {
-    if (_.isEmpty(this.current.styles) && _.isEmpty(this.current.values)) {
+    if (isEmpty(this.current.styles) && isEmpty(this.current.values)) {
       // nothing to flush
       return;
     }
@@ -87,7 +119,7 @@ export default class MetaBuilder {
     );
 
     // Merge new styles to the stored element data
-    if (!_.isEmpty(this.current.styles)) {
+    if (!isEmpty(this.current.styles)) {
       if (!storedElementData[STYLES]) {
         storedElementData[STYLES] = {};
       }
@@ -95,7 +127,7 @@ export default class MetaBuilder {
       objectAssign(storedElementData[STYLES], this.current.styles);
     }
 
-    if (!_.isEmpty(this.current.values)) {
+    if (!isEmpty(this.current.values)) {
       if (!storedElementData[VALUES]) {
         storedElementData[VALUES] = {};
       }
@@ -113,12 +145,11 @@ export default class MetaBuilder {
     const style = [];
 
     if (typeof node === "string") {
-      const matches = node.match(/([^:]+):(.+)/);
-      if (!matches) {
+      const parts = node.match(/ *([^:]+): *(.+)/);
+      if (!parts) {
         throw new Error(`Invalid CSS declaration format: "${node}"`);
       }
 
-      const parts = matches.map(part => _.trim(part));
       style.push(parts[1], parts[2]);
     } else if (
       typeof node === "object" &&

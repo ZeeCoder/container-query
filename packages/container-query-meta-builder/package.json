@@ -16,6 +16,7 @@
     "build:cjs": "BABEL_ENV=production rollup -c rollup/rollup.cjs.js",
     "build": "npm-run-all build:*",
     "size": "size-limit",
+    "why-size": "size-limit --why",
     "prepublish": "yarn build"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "size-limit": "^0.15.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
     "object-assign": "^4.1.1"
   },
   "keywords": [
