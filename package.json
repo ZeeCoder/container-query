@@ -10,27 +10,30 @@
   "bugs": {
     "url": "https://github.com/ZeeCoder/container-query/issues"
   },
-  "dependencies": {},
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "husky": "^0.14.3",
+    "husky": "^1.1.3",
     "jest": "^22.4.2",
     "lerna": "^2.9.0",
-    "lint-staged": "^7.0.0",
-    "prettier": "^1.10.2"
+    "lint-staged": "^8.0.4",
+    "prettier": "^1.14.3"
   },
   "scripts": {
     "test": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "watch:test": "jest --watch",
-    "precommit": "lint-staged",
     "pretest": "lerna run flow && yarn run build",
     "prettify": "prettier --write 'packages/**/*.js'",
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.js": [
+    "*.{js,md}": [
       "prettier --write",
       "git add"
     ]
