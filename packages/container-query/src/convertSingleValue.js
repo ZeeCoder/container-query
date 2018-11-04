@@ -31,8 +31,8 @@ export default function convertSingleValue(
     (unit === "rmax" && dimensions.height > dimensions.width);
 
   const valueNum: number =
-    (relativeToHeight ? dimensions.height : dimensions.width) *
-    parseFloat(num) /
+    ((relativeToHeight ? dimensions.height : dimensions.width) *
+      parseFloat(num)) /
     100;
 
   return `${valueNum.toFixed(precision)}px`;
