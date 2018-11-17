@@ -9,6 +9,7 @@ import * as missingContainerDelcarationTest from "./test/missing-container-decla
 import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-with-r-units";
 import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
+import fs from "fs";
 
 const containerQuery = require("../dist");
 const getMetadataFromMessages = require("../getMetadataFromMessages");
@@ -66,7 +67,6 @@ test('should avoid accidentally creating ".default" exports', () => {
 });
 
 test("should use the default json saving function if none was supplied", () => {
-  const fs = require("fs");
   const pluginInstance = containerQuery();
 
   pluginInstance(new Root(), { messages: [] });
