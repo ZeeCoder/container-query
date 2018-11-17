@@ -1,8 +1,8 @@
 import babel from "rollup-plugin-babel";
-import uglify from "rollup-plugin-uglify";
+import { terser } from "rollup-plugin-terser";
 
 export default {
   input: __dirname + "/../src/index.js",
-  plugins: [babel(), uglify()],
-  external: ["lodash/isEmpty", "lodash/trim", "lodash/isEqual", "object-assign"]
+  plugins: [babel(), terser()],
+  external: ["object-assign"]
 };

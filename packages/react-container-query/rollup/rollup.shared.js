@@ -1,9 +1,9 @@
 import babel from "rollup-plugin-babel";
-import uglify from "rollup-plugin-uglify";
+import { terser } from "rollup-plugin-terser";
 
 export default {
   input: __dirname + "/../src/index.js",
-  plugins: [babel(), uglify()],
+  plugins: [babel(), terser()],
   external: [
     "react",
     "react-dom",

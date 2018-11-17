@@ -6,36 +6,32 @@
   "version": "2.7.4",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "main": "dist/index.js",
   "browser": {
     "fs": false
   },
   "scripts": {
-    "test": "yarn run flow && jest",
     "build": "rollup -c",
     "watch:build": "rollup -c --watch",
     "flow": "flow check",
-    "prebuild": "yarn run flow",
+    "prebuild": "yarn flow",
     "prepublish": "yarn build"
   },
   "devDependencies": {
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-env": "^1.6.0",
-    "flow-bin": "^0.66.0",
-    "jest": "^22.4.2",
-    "rollup": "^0.56.2",
-    "rollup-plugin-babel": "^3.0.2",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-transform-flow-strip-types": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "flow-bin": "^0.86.0",
+    "rollup": "^0.67.3",
+    "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-terser": "^3.0.0"
   },
   "dependencies": {
     "@zeecoder/container-query-meta-builder": "^2.7.4",
-    "lodash": "^4.17.4",
-    "postcss": "^6.0.1"
+    "postcss": "^7.0.5"
   },
   "keywords": [
     "rwd",
