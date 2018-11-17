@@ -1,25 +1,24 @@
 import adjustContainer from "./adjustContainer";
 import containerRegistry from "./containerRegistry";
 import { SELECTOR, QUERIES } from "@zeecoder/container-query-meta-builder";
+import getContainerSize from "./getContainerSize";
+import getChangedStyles from "./getChangedStyles";
 
 jest.mock("./getChangedStyles");
 jest.mock("./getContainerSize");
 
 beforeEach(() => {
-  require("./getChangedStyles").default.mockClear();
-  require("./getContainerSize").default.mockClear();
+  getChangedStyles.mockClear();
+  getContainerSize.mockClear();
 });
 
 test("should ignore call if the element is not registered", () => {
-  const getContainerSize = require("./getContainerSize").default;
   const containerElement = document.createElement("div");
   adjustContainer(containerElement);
   expect(getContainerSize).toHaveBeenCalledTimes(0);
 });
 
 test("should be able to get the container size itself, and ignore empty change sets", () => {
-  const getChangedStyles = require("./getChangedStyles").default;
-  const getContainerSize = require("./getContainerSize").default;
   const containerElement = document.createElement("div");
   const containerSize = { width: 1, height: 2 };
   getContainerSize.mockImplementationOnce(() => containerSize);
@@ -46,8 +45,6 @@ test("should be able to get the container size itself, and ignore empty change s
 });
 
 test("should apply changed styles", () => {
-  const getChangedStyles = require("./getChangedStyles").default;
-  const getContainerSize = require("./getContainerSize").default;
   const containerElement = document.createElement("div");
   const containerChildElement1 = document.createElement("div");
   const containerChildElement2 = document.createElement("div");
@@ -101,8 +98,6 @@ test("should apply changed styles", () => {
 });
 
 test("should respect container boundaries while applying styles", () => {
-  const getChangedStyles = require("./getChangedStyles").default;
-  const getContainerSize = require("./getContainerSize").default;
   const container1 = document.createElement("div");
   const container2 = document.createElement("div");
   const container1Descendant1 = document.createElement("div");
