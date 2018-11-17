@@ -58,13 +58,18 @@ const walkRules = (root, opts, ruleHandler) => {
 
 /**
  * @param {{
- *   getJSON: function,
- *   singleContainer: boolean,
+ *   [getJSON]: function,
+ *   [singleContainer]: boolean,
+ *   [exportMetaInCss]: boolean|string,
  * }} options
  */
 function containerQuery(options = {}) {
   const getJSON = options.getJSON || saveMeta;
   const singleContainer = options.singleContainer !== false;
+  const exportMetaInCss =
+    typeof options.exportMetaInCss !== "undefined"
+      ? options.exportMetaInCss
+      : "meta";
 
   return function(root, result) {
     const containers = {};
@@ -158,7 +163,17 @@ function containerQuery(options = {}) {
       filepath
     });
 
-    getJSON(filepath, meta);
+    if (typeof getJSON === "function") {
+      getJSON(filepath, meta);
+    }
+
+    // The following is picked up by css-loader, therefore making importing json
+    // files obsolete
+    if (exportMetaInCss) {
+      root.append(
+        `\n:export { ${exportMetaInCss}: '${JSON.stringify(meta)}' }`
+      );
+    }
   };
 }
 

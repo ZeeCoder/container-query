@@ -9,11 +9,12 @@ import * as missingContainerDelcarationTest from "./test/missing-container-decla
 import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-with-r-units";
 import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
+import * as metaExportTest from "./test/meta-export";
+import * as metaNamedExportTest from "./test/meta-named-export";
 import fs from "fs";
-
-const containerQuery = require("../dist");
-const getMetadataFromMessages = require("../getMetadataFromMessages");
-const saveMeta = require("../saveMeta");
+import containerQuery from "./containerQuery";
+import getMetadataFromMessages from "../getMetadataFromMessages";
+import saveMeta from "../saveMeta";
 
 jest.mock("fs");
 
@@ -51,7 +52,10 @@ const processCss = async (rawCSS, options = {}) => {
  * @param {{}} [options] plugin options
  */
 const assertProcessingResult = async (testObj, options = {}) => {
-  const { css, meta } = await processCss(testObj.cssInput, options);
+  const { css, meta } = await processCss(testObj.cssInput, {
+    exportMetaInCss: false,
+    ...options
+  });
 
   expect(css).toBe(testObj.cssOutput);
   expect(meta).toEqual(testObj.meta);
@@ -67,7 +71,7 @@ test('should avoid accidentally creating ".default" exports', () => {
 });
 
 test("should use the default json saving function if none was supplied", () => {
-  const pluginInstance = containerQuery();
+  const pluginInstance = containerQuery({ exportMetaInCss: false });
 
   pluginInstance(new Root(), { messages: [] });
 
@@ -99,10 +103,16 @@ test("should throw on missing container declaration when the container has r-uni
 });
 
 test("should ignore unrecognised at-rules, like @keyframes", () =>
-  assertProcessingResult(unrecognisedAtRulesTest, { singleContainer: false }));
+  assertProcessingResult(unrecognisedAtRulesTest, {
+    singleContainer: false,
+    exportMetaInCss: false
+  }));
 
 test("should properly process CSS", () =>
-  assertProcessingResult(regularTest, { singleContainer: false }));
+  assertProcessingResult(regularTest, {
+    singleContainer: false,
+    exportMetaInCss: false
+  }));
 
 // This also tests that containers are processed even without queries
 test("should detect the first class as the container by default", () =>
@@ -126,3 +136,11 @@ test("should handle :self", () => assertProcessingResult(selfTest));
 
 test("should be able to run this simple test", () =>
   assertProcessingResult(simpleTest));
+
+test("should export the meta in the css by default", () =>
+  assertProcessingResult(metaExportTest, { exportMetaInCss: undefined }));
+
+test("should be able to export the meta under a custom export", () =>
+  assertProcessingResult(metaNamedExportTest, {
+    exportMetaInCss: "custom-meta"
+  }));
