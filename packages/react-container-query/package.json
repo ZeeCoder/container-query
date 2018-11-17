@@ -8,7 +8,7 @@
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
   "scripts": {
-    "test": "yarn build && yarn size",
+    "test": "yarn size",
     "build:esm": "rollup -c rollup/rollup.esm.js",
     "build:cjs": "rollup -c rollup/rollup.cjs.js",
     "build": "npm-run-all build:*",

@@ -63,8 +63,7 @@ const walkRules = (root, opts, ruleHandler) => {
  * }} options
  */
 function containerQuery(options = {}) {
-  const getJSON =
-    typeof options.getJSON !== "undefined" ? options.getJSON : saveMeta;
+  const getJSON = options.getJSON || saveMeta;
   const singleContainer = options.singleContainer !== false;
 
   return function(root, result) {
@@ -147,8 +146,8 @@ function containerQuery(options = {}) {
     const meta = !singleContainer
       ? containers
       : currentContainerSelector
-        ? containers[currentContainerSelector]
-        : {};
+      ? containers[currentContainerSelector]
+      : {};
 
     const filepath = root.source.input.file;
 
@@ -159,14 +158,7 @@ function containerQuery(options = {}) {
       filepath
     });
 
-    if (typeof getJSON === "function") {
-      getJSON(filepath, meta);
-    }
-
-    // todo if option is set
-    root.append(`
-      :export { meta: '${JSON.stringify(meta)}' }
-    `);
+    getJSON(filepath, meta);
   };
 }
 
