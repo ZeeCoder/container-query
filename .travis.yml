@@ -1,8 +1,6 @@
 language: node_js
 sudo: false
-node_js:
-- [6,7,8]
-- 10
+node_js: [ 6, 8, 10 ]
 after_success: 'yarn run coveralls'
 cache:
     yarn: true

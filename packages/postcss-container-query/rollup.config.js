@@ -1,12 +1,11 @@
 import flow from "rollup-plugin-flow";
 import babel from "rollup-plugin-babel";
-import uglify from "rollup-plugin-uglify";
-import fs from "fs";
+import { terser } from "rollup-plugin-terser";
 
 const generate = ({ input, output }) => ({
   input,
   output: [{ file: output, format: "cjs" }],
-  plugins: [flow(), babel(), uglify()],
+  plugins: [flow(), babel(), terser()],
   external: [
     "postcss",
     "lodash/trim",

@@ -1,10 +1,10 @@
 import flow from "rollup-plugin-flow";
 import babel from "rollup-plugin-babel";
-import uglify from "rollup-plugin-uglify";
+import { terser } from "rollup-plugin-terser";
 
 export default {
   input: __dirname + "/../src/Container.js",
-  plugins: [flow(), babel(), uglify()],
+  plugins: [flow(), babel(), terser()],
   external: [
     "es6-weak-map",
     "object-assign",
@@ -12,6 +12,7 @@ export default {
     "lodash/union",
     "raf",
     "mutation-observer",
-    "resize-observer-polyfill"
+    "resize-observer-polyfill",
+    "@zeecoder/container-query-meta-builder"
   ]
 };

@@ -1,7 +1,7 @@
 [
   {
     path: "dist/bundle.cjs.js",
-    limit: "1.7KB"
+    limit: "1.66KB"
   },
   {
     path: "dist/bundle.esm.js",

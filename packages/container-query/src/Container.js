@@ -58,7 +58,12 @@ const mutationObserver = new MutationObserver(mutationRecords => {
 export default class Container {
   container: HTMLElement;
   meta: {};
-  opts: {};
+  opts: {
+    adjustOnResize: boolean,
+    adjustOnInstantiation: boolean,
+    valuePrecision: number,
+    handleResize?: Function
+  };
 
   constructor(containerElement: HTMLElement, meta: Meta, opts: {} = {}) {
     this.container = containerElement;
