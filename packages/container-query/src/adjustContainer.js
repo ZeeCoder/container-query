@@ -72,6 +72,7 @@ export default function adjustContainer(
 
     // Normalise to a single changeSet that can be applied by applyStylesToElements
     const changeSet = changedStyles[selector].addStyle || {};
+
     if (Array.isArray(changedStyles[selector].removeProps)) {
       changedStyles[selector].removeProps.forEach(prop => {
         changeSet[prop] = "";
