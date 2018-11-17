@@ -2,14 +2,10 @@ import applyStylesToElements from "./applyStylesToElements";
 
 test("should apply all declarations to all the elements", () => {
   const element1 = {
-    style: {
-      setProperty: jest.fn()
-    }
+    style: {}
   };
   const element2 = {
-    style: {
-      setProperty: jest.fn()
-    }
+    style: {}
   };
 
   const elements = [element1, element2];
@@ -21,17 +17,6 @@ test("should apply all declarations to all the elements", () => {
 
   applyStylesToElements(style, elements);
 
-  expect(element1.style.setProperty).toHaveBeenCalledTimes(2);
-  expect(element1.style.setProperty).toHaveBeenCalledWith("font-size", "42px");
-  expect(element1.style.setProperty).toHaveBeenCalledWith(
-    "line-height",
-    "50px"
-  );
-
-  expect(element2.style.setProperty).toHaveBeenCalledTimes(2);
-  expect(element2.style.setProperty).toHaveBeenCalledWith("font-size", "42px");
-  expect(element2.style.setProperty).toHaveBeenCalledWith(
-    "line-height",
-    "50px"
-  );
+  expect(element1.style).toEqual(style);
+  expect(element2.style).toEqual(style);
 });
