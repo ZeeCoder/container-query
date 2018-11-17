@@ -1,5 +1,11 @@
 import Container from "./Container";
 import { QUERIES } from "@zeecoder/container-query-meta-builder";
+import raf from "raf";
+import processMeta from "./processMeta";
+import adjustContainer from "./adjustContainer";
+import containerRegistry from "./containerRegistry";
+import ResizeObserver from "resize-observer-polyfill";
+import MutationObserver from "mutation-observer";
 
 console.warn = jest.fn();
 jest.mock("./processMeta", () => jest.fn(config => config));
@@ -35,13 +41,11 @@ jest.mock("mutation-observer", () => {
 });
 
 beforeEach(() => {
-  require("raf").mockClear();
-  require("./processMeta").mockClear();
-  require("./adjustContainer").mockClear();
-  const ResizeObserver = require("resize-observer-polyfill");
+  raf.mockClear();
+  processMeta.mockClear();
+  adjustContainer.mockClear();
   ResizeObserver.prototype.observe.mockClear();
   ResizeObserver.prototype.unobserve.mockClear();
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockClear();
   containerRegistry.set.mockClear();
   containerRegistry.has.mockClear();
@@ -49,12 +53,6 @@ beforeEach(() => {
 });
 
 test("should instantiate properly", () => {
-  const ResizeObserver = require("resize-observer-polyfill");
-  const processMeta = require("./processMeta");
-  const adjustContainer = require("./adjustContainer");
-  const containerRegistry = require("./containerRegistry");
-  const raf = require("raf");
-
   const containerElement = {
     parentNode: document.createElement("div")
   };
@@ -84,8 +82,6 @@ test("should instantiate properly", () => {
 });
 
 test("should create the initial query state based on the number of queries", () => {
-  const containerRegistry = require("./containerRegistry");
-
   const containerElement = {
     parentNode: document.createElement("div")
   };
@@ -103,11 +99,6 @@ test("should create the initial query state based on the number of queries", () 
 });
 
 test("should not call adjust if disabled by the options", () => {
-  const ResizeObserver = require("resize-observer-polyfill");
-  const processMeta = require("./processMeta");
-  const adjustContainer = require("./adjustContainer");
-  const raf = require("raf");
-
   const containerElement = {
     parentNode: document.createElement("div")
   };
@@ -128,10 +119,6 @@ test("should not call adjust if disabled by the options", () => {
 });
 
 test("should be able to observe resize events and switch off initial adjust call", () => {
-  const ResizeObserver = require("resize-observer-polyfill");
-  const raf = require("raf");
-  const adjustContainer = require("./adjustContainer");
-
   const containerElement = {
     parentNode: document.createElement("div")
   };
@@ -165,7 +152,6 @@ test("should be able to observe resize events and switch off initial adjust call
 });
 
 test("should call adjust() on resize changes", () => {
-  const containerRegistry = require("./containerRegistry");
   const randomElement = document.createElement("div");
   containerRegistry.get.mockImplementationOnce(queriedContainerElement => {
     expect(queriedContainerElement).toBe(randomElement);
@@ -177,7 +163,6 @@ test("should call adjust() on resize changes", () => {
 
     return registryData;
   });
-  const ResizeObserver = require("resize-observer-polyfill");
   const parentElement = document.createElement("div");
   const containerElement = document.createElement("div");
   parentElement.appendChild(containerElement);
@@ -232,10 +217,7 @@ test("should call adjust() on resize changes", () => {
 });
 
 test("should clean up after container element is detached from the DOM", () => {
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.has.mockImplementationOnce(() => true);
-  const MutationObserver = require("mutation-observer");
-  const ResizeObserver = require("resize-observer-polyfill");
   ResizeObserver.prototype.unobserve = jest.fn();
   const parentElement = document.createElement("div");
   const containerElement = document.createElement("div");
