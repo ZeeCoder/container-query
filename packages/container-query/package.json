@@ -8,9 +8,8 @@
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
   "scripts": {
-    "test": "yarn build && yarn size",
+    "test": "yarn flow && yarn size",
     "flow": "flow check",
-    "prebuild": "yarn flow",
     "build:esm": "BABEL_ENV=production rollup -c rollup/rollup.esm.js",
     "build:cjs": "BABEL_ENV=production rollup -c rollup/rollup.cjs.js",
     "build": "npm-run-all build:*",
