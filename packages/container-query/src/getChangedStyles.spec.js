@@ -6,6 +6,7 @@ import {
   STYLES,
   VALUES
 } from "@zeecoder/container-query-meta-builder";
+import containerRegistry from "./containerRegistry";
 
 jest.mock("./containerRegistry", () => ({
   get: jest.fn()
@@ -18,7 +19,6 @@ test("should return empty object if the element is not registered", () => {
 });
 
 test("should apply default queries without a condition function", () => {
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => {
     return {
       instance: { opts: { valuePrecision: 3 } },
@@ -124,7 +124,6 @@ test("should return change sets on first run", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -223,7 +222,6 @@ test("should generate remove change set", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -296,7 +294,6 @@ test("should generate empty change set if conditions allow", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -362,7 +359,6 @@ test("should always recalculate values", () => {
       ]
     }
   };
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -406,7 +402,6 @@ test("should be able to limit the precision of generated css values", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -470,7 +465,6 @@ test("should handle multiple prop removal over multiple queries", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");
@@ -507,7 +501,6 @@ test("should use :self if the selector is not available", () => {
     }
   };
 
-  const containerRegistry = require("./containerRegistry");
   containerRegistry.get.mockImplementation(() => registryData);
 
   const element = document.createElement("div");

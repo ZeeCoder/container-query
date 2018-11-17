@@ -4,11 +4,11 @@ import {
   CONDITIONS,
   SELECTOR
 } from "@zeecoder/container-query-meta-builder";
+import getConditionFunction from "./getConditionFunction";
 
 jest.mock("./getConditionFunction");
 
 test("should turn conditions to functions", () => {
-  const getConditionFunction = require("./getConditionFunction").default;
   getConditionFunction
     .mockImplementationOnce(() => () => 1)
     .mockImplementationOnce(() => () => 2)
