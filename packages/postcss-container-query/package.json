@@ -13,10 +13,10 @@
     "fs": false
   },
   "scripts": {
+    "test": "yarn flow",
     "build": "rollup -c",
     "watch:build": "rollup -c --watch",
     "flow": "flow check",
-    "prebuild": "yarn flow",
     "prepublish": "yarn build"
   },
   "devDependencies": {
