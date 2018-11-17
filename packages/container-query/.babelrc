@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "modules": false,
         "targets": {
@@ -20,7 +20,7 @@
     "test": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": ["last 2 versions"]
@@ -28,10 +28,10 @@
           }
         ]
       ],
-      "plugins": ["transform-flow-strip-types"]
+      "plugins": ["@babel/transform-flow-strip-types"]
     },
     "production": {
-      "plugins": ["transform-flow-strip-types", "lodash", "external-helpers"]
+      "plugins": ["@babel/transform-flow-strip-types", "babel-plugin-lodash"]
     }
   }
 }

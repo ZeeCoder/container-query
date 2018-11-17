@@ -1,31 +1,24 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "modules": false,
         "targets": {
-          "node": 4,
-          "browsers": [
-            "IE >= 10",
-            "Chrome >= 10",
-            "Opera >= 15",
-            "FF >= 10",
-            "Edge >= 12"
-          ]
+          "node": 6
         }
       }
     ]
   ],
-  "plugins": ["transform-flow-strip-types", "lodash"],
+  "plugins": ["@babel/plugin-transform-flow-strip-types"],
   "env": {
     "test": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
-              "node": 4
+              "node": 6
             }
           }
         ]
