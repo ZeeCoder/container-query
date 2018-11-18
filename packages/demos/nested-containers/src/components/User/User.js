@@ -4,14 +4,12 @@ import PropTypes from "prop-types";
 import Container from "@zeecoder/container-query";
 import SocialContainer from "../SocialContainer/SocialContainer";
 import SocialLink from "../SocialLink/SocialLink";
-
-require("./User.pcss");
-const queryStats = require("./User.pcss.json");
+import { meta } from "./User.pcss";
 
 export default class User extends Component {
   componentDidMount() {
     const element = ReactDOM.findDOMNode(this);
-    new Container(element, queryStats);
+    new Container(element, meta);
 
     if (!this.props.animate) {
       return;

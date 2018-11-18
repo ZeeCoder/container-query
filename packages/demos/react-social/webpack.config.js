@@ -1,17 +1,14 @@
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-  .BundleAnalyzerPlugin;
-
 module.exports = {
   entry: "./src/main.js",
   output: {
     path: __dirname + "/web/dist",
     filename: "main.js"
   },
+  mode: "production",
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader"
         }
@@ -20,6 +17,7 @@ module.exports = {
         test: /\.pcss$/,
         use: [
           "style-loader",
+          "css-loader",
           {
             loader: "postcss-loader",
             options: {
@@ -36,5 +34,4 @@ module.exports = {
     ]
   },
   devtool: "source-map"
-  // plugins: [new BundleAnalyzerPlugin()],
 };
