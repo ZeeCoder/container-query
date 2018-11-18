@@ -9,7 +9,6 @@ import containerRegistry from "./containerRegistry";
 import type { ContainerSize, Meta, RegistryData } from "../flow/types";
 import { QUERIES } from "@zeecoder/container-query-meta-builder";
 
-// TODO fix test picking up all sorts of js files
 const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   if (!Array.isArray(entries)) {
     return;
@@ -65,8 +64,17 @@ export default class Container {
     handleResize?: Function
   };
 
-  constructor(containerElement: HTMLElement, meta: Meta, opts: {} = {}) {
+  constructor(
+    containerElement: HTMLElement,
+    meta: Meta | string,
+    opts: {} = {}
+  ) {
     this.container = containerElement;
+    // Strings are assumed to be JSON meta in quotations, got from css-loader
+    if (typeof meta === "string") {
+      meta = JSON.parse(meta.slice(1, -1));
+    }
+
     this.meta = processMeta(meta);
 
     this.opts = objectAssign(

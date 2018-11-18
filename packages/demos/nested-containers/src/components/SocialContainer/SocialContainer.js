@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Container from "@zeecoder/container-query";
-
-require("./SocialContainer.pcss");
-const queryStats = require("./SocialContainer.pcss.json");
+import { meta } from "./SocialContainer.pcss";
 
 export default class SocialContainer extends Component {
   componentDidMount() {
     const element = ReactDOM.findDOMNode(this);
-    new Container(element, queryStats);
+    new Container(element, meta);
   }
 
   renderChildren() {

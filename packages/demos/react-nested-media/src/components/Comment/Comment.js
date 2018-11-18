@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import withContainerQuery from "@zeecoder/react-container-query";
-import "./Comment.pcss";
-import stats from "./Comment.pcss.json";
+import { meta } from "./Comment.pcss";
 
 class Comment extends Component {
   renderChildren() {
@@ -28,4 +27,4 @@ class Comment extends Component {
   }
 }
 
-export default withContainerQuery(Comment, stats);
+export default withContainerQuery(Comment, meta);

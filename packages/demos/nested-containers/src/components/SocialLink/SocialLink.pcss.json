@@ -1,1 +1,0 @@
-{"e":".SocialLink","f":[{"b":[{"c":{"--rh":"1rh","--rw":"1rw","--rmin":"1rmin"}}]},{"b":[{"d":{"font-size":"calc(60*var(--rh))"}},{"e":".SocialLink__icon","d":{"margin-left":"calc(20*var(--rh))"}},{"e":".SocialLink__name","d":{"display":"block","margin-left":"calc(5*var(--rw))","margin-right":"calc(20*var(--rh))"}}],"a":[[["aspect-ratio",">",3]]]}]}

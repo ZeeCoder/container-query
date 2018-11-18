@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Post from "../Post/Post";
 import _random from "lodash/random";
-
-require("./App.pcss");
+import "./App.pcss";
 
 const postData = [
   {

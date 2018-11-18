@@ -2,13 +2,11 @@ import ReactDOM from "react-dom";
 import React, { Component } from "react";
 import Container from "@zeecoder/container-query";
 import PropTypes from "prop-types";
-
-require("./Post.pcss");
-const queryStats = require("./Post.pcss.json");
+import { meta } from "./Post.pcss";
 
 export default class Post extends Component {
   componentDidMount() {
-    new Container(ReactDOM.findDOMNode(this), queryStats);
+    new Container(ReactDOM.findDOMNode(this), meta);
   }
 
   render() {
