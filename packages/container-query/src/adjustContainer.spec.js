@@ -63,7 +63,7 @@ test("should apply changed styles", () => {
   getChangedStyles.mockImplementationOnce(() => ({
     ".Container": {
       addStyle: {
-        lineHeight: "10px",
+        "line-height": "10px",
         background: "none"
       },
       removeProps: ["fontSize", "border"]

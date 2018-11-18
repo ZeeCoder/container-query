@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.0.0]
+## [3.0.0-alpha.1]
+
+### Fixed
+
+- Tests now check if custom props are properly set
+- Change sets are tested with hyphenated prop names instead of camel cased ones
+
+## [3.0.0-alpha.0]
 
 ### Added
 

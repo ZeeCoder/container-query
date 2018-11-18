@@ -30,14 +30,14 @@ test("should apply default queries without a condition function", () => {
               {
                 [SELECTOR]: ".Container",
                 [VALUES]: {
-                  fontSize: `2rh`,
-                  lineHeight: `1rh`
+                  "font-size": `2rh`,
+                  "line-height": `1rh`
                 }
               },
               {
                 [SELECTOR]: ".Container__element",
                 [VALUES]: {
-                  lineHeight: `3rh`
+                  "line-height": `3rh`
                 }
               }
             ]
@@ -48,14 +48,14 @@ test("should apply default queries without a condition function", () => {
               {
                 [SELECTOR]: ".Container",
                 [VALUES]: {
-                  fontSize: `4rh`,
-                  lineHeight: `2rh`
+                  "font-size": `4rh`,
+                  "line-height": `2rh`
                 }
               },
               {
                 [SELECTOR]: ".Container__element",
                 [STYLES]: {
-                  lineHeight: "10px"
+                  "line-height": "10px"
                 }
               }
             ]
@@ -70,13 +70,13 @@ test("should apply default queries without a condition function", () => {
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
-        fontSize: "4.000px",
-        lineHeight: "2.000px"
+        "font-size": "4.000px",
+        "line-height": "2.000px"
       }
     },
     ".Container__element": {
       addStyle: {
-        lineHeight: "10px"
+        "line-height": "10px"
       }
     }
   });
@@ -94,11 +94,11 @@ test("should return change sets on first run", () => {
             {
               [SELECTOR]: ".Container__element",
               [STYLES]: {
-                fontSize: "12px",
+                "font-size": "12px",
                 background: "#ccc"
               },
               [VALUES]: {
-                lineHeight: `1rh`
+                "line-height": `1rh`
               }
             }
           ]
@@ -115,7 +115,7 @@ test("should return change sets on first run", () => {
             {
               [SELECTOR]: ".Container__element",
               [STYLES]: {
-                fontSize: "14px"
+                "font-size": "14px"
               }
             }
           ]
@@ -136,8 +136,8 @@ test("should return change sets on first run", () => {
     },
     ".Container__element": {
       addStyle: {
-        fontSize: "14px",
-        lineHeight: "1.00px",
+        "font-size": "14px",
+        "line-height": "1.00px",
         background: "#ccc"
       }
     }
@@ -188,7 +188,7 @@ test("should generate remove change set", () => {
               [SELECTOR]: ".Container",
               [STYLES]: {},
               [VALUES]: {
-                lineHeight: `10rh`
+                "line-height": `10rh`
               }
             }
           ]
@@ -199,11 +199,11 @@ test("should generate remove change set", () => {
             {
               [SELECTOR]: ".Container",
               [STYLES]: {
-                fontSize: "14px",
+                "font-size": "14px",
                 background: "#bbb"
               },
               [VALUES]: {
-                lineHeight: `2rh`
+                "line-height": `2rh`
               }
             },
             {
@@ -213,7 +213,7 @@ test("should generate remove change set", () => {
                 border: "none"
               },
               [VALUES]: {
-                fontSize: `1rh`
+                "font-size": `1rh`
               }
             }
           ]
@@ -230,15 +230,15 @@ test("should generate remove change set", () => {
     ".Container": {
       addStyle: {
         background: "#aaa",
-        lineHeight: "10.00px"
+        "line-height": "10.00px"
       },
-      removeProps: ["fontSize"]
+      removeProps: ["font-size"]
     },
     ".Container__element": {
       addStyle: {
         background: "#bbb"
       },
-      removeProps: ["border", "fontSize"]
+      removeProps: ["border", "font-size"]
     }
   });
   expect(registryData.queryState).toEqual([true, true, false]);
@@ -256,15 +256,15 @@ test("should generate empty change set if conditions allow", () => {
             {
               [SELECTOR]: ".Container",
               [STYLES]: {
-                fontSize: "14px",
+                "font-size": "14px",
                 background: "#bbb",
-                lineHeight: "16px"
+                "line-height": "16px"
               }
             },
             {
               [SELECTOR]: ".Container__element",
               [STYLES]: {
-                fontSize: "8px",
+                "font-size": "8px",
                 background: "#eee"
               }
             }
@@ -276,15 +276,15 @@ test("should generate empty change set if conditions allow", () => {
             {
               [SELECTOR]: ".Container",
               [STYLES]: {
-                fontSize: "16px",
+                "font-size": "16px",
                 background: "#ccc",
-                lineHeight: "18px"
+                "line-height": "18px"
               }
             },
             {
               [SELECTOR]: ".Container__element",
               [STYLES]: {
-                fontSize: "9px",
+                "font-size": "9px",
                 background: "#fff"
               }
             }
@@ -317,13 +317,13 @@ test("should always recalculate values", () => {
             {
               [SELECTOR]: ".Container",
               [VALUES]: {
-                fontSize: `2rh`
+                "font-size": `2rh`
               }
             },
             {
               [SELECTOR]: ".Container__element",
               [VALUES]: {
-                fontSize: `4rh`
+                "font-size": `4rh`
               }
             }
           ]
@@ -334,7 +334,7 @@ test("should always recalculate values", () => {
             {
               [SELECTOR]: ".Container",
               [VALUES]: {
-                fontSize: `3rh`
+                "font-size": `3rh`
               }
             }
           ]
@@ -345,13 +345,13 @@ test("should always recalculate values", () => {
             {
               [SELECTOR]: ".Container",
               [VALUES]: {
-                lineHeight: `4rh`
+                "line-height": `4rh`
               }
             },
             {
               [SELECTOR]: ".Container__element",
               [VALUES]: {
-                lineHeight: `3rh`
+                "line-height": `3rh`
               }
             }
           ]
@@ -366,14 +366,14 @@ test("should always recalculate values", () => {
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
-        lineHeight: "8.00px",
-        fontSize: "6.00px"
+        "line-height": "8.00px",
+        "font-size": "6.00px"
       }
     },
     ".Container__element": {
       addStyle: {
-        lineHeight: "6.00px",
-        fontSize: "8.00px"
+        "line-height": "6.00px",
+        "font-size": "8.00px"
       }
     }
   });
@@ -392,8 +392,8 @@ test("should be able to limit the precision of generated css values", () => {
             {
               [SELECTOR]: ".Container",
               [VALUES]: {
-                fontSize: `22.5rh`,
-                lineHeight: `22.4rh`
+                "font-size": `22.5rh`,
+                "line-height": `22.4rh`
               }
             }
           ]
@@ -409,8 +409,8 @@ test("should be able to limit the precision of generated css values", () => {
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
-        fontSize: "27.68px",
-        lineHeight: "27.55px"
+        "font-size": "27.68px",
+        "line-height": "27.55px"
       }
     }
   });
@@ -430,8 +430,8 @@ test("should handle multiple prop removal over multiple queries", () => {
               [SELECTOR]: ".Container",
               [STYLES]: {
                 border: "none",
-                fontSize: "12px",
-                lineHeight: "15px"
+                "font-size": "12px",
+                "line-height": "15px"
               }
             }
           ]
@@ -442,7 +442,7 @@ test("should handle multiple prop removal over multiple queries", () => {
             {
               [SELECTOR]: ".Container",
               [STYLES]: {
-                fontSize: "13px"
+                "font-size": "13px"
               }
             }
           ]
@@ -456,7 +456,7 @@ test("should handle multiple prop removal over multiple queries", () => {
                 border: "1px solid"
               },
               [VALUES]: {
-                lineHeight: `2rh`
+                "line-height": `2rh`
               }
             }
           ]
@@ -473,8 +473,8 @@ test("should handle multiple prop removal over multiple queries", () => {
     ".Container": {
       addStyle: {
         border: "none",
-        fontSize: "13px",
-        lineHeight: "15px"
+        "font-size": "13px",
+        "line-height": "15px"
       }
     }
   });
