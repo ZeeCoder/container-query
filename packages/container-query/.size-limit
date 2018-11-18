@@ -5,6 +5,6 @@
   },
   {
     path: "dist/bundle.esm.js",
-    limit: "14.86KB"
+    limit: "14.87KB"
   }
 ]
