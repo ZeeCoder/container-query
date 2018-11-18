@@ -18,11 +18,6 @@ export const cssInput = `
 }
 `;
 
-export const cssOutput = `
-.Container {
-}
-`;
-
 export const meta = {
   [SELECTOR]: ".Container",
   [QUERIES]: [
@@ -36,14 +31,20 @@ export const meta = {
       ]
     },
     {
-      [CONDITIONS]: [[["width", ">", 100]]],
       [ELEMENTS]: [
         {
           [VALUES]: {
             "line-height": "2rh"
           }
         }
-      ]
+      ],
+      [CONDITIONS]: [[["width", ">", 100]]]
     }
   ]
 };
+
+export const cssOutput = `
+.Container {
+}
+:export { meta: '${JSON.stringify(meta)}' }
+`;

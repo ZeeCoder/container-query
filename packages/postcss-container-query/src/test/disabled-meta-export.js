@@ -46,5 +46,4 @@ export const meta = {
 export const cssOutput = `
 .Container {
 }
-:export { meta: '${JSON.stringify(meta)}' }
 `;

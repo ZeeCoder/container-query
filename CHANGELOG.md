@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 - "test" script is now only in the root, instead of in every package.
-- No longer testing for Node 7
+- [BREAKING] No longer testing for Node 7
 
 ### Changed
 
@@ -26,7 +26,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - [BREAKING] Removed the UMD build
 
 - `postcss-container-query`
-  - Minimum Node version lifted to v8
+  - [BREAKING] Minimum Node version lifted to v8
+  - [BREAKING] Dropped the `getJSON` option, and no json is saved by default.
+    The new behaviour is to use the ICSS `:export` syntax, which then can be
+    imported through css-loader. (The meta object is still passed down in the
+    postcss plugin messages in case it's needed.)
+  - [BREAKING] `saveMeta` is removed
 
 ## [2.7.4]
 
