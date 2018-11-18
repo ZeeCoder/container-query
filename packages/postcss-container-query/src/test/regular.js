@@ -62,23 +62,6 @@ export const cssInput = `
 }
 `;
 
-export const cssOutput = `
-.Container {
-    border: none;
-    /* Ignore this comment */
-}
-
-/* Ignore this comment */
-
-.Container2 {
-    border: 1px solid;
-}
-
-.Container2__element {
-    background: green;
-}
-`;
-
 export const meta = {
   ".Container": {
     [SELECTOR]: ".Container",
@@ -94,36 +77,36 @@ export const meta = {
         ]
       },
       {
-        [CONDITIONS]: [[["height", ">=", 100], ["width", ">=", 100]]],
         [ELEMENTS]: [
           {
             [VALUES]: {
               "font-size": `70rh`
             }
           }
-        ]
+        ],
+        [CONDITIONS]: [[["height", ">=", 100], ["width", ">=", 100]]]
       },
       {
-        [CONDITIONS]: [[["height", ">=", 100]]],
         [ELEMENTS]: [
           {
             [STYLES]: {
               background: "none"
             }
           }
-        ]
+        ],
+        [CONDITIONS]: [[["height", ">=", 100]]]
       },
       {
-        [CONDITIONS]: [
-          [["height", ">=", 100], ["width", ">=", 100]],
-          [["aspect-ratio", ">", 3.5]]
-        ],
         [ELEMENTS]: [
           {
             [STYLES]: {
               background: "#000"
             }
           }
+        ],
+        [CONDITIONS]: [
+          [["height", ">=", 100], ["width", ">=", 100]],
+          [["aspect-ratio", ">", 3.5]]
         ]
       }
     ]
@@ -143,7 +126,6 @@ export const meta = {
         ]
       },
       {
-        [CONDITIONS]: [[["orientation", ":", "portrait"]]],
         [ELEMENTS]: [
           {
             [VALUES]: {
@@ -160,8 +142,28 @@ export const meta = {
               height: `75rh`
             }
           }
-        ]
+        ],
+        [CONDITIONS]: [[["orientation", ":", "portrait"]]]
       }
     ]
   }
 };
+
+export const cssOutput = `
+.Container {
+    border: none;
+    /* Ignore this comment */
+}
+
+/* Ignore this comment */
+
+.Container2 {
+    border: 1px solid;
+}
+
+.Container2__element {
+    background: green;
+}
+
+:export { meta: '${JSON.stringify(meta)}' }
+`;

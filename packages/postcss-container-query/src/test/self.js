@@ -21,12 +21,6 @@ export const cssInput = `
 }
 `;
 
-export const cssOutput = `
-.Container {
-  border: 1px solid;
-}
-`;
-
 export const meta = {
   [SELECTOR]: ".Container",
   [QUERIES]: [
@@ -40,17 +34,24 @@ export const meta = {
       ]
     },
     {
-      [CONDITIONS]: [[["width", ">", 100]]],
       [ELEMENTS]: [
         {
-          [VALUES]: {
-            "line-height": "2rw"
-          },
           [STYLES]: {
             border: "none"
+          },
+          [VALUES]: {
+            "line-height": "2rw"
           }
         }
-      ]
+      ],
+      [CONDITIONS]: [[["width", ">", 100]]]
     }
   ]
 };
+
+export const cssOutput = `
+.Container {
+  border: 1px solid;
+}
+:export { meta: '${JSON.stringify(meta)}' }
+`;

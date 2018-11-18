@@ -6,22 +6,13 @@ const generate = ({ input, output }) => ({
   input,
   output: [{ file: output, format: "cjs" }],
   plugins: [flow(), babel(), terser()],
-  external: [
-    "postcss",
-    "lodash/trim",
-    "fs",
-    "@zeecoder/container-query-meta-builder"
-  ]
+  external: ["postcss", "lodash/trim", "@zeecoder/container-query-meta-builder"]
 });
 
 export default [
   generate({
     input: "src/containerQuery.js",
     output: "dist/index.js"
-  }),
-  generate({
-    input: "src/saveMeta.js",
-    output: "./saveMeta.js"
   }),
   generate({
     input: "src/getMetadataFromMessages.js",

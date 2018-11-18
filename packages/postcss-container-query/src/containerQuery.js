@@ -1,7 +1,6 @@
 import postcss from "postcss";
 import hasContainerDefinition from "./hasContainerDefinition";
 import extractPropsFromNode from "./extractPropsFromNode";
-import saveMeta from "./saveMeta";
 import MetaBuilder from "@zeecoder/container-query-meta-builder";
 
 const plugin = "postcss-container-query";
@@ -58,13 +57,11 @@ const walkRules = (root, opts, ruleHandler) => {
 
 /**
  * @param {{
- *   [getJSON]: function,
  *   [singleContainer]: boolean,
  *   [exportMetaInCss]: boolean|string,
  * }} options
  */
 function containerQuery(options = {}) {
-  const getJSON = options.getJSON || saveMeta;
   const singleContainer = options.singleContainer !== false;
   const exportMetaInCss =
     typeof options.exportMetaInCss !== "undefined"
@@ -162,10 +159,6 @@ function containerQuery(options = {}) {
       meta,
       filepath
     });
-
-    if (typeof getJSON === "function") {
-      getJSON(filepath, meta);
-    }
 
     // The following is picked up by css-loader, therefore making importing json
     // files obsolete

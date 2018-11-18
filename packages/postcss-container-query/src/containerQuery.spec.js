@@ -1,5 +1,4 @@
 import postcss from "postcss";
-import Root from "../__mocks__/Root";
 import * as regularTest from "./test/regular";
 import * as customPropertiesTest from "./test/custom-properties";
 import * as exessContainerDeclarationTest from "./test/exess-container-declaration";
@@ -9,12 +8,11 @@ import * as missingContainerDelcarationTest from "./test/missing-container-decla
 import * as missingDeclarationWithRUnitsTest from "./test/missing-declaration-with-r-units";
 import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
-import * as metaExportTest from "./test/meta-export";
 import * as metaNamedExportTest from "./test/meta-named-export";
+import * as disabledMetaExportTest from "./test/disabled-meta-export";
 import fs from "fs";
 import containerQuery from "./containerQuery";
 import getMetadataFromMessages from "../getMetadataFromMessages";
-import saveMeta from "../saveMeta";
 
 jest.mock("fs");
 
@@ -27,18 +25,12 @@ jest.mock("fs");
  * }>}
  */
 const processCss = async (rawCSS, options = {}) => {
-  let getJsonMeta = null;
-  options.getJSON = (path, meta) => (getJsonMeta = meta);
-
   const { css, messages } = await postcss([containerQuery(options)]).process(
     rawCSS,
     { from: "from.css", to: "to.css" }
   );
 
   const meta = getMetadataFromMessages(messages);
-
-  // As long as the `getJSON` option is supported, this is important
-  expect(getJsonMeta).toEqual(meta);
 
   return { css, meta };
 };
@@ -52,30 +44,17 @@ const processCss = async (rawCSS, options = {}) => {
  * @param {{}} [options] plugin options
  */
 const assertProcessingResult = async (testObj, options = {}) => {
-  const { css, meta } = await processCss(testObj.cssInput, {
-    exportMetaInCss: false,
-    ...options
-  });
+  const { css, meta } = await processCss(testObj.cssInput, options);
 
   expect(css).toBe(testObj.cssOutput);
   expect(meta).toEqual(testObj.meta);
 };
 
 test('should avoid accidentally creating ".default" exports', () => {
-  expect(typeof saveMeta).toBe("function");
   expect(typeof getMetadataFromMessages).toBe("function");
   expect(typeof containerQuery).toBe("function");
-  expect(typeof saveMeta.default).toBe("undefined");
   expect(typeof getMetadataFromMessages.default).toBe("undefined");
   expect(typeof containerQuery.default).toBe("undefined");
-});
-
-test("should use the default json saving function if none was supplied", () => {
-  const pluginInstance = containerQuery({ exportMetaInCss: false });
-
-  pluginInstance(new Root(), { messages: [] });
-
-  expect(fs.readFile).toHaveBeenCalledTimes(1);
 });
 
 test("should throw on missing container declaration", () => {
@@ -103,16 +82,10 @@ test("should throw on missing container declaration when the container has r-uni
 });
 
 test("should ignore unrecognised at-rules, like @keyframes", () =>
-  assertProcessingResult(unrecognisedAtRulesTest, {
-    singleContainer: false,
-    exportMetaInCss: false
-  }));
+  assertProcessingResult(unrecognisedAtRulesTest, { singleContainer: false }));
 
 test("should properly process CSS", () =>
-  assertProcessingResult(regularTest, {
-    singleContainer: false,
-    exportMetaInCss: false
-  }));
+  assertProcessingResult(regularTest, { singleContainer: false }));
 
 // This also tests that containers are processed even without queries
 test("should detect the first class as the container by default", () =>
@@ -137,10 +110,12 @@ test("should handle :self", () => assertProcessingResult(selfTest));
 test("should be able to run this simple test", () =>
   assertProcessingResult(simpleTest));
 
-test("should export the meta in the css by default", () =>
-  assertProcessingResult(metaExportTest, { exportMetaInCss: undefined }));
-
 test("should be able to export the meta under a custom export", () =>
   assertProcessingResult(metaNamedExportTest, {
     exportMetaInCss: "custom-meta"
+  }));
+
+test("should be able to disable the css meta export", () =>
+  assertProcessingResult(disabledMetaExportTest, {
+    exportMetaInCss: false
   }));
