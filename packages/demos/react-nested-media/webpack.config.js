@@ -4,11 +4,11 @@ module.exports = {
     path: __dirname + "/web/dist",
     filename: "main.js"
   },
+  mode: "production",
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
         use: {
           loader: "babel-loader"
         }
@@ -17,6 +17,7 @@ module.exports = {
         test: /\.pcss$/,
         use: [
           "style-loader",
+          "css-loader",
           {
             loader: "postcss-loader",
             options: {

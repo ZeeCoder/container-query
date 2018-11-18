@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Container from "@zeecoder/container-query";
-
-require("./SocialLink.pcss");
-const queryStats = require("./SocialLink.pcss.json");
+import { meta } from "./SocialLink.pcss";
 
 export default class SocialLink extends Component {
   componentDidMount() {
     const element = ReactDOM.findDOMNode(this);
-    new Container(element, queryStats);
+    new Container(element, meta);
   }
 
   render() {
