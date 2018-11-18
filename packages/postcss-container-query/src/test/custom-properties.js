@@ -15,11 +15,6 @@ export const cssInput = `
 }
 `;
 
-export const cssOutput = `
-.Container {
-}
-`;
-
 export const meta = {
   [SELECTOR]: ".Container",
   [QUERIES]: [
@@ -37,3 +32,9 @@ export const meta = {
     }
   ]
 };
+
+export const cssOutput = `
+.Container {
+}
+:export { meta: '${JSON.stringify(meta)}' }
+`;

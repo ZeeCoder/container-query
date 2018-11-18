@@ -65,6 +65,40 @@ export const cssInput = `
 }
 `;
 
+export const meta = {
+  ".Container": {
+    [SELECTOR]: ".Container",
+    [QUERIES]: [
+      {
+        [ELEMENTS]: [
+          {
+            [VALUES]: {
+              "line-height": `3rh`,
+              "font-size": `1rh`,
+              "margin-left": `2rw`
+            }
+          },
+          {
+            [SELECTOR]: ".Container__element",
+            [VALUES]: {
+              "font-size": `1rw`,
+              "line-height": `2rw`
+            }
+          }
+        ]
+      },
+      {
+        [ELEMENTS]: [
+          {
+            [STYLES]: { "font-size": "24px" }
+          }
+        ],
+        [CONDITIONS]: [[["orientation", ":", "landscape"]]]
+      }
+    ]
+  }
+};
+
 export const cssOutput = `
 .unrelated-class {
   color: black;
@@ -104,38 +138,6 @@ export const cssOutput = `
 
 .Container__element {
 }
-`;
 
-export const meta = {
-  ".Container": {
-    [SELECTOR]: ".Container",
-    [QUERIES]: [
-      {
-        [ELEMENTS]: [
-          {
-            [VALUES]: {
-              "line-height": `3rh`,
-              "font-size": `1rh`,
-              "margin-left": `2rw`
-            }
-          },
-          {
-            [SELECTOR]: ".Container__element",
-            [VALUES]: {
-              "font-size": `1rw`,
-              "line-height": `2rw`
-            }
-          }
-        ]
-      },
-      {
-        [CONDITIONS]: [[["orientation", ":", "landscape"]]],
-        [ELEMENTS]: [
-          {
-            [STYLES]: { "font-size": "24px" }
-          }
-        ]
-      }
-    ]
-  }
-};
+:export { meta: '${JSON.stringify(meta)}' }
+`;

@@ -15,17 +15,7 @@ export const cssInput = `
 .Container {
   @define-container;
   font-size: 2rh;
-}
-`;
-
-export const cssOutput = `
-.Container {
-  border: none;
-}
-
-.Container {
-}
-`;
+}`;
 
 export const meta = {
   [SELECTOR]: ".Container",
@@ -42,3 +32,13 @@ export const meta = {
     }
   ]
 };
+
+export const cssOutput = `
+.Container {
+  border: none;
+}
+
+.Container {
+}
+
+:export { meta: '${JSON.stringify(meta)}' }`;
