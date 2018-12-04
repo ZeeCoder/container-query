@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+
+- `react-container-query`
+  - Removed the "render" prop in favour of using children. (The former was not
+    even documented.)
+
 ## [3.0.0-alpha.1]
 
 ### Fixed

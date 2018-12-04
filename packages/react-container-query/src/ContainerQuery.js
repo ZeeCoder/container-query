@@ -9,26 +9,21 @@ export default class ContainerQuery extends Component {
 
     this.state = { size: null };
 
-    this.handleResize = this.handleResize.bind(this);
-
     this.containerOptions = { ...this.props.options };
 
     // Listen to size changes only if needed
-    if (
-      typeof this.props.render === "function" ||
-      typeof this.props.children === "function"
-    ) {
+    if (typeof this.props.children === "function") {
       this.containerOptions.handleResize = this.handleResize;
     }
   }
 
-  handleResize(size) {
-    if (this.unMounting) {
+  handleResize = size => {
+    if (this.__willUnmount) {
       return;
     }
 
     this.setState({ size });
-  }
+  };
 
   componentDidMount() {
     if (!this.props.meta && !this.props.stats) {
@@ -55,7 +50,7 @@ export default class ContainerQuery extends Component {
   }
 
   componentWillUnmount() {
-    this.unMounting = true;
+    this.__willUnmount = true;
   }
 
   render() {
@@ -65,7 +60,7 @@ export default class ContainerQuery extends Component {
       return this.props.children;
     }
 
-    return this.props.render(this.state.size);
+    return null;
   }
 }
 
@@ -76,7 +71,6 @@ ContainerQuery.defaultProps = {
 };
 
 ContainerQuery.propTypes = {
-  render: PropTypes.func,
   stats: PropTypes.object,
   meta: PropTypes.object,
   options: PropTypes.object,
