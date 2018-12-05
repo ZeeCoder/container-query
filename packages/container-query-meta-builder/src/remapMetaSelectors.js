@@ -1,3 +1,5 @@
+import { SELECTOR, QUERIES, ELEMENTS } from "./index";
+
 /**
  * Runs through all selectors of a meta object.
  * @param {{}} meta
@@ -30,8 +32,9 @@ const mapMetaSelectors = (meta, cb) => {
  * @return {{}}
  */
 const remapMetaSelectors = (rawMeta, styles) => {
-  // If meta is a string, then assume it's from a css-loader export
-  // todo trim quotations instead of just slicing
+  // If meta is a string, then assume it's from a css-loader export.
+  // Unfortunately css-loader will add quotations around the exported JSON, so
+  // we need to trim that.
   const meta =
     typeof rawMeta === "string" ? JSON.parse(rawMeta.slice(1, -1)) : rawMeta;
 
@@ -51,13 +54,27 @@ const remapMetaSelectors = (rawMeta, styles) => {
    */
   const getMappedCssClass = selector => `.${styles[selector.slice(1)]}`;
 
-  mapMetaSelectors(meta, selector => {
-    if (!hasSelectorInStyles(selector)) {
-      return selector;
-    }
+  // We need to differentiate between single- and multi container mode here, as
+  // the meta object's structure would be slightly different.
+  if (meta[SELECTOR]) {
+    mapMetaSelectors(meta, selector => {
+      if (!hasSelectorInStyles(selector)) {
+        return selector;
+      }
 
-    return getMappedCssClass(selector);
-  });
+      return getMappedCssClass(selector);
+    });
+  } else {
+    for (let selector of Object.keys(meta)) {
+      mapMetaSelectors(meta[selector], selector => {
+        if (!hasSelectorInStyles(selector)) {
+          return selector;
+        }
+
+        return getMappedCssClass(selector);
+      });
+    }
+  }
 
   return meta;
 };
