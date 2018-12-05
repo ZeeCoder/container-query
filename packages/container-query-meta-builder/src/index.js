@@ -1,6 +1,9 @@
 import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
+import remapMetaSelectors from "./remapMetaSelectors";
+
+export { remapMetaSelectors };
 
 export const CONDITIONS = "a";
 export const ELEMENTS = "b";
