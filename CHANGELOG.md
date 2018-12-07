@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `react-container-query`
   - Removed the "render" prop in favour of using children. (The former was not
     even documented.)
+  - Removed the `ResizeObserver` component in favour of the
+    [react-resize-observer](https://github.com/ZeeCoder/react-resize-observer) and
+    [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer) packages.
+  - Removed the default export. (Both ContainerQuery and withContainerQuery is
+    still available as named exports.)
 
 ## [3.0.0-alpha.1]
 
