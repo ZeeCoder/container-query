@@ -26,26 +26,23 @@ export default class ContainerQuery extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.meta && !this.props.stats) {
+    if (!this.props.meta) {
       return;
     }
 
     this.lastContainer = ReactDOM.findDOMNode(this);
-    const meta = this.props.meta || this.props.stats;
-    new Container(this.lastContainer, meta, this.containerOptions);
+    new Container(this.lastContainer, this.props.meta, this.containerOptions);
   }
 
   componentDidUpdate() {
-    if (!this.props.meta && !this.props.stats) {
+    if (!this.props.meta) {
       return;
     }
-
-    const meta = this.props.meta || this.props.stats;
 
     const element = ReactDOM.findDOMNode(this);
     if (this.lastContainer !== element) {
       this.lastContainer = element;
-      new Container(this.lastContainer, meta, this.containerOptions);
+      new Container(this.lastContainer, this.props.meta, this.containerOptions);
     }
   }
 
@@ -65,13 +62,11 @@ export default class ContainerQuery extends Component {
 }
 
 ContainerQuery.defaultProps = {
-  stats: null,
   meta: null,
   options: {}
 };
 
 ContainerQuery.propTypes = {
-  stats: PropTypes.object,
   meta: PropTypes.object,
   options: PropTypes.object,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
