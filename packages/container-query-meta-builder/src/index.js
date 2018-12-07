@@ -2,22 +2,24 @@ import objectAssign from "object-assign";
 import isValueUsingContainerUnits from "./isValueUsingContainerUnits";
 import getConditionsFromQueryParams from "./getConditionsFromQueryParams";
 import remapMetaSelectors from "./remapMetaSelectors";
+import {
+  CONDITIONS,
+  ELEMENTS,
+  VALUES,
+  STYLES,
+  SELECTOR,
+  QUERIES
+} from "./constants";
 
-export { remapMetaSelectors };
-
-export const CONDITIONS = "a";
-export const ELEMENTS = "b";
-export const VALUES = "c";
-export const STYLES = "d";
-export const SELECTOR = "e";
-export const QUERIES = "f";
-
-// export const CONDITIONS = "conditions";
-// export const ELEMENTS = "elements";
-// export const VALUES = "values";
-// export const STYLES = "styles";
-// export const SELECTOR = "selector";
-// export const QUERIES = "queries";
+export {
+  remapMetaSelectors,
+  CONDITIONS,
+  ELEMENTS,
+  VALUES,
+  STYLES,
+  SELECTOR,
+  QUERIES
+};
 
 const isEmpty = obj => Object.keys(obj).length === 0;
 
