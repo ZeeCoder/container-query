@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Removed the default export. (Both ContainerQuery and withContainerQuery is
     still available as named exports.)
   - Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
+  - `ContainerQuery` no longer returns with a "null" size object when a function
+    is passed in as the children prop. Instead it returns with `{width: 0, height: 0}`
+    initially, then updates with the observed container element.
 
 ## [3.0.0-alpha.1]
 
