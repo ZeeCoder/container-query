@@ -7,7 +7,7 @@ export default class ContainerQuery extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { size: null };
+    this.state = { width: 0, height: 0 };
 
     this.containerOptions = { ...this.props.options };
 
