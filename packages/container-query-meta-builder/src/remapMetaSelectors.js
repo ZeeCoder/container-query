@@ -1,4 +1,4 @@
-import { SELECTOR, QUERIES, ELEMENTS } from "./index";
+import { SELECTOR, QUERIES, ELEMENTS } from "./constants";
 
 /**
  * Runs through all selectors of a meta object.

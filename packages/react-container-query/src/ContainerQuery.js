@@ -22,28 +22,27 @@ export default class ContainerQuery extends Component {
       return;
     }
 
-    this.setState({ size });
+    this.setState(size);
   };
 
-  componentDidMount() {
+  instantiateContainer() {
     if (!this.props.meta) {
       return;
     }
 
-    this.lastContainer = ReactDOM.findDOMNode(this);
-    new Container(this.lastContainer, this.props.meta, this.containerOptions);
+    const element = this.props.element || ReactDOM.findDOMNode(this);
+    if (element && this.element !== element) {
+      this.element = element;
+      new Container(this.element, this.props.meta, this.containerOptions);
+    }
+  }
+
+  componentDidMount() {
+    this.instantiateContainer();
   }
 
   componentDidUpdate() {
-    if (!this.props.meta) {
-      return;
-    }
-
-    const element = ReactDOM.findDOMNode(this);
-    if (this.lastContainer !== element) {
-      this.lastContainer = element;
-      new Container(this.lastContainer, this.props.meta, this.containerOptions);
-    }
+    this.instantiateContainer();
   }
 
   componentWillUnmount() {
