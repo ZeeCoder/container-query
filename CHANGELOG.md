@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer) packages.
   - Removed the default export. (Both ContainerQuery and withContainerQuery is
     still available as named exports.)
+  - Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
 
 ## [3.0.0-alpha.1]
 
