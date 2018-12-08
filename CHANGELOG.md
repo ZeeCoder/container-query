@@ -10,14 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 - `react-container-query`
-  - Removed the "render" prop in favour of using children. (The former was not
-    even documented.)
-  - Removed the `ResizeObserver` component in favour of the
+  - [BREAKING] Removed the "render" prop in favour of using children. (The
+    former was not even documented.)
+  - [BREAKING] Removed the `ResizeObserver` component in favour of the
     [react-resize-observer](https://github.com/ZeeCoder/react-resize-observer) and
     [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer) packages.
-  - Removed the default export. (Both ContainerQuery and withContainerQuery is
-    still available as named exports.)
-  - Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
+  - [BREAKING] Removed the default export. (Both ContainerQuery and withContainerQuery
+    is still available as named exports.)
+  - [BREAKING] Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
+
+### Changed
+
+- `react-container-query`
   - `ContainerQuery` no longer returns with a "null" size object when a function
     is passed in as the children prop. Instead it returns with `{width: 0, height: 0}`
     initially, then updates with the observed container element.
