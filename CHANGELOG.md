@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Removed unnecessary files from the packages
-- Fixed size-limit errors
 
 ## [3.0.0-alpha.2]
 
