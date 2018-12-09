@@ -3,3 +3,5 @@ src/
 rollup.config.js
 .flowconfig
 .babelrc
+yarn.lock
+yarn-error.log
