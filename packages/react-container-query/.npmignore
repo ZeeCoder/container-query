@@ -1,3 +1,6 @@
 src/
 rollup/
 .babelrc
+yarn.lock
+yarn-error.log
+.size-limit

@@ -2,3 +2,7 @@ src/
 rollup/
 .flowconfig
 .babelrc
+coverage
+yarn.lock
+yarn-error.log
+.size-limit
