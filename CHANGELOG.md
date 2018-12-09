@@ -7,17 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.0-alpha.2]
+
 ### Removed
 
 - `react-container-query`
-  - [BREAKING] Removed the "render" prop in favour of using children. (The
-    former was not even documented.)
-  - [BREAKING] Removed the `ResizeObserver` component in favour of the
+  - **[BREAKING]** Removed the "render" prop from ContainerQuery in favour of
+    using children. (The former was not even documented.)
+  - **[BREAKING]** Removed the `ResizeObserver` component in favour of the
     [react-resize-observer](https://github.com/ZeeCoder/react-resize-observer) and
     [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer) packages.
-  - [BREAKING] Removed the default export. (Both ContainerQuery and withContainerQuery
+  - **[BREAKING]** Removed the default export. (Both ContainerQuery and withContainerQuery
     is still available as named exports.)
-  - [BREAKING] Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
+  - **[BREAKING]** Removed the `stats` prop from ContainerQuery. (Use `meta` instead.)
 
 ### Changed
 
@@ -25,6 +27,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `ContainerQuery` no longer returns with a "null" size object when a function
     is passed in as the children prop. Instead it returns with `{width: 0, height: 0}`
     initially, then updates with the observed container element.
+  - **[BREAKING]** `ContainerQuery` now renders a div root node by default, inside
+    of which it renders all children. (Also accepts an `as` prop to change the
+    tag type.)
 
 ## [3.0.0-alpha.1]
 
@@ -42,22 +47,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 - "test" script is now only in the root, instead of in every package.
-- [BREAKING] No longer testing for Node 7
+- **[BREAKING]** No longer testing for Node 7
 
 ### Changed
 
 - `container-query-meta-builder`
 
   - Removed the engines field package.json field
-  - [BREAKING] Removed the UMD build
+  - **[BREAKING]** Removed the UMD build
 
 - `postcss-container-query`
-  - [BREAKING] Minimum Node version lifted to v8
-  - [BREAKING] Dropped the `getJSON` option, and no json is saved by default.
+  - **[BREAKING]** Minimum Node version lifted to v8
+  - **[BREAKING]** Dropped the `getJSON` option, and no json is saved by default.
     The new behaviour is to use the ICSS `:export` syntax, which then can be
     imported through css-loader. (The meta object is still passed down in the
     postcss plugin messages in case it's needed.)
-  - [BREAKING] `saveMeta` is removed
+  - **[BREAKING]** `saveMeta` is removed
 
 ## [2.7.4]
 
