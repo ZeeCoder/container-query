@@ -25,6 +25,20 @@ const mapMetaSelectors = (meta, cb) => {
 };
 
 /**
+ * Replaces the classes in the given styles map
+ * @param {string} selector
+ * @param {{}} styles
+ * @return {string}
+ */
+const updateSelector = (selector, styles) => {
+  for (let className of Object.keys(styles)) {
+    selector = selector.replace(new RegExp(className, "g"), styles[className]);
+  }
+
+  return selector;
+};
+
+/**
  * Rewrites the meta selectors according to the styles map object.
  * @param {{}} rawMeta
  * @param {{}} styles A classname => classname map, like the one CSS Modules provides.
@@ -38,41 +52,15 @@ const remapMetaSelectors = (rawMeta, styles) => {
   const meta =
     typeof rawMeta === "string" ? JSON.parse(rawMeta.slice(1, -1)) : rawMeta;
 
-  /**
-   * Checks if the given css selector has a hashed css class in the given `styles`
-   * object
-   * @param {string} selector Ex: ".App"
-   * @return {boolean}
-   */
-  const hasSelectorInStyles = selector =>
-    typeof styles[selector.slice(1)] === "string";
-
-  /**
-   * Returns a hashed css class to the given selector, from the styles object.
-   * @param {string} selector Ex: ".App"
-   * @return {string} Ex: ".App_wCjtv"
-   */
-  const getMappedCssClass = selector => `.${styles[selector.slice(1)]}`;
-
   // We need to differentiate between single- and multi container mode here, as
   // the meta object's structure would be slightly different.
   if (meta[SELECTOR]) {
-    mapMetaSelectors(meta, selector => {
-      if (!hasSelectorInStyles(selector)) {
-        return selector;
-      }
-
-      return getMappedCssClass(selector);
-    });
+    mapMetaSelectors(meta, selector => updateSelector(selector, styles));
   } else {
     for (let selector of Object.keys(meta)) {
-      mapMetaSelectors(meta[selector], selector => {
-        if (!hasSelectorInStyles(selector)) {
-          return selector;
-        }
-
-        return getMappedCssClass(selector);
-      });
+      mapMetaSelectors(meta[selector], selector =>
+        updateSelector(selector, styles)
+      );
     }
   }
 
