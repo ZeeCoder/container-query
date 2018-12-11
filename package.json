@@ -28,7 +28,8 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "pretest": "lerna run flow",
     "prettify": "prettier --write 'packages/**/*.js'",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "publish": "lerna bootstrap && yarn test && lerna publish"
   },
   "husky": {
     "hooks": {
