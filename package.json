@@ -26,7 +26,6 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "pretest": "lerna run flow",
     "prettify": "prettier --write 'packages/**/*.js'",
     "bootstrap": "lerna bootstrap",
     "publish": "lerna bootstrap && yarn test && lerna publish"
