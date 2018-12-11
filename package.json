@@ -23,7 +23,7 @@
     "regenerator-runtime": "^0.13.1"
   },
   "scripts": {
-    "test": "jest --coverage && lerna run test",
+    "test": "jest --coverage",
     "test:watch": "jest --watch",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "pretest": "lerna run flow",
