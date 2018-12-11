@@ -14,7 +14,8 @@
     "build": "npm-run-all build:*",
     "size": "size-limit",
     "size:why": "size-limit --why",
-    "prepublish": "yarn build"
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test"
   },
   "dependencies": {
     "@zeecoder/container-query": "^3.0.0-alpha.2",

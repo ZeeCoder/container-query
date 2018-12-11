@@ -17,7 +17,8 @@
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "flow": "flow check",
-    "prepublish": "yarn build"
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
