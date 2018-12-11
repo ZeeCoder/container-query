@@ -57,9 +57,12 @@ test("should instantiate properly", () => {
     parentNode: document.createElement("div")
   };
 
-  const config = {};
+  const meta = {};
 
-  const containerInstance = new Container(containerElement, config);
+  const containerInstance = new Container(
+    containerElement,
+    `'${JSON.stringify(meta)}'`
+  );
   containerInstance.adjust();
   containerInstance.adjust();
   containerInstance.adjust();
@@ -67,7 +70,7 @@ test("should instantiate properly", () => {
   expect(containerRegistry.set).toHaveBeenCalledTimes(1);
   expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
     instance: containerInstance,
-    meta: config,
+    meta,
     queryState: []
   });
 
@@ -75,7 +78,7 @@ test("should instantiate properly", () => {
   expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(1);
   expect(raf).toHaveBeenCalledTimes(1);
   expect(processMeta).toHaveBeenCalledTimes(1);
-  expect(processMeta.mock.calls[0][0]).toBe(config);
+  expect(processMeta.mock.calls[0][0]).toEqual(meta);
   expect(adjustContainer).toHaveBeenCalledTimes(4);
   expect(adjustContainer.mock.calls[0][0]).toBe(containerElement);
   expect(adjustContainer.mock.calls[1][0]).toBe(containerElement);
@@ -86,14 +89,14 @@ test("should create the initial query state based on the number of queries", () 
     parentNode: document.createElement("div")
   };
 
-  const config = { [QUERIES]: [{}, {}] };
+  const meta = { [QUERIES]: [{}, {}] };
 
-  const containerInstance = new Container(containerElement, config);
+  const containerInstance = new Container(containerElement, meta);
 
   expect(containerRegistry.set).toHaveBeenCalledTimes(1);
   expect(containerRegistry.set).toHaveBeenCalledWith(containerElement, {
     instance: containerInstance,
-    meta: config,
+    meta,
     queryState: [false, false]
   });
 });
@@ -103,9 +106,9 @@ test("should not call adjust if disabled by the options", () => {
     parentNode: document.createElement("div")
   };
 
-  const config = {};
+  const meta = {};
 
-  const containerInstance = new Container(containerElement, config, {
+  new Container(containerElement, meta, {
     adjustOnResize: false,
     adjustOnInstantiation: false
   });
@@ -114,7 +117,7 @@ test("should not call adjust if disabled by the options", () => {
   expect(ResizeObserver.prototype.observe).toHaveBeenCalledTimes(0);
   expect(raf).toHaveBeenCalledTimes(0);
   expect(processMeta).toHaveBeenCalledTimes(1);
-  expect(processMeta.mock.calls[0][0]).toBe(config);
+  expect(processMeta.mock.calls[0][0]).toBe(meta);
   expect(adjustContainer).toHaveBeenCalledTimes(0);
 });
 
@@ -122,9 +125,9 @@ test("should be able to observe resize events and switch off initial adjust call
   const containerElement = {
     parentNode: document.createElement("div")
   };
-  const config = {};
+  const meta = {};
 
-  const containerInstance = new Container(containerElement, config, {
+  const containerInstance = new Container(containerElement, meta, {
     adjustOnInstantiation: false,
     adjustOnResize: true
   });
@@ -166,8 +169,8 @@ test("should call adjust() on resize changes", () => {
   const parentElement = document.createElement("div");
   const containerElement = document.createElement("div");
   parentElement.appendChild(containerElement);
-  const config = {};
-  const containerInstance = new Container(containerElement, config, {
+  const meta = {};
+  const containerInstance = new Container(containerElement, meta, {
     adjustOnInstantiation: false,
     adjustOnResize: true
   });
@@ -222,8 +225,8 @@ test("should clean up after container element is detached from the DOM", () => {
   const parentElement = document.createElement("div");
   const containerElement = document.createElement("div");
   parentElement.appendChild(containerElement);
-  const config = {};
-  const containerInstance = new Container(containerElement, config, {
+  const meta = {};
+  const containerInstance = new Container(containerElement, meta, {
     adjustOnInstantiation: false,
     adjustOnResize: false
   });
@@ -267,4 +270,14 @@ test("should clean up after container element is detached from the DOM", () => {
   expect(containerRegistry.has).toHaveBeenCalledTimes(1);
   expect(containerRegistry.delete).toHaveBeenCalledTimes(1);
   expect(ResizeObserver.prototype.unobserve).toHaveBeenCalledTimes(1);
+});
+
+test("should call handleResize when `adjust` is called", () => {
+  const containerElement = document.createElement("div");
+  const handleResize = jest.fn();
+
+  new Container(containerElement, {}, { handleResize });
+
+  expect(handleResize).toHaveBeenCalledTimes(1);
+  expect(handleResize).toHaveBeenCalledWith(null);
 });
