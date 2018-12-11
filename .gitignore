@@ -6,5 +6,6 @@ lerna-debug.log
 yarn-error.log
 .idea
 .DS_Store
-yarn.lock
+# Root yarn.lock is used by Travis to use Yarn instead of npm
+packages/**/yarn.lock
 package-lock.json
