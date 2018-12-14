@@ -4,19 +4,43 @@ module.exports = function(config) {
     frameworks: ["jasmine"],
     files: ["browser-tests/dist/index.js"],
     autoWatch: true,
-    browsers: ["Chrome"],
-    // browsers: process.env.CI ? Object.keys(customLaunchers) : ['Chrome'],
+
+    // todo come up with a way to switch in between dev / CI setup
+    // browsers: ["Chrome"],
+    // reporters: ["spec"],
+
+    reporters: ["spec", "saucelabs"],
+    browsers: ["sl_chrome_70"],
 
     singleRun: true,
 
-    concurrency: 2 // SanceLabs free account for open source
+    // Max concurrency for SauceLabs OS plan
+    concurrency: 5,
 
-    // customLaunchers: customLaunchers,
+    // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
+    customLaunchers: {
+      sl_chrome_35: {
+        base: "SauceLabs",
+        browserName: "chrome",
+        platform: "Windows 7",
+        version: "35"
+      },
+      sl_chrome_70: {
+        base: "SauceLabs",
+        browserName: "chrome",
+        platform: "Windows 10",
+        version: "70"
+      }
+    },
 
     // Saucelabs launcher
     // sauceLabs: {
     //   testName: 'react-container-query',
     //   public: 'public'
     // },
+    sauceLabs: {
+      testName: "@zeecoder/container-query",
+      public: "public"
+    }
   });
 };
