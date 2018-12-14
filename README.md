@@ -176,6 +176,12 @@ the following links, where the disussions are happening:
 * https://github.com/WICG/container-queries
 * [Slack](https://join.slack.com/t/containerqueries/shared_invite/enQtMzA2OTc5MDUwNjk1LTEwMWEzNjcwMTY1MGYzYWMyOGMxM2MzNDM1OGZjMjM3NDNiMDMxYTk0YjQxN2FjYTZkYmZkMDZmOWE1ODRkZWI)
 
+## Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
+
+[homepage]: https://saucelabs.com
+
 ## License
 
 MIT
