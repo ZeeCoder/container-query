@@ -22,6 +22,8 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-jasmine": "^2.0.1",
+    "karma-sauce-launcher": "^2.0.2",
+    "karma-spec-reporter": "^0.0.32",
     "lerna": "^3.4.3",
     "lint-staged": "^8.0.5",
     "parcel-bundler": "^1.10.3",
