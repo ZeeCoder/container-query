@@ -14,7 +14,7 @@ class ContainerQuery extends Component {
     }
   }
 
-  state = { width: 0, height: 0 };
+  state = { width: 1, height: 1 };
 
   ref = React.createRef();
 
@@ -52,7 +52,7 @@ class ContainerQuery extends Component {
 
   doRender() {
     if (typeof this.props.children === "function") {
-      return this.props.children(this.state);
+      return this.props.children(this.state.width, this.state.height);
     } else if (this.props.children) {
       return this.props.children;
     }
