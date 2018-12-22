@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [">1%"]
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ]
+}
