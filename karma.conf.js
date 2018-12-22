@@ -1,8 +1,60 @@
+const customLaunchers = {
+  sl_chrome_35: {
+    base: "SauceLabs",
+    browserName: "Chrome",
+    platform: "Windows 7",
+    version: "35"
+  },
+  sl_chrome_70: {
+    base: "SauceLabs",
+    browserName: "Chrome",
+    platform: "Windows 10",
+    version: "70"
+  },
+  sl_edge_13: {
+    base: "SauceLabs",
+    browserName: "MicrosoftEdge",
+    platform: "Windows 10",
+    version: "13"
+  },
+  sl_ie_11: {
+    // todo polyfill promises for the tests
+    base: "SauceLabs",
+    browserName: "Internet Explorer",
+    platform: "Windows 10",
+    version: "11"
+  },
+  sl_ff_30: {
+    base: "SauceLabs",
+    browserName: "Firefox",
+    platform: "Windows 10",
+    version: "30"
+  },
+  sl_ff_64: {
+    base: "SauceLabs",
+    browserName: "Firefox",
+    platform: "Windows 10",
+    version: "64"
+  }
+};
+
 module.exports = function(config) {
   const singleRun = process.env.KARMA_SINGLE_RUN !== "false";
-  const chromeHeadless = process.env.KARMA_HEADLESS_CHROME === "true";
-
+  const chrome = process.env.KARMA_CHROME === "true";
+  const firefox = process.env.KARMA_FIREFOX === "true";
   const ci = process.env.CI === "true";
+
+  const browsers = [];
+
+  if (ci) {
+    browsers.push(...Object.keys(customLaunchers));
+  } else if (chrome) {
+    browsers.push("Chrome");
+  } else if (firefox) {
+    browsers.push("Firefox");
+  } else {
+    browsers.push("ChromeHeadless");
+  }
 
   config.set({
     basePath: ".",
@@ -10,11 +62,7 @@ module.exports = function(config) {
     files: ["tests/dist/index.js"],
     autoWatch: true,
 
-    browsers: chromeHeadless
-      ? ["ChromeHeadless"]
-      : ci
-      ? ["sl_chrome_70"]
-      : ["Chrome"],
+    browsers,
     reporters: ci ? ["spec", "saucelabs"] : ["spec"],
 
     singleRun,
@@ -23,20 +71,7 @@ module.exports = function(config) {
     concurrency: 5,
 
     // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
-    customLaunchers: {
-      sl_chrome_35: {
-        base: "SauceLabs",
-        browserName: "chrome",
-        platform: "Windows 7",
-        version: "35"
-      },
-      sl_chrome_70: {
-        base: "SauceLabs",
-        browserName: "chrome",
-        platform: "Windows 10",
-        version: "70"
-      }
-    },
+    customLaunchers,
     sauceLabs: {
       testName: "@zeecoder/container-query",
       public: "public"
