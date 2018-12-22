@@ -7,13 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Integration tests, supported by SauceLabs
+
 ### Changed
 
 - Removed unnecessary files from the packages
+- `react-container-query`
+  - **[BREAKING]**ContainerQuery no longer returns an object for size, but width and height as
+    the first parameter of the child function
+  - **[BREAKING]** ContainerQuery now returns 1x1 dimensions before the ResizeObserver kicks in
 
 ### Removed
 
-- Removed test running from Node 6
+- **[BREAKING]** Removed test running from Node 6
 
 ## [3.0.0-alpha.2]
 
