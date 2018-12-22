@@ -1,5 +1,9 @@
 import ReactDOM from "react-dom";
-import { getByTestId as rawGetByTestId } from "dom-testing-library";
+import {
+  getByTestId as rawGetByTestId,
+  getNodeText,
+  wait
+} from "dom-testing-library";
 
 let root = null;
 let componentElement = null;
@@ -33,6 +37,8 @@ export const renderTestComponent = (
 
   return componentElement;
 };
+
+export const clearDOM = () => (document.body.innerHTML = "");
 
 /**
  * Changing the root size, which results in changing the size of the component
@@ -96,3 +102,26 @@ export const expectElementToHaveCustomProperties = (element, props) => {
  */
 export const expectTestComponentToHaveCustomProperties = props =>
   expectElementToHaveCustomProperties(componentElement, props);
+
+/**
+ * The reason we need this solution instead of just using wait() is because
+ * jasmine's expect doesn't throw an exception on failure, but somehow communicates
+ * that event back to the it() and describe() blocks, so that the test immediately
+ * fails.
+ *
+ * @param {HTMLElement} element
+ * @param {string} text
+ * @return {Promise}
+ */
+export const expectTextContent = async (element, text) => {
+  await wait(() => {
+    const textContent = getNodeText(element);
+    if (textContent !== text) {
+      throw new Error(
+        `Text content not yet what is expected. Got: ${textContent}. Expecting: ${text}.`
+      );
+    } else {
+      expect(textContent).toBe(text);
+    }
+  });
+};

@@ -7,8 +7,10 @@ import {
   changeRootSize,
   expectTestComponentToHaveStyle,
   expectTestComponentToHaveCustomProperties,
-  expectElementToHaveStyle
-} from "../utils";
+  expectElementToHaveStyle,
+  clearDOM,
+  expectTextContent
+} from "../../utils";
 
 // Features covered:
 // - Style applying and restoring on width, height and orientation change
@@ -18,6 +20,7 @@ import {
 describe("Basic", () => {
   const refs = {};
   beforeAll(() => {
+    clearDOM();
     renderTestComponent(<Basic />, {
       width: 100,
       height: 50
@@ -31,7 +34,7 @@ describe("Basic", () => {
     expect(getNodeText(refs.content)).toBe("1x1");
 
     // Wait for resize observer to kick in
-    await wait(() => expect(getNodeText(refs.content)).toBe("100x50"));
+    await expectTextContent(refs.content, "100x50");
 
     expectTestComponentToHaveCustomProperties({
       "--w": "100px",
@@ -106,6 +109,8 @@ describe("Basic", () => {
   it("should handle all queries at the same time", async () => {
     // changing to portrait, as well as being bigger than 100x50
     await changeRootSize({ width: 200, height: 300 });
+
+    await expectTextContent(refs.content, "200x300");
 
     expectTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
