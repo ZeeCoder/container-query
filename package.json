@@ -14,6 +14,7 @@
     "@babel/core": "^7.2.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
+    "babel-regenerator-runtime": "^6.5.0",
     "coveralls": "^3.0.2",
     "husky": "^1.1.4",
     "jasmine-core": "^3.3.0",
@@ -33,10 +34,10 @@
     "regenerator-runtime": "^0.13.1"
   },
   "scripts": {
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
-    "browser-test:build": "parcel build browser-tests/index.js --out-dir browser-tests/dist",
-    "browser-test:run": "karma start",
+    "test:unit": "jest --coverage",
+    "test:unit:watch": "jest --watch",
+    "test:integration": "karma start",
+    "test:integration:build": "parcel build browser-tests/index.js --out-dir browser-tests/dist",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write 'packages/**/*.js'",
     "bootstrap": "lerna bootstrap",
