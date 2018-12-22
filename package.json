@@ -37,7 +37,7 @@
     "test:unit": "jest --coverage",
     "test:unit:watch": "jest --watch",
     "test:integration": "karma start",
-    "test:integration:build": "parcel build browser-tests/index.js --out-dir browser-tests/dist",
+    "test:integration:build": "parcel build tests/index.js --out-dir tests/dist",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write 'packages/**/*.js'",
     "bootstrap": "lerna bootstrap",
