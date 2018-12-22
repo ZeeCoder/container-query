@@ -1,8 +1,12 @@
 language: node_js
 sudo: false
-node_js: [6, 8, 10]
-after_success: "yarn coveralls"
+node_js: [8, 10]
+addons:
+  chrome: stable
 script:
   - lerna bootstrap --ignore={demos}
-  - yarn test
+  - yarn test:unit
   - lerna run test
+  - yarn test:integration:build
+  - yarn test:integration
+after_success: "yarn coveralls"

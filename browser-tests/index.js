@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+// Using the following to support async/await in tests.
+// I'm intentionally not using babel/polyfill, as that would introduce polyfills
+// the actual lib might not have, giving the false impression that something
+// works while it might actually not, if you use the lib without babel-polyfill.
+import "babel-regenerator-runtime";
 
 const Test = () => <div id="asd" style={{ background: "grey" }} />;
 
-// todo figure out how to make async-await work in parcel
-// todo make sure parcel transpiles down to IE10 (example: async and "Set" doesn't work properly)
-it("should render", () => {
+it("should render", async () => {
   const div = document.createElement("div");
   document.body.appendChild(div);
 

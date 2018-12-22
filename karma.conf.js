@@ -1,18 +1,18 @@
 module.exports = function(config) {
+  const singleRun = process.env.KARMA_SINGLE_RUN !== "false";
+
+  const ci = process.env.CI === "true";
+
   config.set({
     basePath: ".",
     frameworks: ["jasmine"],
     files: ["browser-tests/dist/index.js"],
     autoWatch: true,
 
-    // todo come up with a way to switch in between dev / CI setup
-    // browsers: ["Chrome"],
-    // reporters: ["spec"],
+    browsers: ci ? ["ChromeHeadless", "sl_chrome_70"] : ["Chrome"],
+    reporters: ci ? ["spec", "saucelabs"] : ["spec"],
 
-    reporters: ["spec", "saucelabs"],
-    browsers: ["sl_chrome_70"],
-
-    singleRun: true,
+    singleRun,
 
     // Max concurrency for SauceLabs OS plan
     concurrency: 5,
@@ -32,12 +32,6 @@ module.exports = function(config) {
         version: "70"
       }
     },
-
-    // Saucelabs launcher
-    // sauceLabs: {
-    //   testName: 'react-container-query',
-    //   public: 'public'
-    // },
     sauceLabs: {
       testName: "@zeecoder/container-query",
       public: "public"

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Removed unnecessary files from the packages
 
+### Removed
+
+- Removed test running from Node 6
+
 ## [3.0.0-alpha.2]
 
 ### Removed
