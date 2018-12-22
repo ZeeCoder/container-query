@@ -1,23 +1,125 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import Basic from "./Basic/Basic";
+import { wait, getNodeText } from "dom-testing-library";
+import {
+  renderTestComponent,
+  getByTestId,
+  changeRootSize,
+  expectTestComponentToHaveStyle,
+  expectTestComponentToHaveCustomProperties,
+  expectElementToHaveStyle
+} from "../utils";
 
-const delay = time => new Promise(resolve => setTimeout(resolve, time));
+// Features covered:
+// - Style applying and restoring on width, height and orientation change
+// - rw / rh unit applying / removing (With max precision of 4)
+// - All the above on a descendant
+// - Getting the size from the ContainerQuery component
+describe("Basic", () => {
+  const refs = {};
+  beforeAll(() => {
+    renderTestComponent(<Basic />, {
+      width: 100,
+      height: 50
+    });
 
-it("should render Basic", async () => {
-  const div = document.createElement("div");
-  document.body.appendChild(div);
+    refs.content = getByTestId("content");
+  });
 
-  ReactDOM.render(<Basic />, div);
+  it("should not have any of the container queries applied", async () => {
+    // Assertions before the ResizeObserver kicks in
+    expect(getNodeText(refs.content)).toBe("1x1");
 
-  const rendered = document.getElementById("rendered-component");
+    // Wait for resize observer to kick in
+    await wait(() => expect(getNodeText(refs.content)).toBe("100x50"));
 
-  // Assertions before the ResizeObserver kicks in
-  expect(rendered.textContent).toBe("1x1");
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
 
-  // wait a little before asserting
-  await delay(50);
+    expectTestComponentToHaveStyle({
+      backgroundColor: "rgb(255, 0, 0)",
+      color: "rgb(0, 0, 0)",
+      border: "2px solid rgb(255, 255, 255)"
+    });
 
-  expect(rendered.textContent).toBe("101x100");
-  expect(rendered.style.backgroundColor).toBe("green");
+    expectElementToHaveStyle(refs.content, {
+      textAlign: "center",
+      fontSize: "25px", // 50rh
+      lineHeight: "50px" // 100rh
+    });
+  });
+
+  it("should react to width change", async () => {
+    await changeRootSize({ width: 101 });
+
+    expectTestComponentToHaveStyle({
+      backgroundColor: "rgb(0, 128, 0)",
+      border: "4.03125px solid rgb(255, 255, 255)"
+    });
+    expectTestComponentToHaveCustomProperties({
+      "--w": "101px",
+      "--h": "50px"
+    });
+  });
+
+  it("should revert styles after width changes back", async () => {
+    await changeRootSize({ width: 100 });
+
+    expectTestComponentToHaveStyle({
+      backgroundColor: "rgb(255, 0, 0)",
+      border: "2px solid rgb(255, 255, 255)"
+    });
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
+  });
+
+  it("should react to height change", async () => {
+    await changeRootSize({ height: 51 });
+
+    expectTestComponentToHaveStyle({
+      color: "rgb(255, 255, 255)",
+      border: "2.03125px solid rgb(255, 255, 255)"
+    });
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "51px"
+    });
+  });
+
+  it("should revert styles after height changes back", async () => {
+    await changeRootSize({ height: 50 });
+
+    expectTestComponentToHaveStyle({
+      color: "rgb(0, 0, 0)",
+      border: "2px solid rgb(255, 255, 255)"
+    });
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
+  });
+
+  it("should handle all queries at the same time", async () => {
+    // changing to portrait, as well as being bigger than 100x50
+    await changeRootSize({ width: 200, height: 300 });
+
+    expectTestComponentToHaveStyle({
+      backgroundColor: "rgb(0, 128, 0)",
+      color: "rgb(255, 255, 255)",
+      border: "4px solid rgb(0, 0, 0)"
+    });
+    expectTestComponentToHaveCustomProperties({
+      "--w": "200px",
+      "--h": "300px"
+    });
+
+    expectElementToHaveStyle(refs.content, {
+      fontWeight: "700",
+      fontSize: "45px" // 15rh
+    });
+  });
 });
