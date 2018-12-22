@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ContainerQuery } from "../../../packages/react-container-query/dist/bundle.esm";
+import { ContainerQuery } from "../../../../packages/react-container-query/dist/bundle.esm";
 import { meta as rawMeta } from "./Basic.pcss";
 
 // todo this shouldn't be needed
