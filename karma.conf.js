@@ -1,5 +1,6 @@
 module.exports = function(config) {
   const singleRun = process.env.KARMA_SINGLE_RUN !== "false";
+  const chromeHeadless = process.env.KARMA_HEADLESS_CHROME === "true";
 
   const ci = process.env.CI === "true";
 
@@ -9,7 +10,11 @@ module.exports = function(config) {
     files: ["tests/dist/index.js"],
     autoWatch: true,
 
-    browsers: ci ? ["ChromeHeadless", "sl_chrome_70"] : ["Chrome"],
+    browsers: chromeHeadless
+      ? ["ChromeHeadless"]
+      : ci
+      ? ["sl_chrome_70"]
+      : ["Chrome"],
     reporters: ci ? ["spec", "saucelabs"] : ["spec"],
 
     singleRun,
