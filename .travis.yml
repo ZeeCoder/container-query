@@ -10,3 +10,7 @@ script:
   - yarn test:integration:build
   - yarn test:integration
 after_success: "yarn coveralls"
+cache:
+  yarn: true
+  directories:
+    - node_modules
