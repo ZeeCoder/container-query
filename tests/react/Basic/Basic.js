@@ -6,10 +6,10 @@ import { meta as rawMeta } from "./Basic.pcss";
 const meta = JSON.parse(rawMeta.slice(1, -1));
 
 const Basic = () => (
-  <ContainerQuery meta={meta} className="Basic" id="rendered-component">
+  <ContainerQuery meta={meta} className="Basic">
     {(width, height) => {
       return (
-        <div>
+        <div className="Basic__content" data-testid="content">
           {width}x{height}
         </div>
       );

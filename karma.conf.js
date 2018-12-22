@@ -35,6 +35,13 @@ module.exports = function(config) {
     sauceLabs: {
       testName: "@zeecoder/container-query",
       public: "public"
+    },
+
+    client: {
+      jasmine: {
+        // Order of the tests matter, so don't randomise it
+        random: false
+      }
     }
   });
 };
