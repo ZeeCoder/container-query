@@ -3,4 +3,4 @@
 // the actual lib might not have, giving the false impression that something
 // works while it might actually not, if you use the lib without babel-polyfill.
 import "babel-regenerator-runtime";
-import "./react";
+import "./react/basic/index";
