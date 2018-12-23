@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **[BREAKING]** Removed test running from Node 6
 
+### Fixed
+
+- `container-query`
+  - Value precision is now consistent across browsers. (Instead of chrome
+    applying 1px and firefox 1.00px for example.)
+
 ## [3.0.0-alpha.2]
 
 ### Removed
