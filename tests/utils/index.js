@@ -7,15 +7,27 @@ import {
 
 let root = null;
 let componentElement = null;
+let customCssPropertiesSupported = null;
 
-const waitForAnimationFrame = () =>
-  new Promise(resolve => requestAnimationFrame(resolve));
+/**
+ * @return {boolean}
+ */
+export const areCustomCssPropertiesSupported = () => {
+  if (customCssPropertiesSupported === null) {
+    document.body.style.setProperty("--test", "1px");
 
-const waitForNAnimationFrame = async n => {
-  for (let i = 0; i < n; i++) {
-    await waitForAnimationFrame();
+    customCssPropertiesSupported =
+      document.body.style.getPropertyValue("--test") === "1px";
   }
+
+  return customCssPropertiesSupported;
 };
+
+export const isFirefox = () =>
+  navigator.userAgent.toLowerCase().indexOf("firefox") !== -1;
+
+export const isChrome = () =>
+  navigator.userAgent.toLowerCase().indexOf("chrome") !== -1;
 
 /**
  * @param {Component} component
@@ -46,7 +58,7 @@ export const clearDOM = () => (document.body.innerHTML = "");
  * @param {int} width
  * @param {int} height
  */
-export const changeRootSize = async ({ width, height }) => {
+export const changeRootSize = ({ width, height }) => {
   if (width) {
     root.style.width = `${width}px`;
   }
@@ -54,12 +66,6 @@ export const changeRootSize = async ({ width, height }) => {
   if (height) {
     root.style.height = `${height}px`;
   }
-
-  // Style changes will be applied in the first frame, and then they'll be
-  // accessible in the one after that.
-  // (Waiting 1 frame would result us querying the element in the same frame it's
-  // expected to be updated.)
-  await waitForNAnimationFrame(2);
 };
 
 /**
@@ -81,11 +87,77 @@ export const expectElementToHaveStyle = (element, style) => {
 };
 
 /**
+ * The difference between this method and expectElementToHaveStyle is that the
+ * previous one would make the current test fail immediately, while this one just
+ * returns with a boolean.
+ * This allows for a "waiting" to happen.
+ * @param {HTMLElement} element
+ * @param {{}} style
+ * @return {boolean}
+ */
+export const testElementToHaveStyle = (element, style) => {
+  const computedStyle = getComputedStyle(element);
+  for (let prop of Object.keys(style)) {
+    if (computedStyle[prop] !== style[prop]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+/**
  * Asserts whether the currently rendered component has the expected styles.
  * @param {{}} style
  */
 export const expectTestComponentToHaveStyle = style =>
   expectElementToHaveStyle(componentElement, style);
+
+/**
+ * This method is necessary, as after a size change we have no way of knowing
+ * exactly when the Resize observer might kick in in different browsers.
+ * @param {HTMLElement} element
+ * @param {style} style
+ * @param {int} [timeout]
+ * @return {Promise}
+ */
+export const waitForElementToHaveStyle = (element, style, timeout = 4500) =>
+  new Promise((resolve, reject) => {
+    const loop = () => {
+      const hasStyle = testElementToHaveStyle(componentElement, style);
+
+      if (hasStyle) {
+        clearTimeout(timeoutHandler);
+        // This should succeed
+        expectElementToHaveStyle(element, style);
+        return resolve();
+      }
+
+      // Start in about the next animation frame
+      requestAnimationFrame(loop);
+    };
+
+    const timeoutHandler = setTimeout(() => {
+      // This should fail the test
+      expectElementToHaveStyle(element, style);
+      // The above should've made the test reject, but reject the promise as well regardless
+      reject(
+        new Error(
+          "timeout on waiting for styles to change on the given element"
+        )
+      );
+    }, timeout);
+
+    loop();
+  });
+
+/**
+ * @param {{}} style
+ * @param {int} [timeout]
+ * @return {Promise}
+ */
+export const waitForTestComponentToHaveStyle = (style, timeout = 4500) =>
+  waitForElementToHaveStyle(componentElement, style, timeout);
 
 /**
  * @param {HTMLElement} element
