@@ -1,11 +1,14 @@
 // @flow
 import type { ContainerSize } from "../flow/types";
+import _ from "lodash";
 
 /**
  * Converts a value possibly using a container unit into a pixel value.
+ * (Respecting the given precision.)
  * Examples:
  * - "1rh" => "123px"
- * - "10px" => 10px
+ * - "10px" => "10px"
+ * - "2rw" => "11.42px"
  */
 export default function convertSingleValue(
   dimensions: ContainerSize,
@@ -35,5 +38,12 @@ export default function convertSingleValue(
       parseFloat(num)) /
     100;
 
-  return `${valueNum.toFixed(precision)}px`;
+  // Removing unnecessary precisions. (Otherwise it would get applied
+  // inconsistently in chrome / firefox, which would not be a big issue, but
+  // makes writing tests a pain.)
+  const preciseValue = `${valueNum.toFixed(precision)}`;
+
+  const trimmedValue = _.trim(_.trim(preciseValue, " 0"), ".");
+
+  return `${trimmedValue}px`;
 }

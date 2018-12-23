@@ -1,5 +1,8 @@
 import React from "react";
 import Basic from "./Basic/Basic";
+// polyfills for the test files, not the tested libraries
+import "core-js/fn/array/from";
+import "core-js/fn/promise";
 import { wait, getNodeText } from "dom-testing-library";
 import {
   renderTestComponent,
@@ -9,8 +12,37 @@ import {
   expectTestComponentToHaveCustomProperties,
   expectElementToHaveStyle,
   clearDOM,
-  expectTextContent
+  expectTextContent,
+  isFirefox,
+  isChrome,
+  waitForTestComponentToHaveStyle,
+  areCustomCssPropertiesSupported
 } from "../../utils";
+
+const ucfirst = str => `${str[0].toUpperCase()}${str.slice(1)}`;
+
+/**
+ * Asserting with shorthands (like "border: x") don't work consistently across
+ * browsers (like with firefox)
+ * Used instead of writing `border: "2px solid rgb(255, 255, 255)"` for example.
+ * todo extract
+ * @param {string} prop Ex: "border-width"
+ * @param {string} value Ex: "2px"
+ * @return {{}}
+ */
+const createStyleObjectFromShorthand = (prop, value) => {
+  const style = {};
+
+  const propParts = prop.split("-");
+
+  const sides = ["Top", "Bottom", "Left", "Right"];
+
+  sides.forEach(side => {
+    style[`${propParts[0]}${side}${ucfirst(propParts[1])}`] = value;
+  });
+
+  return style;
+};
 
 // Features covered:
 // - Style applying and restoring on width, height and orientation change
@@ -36,15 +68,19 @@ describe("Basic", () => {
     // Wait for resize observer to kick in
     await expectTextContent(refs.content, "100x50");
 
-    expectTestComponentToHaveCustomProperties({
-      "--w": "100px",
-      "--h": "50px"
-    });
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "100px",
+        "--h": "50px"
+      });
+    }
 
     expectTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
       color: "rgb(0, 0, 0)",
-      border: "2px solid rgb(255, 255, 255)"
+      ...createStyleObjectFromShorthand("border-width", "2px"),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
     expectElementToHaveStyle(refs.content, {
@@ -55,55 +91,82 @@ describe("Basic", () => {
   });
 
   it("should react to width change", async () => {
-    await changeRootSize({ width: 101 });
+    changeRootSize({ width: 101 });
 
-    expectTestComponentToHaveStyle({
+    await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
-      border: "4.03125px solid rgb(255, 255, 255)"
+      ...createStyleObjectFromShorthand(
+        "border-width",
+        // todo The following seems to be bugs in getComputedStyle
+        isChrome() ? "4.03125px" : isFirefox() ? "4px" : "4.04px"
+      ),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
     });
-    expectTestComponentToHaveCustomProperties({
-      "--w": "101px",
-      "--h": "50px"
-    });
+
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "101px",
+        "--h": "50px"
+      });
+    }
   });
 
   it("should revert styles after width changes back", async () => {
-    await changeRootSize({ width: 100 });
+    changeRootSize({ width: 100 });
 
-    expectTestComponentToHaveStyle({
+    await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
-      border: "2px solid rgb(255, 255, 255)"
+      ...createStyleObjectFromShorthand("border-width", "2px"),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
     });
-    expectTestComponentToHaveCustomProperties({
-      "--w": "100px",
-      "--h": "50px"
-    });
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "100px",
+        "--h": "50px"
+      });
+    }
   });
 
   it("should react to height change", async () => {
-    await changeRootSize({ height: 51 });
+    changeRootSize({ height: 51 });
 
-    expectTestComponentToHaveStyle({
+    await waitForTestComponentToHaveStyle({
       color: "rgb(255, 255, 255)",
-      border: "2.03125px solid rgb(255, 255, 255)"
+      ...createStyleObjectFromShorthand(
+        "border-width",
+        // todo The following seems to be bugs in getComputedStyle
+        isChrome() ? "2.03125px" : isFirefox() ? "2px" : "2.04px"
+      ),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
     });
-    expectTestComponentToHaveCustomProperties({
-      "--w": "100px",
-      "--h": "51px"
-    });
+
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "100px",
+        "--h": "51px"
+      });
+    }
   });
 
   it("should revert styles after height changes back", async () => {
     await changeRootSize({ height: 50 });
 
-    expectTestComponentToHaveStyle({
+    await waitForTestComponentToHaveStyle({
       color: "rgb(0, 0, 0)",
-      border: "2px solid rgb(255, 255, 255)"
+      ...createStyleObjectFromShorthand("border-width", "2px"),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
     });
-    expectTestComponentToHaveCustomProperties({
-      "--w": "100px",
-      "--h": "50px"
-    });
+
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "100px",
+        "--h": "50px"
+      });
+    }
   });
 
   it("should handle all queries at the same time", async () => {
@@ -112,15 +175,20 @@ describe("Basic", () => {
 
     await expectTextContent(refs.content, "200x300");
 
-    expectTestComponentToHaveStyle({
+    await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
       color: "rgb(255, 255, 255)",
-      border: "4px solid rgb(0, 0, 0)"
+      ...createStyleObjectFromShorthand("border-width", "4px"),
+      ...createStyleObjectFromShorthand("border-style", "solid"),
+      ...createStyleObjectFromShorthand("border-color", "rgb(0, 0, 0)")
     });
-    expectTestComponentToHaveCustomProperties({
-      "--w": "200px",
-      "--h": "300px"
-    });
+
+    if (areCustomCssPropertiesSupported()) {
+      expectTestComponentToHaveCustomProperties({
+        "--w": "200px",
+        "--h": "300px"
+      });
+    }
 
     expectElementToHaveStyle(refs.content, {
       fontWeight: "700",
