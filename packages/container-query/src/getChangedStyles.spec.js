@@ -48,7 +48,7 @@ test("should apply default queries without a condition function", () => {
               {
                 [SELECTOR]: ".Container",
                 [VALUES]: {
-                  "font-size": `4rh`,
+                  "font-size": `4.1234rh`,
                   "line-height": `2rh`
                 }
               },
@@ -70,8 +70,8 @@ test("should apply default queries without a condition function", () => {
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
-        "font-size": "4.000px",
-        "line-height": "2.000px"
+        "font-size": "4.123px",
+        "line-height": "2px"
       }
     },
     ".Container__element": {
@@ -137,7 +137,7 @@ test("should return change sets on first run", () => {
     ".Container__element": {
       addStyle: {
         "font-size": "14px",
-        "line-height": "1.00px",
+        "line-height": "1px",
         background: "#ccc"
       }
     }
@@ -230,7 +230,7 @@ test("should generate remove change set", () => {
     ".Container": {
       addStyle: {
         background: "#aaa",
-        "line-height": "10.00px"
+        "line-height": "10px"
       },
       removeProps: ["font-size"]
     },
@@ -351,7 +351,7 @@ test("should always recalculate values", () => {
             {
               [SELECTOR]: ".Container__element",
               [VALUES]: {
-                "line-height": `3rh`
+                "line-height": `3.5rh`
               }
             }
           ]
@@ -366,14 +366,14 @@ test("should always recalculate values", () => {
   expect(getChangedStyles(element, size)).toEqual({
     ".Container": {
       addStyle: {
-        "line-height": "8.00px",
-        "font-size": "6.00px"
+        "line-height": "8px",
+        "font-size": "6px"
       }
     },
     ".Container__element": {
       addStyle: {
-        "line-height": "6.00px",
-        "font-size": "8.00px"
+        "line-height": "7px",
+        "font-size": "8px"
       }
     }
   });
