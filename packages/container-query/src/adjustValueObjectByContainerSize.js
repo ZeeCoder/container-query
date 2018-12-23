@@ -6,8 +6,8 @@ import type { ContainerSize, Styles } from "../flow/types";
 /**
  * Ex:
  * `{
- *   fontSize: "1<HEIGHT_UNIT>",
- *   padding: "10<HEIGHT_UNIT> 10<WIDTH_UNIT>",
+ *   fontSize: "1rh",
+ *   padding: "10rh 10rw",
  * }`
  * Ex:
  * `{
