@@ -1,16 +1,19 @@
+// @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
 const customLaunchers = {
-  sl_chrome_35: {
-    base: "SauceLabs",
-    browserName: "Chrome",
-    platform: "Windows 7",
-    version: "35"
-  },
+  // todo fix by polyfilling Set properly
+  // sl_chrome_35: {
+  //   base: "SauceLabs",
+  //   browserName: "Chrome",
+  //   platform: "Windows 7",
+  //   version: "35"
+  // },
   sl_chrome_70: {
     base: "SauceLabs",
     browserName: "Chrome",
     platform: "Windows 10",
     version: "70"
   },
+  // Testing the oldest edge version
   sl_edge_13: {
     base: "SauceLabs",
     browserName: "MicrosoftEdge",
@@ -18,12 +21,18 @@ const customLaunchers = {
     version: "13"
   },
   sl_ie_11: {
-    // todo polyfill promises for the tests
     base: "SauceLabs",
     browserName: "Internet Explorer",
     platform: "Windows 10",
     version: "11"
   },
+  // todo fix by polyfilling Set properly
+  // sl_ie_10: {
+  //   base: "SauceLabs",
+  //   browserName: "Internet Explorer",
+  //   platform: "Windows 7",
+  //   version: "10"
+  // },
   sl_ff_30: {
     base: "SauceLabs",
     browserName: "Firefox",
@@ -70,7 +79,6 @@ module.exports = function(config) {
     // Max concurrency for SauceLabs OS plan
     concurrency: 5,
 
-    // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
     customLaunchers,
     sauceLabs: {
       testName: "@zeecoder/container-query",
