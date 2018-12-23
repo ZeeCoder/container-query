@@ -16,33 +16,9 @@ import {
   isFirefox,
   isChrome,
   waitForTestComponentToHaveStyle,
-  areCustomCssPropertiesSupported
+  areCustomCssPropertiesSupported,
+  createStyleFromShorthand
 } from "../../utils";
-
-const ucfirst = str => `${str[0].toUpperCase()}${str.slice(1)}`;
-
-/**
- * Asserting with shorthands (like "border: x") don't work consistently across
- * browsers (like with firefox)
- * Used instead of writing `border: "2px solid rgb(255, 255, 255)"` for example.
- * todo extract
- * @param {string} prop Ex: "border-width"
- * @param {string} value Ex: "2px"
- * @return {{}}
- */
-const createStyleObjectFromShorthand = (prop, value) => {
-  const style = {};
-
-  const propParts = prop.split("-");
-
-  const sides = ["Top", "Bottom", "Left", "Right"];
-
-  sides.forEach(side => {
-    style[`${propParts[0]}${side}${ucfirst(propParts[1])}`] = value;
-  });
-
-  return style;
-};
 
 // Features covered:
 // - Style applying and restoring on width, height and orientation change
@@ -78,9 +54,9 @@ describe("Basic", () => {
     expectTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
       color: "rgb(0, 0, 0)",
-      ...createStyleObjectFromShorthand("border-width", "2px"),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
+      ...createStyleFromShorthand("border-width", "2px"),
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
     expectElementToHaveStyle(refs.content, {
@@ -95,13 +71,13 @@ describe("Basic", () => {
 
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
-      ...createStyleObjectFromShorthand(
+      ...createStyleFromShorthand(
         "border-width",
         // todo The following seems to be bugs in getComputedStyle
         isChrome() ? "4.03125px" : isFirefox() ? "4px" : "4.04px"
       ),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
     if (areCustomCssPropertiesSupported()) {
@@ -117,9 +93,9 @@ describe("Basic", () => {
 
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
-      ...createStyleObjectFromShorthand("border-width", "2px"),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
+      ...createStyleFromShorthand("border-width", "2px"),
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
     if (areCustomCssPropertiesSupported()) {
       expectTestComponentToHaveCustomProperties({
@@ -134,13 +110,13 @@ describe("Basic", () => {
 
     await waitForTestComponentToHaveStyle({
       color: "rgb(255, 255, 255)",
-      ...createStyleObjectFromShorthand(
+      ...createStyleFromShorthand(
         "border-width",
         // todo The following seems to be bugs in getComputedStyle
         isChrome() ? "2.03125px" : isFirefox() ? "2px" : "2.04px"
       ),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
     if (areCustomCssPropertiesSupported()) {
@@ -156,9 +132,9 @@ describe("Basic", () => {
 
     await waitForTestComponentToHaveStyle({
       color: "rgb(0, 0, 0)",
-      ...createStyleObjectFromShorthand("border-width", "2px"),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(255, 255, 255)")
+      ...createStyleFromShorthand("border-width", "2px"),
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
     if (areCustomCssPropertiesSupported()) {
@@ -178,9 +154,9 @@ describe("Basic", () => {
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
       color: "rgb(255, 255, 255)",
-      ...createStyleObjectFromShorthand("border-width", "4px"),
-      ...createStyleObjectFromShorthand("border-style", "solid"),
-      ...createStyleObjectFromShorthand("border-color", "rgb(0, 0, 0)")
+      ...createStyleFromShorthand("border-width", "4px"),
+      ...createStyleFromShorthand("border-style", "solid"),
+      ...createStyleFromShorthand("border-color", "rgb(0, 0, 0)")
     });
 
     if (areCustomCssPropertiesSupported()) {
