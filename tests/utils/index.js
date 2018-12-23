@@ -23,11 +23,17 @@ export const areCustomCssPropertiesSupported = () => {
   return customCssPropertiesSupported;
 };
 
+/**
+ * @return {boolean}
+ */
 export const isFirefox = () =>
   navigator.userAgent.toLowerCase().indexOf("firefox") !== -1;
 
+/**
+ * @return {boolean}
+ */
 export const isChrome = () =>
-  navigator.userAgent.toLowerCase().indexOf("chrome") !== -1;
+  /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
 /**
  * @param {Component} component
@@ -196,4 +202,29 @@ export const expectTextContent = async (element, text) => {
       expect(textContent).toBe(text);
     }
   });
+};
+
+const ucfirst = str => `${str[0].toUpperCase()}${str.slice(1)}`;
+
+/**
+ * Asserting with shorthands (like "border: x") doesn't work consistently across
+ * browsers. (For example in firefox.)
+ * This function can be used instead of asserting
+ * `border: "2px solid rgb(255, 255, 255)"` as a whole for example.
+ * @param {string} prop Ex: "border-width"
+ * @param {string} value Ex: "2px"
+ * @return {{}}
+ */
+export const createStyleFromShorthand = (prop, value) => {
+  const style = {};
+
+  const propParts = prop.split("-");
+
+  const sides = ["Top", "Bottom", "Left", "Right"];
+
+  sides.forEach(side => {
+    style[`${propParts[0]}${side}${ucfirst(propParts[1])}`] = value;
+  });
+
+  return style;
 };
