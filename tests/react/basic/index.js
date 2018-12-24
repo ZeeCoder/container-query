@@ -34,9 +34,6 @@ describe("Basic", () => {
   });
 
   it("should not have any of the container queries applied", async () => {
-    // Assertions before the ResizeObserver kicks in
-    expect(getNodeText(refs.content)).toBe("1x1");
-
     // Wait for resize observer to kick in
     await expectTextContent(refs.content, "100x50");
 
