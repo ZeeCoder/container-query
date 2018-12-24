@@ -1,6 +1,21 @@
 // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
-// todo figure out a way to run all browsers. (For some reason only 5 can be run, and only if all 5 starts at the same time with concurrency set)
 const customLaunchers = {
+  sl_iphone_6s: {
+    base: "SauceLabs",
+    browserName: "Safari",
+    platform: "iOS",
+    deviceName: "iPhone 6s Simulator",
+    deviceOrientation: "portrait",
+    platformVersion: "10.0"
+  },
+  sl_iphone_x: {
+    base: "SauceLabs",
+    browserName: "Safari",
+    platform: "iOS",
+    deviceName: "iPhone XS Simulator",
+    deviceOrientation: "portrait",
+    platformVersion: "12.0"
+  },
   sl_android_4_4: {
     base: "SauceLabs",
     browserName: "Chrome",
