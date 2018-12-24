@@ -1,18 +1,34 @@
 // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
+// todo figure out a way to run all browsers. (For some reason only 5 can be run, and only if all 5 starts at the same time with concurrency set)
 const customLaunchers = {
-  // todo fix by polyfilling Set properly
-  // sl_chrome_35: {
-  //   base: "SauceLabs",
-  //   browserName: "Chrome",
-  //   platform: "Windows 7",
-  //   version: "35"
+  // sl_android_4_4: {
+  //   base: 'SauceLabs',
+  //   browserName: 'Chrome',
+  //   platform: 'Android',
+  //   version: '4.4',
+  //   deviceName: 'Android Emulator',
+  //   deviceOrientation: 'portrait'
   // },
-  sl_chrome_70: {
+  sl_android_6: {
     base: "SauceLabs",
     browserName: "Chrome",
-    platform: "Windows 10",
-    version: "70"
+    platform: "Android",
+    version: "6.0",
+    deviceName: "Android Emulator",
+    deviceOrientation: "portrait"
   },
+  sl_chrome_35: {
+    base: "SauceLabs",
+    browserName: "Chrome",
+    platform: "Windows 7",
+    version: "35"
+  },
+  // sl_chrome_70: {
+  //   base: "SauceLabs",
+  //   browserName: "Chrome",
+  //   platform: "Windows 10",
+  //   version: "70"
+  // },
   // Testing the oldest edge version
   sl_edge_13: {
     base: "SauceLabs",
@@ -20,31 +36,31 @@ const customLaunchers = {
     platform: "Windows 10",
     version: "13"
   },
-  sl_ie_11: {
-    base: "SauceLabs",
-    browserName: "Internet Explorer",
-    platform: "Windows 10",
-    version: "11"
-  },
-  // todo fix by polyfilling Set properly
-  // sl_ie_10: {
+  // sl_ie_11: {
   //   base: "SauceLabs",
   //   browserName: "Internet Explorer",
-  //   platform: "Windows 7",
-  //   version: "10"
+  //   platform: "Windows 10",
+  //   version: "11"
   // },
+  sl_ie_10: {
+    base: "SauceLabs",
+    browserName: "Internet Explorer",
+    platform: "Windows 7",
+    version: "10"
+  },
   sl_ff_30: {
     base: "SauceLabs",
     browserName: "Firefox",
     platform: "Windows 10",
     version: "30"
-  },
-  sl_ff_64: {
-    base: "SauceLabs",
-    browserName: "Firefox",
-    platform: "Windows 10",
-    version: "64"
   }
+  // ,
+  // sl_ff_64: {
+  //   base: "SauceLabs",
+  //   browserName: "Firefox",
+  //   platform: "Windows 10",
+  //   version: "64"
+  // }
 };
 
 module.exports = function(config) {
