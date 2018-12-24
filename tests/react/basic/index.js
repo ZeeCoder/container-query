@@ -1,9 +1,6 @@
 import React from "react";
 import Basic from "./Basic/Basic";
-// polyfills for the test files, not the tested libraries
-import "core-js/fn/array/from";
-import "core-js/fn/promise";
-import { wait, getNodeText } from "dom-testing-library";
+import { getNodeText } from "dom-testing-library";
 import {
   renderTestComponent,
   getByTestId,
@@ -13,11 +10,10 @@ import {
   expectElementToHaveStyle,
   clearDOM,
   expectTextContent,
-  isFirefox,
-  isChrome,
   waitForTestComponentToHaveStyle,
-  areCustomCssPropertiesSupported,
-  createStyleFromShorthand
+  createStyleFromShorthand,
+  testElementToHaveStyle,
+  expectTestComponentToHaveOneOfStyles
 } from "../../utils";
 
 // Features covered:
@@ -44,12 +40,10 @@ describe("Basic", () => {
     // Wait for resize observer to kick in
     await expectTextContent(refs.content, "100x50");
 
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "100px",
-        "--h": "50px"
-      });
-    }
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
 
     expectTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
@@ -69,27 +63,30 @@ describe("Basic", () => {
   it("should react to width change", async () => {
     changeRootSize({ width: 101 });
 
+    await expectTextContent(refs.content, "101x50");
+
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 128, 0)",
-      ...createStyleFromShorthand(
-        "border-width",
-        // todo The following seems to be bugs in getComputedStyle
-        isChrome() ? "4.03125px" : isFirefox() ? "4px" : "4.04px"
-      ),
       ...createStyleFromShorthand("border-style", "solid"),
       ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "101px",
-        "--h": "50px"
-      });
-    }
+    expectTestComponentToHaveOneOfStyles([
+      createStyleFromShorthand("border-width", "4px"), // most browsers do rounding
+      createStyleFromShorthand("border-width", "4.04px"), // what I would really want, but only IE / Edge reports this properly
+      createStyleFromShorthand("border-width", "4.03125px") // This is what chrome reports >=v58 for some reason...
+    ]);
+
+    expectTestComponentToHaveCustomProperties({
+      "--w": "101px",
+      "--h": "50px"
+    });
   });
 
   it("should revert styles after width changes back", async () => {
     changeRootSize({ width: 100 });
+
+    await expectTextContent(refs.content, "100x50");
 
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)",
@@ -97,38 +94,40 @@ describe("Basic", () => {
       ...createStyleFromShorthand("border-style", "solid"),
       ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "100px",
-        "--h": "50px"
-      });
-    }
+
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
   });
 
   it("should react to height change", async () => {
     changeRootSize({ height: 51 });
 
+    await expectTextContent(refs.content, "100x51");
+
     await waitForTestComponentToHaveStyle({
       color: "rgb(255, 255, 255)",
-      ...createStyleFromShorthand(
-        "border-width",
-        // todo The following seems to be bugs in getComputedStyle
-        isChrome() ? "2.03125px" : isFirefox() ? "2px" : "2.04px"
-      ),
       ...createStyleFromShorthand("border-style", "solid"),
       ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "100px",
-        "--h": "51px"
-      });
-    }
+    expectTestComponentToHaveOneOfStyles([
+      createStyleFromShorthand("border-width", "2px"), // most browsers do rounding
+      createStyleFromShorthand("border-width", "2.04px"), // what I would really want, but only IE / Edge reports this properly
+      createStyleFromShorthand("border-width", "2.03125px") // This is what chrome reports >=v58 for some reason...
+    ]);
+
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "51px"
+    });
   });
 
   it("should revert styles after height changes back", async () => {
     await changeRootSize({ height: 50 });
+
+    await expectTextContent(refs.content, "100x50");
 
     await waitForTestComponentToHaveStyle({
       color: "rgb(0, 0, 0)",
@@ -137,12 +136,10 @@ describe("Basic", () => {
       ...createStyleFromShorthand("border-color", "rgb(255, 255, 255)")
     });
 
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "100px",
-        "--h": "50px"
-      });
-    }
+    expectTestComponentToHaveCustomProperties({
+      "--w": "100px",
+      "--h": "50px"
+    });
   });
 
   it("should handle all queries at the same time", async () => {
@@ -159,15 +156,27 @@ describe("Basic", () => {
       ...createStyleFromShorthand("border-color", "rgb(0, 0, 0)")
     });
 
-    if (areCustomCssPropertiesSupported()) {
-      expectTestComponentToHaveCustomProperties({
-        "--w": "200px",
-        "--h": "300px"
+    expectTestComponentToHaveCustomProperties({
+      "--w": "200px",
+      "--h": "300px"
+    });
+
+    // Chrome <= 61 wrongly reports "bold" instead of 700, so we test the assertion first
+    const haveStyle = testElementToHaveStyle(refs.content, {
+      fontWeight: "700"
+    });
+
+    if (haveStyle) {
+      expectElementToHaveStyle(refs.content, {
+        fontWeight: "700"
+      });
+    } else {
+      // Handle Chrome <= 61 differently
+      expectElementToHaveStyle(refs.content, {
+        fontWeight: "bold"
       });
     }
-
     expectElementToHaveStyle(refs.content, {
-      fontWeight: "700",
       fontSize: "45px" // 15rh
     });
   });

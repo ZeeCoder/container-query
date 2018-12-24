@@ -24,18 +24,6 @@ export const areCustomCssPropertiesSupported = () => {
 };
 
 /**
- * @return {boolean}
- */
-export const isFirefox = () =>
-  navigator.userAgent.toLowerCase().indexOf("firefox") !== -1;
-
-/**
- * @return {boolean}
- */
-export const isChrome = () =>
-  /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-
-/**
  * @param {Component} component
  * @param {{width: int, height: int}} size
  * @return {HTMLElement}
@@ -93,6 +81,13 @@ export const expectElementToHaveStyle = (element, style) => {
 };
 
 /**
+ * Asserts whether the currently rendered component has the expected styles.
+ * @param {{}} style
+ */
+export const expectTestComponentToHaveStyle = style =>
+  expectElementToHaveStyle(componentElement, style);
+
+/**
  * The difference between this method and expectElementToHaveStyle is that the
  * previous one would make the current test fail immediately, while this one just
  * returns with a boolean.
@@ -113,11 +108,10 @@ export const testElementToHaveStyle = (element, style) => {
 };
 
 /**
- * Asserts whether the currently rendered component has the expected styles.
  * @param {{}} style
  */
-export const expectTestComponentToHaveStyle = style =>
-  expectElementToHaveStyle(componentElement, style);
+export const testComponentToHaveStyle = style =>
+  testElementToHaveStyle(componentElement, style);
 
 /**
  * This method is necessary, as after a size change we have no way of knowing
@@ -170,6 +164,11 @@ export const waitForTestComponentToHaveStyle = (style, timeout = 4500) =>
  * @param {{}} props
  */
 export const expectElementToHaveCustomProperties = (element, props) => {
+  // Not all browsers tested here support custom css properties
+  if (!areCustomCssPropertiesSupported()) {
+    return;
+  }
+
   for (let prop of Object.keys(props)) {
     expect(element.style.getPropertyValue(prop)).toBe(props[prop]);
   }
@@ -228,3 +227,28 @@ export const createStyleFromShorthand = (prop, value) => {
 
   return style;
 };
+
+/**
+ * @param {HTMLElement} element
+ * @param {{}[]} styles
+ */
+export const expectElementToHaveOneOfStyles = (element, styles) => {
+  const styleCount = styles.length;
+  for (let i = 0; i < styleCount; i++) {
+    const success = testElementToHaveStyle(element, styles[i]);
+
+    if (success) {
+      return expectElementToHaveStyle(element, styles[i]);
+    }
+  }
+
+  // non of the provided styles are available, report error
+  // todo report which styles were tried, and what were the diffs
+  fail("Non of the provided styles matched the element's style.");
+};
+
+/**
+ * @param {{}[]} styles
+ */
+export const expectTestComponentToHaveOneOfStyles = styles =>
+  expectElementToHaveOneOfStyles(componentElement, styles);
