@@ -7,8 +7,10 @@ script:
   - lerna bootstrap --ignore={demos}
   - yarn test:unit
   - lerna run test
-  - yarn test:integration:build
-  - yarn test:integration
+  - node ./tests/bin/is-first-ci-job.js && echo Running integration tests as this is the first job of the current build.
+  - node ./tests/bin/is-first-ci-job.js || echo Skipping integration tests, as this is not the first job of this build.
+  - node ./tests/bin/is-first-ci-job.js && yarn test:integration:build
+  - node ./tests/bin/is-first-ci-job.js && yarn test:integration
 after_success: "yarn coveralls"
 cache:
   yarn: true
