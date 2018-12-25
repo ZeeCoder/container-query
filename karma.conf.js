@@ -1,21 +1,22 @@
 // @see https://wiki.saucelabs.com/display/DOCS/Platform+Configurator/
 const customLaunchers = {
-  sl_iphone_6s: {
-    base: "SauceLabs",
-    browserName: "Safari",
-    platform: "iOS",
-    deviceName: "iPhone 6s Simulator",
-    deviceOrientation: "portrait",
-    platformVersion: "10.0"
-  },
-  sl_iphone_x: {
-    base: "SauceLabs",
-    browserName: "Safari",
-    platform: "iOS",
-    deviceName: "iPhone XS Simulator",
-    deviceOrientation: "portrait",
-    platformVersion: "12.0"
-  },
+  // disabled, as ios tests proved to be unreliable
+  // sl_iphone_6s: {
+  //   base: "SauceLabs",
+  //   browserName: "Safari",
+  //   platform: "iOS",
+  //   deviceName: "iPhone 6s Simulator",
+  //   deviceOrientation: "portrait",
+  //   platformVersion: "10.0"
+  // },
+  // sl_iphone_x: {
+  //   base: "SauceLabs",
+  //   browserName: "Safari",
+  //   platform: "iOS",
+  //   deviceName: "iPhone XS Simulator",
+  //   deviceOrientation: "portrait",
+  //   platformVersion: "12.0"
+  // },
   sl_android_4_4: {
     base: "SauceLabs",
     browserName: "Chrome",
@@ -120,6 +121,9 @@ module.exports = function(config) {
         // Order of the tests matter, so don't randomise it
         random: false
       }
-    }
+    },
+
+    // SauceLabs takes some time to connect to mobile devices
+    captureTimeout: 120000
   });
 };
