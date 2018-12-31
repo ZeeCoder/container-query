@@ -9,7 +9,6 @@ import meta from "./styles.meta.json";
 // - Multiple containers should work in a single stylesheet
 // - Uses `getMetadataFromMessages` to get the meta and save it as a JSON before
 //   bundling it with webpack
-// todo test multiple instances of the same container
 describe("Manual", () => {
   const refs = {};
   beforeAll(() => {
@@ -17,62 +16,96 @@ describe("Manual", () => {
     refs.root = document.createElement("div");
 
     refs.container1 = document.createElement("div");
-    refs.container1.className = "Container1";
+    refs.container1.className = "ContainerType1";
 
     refs.container2 = document.createElement("div");
-    refs.container2.className = "Container2";
+    refs.container2.className = "ContainerType1";
+
+    refs.container3 = document.createElement("div");
+    refs.container3.className = "ContainerType2";
+
+    refs.container4 = document.createElement("div");
+    refs.container4.className = "ContainerType2";
 
     refs.root.appendChild(refs.container1);
     refs.root.appendChild(refs.container2);
+    refs.root.appendChild(refs.container3);
+    refs.root.appendChild(refs.container4);
 
-    refs.root.style.width = "100px";
     document.body.appendChild(refs.root);
 
     // todo Fix potential endless loop
     // `new Container` gets in an endless for loop if it's attached to an element
     // that's not yet added to the dom for some reason.
-    new Container(refs.container1, meta[".Container1"]);
-    new Container(refs.container2, meta[".Container2"]);
+    new Container(refs.container1, meta[".ContainerType1"]);
+    new Container(refs.container2, meta[".ContainerType1"]);
+    new Container(refs.container3, meta[".ContainerType2"]);
+    new Container(refs.container4, meta[".ContainerType2"]);
   });
 
   it("should not see container query styles on start", async () => {
     await waitForElementToHaveStyle(refs.container1, {
       backgroundColor: "rgb(255, 0, 0)"
     });
+    await waitForElementToHaveStyle(refs.container2, {
+      backgroundColor: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.container3, {
+      backgroundColor: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.container4, {
+      backgroundColor: "rgb(255, 0, 0)"
+    });
   });
 
-  it("should see a change in Container1 but not Container2", async () => {
-    refs.root.style.width = "101px";
+  it("should see a change in container1 but not the rest", async () => {
+    refs.container1.style.width = "200px";
 
     await waitForElementToHaveStyle(refs.container1, {
       backgroundColor: "rgb(0, 255, 0)"
     });
   });
 
-  it("should see changes in both Container1 and Container2", async () => {
-    refs.container2.style.height = "31px";
+  it("should see a change in container2 but not the rest", async () => {
+    refs.container2.style.width = "200px";
 
     await waitForElementToHaveStyle(refs.container2, {
       backgroundColor: "rgb(0, 255, 0)"
     });
   });
 
-  it("should revert changes in Container1", async () => {
-    refs.root.style.width = "100px";
+  it("should see a change in container3 but not the rest", async () => {
+    refs.container3.style.height = "60px";
 
-    await waitForElementToHaveStyle(refs.container1, {
-      backgroundColor: "rgb(255, 0, 0)"
+    await waitForElementToHaveStyle(refs.container3, {
+      backgroundColor: "rgb(0, 255, 0)"
     });
   });
 
-  it("should revert changes in both Container1 and Container2", async () => {
-    refs.container2.style.height = "";
+  it("should see a change in container4 but not the rest", async () => {
+    refs.container4.style.height = "60px";
+
+    await waitForElementToHaveStyle(refs.container4, {
+      backgroundColor: "rgb(0, 255, 0)"
+    });
+  });
+
+  it("should revert the changes in all containers", async () => {
+    refs.container1.style.width = "";
+    refs.container2.style.width = "";
+    refs.container3.style.height = "";
+    refs.container4.style.height = "";
 
     await waitForElementToHaveStyle(refs.container1, {
       backgroundColor: "rgb(255, 0, 0)"
     });
-
     await waitForElementToHaveStyle(refs.container2, {
+      backgroundColor: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.container3, {
+      backgroundColor: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.container4, {
       backgroundColor: "rgb(255, 0, 0)"
     });
   });

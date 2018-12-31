@@ -2,6 +2,8 @@
 // (Intentionally not using babel-polyfill to do this automatically, as then I
 // might end up accidentally polyfilling something for the library, and therefore
 // miss that it wouldn't work without the polyfill.)
+// todo note that for IE9/10 support, these polyfills are needed with react-container-query
+// @see https://reactjs.org/docs/javascript-environment-requirements.html
 import "core-js/fn/array/from";
 import "core-js/fn/promise";
 import "core-js/fn/set";
