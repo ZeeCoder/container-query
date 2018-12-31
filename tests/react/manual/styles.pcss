@@ -1,0 +1,19 @@
+.Container1 {
+  @define-container;
+  height: 30px;
+  background-color: rgb(255, 0, 0);
+
+  @container (width > 100px) {
+    background-color: rgb(0, 255, 0);
+  }
+}
+
+.Container2 {
+  @define-container;
+  height: 30px;
+  background-color: rgb(255, 0, 0);
+
+  @container (height > 30px) {
+    background-color: rgb(0, 255, 0);
+  }
+}

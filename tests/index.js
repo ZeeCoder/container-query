@@ -14,3 +14,4 @@ import "babel-regenerator-runtime";
 // test suits
 import "./react/basic/index";
 import "./react/hoc/index";
+import "./react/manual/index";
