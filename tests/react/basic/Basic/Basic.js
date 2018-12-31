@@ -1,9 +1,6 @@
 import React from "react";
 import { ContainerQuery } from "../../../../packages/react-container-query/dist/bundle.esm";
-import { meta as rawMeta } from "./Basic.pcss";
-
-// todo this shouldn't be needed
-const meta = JSON.parse(rawMeta.slice(1, -1));
+import { meta } from "./Basic.pcss";
 
 const Basic = () => (
   <ContainerQuery meta={meta} className="Basic">
