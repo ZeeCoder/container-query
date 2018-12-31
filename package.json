@@ -52,7 +52,7 @@
     "test:unit:watch": "jest --watch",
     "test:integration": "karma start",
     "test:integration:watch": "yarn test:integration:build --watch",
-    "test:integration:build": "webpack --config tests/webpack.config.js",
+    "test:integration:build": "node ./tests/react/manual/build-meta.js && webpack --config tests/webpack.config.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write 'packages/**/*.js'",
     "bootstrap": "lerna bootstrap",

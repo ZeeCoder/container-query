@@ -124,7 +124,7 @@ export const testComponentToHaveStyle = style =>
 export const waitForElementToHaveStyle = (element, style, timeout = 4500) =>
   new Promise((resolve, reject) => {
     const loop = () => {
-      const hasStyle = testElementToHaveStyle(componentElement, style);
+      const hasStyle = testElementToHaveStyle(element, style);
 
       if (hasStyle) {
         clearTimeout(timeoutHandler);
