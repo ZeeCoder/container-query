@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { ContainerQuery } from "../../../../packages/react-container-query/dist/bundle.esm";
 import { meta as rawMeta } from "./Basic.pcss";
 

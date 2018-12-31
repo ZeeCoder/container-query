@@ -11,4 +11,6 @@ import "core-js/fn/map";
 // the actual lib might not have, giving the false impression that something
 // works while it might actually not, if you use the lib without babel-polyfill.
 import "babel-regenerator-runtime";
+// test suits
 import "./react/basic/index";
+import "./react/hoc/index";
