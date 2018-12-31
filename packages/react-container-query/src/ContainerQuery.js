@@ -69,7 +69,7 @@ ContainerQuery.defaultProps = {
 ContainerQuery.propTypes = {
   options: PropTypes.object,
   as: PropTypes.string,
-  meta: PropTypes.object.isRequired,
+  meta: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
