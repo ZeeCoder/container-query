@@ -1,6 +1,5 @@
 import React from "react";
 import Basic from "./Basic/Basic";
-import { getNodeText } from "dom-testing-library";
 import {
   renderTestComponent,
   getByTestId,
