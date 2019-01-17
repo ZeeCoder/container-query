@@ -79,7 +79,6 @@ const customLaunchers = {
 };
 
 module.exports = function(config) {
-  const singleRun = process.env.KARMA_SINGLE_RUN !== "false";
   const chrome = process.env.KARMA_CHROME === "true";
   const firefox = process.env.KARMA_FIREFOX === "true";
   const ci = process.env.CI === "true";
@@ -105,7 +104,7 @@ module.exports = function(config) {
     browsers,
     reporters: ci ? ["spec", "saucelabs"] : ["spec"],
 
-    singleRun,
+    singleRun: true,
 
     // Max concurrency for SauceLabs OS plan
     concurrency: 5,
