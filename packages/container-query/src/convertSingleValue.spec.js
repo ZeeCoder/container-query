@@ -50,3 +50,21 @@ test("should handle higher precisions", () => {
     "31.0575px"
   );
 });
+
+test("should be able to round to various precisions", () => {
+  expect(convertSingleValue({ width: 123, height: 321 }, "25.25rw", 0)).toBe(
+    "31px"
+  );
+  expect(convertSingleValue({ width: 123, height: 321 }, "25.25rw", 1)).toBe(
+    "31.1px"
+  );
+  expect(convertSingleValue({ width: 123, height: 321 }, "25.25rw", 2)).toBe(
+    "31.06px"
+  );
+  expect(convertSingleValue({ width: 123, height: 321 }, "25.25rw", 3)).toBe(
+    "31.058px"
+  );
+  expect(convertSingleValue({ width: 123, height: 321 }, "25.25rw", 4)).toBe(
+    "31.0575px"
+  );
+});
