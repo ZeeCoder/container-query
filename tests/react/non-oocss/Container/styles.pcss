@@ -1,0 +1,43 @@
+/*
+  Even though we're not using any OOCSS pattern, container queries still
+  assume containment.
+  Therefore ".marker" and ".child" would not have container query styles
+  applied to them without being in a container.
+*/
+.container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid;
+  /*todo box-sizing: border-box;*/
+}
+
+.marker {
+  background: rgb(255, 0, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30rw;
+  height: 100%;
+
+  @container (width > 100px) {
+    background: rgb(0, 255, 0);
+  }
+
+  @container (width > 140px) {
+    background: rgb(0, 0, 255);
+  }
+}
+
+.child {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  width: 70rw;
+  box-sizing: border-box;
+  height: 90rh;
+  margin-top: 10rh;
+}
