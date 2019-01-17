@@ -15,7 +15,6 @@ import { getByTestId } from "dom-testing-library";
 //   as a child, should not affect the latter even if they're the same container types
 // - Tests whether the lib can work with CSS-modules built in to css-loader
 // - Tests r-units
-// todo make the tests assert whole numbers, to make cross-browser testing easier
 // todo add css-modules, and export the classes for reuse
 describe("Non OOCSS", () => {
   const refs = {};
@@ -96,7 +95,7 @@ describe("Non OOCSS", () => {
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(255, 0, 0)",
-      width: "14.6875px"
+      width: "15px"
     });
 
     // Child wrappers should be adjusted with rh
@@ -115,17 +114,17 @@ describe("Non OOCSS", () => {
 
     await waitForElementToHaveStyle(refs.marker1, {
       backgroundColor: "rgb(0, 255, 0)",
-      width: "30.2969px"
+      width: "30px"
     });
 
     await waitForElementToHaveStyle(refs.marker2, {
       backgroundColor: "rgb(255, 0, 0)",
-      width: "21.2031px"
+      width: "21px"
     });
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(255, 0, 0)",
-      width: "14.8281px"
+      width: "15px"
     });
 
     // Child wrapper heights should not change
@@ -140,21 +139,21 @@ describe("Non OOCSS", () => {
   });
 
   it("should change the second container's styles only", async () => {
-    changeRootSize({ width: 143 });
+    changeRootSize({ width: 144 });
 
     await waitForElementToHaveStyle(refs.marker1, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "42.8906px"
+      width: "43px"
     });
 
     await waitForElementToHaveStyle(refs.marker2, {
       backgroundColor: "rgb(0, 255, 0)",
-      width: "30.0156px"
+      width: "30px"
     });
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(255, 0, 0)",
-      width: "21.0156px"
+      width: "21px"
     });
 
     // Child wrapper heights should not change
@@ -173,17 +172,17 @@ describe("Non OOCSS", () => {
 
     await waitForElementToHaveStyle(refs.marker1, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "61.5px"
+      width: "62px"
     });
 
     await waitForElementToHaveStyle(refs.marker2, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "43.0469px"
+      width: "43px"
     });
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(0, 255, 0)",
-      width: "30.125px"
+      width: "30px"
     });
 
     // Child wrapper heights should not change
@@ -198,21 +197,21 @@ describe("Non OOCSS", () => {
   });
 
   it("should change the last container once again", async () => {
-    changeRootSize({ width: 286 });
+    changeRootSize({ width: 287 });
 
     await waitForElementToHaveStyle(refs.marker1, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "85.7969px"
+      width: "86px"
     });
 
     await waitForElementToHaveStyle(refs.marker2, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "60.0469px"
+      width: "60px"
     });
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(0, 0, 255)",
-      width: "42.0312px"
+      width: "42px"
     });
 
     // Child wrapper heights should not change
@@ -241,7 +240,7 @@ describe("Non OOCSS", () => {
 
     await waitForElementToHaveStyle(refs.marker3, {
       backgroundColor: "rgb(255, 0, 0)",
-      width: "14.6875px"
+      width: "15px"
     });
 
     // Child wrappers should be adjusted with rh

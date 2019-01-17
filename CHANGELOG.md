@@ -15,9 +15,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Removed unnecessary files from the packages
 - `react-container-query`
-  - **[BREAKING]**ContainerQuery no longer returns an object for size, but width and height as
+  - **[BREAKING]** ContainerQuery no longer returns an object for size, but width and height as
     the first parameter of the child function
   - **[BREAKING]** ContainerQuery now returns 1x1 dimensions before the ResizeObserver kicks in
+- `container-query`
+  - **[BREAKING]** Set the pixel precision to be 0, so that whole numbers are
+    applied by default.
 
 ### Removed
 

@@ -2,6 +2,15 @@
 import type { ContainerSize } from "../flow/types";
 import _ from "lodash";
 
+const round = (value: number, precision: number): number => {
+  if (Number.isInteger(precision)) {
+    const shift = Math.pow(10, precision);
+    return Math.round(value * shift) / shift;
+  }
+
+  return Math.round(value);
+};
+
 /**
  * Converts a value possibly using a container unit into a pixel value.
  * (Respecting the given precision.)
@@ -41,9 +50,11 @@ export default function convertSingleValue(
   // Removing unnecessary precisions. (Otherwise it would get applied
   // inconsistently in chrome / firefox, which would not be a big issue, but
   // makes writing tests a pain.)
-  const preciseValue = `${valueNum.toFixed(precision)}`;
+  // const preciseValue = `${valueNum.toFixed(precision)}`;
 
-  const trimmedValue = _.trim(_.trim(preciseValue, " 0"), ".");
+  // const trimmedValue = _.trim(_.trim(preciseValue, " 0"), ".");
 
-  return `${trimmedValue}px`;
+  const roundedValue = round(valueNum, precision);
+
+  return `${roundedValue}px`;
 }
