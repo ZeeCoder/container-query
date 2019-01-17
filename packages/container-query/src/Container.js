@@ -81,7 +81,7 @@ export default class Container {
       {
         adjustOnResize: true,
         adjustOnInstantiation: true,
-        valuePrecision: 2
+        valuePrecision: 0
       },
       opts
     );

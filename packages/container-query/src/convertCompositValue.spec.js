@@ -36,4 +36,16 @@ test("should respect precision", () => {
   expect(
     convertCompositValue({ height: 50, width: 50 }, "20.25rh 20.25rw", 4)
   ).toBe("10.125px 10.125px");
+  expect(
+    convertCompositValue({ height: 50, width: 50 }, "20.25rh 20.25rw", 3)
+  ).toBe("10.125px 10.125px");
+  expect(
+    convertCompositValue({ height: 50, width: 50 }, "20.25rh 20.25rw", 2)
+  ).toBe("10.13px 10.13px");
+  expect(
+    convertCompositValue({ height: 50, width: 50 }, "20.25rh 20.25rw", 1)
+  ).toBe("10.1px 10.1px");
+  expect(
+    convertCompositValue({ height: 50, width: 50 }, "20.25rh 20.25rw", 0)
+  ).toBe("10px 10px");
 });

@@ -15,7 +15,7 @@ import "core-js/fn/map";
 import "babel-regenerator-runtime";
 
 // "Registering" test suits
-// import "./react/basic/index";
-// import "./react/hoc/index";
-// import "./react/manual/index";
-import "./react/non-oocss/index";
+// import "./react/basic";
+// import "./react/hoc";
+// import "./react/manual";
+import "./react/non-oocss";
