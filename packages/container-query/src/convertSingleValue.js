@@ -1,9 +1,13 @@
 // @flow
 import type { ContainerSize } from "../flow/types";
-import _ from "lodash";
+
+// `Number.isInteger` for IE
+// @see https://devdocs.io/javascript/global_objects/number/isinteger
+const isInteger = value =>
+  typeof value === "number" && isFinite(value) && Math.floor(value) === value;
 
 const round = (value: number, precision: number): number => {
-  if (Number.isInteger(precision)) {
+  if (isInteger(precision)) {
     const shift = Math.pow(10, precision);
     return Math.round(value * shift) / shift;
   }
