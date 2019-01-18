@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "./Container/Container";
+import Container, { styles } from "./Container/Container";
 import {
   renderTestComponent,
   changeRootSize,
@@ -49,13 +49,13 @@ describe("Non OOCSS", () => {
     wrapper.style.bottom = "0";
 
     refs.unrelatedContainer = document.createElement("div");
-    refs.unrelatedContainer.className = "container";
+    refs.unrelatedContainer.className = styles.container;
     wrapper.appendChild(refs.unrelatedContainer);
     refs.unrelatedMarker = document.createElement("div");
-    refs.unrelatedMarker.className = "marker";
+    refs.unrelatedMarker.className = styles.marker;
     wrapper.appendChild(refs.unrelatedMarker);
     refs.unrelatedChild = document.createElement("div");
-    refs.unrelatedChild.className = "child";
+    refs.unrelatedChild.className = styles.child;
     wrapper.appendChild(refs.unrelatedChild);
 
     document.body.appendChild(wrapper);

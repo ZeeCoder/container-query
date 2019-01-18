@@ -30,6 +30,29 @@ module.exports = {
         ]
       },
       {
+        test: /module.css$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [
+                require("postcss-nested")({ bubble: ["container"] }),
+                require("postcss-media-minmax")(),
+                require("autoprefixer")(),
+                require("../packages/postcss-container-query/dist")()
+              ]
+            }
+          }
+        ]
+      },
+      {
         test: /\.pcss$/,
         use: [
           "style-loader",
