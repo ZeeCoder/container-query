@@ -15,7 +15,8 @@ import { getByTestId } from "dom-testing-library";
 //   as a child, should not affect the latter even if they're the same container types
 // - Tests whether the lib can work with CSS-modules built in to css-loader
 // - Tests r-units
-// todo add css-modules, and export the classes for reuse
+// - Tests the "as" ContainerQuery prop
+// - Tests multiple containers in a single css file and component
 describe("Non OOCSS", () => {
   const refs = {};
   beforeAll(() => {
@@ -34,12 +35,15 @@ describe("Non OOCSS", () => {
 
     refs.root1 = getByTestId(document.body, "root-1");
     refs.marker1 = getByTestId(refs.root1, "marker-1");
+    refs.label1 = getByTestId(refs.root1, "label-1");
     refs.child1 = getByTestId(refs.root1, "child-1");
     refs.root2 = getByTestId(document.body, "root-2");
     refs.marker2 = getByTestId(refs.root2, "marker-2");
+    refs.label2 = getByTestId(refs.root2, "label-2");
     refs.child2 = getByTestId(refs.root2, "child-2");
     refs.root3 = getByTestId(document.body, "root-3");
     refs.marker3 = getByTestId(refs.root3, "marker-3");
+    refs.label3 = getByTestId(refs.root3, "label-3");
 
     const wrapper = document.createElement("div");
     wrapper.style.width = "100px";
@@ -57,6 +61,9 @@ describe("Non OOCSS", () => {
     refs.unrelatedChild = document.createElement("div");
     refs.unrelatedChild.className = styles.child;
     wrapper.appendChild(refs.unrelatedChild);
+    refs.unrelatedLabel = document.createElement("div");
+    refs.unrelatedLabel.className = styles.label;
+    wrapper.appendChild(refs.unrelatedLabel);
 
     document.body.appendChild(wrapper);
   });
@@ -80,6 +87,9 @@ describe("Non OOCSS", () => {
       width: "0px",
       height: "0px"
     });
+    await waitForElementToHaveStyle(refs.unrelatedLabel, {
+      color: "rgb(255, 0, 0)"
+    });
   };
 
   it("should render container query styles with non-oocss classnames", async () => {
@@ -100,10 +110,19 @@ describe("Non OOCSS", () => {
 
     // Child wrappers should be adjusted with rh
     await waitForElementToHaveStyle(refs.child1, {
-      height: "90px"
+      height: "75px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "81px"
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -129,10 +148,19 @@ describe("Non OOCSS", () => {
 
     // Child wrapper heights should not change
     await waitForElementToHaveStyle(refs.child1, {
-      height: "90px"
+      height: "75px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "81px"
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -158,10 +186,19 @@ describe("Non OOCSS", () => {
 
     // Child wrapper heights should not change
     await waitForElementToHaveStyle(refs.child1, {
-      height: "90px"
+      height: "75px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "81px"
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -187,10 +224,19 @@ describe("Non OOCSS", () => {
 
     // Child wrapper heights should not change
     await waitForElementToHaveStyle(refs.child1, {
-      height: "90px"
+      height: "75px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "81px"
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -216,10 +262,57 @@ describe("Non OOCSS", () => {
 
     // Child wrapper heights should not change
     await waitForElementToHaveStyle(refs.child1, {
-      height: "90px"
+      height: "75px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "81px"
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
+    });
+
+    await expectUnrelatedElementsToBeUntouched();
+  });
+
+  it("should change the last label to green", async () => {
+    changeRootSize({ width: 291 });
+
+    await waitForElementToHaveStyle(refs.marker1, {
+      backgroundColor: "rgb(0, 0, 255)",
+      width: "86px"
+    });
+
+    await waitForElementToHaveStyle(refs.marker2, {
+      backgroundColor: "rgb(0, 0, 255)",
+      width: "60px"
+    });
+
+    await waitForElementToHaveStyle(refs.marker3, {
+      backgroundColor: "rgb(0, 0, 255)",
+      width: "42px"
+    });
+
+    // Child wrapper heights should not change
+    await waitForElementToHaveStyle(refs.child1, {
+      height: "75px"
+    });
+    await waitForElementToHaveStyle(refs.child2, {
+      height: "56px"
+    });
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(0, 128, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(0, 128, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -245,10 +338,20 @@ describe("Non OOCSS", () => {
 
     // Child wrappers should be adjusted with rh
     await waitForElementToHaveStyle(refs.child1, {
-      height: "180px"
+      height: "150px"
     });
     await waitForElementToHaveStyle(refs.child2, {
-      height: "162px"
+      height: "113px"
+    });
+
+    await waitForElementToHaveStyle(refs.label1, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label2, {
+      color: "rgb(255, 0, 0)"
+    });
+    await waitForElementToHaveStyle(refs.label3, {
+      color: "rgb(255, 0, 0)"
     });
 
     await expectUnrelatedElementsToBeUntouched();
