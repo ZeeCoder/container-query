@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Integration tests, supported by SauceLabs
+- `postcss-container-query`
+  - Ability to re-export previously exported meta found in the css. Added to be
+    compatible with Parcel bundler which reruns the same plugins over the same
+    css file multiple times.
 
 ### Changed
 

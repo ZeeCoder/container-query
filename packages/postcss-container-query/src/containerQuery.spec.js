@@ -10,6 +10,7 @@ import * as selfTest from "./test/self";
 import * as simpleTest from "./test/simple";
 import * as metaNamedExportTest from "./test/meta-named-export";
 import * as disabledMetaExportTest from "./test/disabled-meta-export";
+import * as reExportTest from "./test/re-export";
 import fs from "fs";
 import containerQuery from "./containerQuery";
 import getMetadataFromMessages from "../getMetadataFromMessages";
@@ -119,3 +120,9 @@ test("should be able to disable the css meta export", () =>
   assertProcessingResult(disabledMetaExportTest, {
     exportMetaInCss: false
   }));
+
+// todo rename test to reexport
+// In parcel bundler postcss plugins run multiple times for some reason over the
+// same css file. If we respect the meta export, then subsequent runs become noop.
+test("should be able to reexport meta from a previously processed css file", () =>
+  assertProcessingResult(reExportTest));

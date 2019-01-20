@@ -56,6 +56,35 @@ const walkRules = (root, opts, ruleHandler) => {
 };
 
 /**
+ * If this file was processed before, then it should have an
+ * `:export { meta: '...' }` rule. If it is set, then return the meta as a js
+ * object.
+ *
+ * @param {Root} root
+ * @param {string} metaKey
+ * @return {{}|null}
+ */
+const getExportedMeta = (root, metaKey) => {
+  let meta = null;
+
+  root.each((/** Rule */ rule) => {
+    if (rule.selector === ":export") {
+      rule.nodes.forEach(node => {
+        if (node.type === "decl" && node.prop === metaKey) {
+          try {
+            meta = JSON.parse(node.value.slice(1, -1));
+          } catch (error) {
+            // ignore
+          }
+        }
+      });
+    }
+  });
+
+  return meta;
+};
+
+/**
  * @param {{
  *   [singleContainer]: boolean,
  *   [exportMetaInCss]: boolean|string,
@@ -69,104 +98,106 @@ function containerQuery(options = {}) {
       : "meta";
 
   return function(root, result) {
-    const containers = {};
-    let currentContainerSelector = null;
+    let meta = getExportedMeta(root, exportMetaInCss);
 
-    walkRules(
-      root,
-      { singleContainer },
-      ({ rule, isContainer, parentCQAtRule }) => {
-        if (
-          isContainer &&
-          rule.selector !== ":self" &&
-          !containers[rule.selector]
-        ) {
-          const nextContainerSelector = rule.selector;
-          if (singleContainer && currentContainerSelector) {
-            throw rule.error(
-              `define-container declaration detected in singleContainer mode. ` +
-                `Tried to override "${currentContainerSelector}" with "${nextContainerSelector}".`
+    if (!meta) {
+      const containers = {};
+      let currentContainerSelector = null;
+
+      walkRules(
+        root,
+        { singleContainer },
+        ({ rule, isContainer, parentCQAtRule }) => {
+          if (
+            isContainer &&
+            rule.selector !== ":self" &&
+            !containers[rule.selector]
+          ) {
+            const nextContainerSelector = rule.selector;
+            if (singleContainer && currentContainerSelector) {
+              throw rule.error(
+                `define-container declaration detected in singleContainer mode. ` +
+                  `Tried to override "${currentContainerSelector}" with "${nextContainerSelector}".`
+              );
+            }
+
+            // Register new container's meta builder
+            currentContainerSelector = nextContainerSelector;
+            containers[nextContainerSelector] = new MetaBuilder(
+              nextContainerSelector
             );
           }
 
-          // Register new container's meta builder
-          currentContainerSelector = nextContainerSelector;
-          containers[nextContainerSelector] = new MetaBuilder(
-            nextContainerSelector
-          );
-        }
+          const props = extractPropsFromNode(rule, {
+            isContainer: isContainer,
+            stripContainerUnits: true
+          });
 
-        const props = extractPropsFromNode(rule, {
-          isContainer: isContainer,
-          stripContainerUnits: true
-        });
+          // Only proceed if there are container units to be extracted, or if there
+          // are styles under a container query at-rule
+          if (!props.values && (!parentCQAtRule || !props.styles)) {
+            return;
+          }
 
-        // Only proceed if there are container units to be extracted, or if there
-        // are styles under a container query at-rule
-        if (!props.values && (!parentCQAtRule || !props.styles)) {
-          return;
-        }
+          if (!currentContainerSelector) {
+            throw rule.error(
+              `Missing @define-container declaration before the processed node.`
+            );
+          }
 
-        if (!currentContainerSelector) {
-          throw rule.error(
-            `Missing @define-container declaration before the processed node.`
-          );
-        }
+          const builder = containers[currentContainerSelector];
 
-        const builder = containers[currentContainerSelector];
+          builder.resetQuery().resetDescendant();
+          if (parentCQAtRule) {
+            builder.setQuery(parentCQAtRule.params);
+          }
+          if (!isContainer) {
+            builder.setDescendant(rule.selector);
+          }
 
-        builder.resetQuery().resetDescendant();
-        if (parentCQAtRule) {
-          builder.setQuery(parentCQAtRule.params);
-        }
-        if (!isContainer) {
-          builder.setDescendant(rule.selector);
-        }
+          if (props.values) {
+            // store values only
+            for (let prop in props.values) {
+              const value = props.values[prop];
+              builder.addStyle({ prop, value });
+            }
+          }
 
-        if (props.values) {
-          // store values only
-          for (let prop in props.values) {
-            const value = props.values[prop];
-            builder.addStyle({ prop, value });
+          if (parentCQAtRule && props.styles) {
+            for (let prop in props.styles) {
+              const value = props.styles[prop];
+              builder.addStyle({ prop, value });
+            }
           }
         }
+      );
 
-        if (parentCQAtRule && props.styles) {
-          for (let prop in props.styles) {
-            const value = props.styles[prop];
-            builder.addStyle({ prop, value });
-          }
-        }
+      // Map builders to metadata
+      for (let selector in containers) {
+        containers[selector] = containers[selector].build();
       }
-    );
 
-    // Map builders to metadata
-    for (let selector in containers) {
-      containers[selector] = containers[selector].build();
+      meta = !singleContainer
+        ? containers
+        : currentContainerSelector
+        ? containers[currentContainerSelector]
+        : {};
+
+      // The following is picked up by css-loader, therefore making importing json
+      // files obsolete
+      if (exportMetaInCss) {
+        root.append(
+          `\n:export { ${exportMetaInCss}: '${JSON.stringify(meta)}' }`
+        );
+      }
     }
-
-    const meta = !singleContainer
-      ? containers
-      : currentContainerSelector
-      ? containers[currentContainerSelector]
-      : {};
-
-    const filepath = root.source.input.file;
 
     result.messages.push({
       type: "metadata",
       plugin,
       meta,
-      filepath
+      filepath: root.source.input.file
     });
-
-    // The following is picked up by css-loader, therefore making importing json
-    // files obsolete
-    if (exportMetaInCss) {
-      root.append(
-        `\n:export { ${exportMetaInCss}: '${JSON.stringify(meta)}' }`
-      );
-    }
   };
 }
 
