@@ -5,6 +5,7 @@
   applied to them without being in a container.
 */
 .container {
+  @define-container;
   position: absolute;
   left: 0;
   top: 0;
@@ -37,6 +38,21 @@
   right: 0;
   width: 70rw;
   box-sizing: border-box;
-  height: 90rh;
-  margin-top: 10rh;
+  height: 75rh;
+  margin-top: 25rh;
+}
+
+.label {
+  @define-container;
+  color: rgb(255, 0, 0);
+  position: absolute;
+  white-space: nowrap;
+  right: 0;
+  width: 70%;
+  overflow: hidden;
+
+  /* This query is relative to ".label" itself, not ".Container" */
+  @container (width > 100px) {
+    color: rgb(0, 128, 0);
+  }
 }

@@ -14,7 +14,7 @@ import "core-js/fn/map";
 import "babel-regenerator-runtime";
 
 // "Registering" test suits
-import "./react/basic";
-import "./react/hoc";
-import "./react/manual";
+// import "./react/basic";
+// import "./react/hoc";
+// import "./react/manual";
 import "./react/non-oocss";
