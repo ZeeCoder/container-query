@@ -46,7 +46,9 @@ module.exports = {
                 require("postcss-nested")({ bubble: ["container"] }),
                 require("postcss-media-minmax")(),
                 require("autoprefixer")(),
-                require("../packages/postcss-container-query/dist")()
+                require("../packages/postcss-container-query/dist")({
+                  singleContainer: false
+                })
               ]
             }
           }

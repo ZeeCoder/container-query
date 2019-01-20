@@ -20,6 +20,7 @@ import {
 // - rw / rh unit applying / removing (With max precision of 4)
 // - All the above on a descendant
 // - Getting the size from the ContainerQuery component
+// - Saving r-unit values as custom css props
 describe("Basic", () => {
   const refs = {};
   beforeAll(() => {
