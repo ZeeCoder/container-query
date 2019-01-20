@@ -34,7 +34,6 @@ describe("Manual", () => {
 
     document.body.appendChild(refs.root);
 
-    // todo Fix potential endless loop
     // `new Container` gets in an endless for loop if it's attached to an element
     // that's not yet added to the dom for some reason.
     new Container(refs.container1, meta[".ContainerType1"]);
