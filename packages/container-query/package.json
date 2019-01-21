@@ -3,7 +3,7 @@
   "description": "A modern container-query solution.",
   "homepage": "https://github.com/ZeeCoder/container-query",
   "license": "MIT",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
@@ -34,7 +34,7 @@
     "size-limit": "^0.21.0"
   },
   "dependencies": {
-    "@zeecoder/container-query-meta-builder": "^3.0.0-alpha.2",
+    "@zeecoder/container-query-meta-builder": "^3.0.0-alpha.3",
     "es6-weak-map": "^2.0.2",
     "lodash": "^4.17.4",
     "mutation-observer": "^1.0.2",
