@@ -4,11 +4,13 @@ import {
   renderTestComponent,
   clearDOM,
   waitForTestComponentToHaveStyle,
-  changeRootSize
+  changeRootSize,
+  waitForTestComponentToHaveCustomProperties
 } from "../../utils";
 
 // Features covered:
 // - HoC should work the same as the render-prop or hook version
+// - HoC should pass in Container class options (Like value precision.)
 describe("withContainerQuery", () => {
   beforeAll(() => {
     clearDOM();
@@ -22,12 +24,20 @@ describe("withContainerQuery", () => {
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(255, 0, 0)"
     });
+
+    await waitForTestComponentToHaveCustomProperties({
+      "--w": "1px"
+    });
   });
 
   it("should react to width change", async () => {
     changeRootSize({ width: 101 });
     await waitForTestComponentToHaveStyle({
       backgroundColor: "rgb(0, 255, 0)"
+    });
+
+    await waitForTestComponentToHaveCustomProperties({
+      "--w": "1.01px"
     });
   });
 });
