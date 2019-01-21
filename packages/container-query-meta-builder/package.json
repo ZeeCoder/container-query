@@ -3,7 +3,7 @@
   "description": "Meta object builder for Container Queries.",
   "homepage": "https://github.com/ZeeCoder/container-query/tree/master/packages/container-query-meta-builder",
   "license": "MIT",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
   "engines": {
     "node": ">=6"
