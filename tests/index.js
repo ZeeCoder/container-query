@@ -14,7 +14,8 @@ import "core-js/fn/map";
 import "babel-regenerator-runtime";
 
 // "Registering" test suits
-import "./react/basic";
-import "./react/hoc";
 import "./react/manual";
+import "./react/hoc";
 import "./react/non-oocss";
+// Weirdly unless basic tests are the last, they throw errors in IE
+import "./react/basic";
