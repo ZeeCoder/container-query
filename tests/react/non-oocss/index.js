@@ -4,7 +4,8 @@ import {
   renderTestComponent,
   changeRootSize,
   clearDOM,
-  waitForElementToHaveStyle
+  waitForElementToHaveStyle,
+  waitForElementToHaveCustomProperties
 } from "../../utils";
 import { getByTestId } from "dom-testing-library";
 
@@ -17,6 +18,9 @@ import { getByTestId } from "dom-testing-library";
 // - Tests r-units
 // - Tests the "as" ContainerQuery prop
 // - Tests multiple containers in a single css file and component
+// - Tests container boundaries
+// - Tests passing in options to the Container instance through the
+//   ContainerQuery component (Like valuePrecision)
 describe("Non OOCSS", () => {
   const refs = {};
   beforeAll(() => {
@@ -124,6 +128,15 @@ describe("Non OOCSS", () => {
     await waitForElementToHaveStyle(refs.label3, {
       color: "rgb(255, 0, 0)"
     });
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "0.7px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "0.49px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.34px"
+    });
 
     await expectUnrelatedElementsToBeUntouched();
   });
@@ -161,6 +174,16 @@ describe("Non OOCSS", () => {
     });
     await waitForElementToHaveStyle(refs.label3, {
       color: "rgb(255, 0, 0)"
+    });
+
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "0.71px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "0.5px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.35px"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -201,6 +224,16 @@ describe("Non OOCSS", () => {
       color: "rgb(255, 0, 0)"
     });
 
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "1.01px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "0.71px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.5px"
+    });
+
     await expectUnrelatedElementsToBeUntouched();
   });
 
@@ -237,6 +270,16 @@ describe("Non OOCSS", () => {
     });
     await waitForElementToHaveStyle(refs.label3, {
       color: "rgb(255, 0, 0)"
+    });
+
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "1.44px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "1.01px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.71px"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -277,6 +320,16 @@ describe("Non OOCSS", () => {
       color: "rgb(255, 0, 0)"
     });
 
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "2.01px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "1.41px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.99px"
+    });
+
     await expectUnrelatedElementsToBeUntouched();
   });
 
@@ -313,6 +366,16 @@ describe("Non OOCSS", () => {
     });
     await waitForElementToHaveStyle(refs.label3, {
       color: "rgb(0, 128, 0)"
+    });
+
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "2.04px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "1.43px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "1px"
     });
 
     await expectUnrelatedElementsToBeUntouched();
@@ -352,6 +415,16 @@ describe("Non OOCSS", () => {
     });
     await waitForElementToHaveStyle(refs.label3, {
       color: "rgb(255, 0, 0)"
+    });
+
+    await waitForElementToHaveCustomProperties(refs.label1, {
+      "--w": "0.7px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label2, {
+      "--w": "0.49px"
+    });
+    await waitForElementToHaveCustomProperties(refs.label3, {
+      "--w": "0.34px"
     });
 
     await expectUnrelatedElementsToBeUntouched();

@@ -173,12 +173,85 @@ export const expectElementToHaveCustomProperties = (element, props) => {
     expect(element.style.getPropertyValue(prop)).toBe(props[prop]);
   }
 };
+/**
+ * @param {HTMLElement} element
+ * @param {{}} props
+ * @return {boolean}
+ */
+export const testElementToHaveCustomProperties = (element, props) => {
+  // Not all browsers tested here support custom css properties
+  if (!areCustomCssPropertiesSupported()) {
+    return true;
+  }
+
+  for (let prop of Object.keys(props)) {
+    if (element.style.getPropertyValue(prop) !== props[prop]) {
+      return false;
+    }
+  }
+
+  return true;
+};
 
 /**
  * @param {{}} props
  */
 export const expectTestComponentToHaveCustomProperties = props =>
   expectElementToHaveCustomProperties(componentElement, props);
+
+/**
+ * @param {HTMLElement} element
+ * @param {{}} props
+ * @param {int} timeout
+ * @return {Promise}
+ */
+export const waitForElementToHaveCustomProperties = (
+  element,
+  props,
+  timeout = 4500
+) =>
+  new Promise((resolve, reject) => {
+    if (!areCustomCssPropertiesSupported()) {
+      return resolve();
+    }
+
+    const loop = () => {
+      const hasProps = testElementToHaveCustomProperties(element, props);
+
+      if (hasProps) {
+        clearTimeout(timeoutHandler);
+        // This should succeed
+        expectElementToHaveCustomProperties(element, props);
+        return resolve();
+      }
+
+      // Start in about the next animation frame
+      requestAnimationFrame(loop);
+    };
+
+    const timeoutHandler = setTimeout(() => {
+      // This should fail the test
+      expectElementToHaveCustomProperties(element, props);
+      // The above should've made the test reject, but reject the promise as well regardless
+      reject(
+        new Error(
+          "Timeout on waiting for custom props to change on the given element."
+        )
+      );
+    }, timeout);
+
+    loop();
+  });
+
+/**
+ * @param {{}} props
+ * @param {int} timeout
+ * @return {Promise}
+ */
+export const waitForTestComponentToHaveCustomProperties = (
+  props,
+  timeout = 4500
+) => waitForElementToHaveCustomProperties(componentElement, props, timeout);
 
 /**
  * The reason we need this solution instead of just using wait() is because

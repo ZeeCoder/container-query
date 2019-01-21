@@ -26,6 +26,7 @@ const Container = ({ children, id }) => (
       className={styles.label}
       as="span"
       data-testid={`label-${id}`}
+      options={{ valuePrecision: 2 }}
     >
       Container id: "{id}"
     </ContainerQuery>
