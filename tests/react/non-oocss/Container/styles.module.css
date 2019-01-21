@@ -50,8 +50,12 @@
   right: 0;
   width: 70%;
   overflow: hidden;
+  --w: 1rw;
 
-  /* This query is relative to ".label" itself, not ".Container" */
+  /*
+    This query is relative to ".label" itself, not ".Container".
+    Also: all r-units and @container queries will be relative to this label's size
+  */
   @container (width > 100px) {
     color: rgb(0, 128, 0);
   }
