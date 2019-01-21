@@ -7,10 +7,9 @@ if (ciJobNumber() !== 1) {
 }
 
 // Run the command otherwise.
-const command = process.argv[2];
-const args = process.argv.slice(3);
+const parts = process.argv[2].split(" ");
 
-const execution = spawn(command, args);
+const execution = spawn(parts[0], parts.slice(1));
 
 execution.stdout.on("data", data => {
   process.stdout.write(data.toString());
@@ -19,3 +18,5 @@ execution.stdout.on("data", data => {
 execution.stderr.on("data", data => {
   console.error(data.toString());
 });
+
+execution.on("close", code => process.exit(code));
