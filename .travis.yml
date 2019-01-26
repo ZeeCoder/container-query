@@ -6,7 +6,7 @@ addons:
 script:
   - lerna bootstrap --ignore={demos}
   - yarn test:unit
-  - lerna run test
+  - yarn test:packages
   - node ./tests/bin/run-on-first-ci-job.js yarn test:integration:build
   - node ./tests/bin/run-on-first-ci-job.js yarn test:integration
 after_success: "yarn coveralls"
