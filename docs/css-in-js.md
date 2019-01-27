@@ -26,3 +26,7 @@ this could be implemented.
 
 Don't hesitate to post in [issues](https://github.com/ZeeCoder/container-query/issues)
 if you feel like you have a good solution!
+
+---
+
+◀️️ [Caveats](caveats.md)

@@ -2,15 +2,19 @@
 
 ## Declaration
 
-As previous examples show, containers can be declared by adding
-`@define-container;` inside a rule that's meant to be used as a container.
+Containers can be declared by adding `@define-container;` inside a rule for a
+container class.
 
-(Unnecessary in `singleContainer` mode.)
+(There's no need for such explicit definitions in `singleContainer` mode, as
+the first selector will be picked up automatically as the container selector.)
 
-Multiple such definitions in a single CSS file are allowed. All container
-queries and units will be relative to the previous declaration.
+Multiple such definitions in a single CSS file are allowed, you just have to pay
+attention to where you declare @container queries, as all they will be relative
+to the last defined container.
 
-**Example**
+The same rule applies to container units as well.
+
+## Example
 
 ```pcss
 .User {
@@ -38,9 +42,6 @@ queries and units will be relative to the previous declaration.
 }
 ```
 
-Note that for container queries and container units to work, all elements must
-be descendants of the container.
-
 Using the above example, an element with the `.User__name` class will not have
 its font-size adjusted, unless it's a descendant of a container element with
 the `.User` class.
@@ -58,11 +59,16 @@ Container queries have the same syntax media queries do:
 However, instead of writing min-width, min-height you can use the following
 operators: `<`, `<=`, `>`, `>=`.
 
-(In accordance width [CSS Media Queries Level 4](https://drafts.csswg.org/mediaqueries/#mq-range-context))
+(This is in accordance width [CSS Media Queries Level 4](https://drafts.csswg.org/mediaqueries/#mq-range-context))
 
-The following conditions are supported: width, height, aspect-ratio, orientation.
+The following conditions are supported:
 
-**Examples**
+- width
+- height
+- aspect-ratio
+- orientation
+
+**Condition Examples**
 
 ```pcss
 @condition (orientation: landscape) {
@@ -79,7 +85,8 @@ The following conditions are supported: width, height, aspect-ratio, orientation
 }
 ```
 
-If you want the same syntax for your media queries, then I recommend [this plugin](https://github.com/postcss/postcss-media-minmax).
+If you want the same syntax for your media queries, then I recommend
+[this postcss plugin](https://github.com/postcss/postcss-media-minmax).
 
 ## Units
 
@@ -87,7 +94,12 @@ Container units are like viewport units (vh, vw, vmin and vmax), only relative
 to the container. They are useful to generate values based on the container's
 size.
 
-The supported units are: **rh**, **rw**, **rmin**, **rmax**.
+Supported units:
+
+- rh
+- rw
+- rmin
+- rmax
 
 **Syntax**: `<value><rh/rw/rmin/rmax>`
 
@@ -96,17 +108,17 @@ container's width or height.
 
 If a container's size is:
 
-* width: 120px
-* height: 130px
+- width: 120px
+- height: 130px
 
 then
 
-* 100rw → 120px
-* 100rh → 130px
-* 100rmin → 120px
-* 100rmax → 130px
-* 15rh → 11.53846px
-* 15rw → 12.5px
+- 100rw → 120px
+- 100rh → 130px
+- 100rmin → 120px
+- 100rmax → 130px
+- 15rh → 11.53846px
+- 15rw → 12.5px
 
 And so on.
 
@@ -132,10 +144,10 @@ And so on.
 }
 ```
 
-Note that recalculating and applying these values is costly, since it's
+Note that recalculating and applying these values can be costly, since it's
 done on each resize event (or `adjust` call).
 
-### CSS Custom Properties
+### CSS Custom Properties for Better Performance
 
 Setting custom properties are supported, which can be used to improve performance.
 
@@ -146,17 +158,17 @@ Setting custom properties are supported, which can be used to improve performanc
   --rmin: 1rmin;
 
   &__name {
-    font-size: calc(10*var(--rh));
+    font-size: calc(10 * var(--rh));
   }
 
   &__avatar {
     border-radius: 100%;
-    border: calc(1*var(--rmin)) solid;
+    border: calc(1 * var(--rmin)) solid;
   }
 
   @container (height > 150px) {
-    font-size: calc(15*var(--rh));
-    border: calc(5*var(--rmin)) solid;
+    font-size: calc(15 * var(--rh));
+    border: calc(5 * var(--rmin)) solid;
   }
 }
 ```
@@ -179,4 +191,8 @@ While this works, there's a [pure CSS solution too](https://codepen.io/ZeeCaptei
 Admittedly more boilerplate, but it might worth avoiding JS when it's not really
 necessary by using flexbox, CSS grid and other vanilla CSS solutions instead.
 
-**Next:** [Api](api.md)
+---
+
+◀️️ [CSS Preprocessors](css-preprocessors.md)
+
+▶️️ [JS API](js-api.md)

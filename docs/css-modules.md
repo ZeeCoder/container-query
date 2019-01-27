@@ -13,15 +13,15 @@ The following shows a usual PostCSS setup, with container queries and CSS module
 ```sh
 yarn add postcss-nested \
          postcss-media-minmax \
-         @zeecoder/postcss-container-query \
-         postcss-modules --dev
+         postcss-modules \
+         @zeecoder/postcss-container-query --dev
 
 # or with NPM:
 
 npm install postcss-nested \
             postcss-media-minmax \
-            @zeecoder/postcss-container-query \
-            postcss-modules --save-dev
+            postcss-modules \
+            @zeecoder/postcss-container-query --save-dev
 ```
 
 Then put the following `.postcssrc` file in your root directory:
@@ -67,7 +67,7 @@ export default App;
 This would work the same way without react React, or without any component
 library for that matter.
 
-## With webpack
+## webpack
 
 Usage is the same with webpack, just add something like the following to your config:
 
@@ -100,3 +100,9 @@ Usage is the same with webpack, just add something like the following to your co
 ```
 
 You can of course have the PostCSS setup in a config file for webpack as well.
+
+---
+
+◀️️ [React](react.md)
+
+▶️️ [Multiple Containers](multiple-containers.md)

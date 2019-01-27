@@ -1,20 +1,26 @@
 # Getting Started
 
-This solution consists of a PostCSS plugin and a JS (`Container`) class.
+This solution consists of a PostCSS plugin and a JS (`Container`) class that
+takes care of runtime styling.
 
 > PostCSS → Metadata → Runtime
 
 The plugin analyses your CSS and extracts all container query related
-data, producing a metadata JSON file.
+data, producing a metadata object.
 
-Depending on your setup (Gulp / webpack, etc) this file could contain more than
-one container's data.
-
+Depending on your setup this file could contain more than one container's data.
 (See [Multiple Containers](multiple-containers.md) for more details.)
 
-For each containers you have in your app, you'll need to instantiate a new
-`Container` with the extracted metadata.
+Once you have your metadata, all you need to do is to feed it to the Container
+instance, and it will take care of the rest!
 
-Once you've done that, the runtime will take care of the rest.
+Your job is even easier in React, as the Container instantiation is abstracted
+away.
 
-**Next:** [Usage with webpack and React](webpack-and-react.md)
+---
+
+▶️ [Parcel](parcel.md)
+
+▶️ [webpack](webpack.md)
+
+▶️ [Gulp](gulp.md)
