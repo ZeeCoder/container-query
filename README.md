@@ -34,6 +34,8 @@ and [Angular](https://angularjs.org/).
 relative to the container element's width and / or height. (Same way viewport
 units are relative to the viewport's size.)
 
+⚡ **Cross-Browser Testing**: Sponsored with ❤️ by [SauceLabs](https://saucelabs.com).
+
 ## Introduction
 
 Container queries are very similar to media queries; they allow you to apply
@@ -138,12 +140,6 @@ convinced by this solution, then I encourage you to look at these alternatives:
 - [CQ Prolyfill](https://github.com/ausi/cq-prolyfill)
 - [React Container Query](https://github.com/d6u/react-container-query)
 - [CSS Element Queries](https://github.com/marcj/css-element-queries)
-
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
-
-[homepage]: https://saucelabs.com
 
 ## License
 
