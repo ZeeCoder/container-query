@@ -5,7 +5,8 @@ import {
   clearDOM,
   waitForTestComponentToHaveStyle,
   changeRootSize,
-  waitForTestComponentToHaveCustomProperties
+  waitForTestComponentToHaveCustomProperties,
+  waitForElementToHaveStyle
 } from "../../utils";
 
 // Features covered:
@@ -17,6 +18,12 @@ describe("withContainerQuery", () => {
     renderTestComponent(<Test />, {
       width: 100,
       height: 50
+    });
+  });
+
+  it("should apply styles to the body", async () => {
+    await waitForElementToHaveStyle(document.body, {
+      backgroundColor: "rgb(200, 200, 200)"
     });
   });
 
