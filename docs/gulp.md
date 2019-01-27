@@ -58,7 +58,8 @@ gulp.task("styles", () =>
 ```
 
 The above CSS can include multiple containers thanks to `singleContainer: false`,
-using @define-container declarations.
+using @define-container declarations, as it's explained in the [Multiple Containers](multiple-containers.md)
+section.
 
 ---
 

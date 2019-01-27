@@ -1,7 +1,7 @@
 # Without React
 
 Even though the library was made with webpack and React in mind, there's no
-reason why other bundlers or ui libraries wouldn't work.
+reason why other bundlers or UI libraries wouldn't work.
 
 ## Installation
 

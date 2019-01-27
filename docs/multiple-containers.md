@@ -1,6 +1,6 @@
 # Multiple Containers
 
-Instead of processing each container individually (on css file for each component
+Instead of processing each container individually (one CSS file for each component
 for example), you might want to import all styles containing multiple container
 declarations in a single file, and process that.
 
@@ -10,9 +10,8 @@ allow for the `@define-container;` declaration instead.
 
 With that, you'll be able to declare multiple containers in a single file.
 
-This is as simple as setting the `singleContainer` option to false.
-
-(Showcased in the [Gulp](gulp.md)) section.)
+This is as simple as setting the `singleContainer` option to false, which was
+showcased in the [Gulp](gulp.md)) section.
 
 ### Example
 

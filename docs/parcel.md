@@ -17,7 +17,7 @@ npm install postcss-nested \
             @zeecoder/postcss-container-query --save-dev
 ```
 
-## Setup PostCSS
+## Setting up PostCSS
 
 Add the following to a file named `.postcssrc` in your root directory.
 
