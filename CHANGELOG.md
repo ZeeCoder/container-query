@@ -7,10 +7,69 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.0.0]
 
+### Fixed
+
+- Tests now check if custom props are properly set.
+- Change sets are tested with hyphenated prop names instead of camel cased ones.
+- `container-query`
+  - Value precision is now consistent across browsers. (Instead of chrome
+    applying 1px and firefox 1.00px for example.)
+
+### Added
+
+- Testing in Node 10
+- Integration tests, supported by SauceLabs
+- `postcss-container-query`
+  - [Parcel bundler](https://github.com/parcel-bundler/parcel) support.
+    Re-running the plugin on the same file is now safe. (The Parcel bundler reruns
+    the same plugins over the same css file multiple times.)
+
+### Removed
+
+- "test" script is now only in the root, instead of in every package.
+- **[BREAKING]** No longer testing for Node 7 and 6 (dom-testing-library needs 8
+  and up, and the real targets are the browsers anyway.)
+- **[BREAKING]** Removed test running from Node 6
+- `react-container-query`
+  - **[BREAKING]** Removed the "render" prop from ContainerQuery in favour of
+    using children. (The former was not documented anyway.)
+  - **[BREAKING]** Removed the `ResizeObserver` component in favour of the
+    [react-resize-observer](https://github.com/ZeeCoder/react-resize-observer) and
+    [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer) packages.
+  - **[BREAKING]** Removed the default export. (Both ContainerQuery and withContainerQuery
+    is still available as named exports.)
+  - **[BREAKING]** Removed the `stats` prop from ContainerQuery. (Always use
+    `meta` instead.)
+
 ### Changed
 
+- Removed unnecessary files from the packages.
+- `container-query-meta-builder`
+  - Removed the engines field package.json field.
+  - **[BREAKING]** Removed the UMD build.
 - `postcss-container-query`
-  - Moved `getMetadataFromMessages` under the lib/ folder.
+  - **[BREAKING]** Minimum tested version lifted to v8. (The engines field still
+    allows for v6.)
+  - **[BREAKING]** Dropped the `getJSON` option, and no json is saved by default.
+    The new behaviour is to use the ICSS `:export` syntax, which then can be
+    imported through css-loader. (The meta object is still passed down in the
+    postcss plugin messages in case it's needed.)
+  - **[BREAKING]** Removed `saveMeta`.
+  - **[BREAKING]** Moved `getMetadataFromMessages` from root to the lib/ folder.
+- `react-container-query`
+  - `ContainerQuery` no longer returns with a "null" size object when a function
+    is passed in as the children prop. Instead it returns with `{width: 0, height: 0}`
+    initially, then updates with the observed container element.
+  - **[BREAKING]** `ContainerQuery` now renders a div root node by default, inside
+    of which it renders all children. (Also accepts an `as` prop to change the
+    tag type.)
+  - **[BREAKING]** ContainerQuery no longer returns an object for size, but width
+    and height as the first parameter of the child function
+  - **[BREAKING]** ContainerQuery now returns 1x1 dimensions before the ResizeObserver
+    kicks in
+- `container-query`
+  - **[BREAKING]** Set the pixel precision to be 0, so that whole numbers are
+    applied by default.
 
 ## [3.0.0-alpha.3]
 
