@@ -1,7 +1,7 @@
 const postcss = require("postcss");
 const fs = require("fs");
-const containerQuery = require("../../../packages/postcss-container-query/dist/index");
-const getMetadataFromMessages = require("../../../packages/postcss-container-query/getMetadataFromMessages");
+const containerQuery = require("../../../packages/postcss-container-query/lib");
+const getMetadataFromMessages = require("../../../packages/postcss-container-query/lib/getMetadataFromMessages");
 const nested = require("postcss-nested");
 const mediaMinMax = require("postcss-media-minmax")();
 
