@@ -15,34 +15,63 @@
 A PostCSS plugin and Javascript runtime combination, which allows you to write
 **container queries** in your CSS the same way you would write **media queries**.
 
+🕶 **Resize Observer**: Uses the native ResizeObserver implentation when available,
+and falls back to a [polyfill](https://github.com/que-etc/resize-observer-polyfill)
+to detect size changes. If you use Chrome, [you can test](https://codesandbox.io/s/l3rmm1rz2l)
+how performant the plugin is with the native implementation. (Shipped in v64.)
+
+📦 **Bundler Support**: Built with bundlers in mind, like [Parcel](https://parceljs.org),
+[webpack](https://webpack.js.org), [Browserify](http://browserify.org/) among others.
+
+🎲 **Component Support**: Built with component-based libraries in mind, like
+[React](https://reactjs.org), [Vue](https://vuejs.org/), [Ember](https://emberjs.com/),
+[Angular](https://angularjs.org/) among others.
+
+📄 **Intuitive syntax**: Uses at-rules, the same way @media queries are:
+`@container (...) { ... }`
+
+🎉 **Container Units**: [rh, rw, rmin, rmax,](docs/syntax.md#Units) which are
+relative to the container element's width and / or height. (Same way viewport
+units are relative to the viewport's size.)
+
 ## Introduction
 
-Container queries work the same way media queries do: they allow you to apply
+Container queries are very similar to media queries; they allow you to apply
 styles to elements when certain conditions are met.
 
-While media queries are relative to the viewport's size, container queries are
-relative to a container element's size.
+The key difference is that while media queries are relative to the viewport's
+size, container queries are relative to a container element's size.
+
+Thanks to this trait, you can have multiple instances of the same container
+element, all of which changes its own- and its childrens' styles based on the
+containing element's size.
 
 **What is a Container?**
 
-A container is just an HTML element, which may contain other elements.
+A container is just an HTML element, which may (or may not) contain other elements.
 
 You may want to think of them as "**Components**" ([React](https://facebook.github.io/react/docs/components-and-props.html))
 or "**Blocks**" ([BEM](http://getbem.com/naming/)).
 
-## Highlights
+## Demos
 
-- Built with webpack / React in mind, but can be used with legacy projects too.
-- Uses a [ResizeObserver polyfill](https://github.com/que-etc/resize-observer-polyfill)
-  to detect size changes. If you use Chrome, you can test how performant the plugin
-  is with the native `ResizeObserver` (shipped in 64): https://codesandbox.io/s/l3rmm1rz2l
-- Intuitive media query like syntax: `@container (...) { /* ... */ }`
-- Supports container units: rh, rw, rmin, rmax. (Useful to set font-size
-  and other properties to a value that's changing with the container's size.)
-- Diffing algorithm which applies / removes only the necessary styles when a
-  change occurs.
+The best way to understand the concept, if you play around with it yourself.
 
-## Look and feel
+- [Nested components](https://codesandbox.io/s/k9n28rkkl7)
+- [Social Posts](https://codesandbox.io/s/0l71yp80w)
+- [Without React](https://codesandbox.io/s/mo7nr90vmj)
+
+Note that because these demos are hosted on [CodeSandbox](https://codesandbox.io)
+where webpack or PostCSS cannot (currently) be configured, styles are simply
+imported as strings and processed in the browser.
+(Using [@zeecoder/cq-demo-utils](https://github.com/ZeeCoder/cq-demo-utils).)
+
+While this works demo purposes, in a real application it is strongly recommended
+to process styles build-time, as later described in this documentation.
+
+## Look and Feel
+
+// todo remove once everything here is covered by other sections
 
 ```pcss
 // User.pcss
@@ -83,6 +112,10 @@ The html then could look like this:
 </div>
 ```
 
+(Note that for container queries and units to work, all elements must be
+descendants of the container, as their conditions and values only makes sense in
+a container's context.)
+
 Finally, after you create a new `Container` instance, (passing in the container
 HTMLElement, and the extracted metadata) everything will just work.
 
@@ -93,68 +126,40 @@ declaration, but it's encouraged to have a dedicated file for each component.
 ## Documentation
 
 - [Getting Started](docs/getting-started.md)
-- [Usage with webpack and React](docs/webpack-and-react.md)
-- [Usage with Gulp](docs/gulp.md)
+- [Parcel](docs/parcel.md)
+- [webpack](docs/webpack.md)
+- [Gulp](docs/gulp.md)
+- [React](docs/react.md)
+- [CSS Modules](docs/css-modules.md)
 - [Multiple Containers](docs/multiple-containers.md)
-- [Usage without webpack](docs/without-webpack.md)
+- [Without React](docs/without-react.md)
+- [CSS Preprocessors](docs/css-preprocessors.md)
 - [Syntax](docs/syntax.md)
-- [API](docs/api.md)
-- [Usage with CSS Preprocessors](docs/css-preprocessors.md)
+- [JS API](docs/js-api.md)
+- [Caveats](docs/caveats.md)
+- [CSS-in-JS](docs/css-in-js.md)
 
-## Demos
+## Thoughts on Design
 
-Note that because these demos are hosted on [CodeSandbox](https://codesandbox.io)
-where webpack cannot be configured, styles are simply imported as strings and
-processed in the browser. (using [@zeecoder/cq-demo-utils](https://github.com/ZeeCoder/cq-demo-utils))
-
-While this works for the demos, in a real application it is strongly recommended
-to process styles build-time.
-
-- [Nested components](https://codesandbox.io/s/k9n28rkkl7)
-- [Social Posts](https://codesandbox.io/s/0l71yp80w)
-- [Without React](https://codesandbox.io/s/mo7nr90vmj)
-
-## Browser Support
-
-Works with all modern browsers and IE10+
-
-## Caveats / Notes
-
-- The ResizeObserver polyfill reacts in ~20ms. For the most part that should be ok, but
-  if you need more control over when a container applies new styles, however, you
-  can switch off the observing behaviour, and call the `adjust` method on the
-  Container instance manually, when you see fit.
-  Due to this 20ms reaction time, the more you nest containers, the slower change
-  propagates from top to bottom. (**This is a no longer an issue** if the native
-  `ResizeObserver` is available, for example in Chrome 64 and up.)
-- Styles are applied with the `Element.style.setProperty` method by default.
-  This logic will probably be configurable in the future (#50) which will allow for
-  different approaches. (Using [Styletron](https://github.com/rtsao/styletron), for
-  instance.)
-- With element / container query solutions, circularity issues may arise. While
-  [an attempt](https://github.com/ZeeCoder/container-query/issues/20) to tackle
-  this was made, the same is still unfortunately true to this library as well.
-  Use your best judgement when setting up container queries / units to avoid these
-  issues.
-
-## Thoughts on design
-
-In case you're wondering about the tool's design, here is a list of goals I
-had in mind when I started:
+In case you're wondering about the tool's design, here is a list of goals I had
+in mind when I started:
 
 - Should be tested,
-- Should use containers instead of elements,
+- Should use containers instead of elements (As opposed to other "element-query"
+  libraries.),
 - Should use a media query-like syntax so that it's familiar and easy to use,
-- Should be easy enough to use, but a transpiling step would be assumed,
 - Should uses PostCSS for preprocessing, instead of having a runtime parser,
-- Should use JS modules, so it plays nicely with bundlers (webpack, Browserify,
-  etc.) and Component-oriented UI libraries (React, Vue, etc.),
-- Shouldn't be limited to CSS syntax. (Utilising custom at-rules for instance),
-- Should work with component naming methodologies - like BEM or SUIT - the best.
+- Should be easy enough to use, but a transpiling step would be assumed (Due to
+  the reason above.),
+- Should use ES modules, so it plays nicely with bundlers (Parcel, webpack
+  Browserify, etc.) and with Component-oriented UI libraries (React, Vue, etc.),
+- Should work best with component naming methodologies, like BEM or SUIT, but
+  should also work without them.
+- Should work with CSS Modules.
 
-## Next up
+## Next Up
 
-[Ideas for enhancement](https://goo.gl/7XtjDe)
+[Ideas for Enhancement](https://goo.gl/7XtjDe)
 
 ## Alternatives
 
@@ -168,15 +173,25 @@ convinced by this solution, then I encourage you to look at these alternatives:
 
 ## WICG
 
-We at the WICG dived into 2018 with renewed effort to make native
-Container Queries a reality in browsers.
+The WICG dived into 2018 with renewed effort to make native Container Queries
+a reality in browsers.
 
 If you're interested in how things are progressing, please feel free to visit
 the following links, where the disussions are happening:
 
-- https://github.com/WICG/cq-usecases
-- https://github.com/WICG/container-queries
 - [Slack](https://join.slack.com/t/containerqueries/shared_invite/enQtMzA2OTc5MDUwNjk1LTEwMWEzNjcwMTY1MGYzYWMyOGMxM2MzNDM1OGZjMjM3NDNiMDMxYTk0YjQxN2FjYTZkYmZkMDZmOWE1ODRkZWI)
+- [Use Cases](https://github.com/WICG/cq-usecases)
+- [General Discussion](https://github.com/WICG/container-queries)
+
+## Related
+
+- [@zeecoder/react-resize-observer](https://github.com/ZeeCoder/react-resize-observer)
+- [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer)
+
+## Support
+
+Please consider supporting me if you like what I do on my
+[Patreon](https://www.patreon.com/zeecoder) page.
 
 ## Big Thanks
 

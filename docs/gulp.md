@@ -1,37 +1,71 @@
-# Usage with Gulp
+# Gulp
 
-If you're not a fan of processing styles with webpack, then you can use a task
-runner instead (like Gulp), to process your CSS and generate the JSON file(s).
+If you're not a fan of processing styles with a bundler, then you can use a task
+runner instead (like Gulp), to process your CSS and generate your meta object(s).
+
+## Installation
+
+```sh
+yarn add gulp \
+         gulp-postcss \
+         postcss-nested \
+         postcss-media-minmax \
+         @zeecoder/postcss-container-query --dev
+# or
+npm install gulp \
+            gulp-postcss \
+            postcss-nested \
+            postcss-media-minmax \
+            @zeecoder/postcss-container-query --save-dev
+```
+
+## Configuration
 
 Your gulpfile could look something like this:
 
 ```js
 const gulp = require("gulp");
 const postcss = require("gulp-postcss");
-const rename = require("gulp-rename");
 const postcssNested = require("postcss-nested");
+const postcssMediaMinmax = require("postcss-media-minmax");
 const containerQuery = require("@zeecoder/postcss-container-query");
+const getMetadataFromMessages = require("@zeecoder/postcss-container-query/lib/getMetadataFromMessages");
 
-gulp.task("styles", () => {
-  return gulp
-    .src("styles.pcss")
+gulp.task("styles", () =>
+  gulp
+    .src("styles.css")
     .pipe(
-      postcss([
-        postcssNested({ bubble: ["container"] }),
-        containerQuery({
-          singleContainer: false
-        })
-      ])
+      postcss(
+        [
+          postcssNested({ bubble: ["container"] }),
+          postcssMediaMinmax(),
+          containerQuery({
+            singleContainer: false
+          })
+        ],
+        {}, // no need to pass in postcss options here
+        {
+          handleResult: ({ messages }) => {
+            const meta = getMetadataFromMessages(messages);
+            // Do something with meta, like save it as a JSON, and later import /
+            // load it in some way when needed.
+          }
+        }
+      )
     )
-    .pipe(rename("styles.css"))
-    .pipe(gulp.dest("dist"));
-});
+    .pipe(gulp.dest("dist"))
+);
 ```
 
 The above CSS can include multiple containers thanks to `singleContainer: false`,
-and [@define-container](docs/define-container.md) declarations.
+using @define-container declarations.
 
-This task creates a `styles.css` and `styles.css.json` file, which can then be
-used by webpack as [you've seen it before](webpack-and-react.md).
+---
 
-**Next:** [Multiple Containers](multiple-containers.md)
+◀️️ [Parcel](parcel.md)
+
+◀️️ [webpack](webpack.md)
+
+▶️ [Multiple Containers](multiple-containers.md)
+
+▶️ [React](react.md)
