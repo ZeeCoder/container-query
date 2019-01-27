@@ -12,22 +12,22 @@
 
 ![SauceLabsTestMatrix](https://app.saucelabs.com/browser-matrix/TheC0d3r.svg)
 
-A PostCSS plugin and Javascript runtime combination, which allows you to write
-**container queries** in your CSS the same way you would write **media queries**.
+> A PostCSS plugin and Javascript runtime combination, which allows you to write
+> **container queries** in your CSS the same way you would write **media queries**.
 
-🕶 **Resize Observer**: Uses the native ResizeObserver implentation when available,
+🕶 **Uses Resize Observer**: Uses the native ResizeObserver implentation when available,
 and falls back to a [polyfill](https://github.com/que-etc/resize-observer-polyfill)
 to detect size changes. If you use Chrome, [you can test](https://codesandbox.io/s/l3rmm1rz2l)
 how performant the plugin is with the native implementation. (Shipped in v64.)
 
 📦 **Bundler Support**: Built with bundlers in mind, like [Parcel](https://parceljs.org),
-[webpack](https://webpack.js.org), [Browserify](http://browserify.org/) among others.
+[webpack](https://webpack.js.org) and [Browserify](http://browserify.org/).
 
 🎲 **Component Support**: Built with component-based libraries in mind, like
-[React](https://reactjs.org), [Vue](https://vuejs.org/), [Ember](https://emberjs.com/),
-[Angular](https://angularjs.org/) among others.
+[React](https://reactjs.org), [Vue](https://vuejs.org/), [Ember](https://emberjs.com/)
+and [Angular](https://angularjs.org/).
 
-📄 **Intuitive syntax**: Uses at-rules, the same way @media queries are:
+📄 **Intuitive Syntax**: Uses at-rules, the [same way @media queries do](docs/syntax.md#Queries):
 `@container (...) { ... }`
 
 🎉 **Container Units**: [rh, rw, rmin, rmax,](docs/syntax.md#Units) which are
@@ -55,73 +55,20 @@ or "**Blocks**" ([BEM](http://getbem.com/naming/)).
 
 ## Demos
 
-The best way to understand the concept, if you play around with it yourself.
+The best way to understand the concept, is if you try it for yourself.
 
-- [Nested components](https://codesandbox.io/s/k9n28rkkl7)
+- [Nested Components](https://codesandbox.io/s/k9n28rkkl7)
 - [Social Posts](https://codesandbox.io/s/0l71yp80w)
 - [Without React](https://codesandbox.io/s/mo7nr90vmj)
 
-Note that because these demos are hosted on [CodeSandbox](https://codesandbox.io)
-where webpack or PostCSS cannot (currently) be configured, styles are simply
-imported as strings and processed in the browser.
+Note that because these demos are hosted on [CodeSandbox](https://codesandbox.io),
+where webpack or PostCSS cannot ([currently](https://twitter.com/codesandbox/status/1087336337915760640))
+be configured, styles are simply imported as strings and processed in the browser.
 (Using [@zeecoder/cq-demo-utils](https://github.com/ZeeCoder/cq-demo-utils).)
 
-While this works demo purposes, in a real application it is strongly recommended
-to process styles build-time, as later described in this documentation.
-
-## Look and Feel
-
-// todo remove once everything here is covered by other sections
-
-```pcss
-// User.pcss
-.User {
-  background: red;
-
-  @container (width >= 200px) and (height >= 200px) {
-    background: green;
-  }
-
-  &__name {
-    font-size: 10rh;
-  }
-
-  &__avatar {
-    display: none;
-
-    @container (width >= 200px) and (height >= 200px) {
-      display: block;
-    }
-  }
-}
-```
-
-The above example assumes **webpack**, using **BEM** naming conventions and the
-**postcss-loader**.
-
-`.User` is automatically detected to be the container (the first class in the
-proccessed file), and all following container queries / units will be related
-to the containing `.User` element.
-
-The html then could look like this:
-
-```html
-<div class="User">
-  <div class="User__name"></div>
-  <img class="User__avatar" src="..." />
-</div>
-```
-
-(Note that for container queries and units to work, all elements must be
-descendants of the container, as their conditions and values only makes sense in
-a container's context.)
-
-Finally, after you create a new `Container` instance, (passing in the container
-HTMLElement, and the extracted metadata) everything will just work.
-
-_Note:_ A file can have multiple containers, with the [@define-container](docs/multiple-containers.md)
-declaration, but it's encouraged to have a dedicated file for each component.
-(Which is also the assumption of the [@zeecoder/react-container-query](https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query) package).
+While this works for demo purposes, in a real application it is strongly
+recommended to process styles build-time, as later described in this
+documentation.
 
 ## Documentation
 
@@ -139,10 +86,19 @@ declaration, but it's encouraged to have a dedicated file for each component.
 - [Caveats](docs/caveats.md)
 - [CSS-in-JS](docs/css-in-js.md)
 
+## What's Next?
+
+[Ideas for Enhancement](https://goo.gl/7XtjDe)
+
+## Support
+
+Please consider supporting me if you like what I do on my
+[Patreon](https://www.patreon.com/zeecoder) page.
+
 ## Thoughts on Design
 
 In case you're wondering about the tool's design, here is a list of goals I had
-in mind when I started:
+in mind with the initial implementation:
 
 - Should be tested,
 - Should use containers instead of elements (As opposed to other "element-query"
@@ -155,21 +111,6 @@ in mind when I started:
   Browserify, etc.) and with Component-oriented UI libraries (React, Vue, etc.),
 - Should work best with component naming methodologies, like BEM or SUIT, but
   should also work without them.
-- Should work with CSS Modules.
-
-## Next Up
-
-[Ideas for Enhancement](https://goo.gl/7XtjDe)
-
-## Alternatives
-
-If you like the idea of container queries, but are not particularly
-convinced by this solution, then I encourage you to look at these alternatives:
-
-- [EQCSS](https://github.com/eqcss/eqcss)
-- [CQ Prolyfill](https://github.com/ausi/cq-prolyfill)
-- [React Container Query](https://github.com/d6u/react-container-query)
-- [CSS Element Queries](https://github.com/marcj/css-element-queries)
 
 ## WICG
 
@@ -188,10 +129,15 @@ the following links, where the disussions are happening:
 - [@zeecoder/react-resize-observer](https://github.com/ZeeCoder/react-resize-observer)
 - [use-resize-observer](https://github.com/ZeeCoder/use-resize-observer)
 
-## Support
+## Alternatives
 
-Please consider supporting me if you like what I do on my
-[Patreon](https://www.patreon.com/zeecoder) page.
+If you like the idea of container queries, but are not particularly
+convinced by this solution, then I encourage you to look at these alternatives:
+
+- [EQCSS](https://github.com/eqcss/eqcss)
+- [CQ Prolyfill](https://github.com/ausi/cq-prolyfill)
+- [React Container Query](https://github.com/d6u/react-container-query)
+- [CSS Element Queries](https://github.com/marcj/css-element-queries)
 
 ## Big Thanks
 

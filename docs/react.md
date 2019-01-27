@@ -42,7 +42,7 @@ You might have the following CSS:
 }
 ```
 
-### `<ContainerQuery>`
+### <ContainerQuery> with (children) Render Prop
 
 Using render props.
 
@@ -75,7 +75,7 @@ const App = () => (
   <ContainerQuery meta={meta} className="App">
     {size => (
       <div className="App__child">
-        The App's size is: {size.width}x{size.height}
+        Size: {size.width}x{size.height}
       </div>
     )}
   </ContainerQuery>
@@ -84,7 +84,7 @@ const App = () => (
 export default App;
 ```
 
-### `withContainerQuery`
+### withContainerQuery Higher-Order Component
 
 If you prefer Higher-Order Components:
 
