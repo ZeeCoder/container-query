@@ -2,6 +2,7 @@ import postcss from "postcss";
 import * as regularTest from "./test/regular";
 import * as customPropertiesTest from "./test/custom-properties";
 import * as exessContainerDeclarationTest from "./test/exess-container-declaration";
+import * as singleContainerOverrideTest from "./test/single-container-override";
 import * as containerAutoDetectionTest from "./test/container-auto-detection";
 import * as unrecognisedAtRulesTest from "./test/unrecognised-at-rules";
 import * as missingContainerDelcarationTest from "./test/missing-container-declaration";
@@ -92,12 +93,15 @@ test("should properly process CSS", () =>
 test("should detect the first class as the container by default", () =>
   assertProcessingResult(containerAutoDetectionTest));
 
-test("should throw in non singleContainer mode for defining a different container", () => {
+test("should allow for one @define-container declaration in singleContainer mode", () =>
+  assertProcessingResult(singleContainerOverrideTest));
+
+test("should throw in singleContainer mode for defining a different container more than one time", () => {
   expect.assertions(1);
 
   return processCss(exessContainerDeclarationTest.cssInput).catch(e => {
     expect(e.reason).toBe(
-      "define-container declaration detected in singleContainer mode. " +
+      "More than one @define-container declaration was detected in singleContainer mode. " +
         'Tried to override ".Container" with ".AnotherContainer".'
     );
   });
@@ -121,7 +125,6 @@ test("should be able to disable the css meta export", () =>
     exportMetaInCss: false
   }));
 
-// todo rename test to reexport
 // In parcel bundler postcss plugins run multiple times for some reason over the
 // same css file. If we respect the meta export, then subsequent runs become noop.
 test("should be able to reexport meta from a previously processed css file", () =>

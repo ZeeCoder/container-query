@@ -15,13 +15,14 @@ const walkRules = (root, opts, ruleHandler) => {
     containerSelectors.indexOf(selector) !== -1;
 
   const handleRule = (rule, parentCQAtRule) => {
+    const definedContainer = hasContainerDefinition(rule);
     const isContainer =
-      hasContainerDefinition(rule) ||
+      definedContainer ||
       hasContainerSelector(rule.selector) ||
       rule.selector === ":self" ||
       (opts.singleContainer && containerSelectors.length === 0);
 
-    const data = { rule, isContainer };
+    const data = { rule, isContainer, definedContainer };
 
     if (isContainer && !hasContainerSelector(rule.selector)) {
       containerSelectors.push(rule.selector);
@@ -103,20 +104,33 @@ function containerQuery(options = {}) {
     if (!meta) {
       const containers = {};
       let currentContainerSelector = null;
+      let containerDefinitionCount = 0;
 
       walkRules(
         root,
         { singleContainer },
-        ({ rule, isContainer, parentCQAtRule }) => {
+        ({ rule, isContainer, definedContainer, parentCQAtRule }) => {
           if (
             isContainer &&
             rule.selector !== ":self" &&
             !containers[rule.selector]
           ) {
+            if (definedContainer) {
+              containerDefinitionCount++;
+            }
+
             const nextContainerSelector = rule.selector;
-            if (singleContainer && currentContainerSelector) {
+            if (
+              // We allow for a single custom definition to be used in
+              // singleContainer mode so that the user can select the container
+              // selector themselves, instead that being picked up as the first
+              // one automatically.
+              containerDefinitionCount > 1 &&
+              singleContainer &&
+              currentContainerSelector
+            ) {
               throw rule.error(
-                `define-container declaration detected in singleContainer mode. ` +
+                `More than one @define-container declaration was detected in singleContainer mode. ` +
                   `Tried to override "${currentContainerSelector}" with "${nextContainerSelector}".`
               );
             }
