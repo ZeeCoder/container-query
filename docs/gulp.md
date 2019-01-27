@@ -3,6 +3,14 @@
 If you're not a fan of processing styles with a bundler, then you can use a task
 runner instead (like Gulp), to process your CSS and generate your meta object(s).
 
+**IMPORTANT NOTE**
+
+This setup will only work once [this update](https://github.com/postcss/gulp-postcss/pull/150)
+is released.
+
+Until then, you could use the same idea outlined here with the [postcss](https://github.com/postcss/postcss)
+package itself.
+
 ## Installation
 
 ```sh
