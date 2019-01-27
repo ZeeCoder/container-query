@@ -102,6 +102,12 @@ const App = () => (
 export default withContainerQuery(App, meta);
 ```
 
+### Browser Support
+
+As outline in the [React docs](https://reactjs.org/docs/javascript-environment-requirements.html)
+in order to properly support <=IE11, you'll probably want to include the appropriate
+polyfills.
+
 ---
 
 ◀️️ [Parcel](parcel.md)
