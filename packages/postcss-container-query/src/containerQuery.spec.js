@@ -13,7 +13,7 @@ import * as disabledMetaExportTest from "./test/disabled-meta-export";
 import * as reExportTest from "./test/re-export";
 import fs from "fs";
 import containerQuery from "./containerQuery";
-import getMetadataFromMessages from "../getMetadataFromMessages";
+import getMetadataFromMessages from "./getMetadataFromMessages";
 
 jest.mock("fs");
 

@@ -12,10 +12,10 @@ const generate = ({ input, output }) => ({
 export default [
   generate({
     input: "src/containerQuery.js",
-    output: "dist/index.js"
+    output: "lib/index.js"
   }),
   generate({
     input: "src/getMetadataFromMessages.js",
-    output: "./getMetadataFromMessages.js"
+    output: "lib/getMetadataFromMessages.js"
   })
 ];
