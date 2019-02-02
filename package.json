@@ -35,7 +35,7 @@
     "karma-sauce-launcher": "^1.0.0",
     "karma-spec-reporter": "^0.0.32",
     "lerna": "^3.4.3",
-    "lint-staged": "^8.0.5",
+    "lint-staged": "^8.1.2",
     "postcss-loader": "^3.0.0",
     "postcss-media-minmax": "^4.0.0",
     "postcss-nested": "^4.1.1",
