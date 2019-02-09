@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.2.0]
+
+### Added
+
+- `container-query`
+  - `handleResize` is no longer called with null, and width / height props are
+    always set.
+- `use-container-query`
+  - New `useContainerQuery` react hook. (Requires 16.8.0 or higher.)
+- `react-container-query`
+  - Relaxed the react and react-dom peer dep version ranges.
+
 ## [3.1.0]
 
 ### Added

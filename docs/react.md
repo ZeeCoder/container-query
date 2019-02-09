@@ -42,6 +42,52 @@ You might have the following CSS:
 }
 ```
 
+### useContainerQuery hook
+
+This is probably the easiest way to use Container Queries up in React.
+
+Note that to use [React hooks](https://reactjs.org/docs/hooks-intro.html), you'll
+need React 16.8.0 or higher.
+
+```js
+import React from "react";
+import useContainerQuery from "@zeecoder/use-container-query";
+import { meta } from "./App.pcss";
+
+const App = () => {
+  const ref = useContainerQuery(meta);
+
+  return (
+    <div className="App" ref={ref}>
+      My App
+    </div>
+  );
+};
+
+export default App;
+```
+
+To get the component's size, you can do the following:
+
+```js
+import React, { useState } from "react";
+import useContainerQuery from "@zeecoder/use-container-query";
+import { meta } from "./App.pcss";
+
+const App = () => {
+  const [size, handleResize] = useState({ width: 1, height: 1 });
+  const ref = useContainerQuery(meta, { handleResize });
+
+  return (
+    <div className="App" ref={ref}>
+      My App {size.width}x{size.height}
+    </div>
+  );
+};
+
+export default App;
+```
+
 ### \<ContainerQuery\> with (children) Render Prop
 
 Using render props.
