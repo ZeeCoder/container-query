@@ -16,6 +16,6 @@ import "babel-regenerator-runtime";
 // "Registering" test suits
 import "./react/manual";
 import "./react/hoc";
+import "./react/hook";
 import "./react/non-oocss";
-// Weirdly unless basic tests are the last, they throw errors in IE
-import "./react/basic";
+import "./react/basic"; // Weirdly unless basic tests are the last, they throw errors in IE

@@ -1,7 +1,7 @@
 {
-  "name": "@zeecoder/react-container-query",
-  "description": "React higher order component to manage a single Container instance.",
-  "homepage": "https://github.com/ZeeCoder/container-query/tree/master/packages/react-container-query",
+  "name": "@zeecoder/use-container-query",
+  "description": "React hook to use Container Queries.",
+  "homepage": "https://github.com/ZeeCoder/container-query/tree/master/packages/use-container-query",
   "version": "3.0.1",
   "license": "MIT",
   "author": "Viktor Hubert <rpgmorpheus@gmail.com>",
@@ -18,32 +18,24 @@
     "prepublishOnly": "yarn test"
   },
   "dependencies": {
-    "@zeecoder/container-query": "^3.0.0",
-    "es6-weak-map": "^2.0.2",
-    "prop-types": "^15.6.0",
-    "resize-observer-polyfill": "^1.5.0"
+    "@zeecoder/container-query": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
-    "@babel/plugin-proposal-class-properties": "^7.2.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
-    "@babel/preset-react": "^7.0.0",
     "npm-run-all": "^4.1.2",
     "rollup": "^0.67.3",
     "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-node-resolve": "^3.0.3",
     "rollup-plugin-terser": "^3.0.0",
     "size-limit": "^0.21.0"
   },
   "peerDependencies": {
-    "react": ">=15.0.0",
-    "react-dom": ">=15.0.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "keywords": [
     "react",
+    "hooks",
     "rwd",
     "responsive-design",
     "responsive",

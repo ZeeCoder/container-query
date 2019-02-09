@@ -1,4 +1,4 @@
-# @zeecoder/react-container-query
+# @zeecoder/use-container-query
 
 This module is part of a [monorepo](https://github.com/ZeeCoder/container-query).
 
