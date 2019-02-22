@@ -22,7 +22,7 @@
     "babel-regenerator-runtime": "^6.5.0",
     "ci-job-number": "^0.3.0",
     "core-js": "^2.6.1",
-    "coveralls": "^3.0.2",
+    "coveralls": "^3.0.3",
     "css-loader": "^2.0.2",
     "dom-testing-library": "^3.16.1",
     "husky": "^1.1.4",
