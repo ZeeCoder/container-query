@@ -42,7 +42,7 @@
     "prettier": "^1.15.2",
     "prop-types": "^15.6.2",
     "react": "^16.8.5",
-    "react-dom": "^16.6.3",
+    "react-dom": "^16.8.5",
     "regenerator-runtime": "^0.13.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.28.2",
