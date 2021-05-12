@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@zeecoder/container-query-meta-builder": "^3.0.0",
-    "postcss": "^7.0.5"
+    "postcss": "^8.2.10"
   },
   "keywords": [
     "rwd",
